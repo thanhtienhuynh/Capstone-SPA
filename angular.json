@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "Capstone-SPA"
+  "defaultProject": "Capstone-SPA",
+  "cli": {
+    "analytics": "c2093c4a-f706-4063-838a-5bd111ca4cea"
+  }
 }
