@@ -1,0 +1,93 @@
+<mat-horizontal-stepper linear #stepper>
+  <!-- first step -->
+  <!-- <mat-step [stepControl]="firstFormGroup" editable="true">
+    <div class="center">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Chọn loại điểm</ng-template>
+          <mat-form-field>
+            <mat-label>Chon loai diem</mat-label>
+            <input type="number" matInput formControlName="firstControl" placeholder="Điểm" required>
+          </mat-form-field>
+        <div>
+          <button mat-button matStepperNext class="btn-step-one">Next</button>
+        </div>
+      </form>
+    </div>
+  </mat-step> -->
+  <!-- second step -->
+  <mat-step [stepControl]="secondFormGroup" editable="true">
+    <div class="center">
+      <form [formGroup]="secondFormGroup" (ngSubmit)="onScoreSubmit()">
+        <ng-template matStepLabel>Nhập điểm</ng-template>
+        <mat-form-field *ngFor="let subject of subjects; let i = index">
+          <mat-label>{{ subject.name }}</mat-label>
+          <input
+            type="number"
+            matInput
+            formControlName="{{ subject.id }}"
+            placeholder="Điểm {{ subject.name }}"
+          />
+        </mat-form-field>
+        <div>
+          <!-- <button mat-button matStepperPrevious>Back</button> -->
+          <button mat-button matStepperNext class="btn-step-one">Next</button>
+        </div>
+      </form>
+    </div>
+  </mat-step>
+  <!-- third step -->
+  <mat-step [stepControl]="thirdFormGroup" editable="true">
+    <div class="center">
+      <form [formGroup]="thirdFormGroup" (ngSubmit)="onResultSelect()">
+        <ng-template matStepLabel>Chọn loại kết quả</ng-template>
+        <div class="third-step">
+          <label id="example-radio-group-label">Bạn muốn tính?</label>
+          <mat-radio-group
+          aria-labelledby="example-radio-group-label"
+          class="example-radio-group"
+            [(ngModel)]="favoriteSeason"
+            formControlName="resultType">
+            <mat-radio-button
+              class="example-radio-button"
+              *ngFor="let resultType of resultTypes;  let i = index"
+              [value]="resultType">
+              {{ resultType }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext class="btn-step-one">Next</button>
+        </div>
+      </form>
+    </div>
+  </mat-step>
+  <!-- last step -->
+  <mat-step>
+    <ng-template matStepLabel>Kết quả</ng-template>
+    <div class="center">
+      <mat-grid-list [cols]="column" rowHeight="100px">
+        <mat-grid-tile
+            *ngFor="let tile of finalResultTiles"
+            [colspan]="tile.cols"
+            [rowspan]="tile.rows"
+            [style.background]="tile.color" style=" align-items: flex-end;">
+            <div *ngIf="!tile.isUsed">
+              <div class="circle">{{tile.suggestedGroup.name}}</div>
+            </div>
+            <mat-list *ngIf="tile.isUsed"  role="list">
+              <mat-list-item *ngIf="!isSuggest" role="listitem">Khối: {{ tile.suggestedGroup.name }}</mat-list-item>
+              <mat-list-item role="listitem">Total marks: {{ tile.suggestedGroup.totalMark }}</mat-list-item>
+              <div *ngIf="tile.suggestedGroup.suggestedMajors">
+                <mat-list-item *ngFor="let major of tile.suggestedGroup.suggestedMajors" role="listitem">{{ major.name}} - {{ major.weightMark }}</mat-list-item>
+              </div>
+            </mat-list>
+        </mat-grid-tile>
+      </mat-grid-list>
+      <div style="margin-top: 25px;">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button class="btn-step-one" (click)="stepper.reset()">Reset</button>
+      </div>
+  </div>
+  </mat-step>
+</mat-horizontal-stepper>
