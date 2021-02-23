@@ -36,10 +36,8 @@ export class StepperComponent implements OnInit, OnDestroy {
   isLoading = true;
   subjects: Subject[];
   favoriteSeason: string;
-  resultTypes: string[] = ['Điểm trung bình mỗi khối', 'Gợi ý khối và chuyên ngành'];
   marks: Mark[];
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
-  isSuggest: boolean;
   emptyTile: Tile = {suggestedGroup: null, cols: 1, rows: 1, color: 'transparent', isUsed: false};
   column: number = NUMBER_OF_DEFAULT_COLUMNS;
 
@@ -68,7 +66,6 @@ export class StepperComponent implements OnInit, OnDestroy {
           this.subjects = stepperState.subjects;
           this.isLoading = stepperState.isLoading;
           this.suggestedSubjectsGroup = stepperState.suggestedSubjectsGroup;
-          this.isSuggest = stepperState.isSuggest;
           for (let subject of this.subjects) {
             this.secondFormGroup.addControl(
               subject.id.toString(),
@@ -93,10 +90,6 @@ export class StepperComponent implements OnInit, OnDestroy {
     // console.log(this.marks);
     this.store.dispatch(new StepperActions.SetMarks(this.marks));
   }
-  
-  onResultSelect() {
-    this.store.dispatch(new StepperActions.SetIsSuggest(this.thirdFormGroup.value['resultType'] !== this.resultTypes[0]));
-  }
 
   ngOnDestroy() {
     if (this.subscription) {
@@ -106,21 +99,13 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   initResult() {
     if (this.suggestedSubjectsGroup && this.suggestedSubjectsGroup.length > 0) {
-      if (this.isSuggest) {
-        this.column = this.suggestedSubjectsGroup.length > NUMBER_OF_DEFAULT_COLUMNS ? this.suggestedSubjectsGroup.length : NUMBER_OF_DEFAULT_COLUMNS;
-      }
+      this.column = this.suggestedSubjectsGroup.length > NUMBER_OF_DEFAULT_COLUMNS ? this.suggestedSubjectsGroup.length : NUMBER_OF_DEFAULT_COLUMNS;
       
       let resultTiles: Tile[] = [];
       let emptyTiles: Tile[] = [];
       this.suggestedSubjectsGroup.forEach((suggestGroup, index) => {
-        if (this.isSuggest) {
-          emptyTiles.push({ ...this.emptyTile, suggestedGroup: suggestGroup, rows: (this.suggestedSubjectsGroup.length - index)});
-          resultTiles.push( {suggestedGroup: suggestGroup, cols: 1, rows: (this.suggestedSubjectsGroup.length - index + 1), color: this.colors[index], isUsed: true});
-          
-        } else {
-          resultTiles.push( {suggestedGroup: suggestGroup, cols: 1, rows: 1, color: this.colors[index], isUsed: true});
-        }
-       
+        emptyTiles.push({ ...this.emptyTile, suggestedGroup: suggestGroup, rows: (this.suggestedSubjectsGroup.length - index)});
+        resultTiles.push( {suggestedGroup: suggestGroup, cols: 1, rows: (this.suggestedSubjectsGroup.length - index + 1), color: this.colors[index], isUsed: true});
       });
       this.finalResultTiles = [];
       this.finalResultTiles = [...emptyTiles, ...resultTiles];
@@ -130,45 +115,6 @@ export class StepperComponent implements OnInit, OnDestroy {
   
 
   onSubmit() {
-    console.log(this.secondFormGroup.value);
+    // console.log(this.secondFormGroup.value);
   }
-
-  // subjects: Subject[] = [
-  //   {
-  //     id: 45,
-  //     name: "Toán 1"
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Lý 2"
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Hóa 3"
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Văn 4"
-  //   },
-  //   {
-  //     id: 5,
-  //     name: "Anh văn 5"
-  //   },
-  //   {
-  //     id: 6,
-  //     name: "Sinh"
-  //   },
-  //   {
-  //     id: 7,
-  //     name: "Sử"
-  //   },
-  //   {
-  //     id: 8,
-  //     name: "Địa"
-  //   },
-  //   {
-  //     id: 9,
-  //     name: "GDCD"
-  //   },
-  // ];
 }

@@ -6,7 +6,6 @@ import { Subject } from "../../../_models/subject";
 export const LOAD_SUBJECTS = '[Stepper] Load Subjects';
 export const SET_SUBJECTS = '[Stepper] Set Subjects';
 export const SET_MARKS = '[Stepper] Set Marks';
-export const SET_IS_SUGGEST = '[Stepper] Set Is Suggest';
 export const SET_SUGGESTED_SUBJECTS_GROUP = '[Stepper] Set Suggested Subjects Group';
 
 export class LoadSubjects implements Action {
@@ -23,14 +22,9 @@ export class SetMarks implements Action {
   constructor(public payload: Mark[]) {}
 }
 
-export class SetIsSuggest implements Action {
-  readonly type = SET_IS_SUGGEST;
-  constructor(public payload: boolean) {}
-}
-
 export class SetSuggestedSubjectsGroup implements Action {
   readonly type = SET_SUGGESTED_SUBJECTS_GROUP;
   constructor(public payload: SuggestedSubjectsGroup[]) {}
 }
 
-export type StepperActions = LoadSubjects | SetSubjects | SetMarks | SetIsSuggest | SetSuggestedSubjectsGroup;
+export type StepperActions = LoadSubjects | SetSubjects | SetMarks | SetSuggestedSubjectsGroup;
