@@ -36,7 +36,7 @@ export class StepperEffects {
 
   @Effect()
   loadResult = this.actions$.pipe(
-    ofType(StepperActions.SET_IS_SUGGEST),
+    ofType(StepperActions.SET_MARKS),
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
       console.log(stepperState.marks);
@@ -44,7 +44,7 @@ export class StepperEffects {
         'https://localhost:44344/api/v1/subject-group/top-subject-group',
         {
           marks: stepperState.marks,
-          isSuggest: stepperState.isSuggest,
+          isSuggest: true,
         }
       );
     }),

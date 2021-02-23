@@ -7,7 +7,6 @@ export interface State {
   subjects: Subject[];
   marks: Mark[];
   isLoading: boolean;
-  isSuggest: boolean;
   suggestedSubjectsGroup: SuggestedSubjectsGroup[]
 }
 
@@ -15,7 +14,6 @@ const initialState: State = {
   subjects: [],
   isLoading: false,
   marks: [],
-  isSuggest: false,
   suggestedSubjectsGroup: []
 };
 
@@ -39,12 +37,6 @@ export function stepReducer(
       return {
         ...state,
         marks: [...action.payload],
-      };
-    case StepperActions.SET_IS_SUGGEST:
-      return {
-        ...state,
-        isSuggest: action.payload,
-        isLoading: true
       };
     case StepperActions.SET_SUGGESTED_SUBJECTS_GROUP:
       return {
