@@ -1,27 +1,12 @@
-<mat-horizontal-stepper linear #stepper>
-  <!-- first step -->
-  <!-- <mat-step [stepControl]="firstFormGroup" editable="true">
-    <div class="center">
-      <form [formGroup]="firstFormGroup">
-        <ng-template matStepLabel>Chọn loại điểm</ng-template>
-          <mat-form-field>
-            <mat-label>Chon loai diem</mat-label>
-            <input type="number" matInput formControlName="firstControl" placeholder="Điểm" required>
-          </mat-form-field>
-        <div>
-          <button mat-button matStepperNext class="btn-step-one">Next</button>
-        </div>
-      </form>
-    </div>
-  </mat-step> -->
-  <!-- second step -->
-  <mat-step [stepControl]="secondFormGroup" editable="true">
+<mat-vertical-stepper [selected]="stepTwo" linear #stepper>
+  <mat-step #stepOne [stepControl]="secondFormGroup" editable="true">
     <div class="center">
       <form [formGroup]="secondFormGroup" (ngSubmit)="onScoreSubmit()">
         <ng-template matStepLabel>Nhập điểm</ng-template>
         <mat-form-field *ngFor="let subject of subjects; let i = index">
           <mat-label>{{ subject.name }}</mat-label>
           <input
+          style="text-align:right;"
             type="number"
             matInput
             formControlName="{{ subject.id }}"
@@ -29,41 +14,12 @@
           />
         </mat-form-field>
         <div>
-          <!-- <button mat-button matStepperPrevious>Back</button> -->
-          <button mat-button matStepperNext class="btn-step-one">Next</button>
+          <button style="margin-top: 20px; margin-left: 30px;" mat-raised-button color="primary" matStepperNext>Xem kết quả</button>
         </div>
       </form>
     </div>
   </mat-step>
-  <!-- third step -->
-  <mat-step [stepControl]="thirdFormGroup" editable="true">
-    <div class="center">
-      <form [formGroup]="thirdFormGroup" (ngSubmit)="onResultSelect()">
-        <ng-template matStepLabel>Chọn loại kết quả</ng-template>
-        <div class="third-step">
-          <label id="example-radio-group-label">Bạn muốn tính?</label>
-          <mat-radio-group
-          aria-labelledby="example-radio-group-label"
-          class="example-radio-group"
-            [(ngModel)]="favoriteSeason"
-            formControlName="resultType">
-            <mat-radio-button
-              class="example-radio-button"
-              *ngFor="let resultType of resultTypes;  let i = index"
-              [value]="resultType">
-              {{ resultType }}
-            </mat-radio-button>
-          </mat-radio-group>
-        </div>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext class="btn-step-one">Next</button>
-        </div>
-      </form>
-    </div>
-  </mat-step>
-  <!-- last step -->
-  <mat-step>
+  <mat-step #stepTwo >
     <ng-template matStepLabel>Kết quả</ng-template>
     <div class="center">
       <mat-grid-list [cols]="column" rowHeight="100px">
@@ -75,13 +31,17 @@
             <div *ngIf="!tile.isUsed">
               <div class="circle">{{tile.suggestedGroup.name}}</div>
             </div>
-            <mat-list *ngIf="tile.isUsed"  role="list">
-              <mat-list-item *ngIf="!isSuggest" role="listitem">Khối: {{ tile.suggestedGroup.name }}</mat-list-item>
-              <mat-list-item role="listitem">Total marks: {{ tile.suggestedGroup.totalMark }}</mat-list-item>
-              <div *ngIf="tile.suggestedGroup.suggestedMajors">
-                <mat-list-item *ngFor="let major of tile.suggestedGroup.suggestedMajors" role="listitem">{{ major.name}} - {{ major.weightMark }}</mat-list-item>
-              </div>
-            </mat-list>
+            <div *ngIf="tile.isUsed"  >
+              <div style="font-weight: bold;">Total marks: {{ tile.suggestedGroup.totalMark }}</div>
+              <mat-selection-list [multiple]="false">
+                <div *ngIf="tile.suggestedGroup.suggestedMajors">
+                  <mat-list-option *ngFor="let major of tile.suggestedGroup.suggestedMajors">
+                    <div>{{ major.name}}</div>
+                    <mat-divider></mat-divider>
+                  </mat-list-option>
+                </div>
+              </mat-selection-list>
+            </div>
         </mat-grid-tile>
       </mat-grid-list>
       <div style="margin-top: 25px;">
@@ -90,4 +50,4 @@
       </div>
   </div>
   </mat-step>
-</mat-horizontal-stepper>
+</mat-vertical-stepper>
