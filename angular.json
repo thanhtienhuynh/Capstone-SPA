@@ -128,10 +128,6 @@
   },
   "defaultProject": "Capstone-SPA",
   "cli": {
-<<<<<<< HEAD
-    "analytics": "c2093c4a-f706-4063-838a-5bd111ca4cea"
-=======
     "analytics": false
->>>>>>> f15458c17806b07dfd26ad615f5de4e91ccc7d64
   }
 }
