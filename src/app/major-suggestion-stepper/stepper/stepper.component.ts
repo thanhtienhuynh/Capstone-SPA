@@ -85,6 +85,7 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   onScoreSubmit() {
     // console.log(this.secondFormGroup.value);
+    console.log('alksdglksdg');
     this.marks = [];
     for(let subject of this.subjects) {
       this.marks.push({subjectId: subject.id, mark: this.secondFormGroup.value[subject.id] ? this.secondFormGroup.value[subject.id] : 0});
