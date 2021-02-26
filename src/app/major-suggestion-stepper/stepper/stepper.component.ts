@@ -8,6 +8,7 @@ import {
 import { MatStepper } from '@angular/material/stepper';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { GenernalHelperService } from 'src/app/services/genernal-helper.service';
 import { NUMBER_OF_DEFAULT_COLUMNS } from 'src/app/_common/constants';
 import { Mark } from 'src/app/_models/mark';
 import { Subject } from 'src/app/_models/subject';
@@ -35,13 +36,14 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   isUniversityLoadedO: Observable<boolean>;
 
-  secondFormGroup: FormGroup;
+  secondFormGroup: FormGroup = null;
   thirdFormGroup: FormGroup;
+  inputFormControl: FormGroup = null;
 
   subscription: Subscription;
 
   isLoading = true;
-  subjects: Subject[];
+  subjects: Subject[] = null;
   marks: Mark[];
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
   universities: University[];
@@ -58,11 +60,13 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private store: Store<fromApp.AppState>
+    private store: Store<fromApp.AppState>,
+    public _generalService: GenernalHelperService
   ) {}
 
   ngOnInit() {
     this.secondFormGroup = this._formBuilder.group({});
+    this.inputFormControl = this._formBuilder.group({});
     this.thirdFormGroup = this._formBuilder.group({
       resultType: [null, Validators.required],
     });
@@ -80,11 +84,11 @@ export class StepperComponent implements OnInit, OnDestroy {
           this.tests = stepperState.tests;
           if (this.universities && this.universities.length > 0) {
             this.myStepper.selectedIndex = 2;
-          }
+          }                    
           for (let subject of this.subjects) {
             this.secondFormGroup.addControl(
               subject.id.toString(),
-              new FormControl(null)
+              new FormControl(subject.id.toString(), [Validators.required, Validators.min(0), Validators.max(10)])
             );
           }
           this.initResult();
@@ -96,15 +100,14 @@ export class StepperComponent implements OnInit, OnDestroy {
   }
 
   onScoreSubmit() {
-    // console.log(this.secondFormGroup.value);
-    console.log('alksdglksdg');
     this.marks = [];
     for(let subject of this.subjects) {
       this.marks.push({subjectId: subject.id, mark: this.secondFormGroup.value[subject.id] ? this.secondFormGroup.value[subject.id] : 0});
-    }
-    // console.log(this.marks);
+    }    
     this.store.dispatch(new StepperActions.SetMarks(this.marks));
   }
+
+  
 
   ngOnDestroy() {
     if (this.subscription) {

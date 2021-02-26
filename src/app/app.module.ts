@@ -23,16 +23,19 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatCardModule} from '@angular/material/card';
 import {MatListModule} from '@angular/material/list';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MathModule } from './_helper/math/math.module';
 import { AppRoutingModule } from './app-routing.module';
 import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-page.component';
+import { WaitingComponent } from './_sharings/components/waiting/waiting.component';
 
 
 @NgModule({
   declarations: [	
     AppComponent,
     StepperComponent,
-    ExamPageComponent
+    ExamPageComponent,
+    WaitingComponent
    ],
   imports: [
     BrowserModule,
@@ -48,6 +51,7 @@ import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-pag
     MatDividerModule,
     MatGridListModule,
     MatCardModule,
+    MatDialogModule,
     CommonModule,
     HttpClientModule,
     MatListModule,

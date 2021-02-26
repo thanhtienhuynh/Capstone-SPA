@@ -1,25 +1,64 @@
 <mat-vertical-stepper linear #stepper>
   <mat-step #stepOne [stepControl]="secondFormGroup" editable="true">
     <div class="center">
-      <form [formGroup]="secondFormGroup" (ngSubmit)="onScoreSubmit()">
+      <form *ngIf="secondFormGroup == null">
+        <div class="card-body">
+          <mat-spinner
+            style="margin-left: auto; margin-right: auto"
+            color="accent"
+            diameter="30"
+          >
+          </mat-spinner>
+        </div>
+      </form>
+      <form
+        *ngIf="secondFormGroup != null; elseNull"
+        [formGroup]="secondFormGroup"
+        (ngSubmit)="onScoreSubmit()"
+      >
         <ng-template matStepLabel>Nhập điểm</ng-template>
         <mat-form-field *ngFor="let subject of subjects; let i = index">
           <mat-label>{{ subject.name }}</mat-label>
           <input
-          style="text-align:right;"
+            style="text-align: right"
             type="number"
+            min="0"
+            max="10"
             matInput
             formControlName="{{ subject.id }}"
             placeholder="Điểm {{ subject.name }}"
+            required
           />
+          <mat-error
+            *ngIf="_generalService.hasErrorInputValidation(subject.id, 'required', secondFormGroup)"
+          >
+            Vui lòng không để trống
+          </mat-error>
+          <mat-error
+            *ngIf="_generalService.hasErrorInputValidation(subject.id, 'max', secondFormGroup)"
+          >
+            Mark between <strong>0 - 10</strong>
+          </mat-error>
+          <mat-error
+            *ngIf="_generalService.hasErrorInputValidation(subject.id, 'min', secondFormGroup)"
+          >
+            Mark between <strong>0 - 10</strong>
+          </mat-error>
         </mat-form-field>
         <div>
-          <button style="margin-top: 20px; margin-left: 30px;" mat-raised-button color="primary" matStepperNext>Xem kết quả</button>
+          <button
+            style="margin-top: 20px; margin-left: 30px"
+            mat-raised-button
+            color="primary"
+            matStepperNext
+          >
+            Xem kết quả
+          </button>
         </div>
       </form>
     </div>
   </mat-step>
-  <mat-step #stepTwo >
+  <!-- <mat-step #stepTwo >
     <ng-template matStepLabel>Kết quả</ng-template>
     <div class="center">
       <mat-grid-list [cols]="column" rowHeight="100px">
@@ -49,8 +88,8 @@
         <button mat-raised-button color="primary" class="btn-step-one">Xem thêm</button>
       </div>
   </div>
-  </mat-step>
-  <mat-step  #stepThree >
+  </mat-step> -->
+  <!-- <mat-step  #stepThree >
     <ng-template matStepLabel>Danh sách trường</ng-template>
     <div class="center">
       <mat-grid-list [cols]="2" rowHeight="320px" [gutterSize]="'20px'">
@@ -79,8 +118,8 @@
         <button mat-button class="btn-step-one" (click)="stepper.reset()">Reset</button>
       </div>
   </div>
-  </mat-step>
-  <mat-step  #stepFour >
+  </mat-step> -->
+  <!-- <mat-step  #stepFour >
     <ng-template matStepLabel>Danh sách bài thi</ng-template>
     <div class="center">
       <div *ngFor="let test of tests">
@@ -93,5 +132,5 @@
         <button mat-button class="btn-step-one" (click)="stepper.reset()">Reset</button>
       </div>
   </div>
-  </mat-step>
+  </mat-step> -->
 </mat-vertical-stepper>
