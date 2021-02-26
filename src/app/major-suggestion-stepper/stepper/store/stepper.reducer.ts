@@ -1,5 +1,7 @@
 import { Mark } from 'src/app/_models/mark';
 import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group';
+import { Test } from 'src/app/_models/test';
+import { University } from 'src/app/_models/university';
 import { Subject } from '../../../_models/subject';
 import * as StepperActions from './stepper.actions';
 
@@ -7,14 +9,30 @@ export interface State {
   subjects: Subject[];
   marks: Mark[];
   isLoading: boolean;
-  suggestedSubjectsGroup: SuggestedSubjectsGroup[]
+  suggestedSubjectsGroup: SuggestedSubjectsGroup[];
+  universities: University[];
+  tests: Test[];
+  test: Test;
+  totalMark: number;
+  selectedGroupId: number;
+  selectedMajorId: number;
+  selectedUniversityId: number;
+  selectedTestId: number;
 }
 
 const initialState: State = {
   subjects: [],
   isLoading: false,
   marks: [],
-  suggestedSubjectsGroup: []
+  suggestedSubjectsGroup: [],
+  universities: [],
+  tests: [],
+  test: null,
+  totalMark: null,
+  selectedGroupId: null,
+  selectedMajorId: null,
+  selectedUniversityId: null,
+  selectedTestId: null
 };
 
 export function stepReducer(
@@ -42,7 +60,45 @@ export function stepReducer(
       return {
         ...state,
         suggestedSubjectsGroup: action.payload,
-        isLoading: false
+        isLoading: false,
+      };
+    case StepperActions.LOAD_UNIVERSIIES:
+      return {
+        ...state,
+        isLoading: true,
+        totalMark: action.payload.totalMark,
+        selectedGroupId: action.payload.subjectGroupId,
+        selectedMajorId: action.payload.majorId,
+      };
+    case StepperActions.SET_UNIVERSIIES:
+      return {
+        ...state,
+        universities: action.payload,
+        isLoading: false,
+      };
+    case StepperActions.LOAD_TESTS:
+      return {
+        ...state,
+        selectedUniversityId: action.payload,
+        isLoading: true,
+      };
+    case StepperActions.SET_TESTS:
+      return {
+        ...state,
+        tests: action.payload,
+        isLoading: false,
+      };
+    case StepperActions.LOAD_TEST:
+      return {
+        ...state,
+        selectedTestId: action.payload,
+        isLoading: true,
+      };
+    case StepperActions.SET_TEST:
+      return {
+        ...state,
+        test: action.payload,
+        isLoading: false,
       };
     default:
       return state;

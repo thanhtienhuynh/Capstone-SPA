@@ -23,13 +23,17 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatCardModule} from '@angular/material/card';
 import {MatListModule} from '@angular/material/list';
+import { MathModule } from './_helper/math/math.module';
+import { AppRoutingModule } from './app-routing.module';
+import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-page.component';
 
 
 @NgModule({
-  declarations: [
+  declarations: [	
     AppComponent,
     StepperComponent,
-  ],
+    ExamPageComponent
+   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -48,8 +52,10 @@ import {MatListModule} from '@angular/material/list';
     HttpClientModule,
     MatListModule,
     StoreModule.forRoot(fromApp.appReducer),
+    MathModule,
     EffectsModule.forRoot([StepperEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
