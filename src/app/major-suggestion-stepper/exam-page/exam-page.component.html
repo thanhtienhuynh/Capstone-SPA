@@ -1,0 +1,16 @@
+<div *ngIf="test">
+  <div  *ngFor="let question of test.questions; let i = index ">
+    <span style="font-weight: bold; font-size: 1.2em;"><br>{{i + 1}}. <p [innerHtml]="question.questionContent"></p> <br></span>
+   <div *ngFor="let option of question.options; let y = index">
+    
+    <p appMath *ngIf="y == 0"  [innerHtml]="'A.' +  option.optionContent "></p>
+    <p *ngIf="y == 1"  [innerHtml]="'B.' +  option.optionContent "></p>
+    <p *ngIf="y == 2"  [innerHtml]="'C.' + option.optionContent "></p>
+    <p *ngIf="y == 3"  [innerHtml]="'D.' +  option.optionContent "></p> 
+    <!-- <p *ngIf="y == 3" >{{  option.optionContent }}</p>  -->
+   </div>
+  </div>
+</div>
+
+
+
