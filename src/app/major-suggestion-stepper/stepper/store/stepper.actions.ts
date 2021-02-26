@@ -1,12 +1,20 @@
 import { Action } from "@ngrx/store";
 import { Mark } from "src/app/_models/mark";
 import { SuggestedSubjectsGroup } from "src/app/_models/suggested-subjects-group";
+import { Test } from "src/app/_models/test";
+import { University } from "src/app/_models/university";
 import { Subject } from "../../../_models/subject";
 
 export const LOAD_SUBJECTS = '[Stepper] Load Subjects';
 export const SET_SUBJECTS = '[Stepper] Set Subjects';
 export const SET_MARKS = '[Stepper] Set Marks';
 export const SET_SUGGESTED_SUBJECTS_GROUP = '[Stepper] Set Suggested Subjects Group';
+export const SET_UNIVERSIIES = '[Stepper] Set Universities';
+export const LOAD_UNIVERSIIES = '[Stepper] Load Universities';
+export const SET_TESTS = '[Stepper] Set Tests';
+export const LOAD_TESTS = '[Stepper] Load Tests';
+export const LOAD_TEST = '[Stepper] Load Test';
+export const SET_TEST = '[Stepper] Set Test';
 
 export class LoadSubjects implements Action {
   readonly type = LOAD_SUBJECTS;
@@ -27,4 +35,35 @@ export class SetSuggestedSubjectsGroup implements Action {
   constructor(public payload: SuggestedSubjectsGroup[]) {}
 }
 
-export type StepperActions = LoadSubjects | SetSubjects | SetMarks | SetSuggestedSubjectsGroup;
+export class LoadUniversities implements Action {
+  readonly type = LOAD_UNIVERSIIES;
+  constructor(public payload: {subjectGroupId: number, majorId: number, totalMark: number}) {}
+}
+
+export class SetUniversities implements Action {
+  readonly type = SET_UNIVERSIIES;
+  constructor(public payload: University[]) {}
+}
+
+export class SetTests implements Action {
+  readonly type = SET_TESTS;
+  constructor(public payload: Test[]) {}
+}
+
+export class LoadTests implements Action {
+  readonly type = LOAD_TESTS;
+  constructor(public payload: number) {}
+}
+
+
+export class LoadTest implements Action {
+  readonly type = LOAD_TEST;
+  constructor(public payload: number) {}
+}
+
+export class SetTest implements Action {
+  readonly type = SET_TEST;
+  constructor(public payload: Test) {}
+}
+
+export type StepperActions = LoadTest | SetTest | LoadSubjects | SetSubjects | SetMarks | SetSuggestedSubjectsGroup | LoadUniversities | SetUniversities | LoadTests | SetTests;

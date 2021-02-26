@@ -1,16 +1,19 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { MatStepper } from '@angular/material/stepper';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { NUMBER_OF_DEFAULT_COLUMNS } from 'src/app/_common/constants';
 import { Mark } from 'src/app/_models/mark';
 import { Subject } from 'src/app/_models/subject';
 import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group';
+import { Test } from 'src/app/_models/test';
+import { University } from 'src/app/_models/university';
 import * as fromApp from '../../_store/app.reducer';
 import * as StepperActions from '../stepper/store/stepper.actions';
 
@@ -26,20 +29,27 @@ export interface Tile {
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
   styleUrls: ['./stepper.component.scss'],
-  encapsulation: ViewEncapsulation.None
 })
 export class StepperComponent implements OnInit, OnDestroy {
-  // firstFormGroup: FormGroup;
+  @ViewChild('stepper') private myStepper: MatStepper;
+
+  isUniversityLoadedO: Observable<boolean>;
+
   secondFormGroup: FormGroup;
   thirdFormGroup: FormGroup;
+
   subscription: Subscription;
+
   isLoading = true;
   subjects: Subject[];
-  favoriteSeason: string;
   marks: Mark[];
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
+  universities: University[];
+  tests: Test[];
+
   emptyTile: Tile = {suggestedGroup: null, cols: 1, rows: 1, color: 'transparent', isUsed: false};
   column: number = NUMBER_OF_DEFAULT_COLUMNS;
+  isUniversityLoaded: boolean = false;
 
   colors: string[] = ['lightblue', 'lightgreen', 'lightpink', '#DDBDF1', 'lightred', 'lightyellow', 'lightblue', 'lightgrey'];
 
@@ -66,6 +76,11 @@ export class StepperComponent implements OnInit, OnDestroy {
           this.subjects = stepperState.subjects;
           this.isLoading = stepperState.isLoading;
           this.suggestedSubjectsGroup = stepperState.suggestedSubjectsGroup;
+          this.universities = stepperState.universities;
+          this.tests = stepperState.tests;
+          if (this.universities && this.universities.length > 0) {
+            this.myStepper.selectedIndex = 2;
+          }
           for (let subject of this.subjects) {
             this.secondFormGroup.addControl(
               subject.id.toString(),
@@ -112,9 +127,25 @@ export class StepperComponent implements OnInit, OnDestroy {
       console.log(this.finalResultTiles);
     }
   }
+
+  getUniversity(suggestedGroupId: number, majorId: number, totalMark: number) {
+    this.store.dispatch(new StepperActions.LoadUniversities({subjectGroupId: suggestedGroupId, majorId: majorId, totalMark: totalMark}));
+  }
+
+  loadTests(universitiId: number) {
+    this.store.dispatch(new StepperActions.LoadTests(universitiId));
+  }
   
 
   onSubmit() {
     // console.log(this.secondFormGroup.value);
+  }
+  
+  goBack(){
+    this.myStepper.previous();
+  }
+
+  goForward(){
+    this.myStepper.next();
   }
 }
