@@ -1,0 +1,4 @@
+<app-answer *ngFor="let question of questions; let i = index">
+    <button class="answer" mat-stroked-button>{{i + 1}}</button>
+    <br *ngIf="(i + 1) % 8 === 0">    
+</app-answer>

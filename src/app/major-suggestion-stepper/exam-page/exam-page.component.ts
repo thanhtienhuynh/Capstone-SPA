@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs';
 import { Test } from 'src/app/_models/test';
 import * as fromApp from "../../_store/app.reducer";
 import * as StepperActions from "../stepper/store/stepper.actions";
-
+import {MediaChange, MediaObserver} from '@angular/flex-layout';
 @Component({
   selector: 'app-exam-page',
   templateUrl: './exam-page.component.html',
@@ -20,9 +20,12 @@ export class ExamPageComponent implements OnInit, OnDestroy {
   sup1 = "<p appMath>";
   sup2 = "</p>";
 
-  constructor(private route: ActivatedRoute, private store: Store<fromApp.AppState>) { }
+  option: any;
 
-  ngOnInit() {
+  constructor(private route: ActivatedRoute, private store: Store<fromApp.AppState>, public mediaObserver: MediaObserver) { }
+
+  ngOnInit() {    
+
     const id = +this.route.snapshot.params['id'];
     console.log("ID:" + id);
     this.store.dispatch(new StepperActions.LoadTest(id));
@@ -38,6 +41,7 @@ export class ExamPageComponent implements OnInit, OnDestroy {
       .select('stepper')
       .subscribe(
         (stepperState) => {
+          console.log(stepperState.test);
           this.test = stepperState.test;
         },
         (error) => {
@@ -51,4 +55,7 @@ export class ExamPageComponent implements OnInit, OnDestroy {
     this.params.unsubscribe();
   }
 
+  getAnswer(): void {
+    console.log('ahaha');
+  }
 }

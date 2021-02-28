@@ -1,16 +1,69 @@
-<div *ngIf="test">
-  <div  *ngFor="let question of test.questions; let i = index ">
-    <span style="font-weight: bold; font-size: 1.2em;"><br>{{i + 1}}. <p [innerHtml]="question.questionContent"></p> <br></span>
-   <div *ngFor="let option of question.options; let y = index">
+<!-- <div *ngIf="test">
+  <div *ngFor="let question of test.questions; let i = index">
+    <span style="font-weight: bold; font-size: 1.2em"><br />Câu {{ i + 1 }}.
+      <p [innerHtml]="question.questionContent"></p>
+      <br
+    /></span>    
+    <mat-radio-group aria-label="Select an option">
+      <div *ngFor="let option of question.options; let y = index">
+        <mat-radio-button value="'{{option.optionContent}}'">
+          <p [innerHtml]=" option.optionContent"></p>
+        </mat-radio-button> 
+      </div>
+    </mat-radio-group>
+  </div>
+</div> -->
+
+<!-- <div *ngFor="let option of question.options; let y = index">
     
     <p appMath *ngIf="y == 0"  [innerHtml]="'A.' +  option.optionContent "></p>
     <p *ngIf="y == 1"  [innerHtml]="'B.' +  option.optionContent "></p>
     <p *ngIf="y == 2"  [innerHtml]="'C.' + option.optionContent "></p>
     <p *ngIf="y == 3"  [innerHtml]="'D.' +  option.optionContent "></p> 
-    <!-- <p *ngIf="y == 3" >{{  option.optionContent }}</p>  -->
-   </div>
-  </div>
+    <p [innerHtml]=" option.optionContent"></p> 
+    
+   </div> -->
+
+<div fxLayout="row" fxLayoutAlign="space-evenly start">
+  <mat-card class="card" style="margin: 100px">
+    <h4 class="card-header">Đề Thi</h4>
+    <mat-card-content class="card-body p-0">
+      <div *ngIf="test">
+        <div *ngFor="let question of test.questions; let i = index">
+          <span style="font-weight: bold; font-size: 1.2em"
+            ><br />Câu {{ i + 1 }}.
+            <p [innerHtml]="question.questionContent"></p>
+            <br
+          /></span>
+
+          <mat-radio-group aria-label="Select an option">
+            <div *ngFor="let option of question.options; let y = index">
+              <mat-radio-button value="'{{ option.optionContent }}'" >
+                <p [innerHtml]="option.optionContent"></p>
+              </mat-radio-button>
+            </div>
+          </mat-radio-group>
+                    
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="card" style="margin: 100px">
+    <h4 class="card-header">
+      <div fxLayout="column" fxLayoutAlign="space-evenly center">
+        <div class="label">Thời gian</div>
+        <div class="timer">60:00</div>
+      </div>
+    </h4>    
+    <mat-card-content class="card-body p-0">
+      <div fxLayout="column" fxLayoutAlign="space-evenly center">
+        <div *ngIf="test">
+          <app-list-answers [questions]="test.questions"></app-list-answers>
+        </div> 
+        
+        <button mat-raised-button color="primary">Nộp Bài</button>
+      </div>           
+    </mat-card-content>
+  </mat-card>
 </div>
-
-
 

@@ -23,11 +23,16 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatCardModule} from '@angular/material/card';
 import {MatListModule} from '@angular/material/list';
+import {FlexLayoutModule} from '@angular/flex-layout';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MathModule } from './_helper/math/math.module';
 import { AppRoutingModule } from './app-routing.module';
 import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-page.component';
 import { WaitingComponent } from './_sharings/components/waiting/waiting.component';
+import { MessageComponent } from './_sharings/components/message/message.component';
+import { AnswerComponent } from './major-suggestion-stepper/exam-page/answer/answer.component';
+import { ListAnswersComponent } from './major-suggestion-stepper/exam-page/list-answers/list-answers.component';
+
 
 
 @NgModule({
@@ -35,7 +40,10 @@ import { WaitingComponent } from './_sharings/components/waiting/waiting.compone
     AppComponent,
     StepperComponent,
     ExamPageComponent,
-    WaitingComponent
+    WaitingComponent,
+    MessageComponent,
+    AnswerComponent,
+    ListAnswersComponent,    
    ],
   imports: [
     BrowserModule,
@@ -51,7 +59,8 @@ import { WaitingComponent } from './_sharings/components/waiting/waiting.compone
     MatDividerModule,
     MatGridListModule,
     MatCardModule,
-    MatDialogModule,
+    MatDialogModule,  
+    FlexLayoutModule,  
     CommonModule,
     HttpClientModule,
     MatListModule,
