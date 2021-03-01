@@ -24,46 +24,57 @@
     
    </div> -->
 
-<div fxLayout="row" fxLayoutAlign="space-evenly start">
-  <mat-card class="card" style="margin: 100px">
+<div *ngIf="test" fxLayout="row" fxLayoutAlign="space-evenly start">
+  <mat-card  class="card" class="question_widget">
     <h4 class="card-header">Đề Thi</h4>
     <mat-card-content class="card-body p-0">
-      <div *ngIf="test">
-        <div *ngFor="let question of test.questions; let i = index">
-          <span style="font-weight: bold; font-size: 1.2em"
-            ><br />Câu {{ i + 1 }}.
-            <p [innerHtml]="question.questionContent"></p>
-            <br
-          /></span>
-
-          <mat-radio-group aria-label="Select an option">
-            <div *ngFor="let option of question.options; let y = index">
-              <mat-radio-button value="'{{ option.optionContent }}'" >
-                <p [innerHtml]="option.optionContent"></p>
-              </mat-radio-button>
-            </div>
-          </mat-radio-group>
-                    
-        </div>
+      <div *ngFor="let question of test.questions; let i = index">
+        <span style="font-weight: bold; font-size: 1.2em"
+          ><br />Câu {{ i + 1 }}.
+          <p [innerHtml]="question.questionContent"></p>
+          <br
+        /></span>
+        <mat-radio-group aria-label="Select an option">
+          <div *ngFor="let option of question.options">
+            <mat-radio-button
+              value="'{{ option.optionContent }}'"
+              (click)="getOrderOfQuestion(i)"
+            >
+              <p [innerHtml]="option.optionContent"></p>
+            </mat-radio-button>
+          </div>
+        </mat-radio-group>
       </div>
     </mat-card-content>
-  </mat-card>
-  <mat-card class="card" style="margin: 100px">
+  </mat-card>  
+  <mat-card class="card" class="answer_widget">
     <h4 class="card-header">
       <div fxLayout="column" fxLayoutAlign="space-evenly center">
         <div class="label">Thời gian</div>
         <div class="timer">60:00</div>
       </div>
-    </h4>    
-    <mat-card-content class="card-body p-0">
-      <div fxLayout="column" fxLayoutAlign="space-evenly center">
-        <div *ngIf="test">
-          <app-list-answers [questions]="test.questions"></app-list-answers>
-        </div> 
-        
-        <button mat-raised-button color="primary">Nộp Bài</button>
-      </div>           
+    </h4>
+    <mat-card-content class="card-body p-0 answer_widget_content">
+      <div>
+        <div
+          *ngFor="let question of test.questions; let i = index"
+          style="display: inline"
+        >
+          <app-answer
+            [numericalOrder]="i"
+            [selectedIndex]="selectedIndex"
+          ></app-answer>
+        </div>
+      </div>
     </mat-card-content>
+    <mat-card-footer fxLayout="column" fxLayoutAlign="space-evenly center">
+      <button mat-raised-button color="primary">Nộp Bài</button>
+    </mat-card-footer>
   </mat-card>
 </div>
 
+<div *ngIf="test==null" style="margin: auto;">  
+    <mat-spinner style="margin-left:auto; 
+                        margin-right:auto;" color="accent" diameter=30>
+    </mat-spinner>   
+</div>

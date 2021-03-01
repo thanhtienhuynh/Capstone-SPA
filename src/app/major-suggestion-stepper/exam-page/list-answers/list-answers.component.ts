@@ -1,19 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-list-answers',
   templateUrl: './list-answers.component.html',
   styleUrls: ['./list-answers.component.scss']
 })
-export class ListAnswersComponent implements OnInit {
+export class ListAnswersComponent implements OnInit, OnChanges {
 
   @Input() questions: any;
-
-  isSelected: boolean = false;
+  @Input() selectedIndex: number;  
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.questions);
+    
+  }
+
+  ngOnChanges(): void {    
   }
 
 }

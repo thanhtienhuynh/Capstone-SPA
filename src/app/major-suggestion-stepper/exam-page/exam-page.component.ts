@@ -6,6 +6,7 @@ import { Test } from 'src/app/_models/test';
 import * as fromApp from "../../_store/app.reducer";
 import * as StepperActions from "../stepper/store/stepper.actions";
 import {MediaChange, MediaObserver} from '@angular/flex-layout';
+import { FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-exam-page',
   templateUrl: './exam-page.component.html',
@@ -20,14 +21,16 @@ export class ExamPageComponent implements OnInit, OnDestroy {
   sup1 = "<p appMath>";
   sup2 = "</p>";
 
-  option: any;
+  option: any;  
+  selectedIndex: any;
+
+  examInputForm: FormGroup;
 
   constructor(private route: ActivatedRoute, private store: Store<fromApp.AppState>, public mediaObserver: MediaObserver) { }
 
   ngOnInit() {    
 
-    const id = +this.route.snapshot.params['id'];
-    console.log("ID:" + id);
+    const id = +this.route.snapshot.params['id'];    
     this.store.dispatch(new StepperActions.LoadTest(id));
     this.params = this.route.params.subscribe(
       (params) => {
@@ -55,7 +58,11 @@ export class ExamPageComponent implements OnInit, OnDestroy {
     this.params.unsubscribe();
   }
 
-  getAnswer(): void {
-    console.log('ahaha');
+  submitExam(): void {
+    console.log('asldkgjlsdkg');
+  }
+
+  getOrderOfQuestion(index: number): void {
+    this.selectedIndex = index;
   }
 }
