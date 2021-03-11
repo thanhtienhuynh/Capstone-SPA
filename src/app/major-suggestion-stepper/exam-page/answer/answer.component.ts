@@ -17,7 +17,7 @@ export class AnswerComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    if (this.numericalOrder == this.selectedIndex) {
+    if (this.numericalOrder === this.selectedIndex) {
       this.isSelected = !this.isSelected;
     }           
   }  

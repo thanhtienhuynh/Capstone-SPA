@@ -16,6 +16,9 @@ import * as fromApp from '../../../_store/app.reducer';
 import { Store } from '@ngrx/store';
 import { University } from 'src/app/_models/university';
 import { Test } from 'src/app/_models/test';
+import { MarkParam } from 'src/app/_params/mark-param';
+import { TestSubmission } from 'src/app/_models/test-submission';
+import { ClassifiedTests } from 'src/app/_models/classified-tests';
 
 @Injectable()
 export class StepperEffects {
@@ -43,10 +46,7 @@ export class StepperEffects {
     switchMap(([actionData, stepperState]) => {
       return this.http.post<SuggestedSubjectsGroup[]>(
         'https://localhost:44344/api/v1/subject-group/top-subject-group',
-        {
-          marks: stepperState.marks,
-          isSuggest: true,
-        }
+        new MarkParam(stepperState.marks, true)
       );
     }),
     map((suggestedGroup) => {
@@ -83,7 +83,7 @@ export class StepperEffects {
       let queryParams = new HttpParams();
       queryParams = queryParams.append('SubjectGroupId', stepperState.selectedGroupId.toString());
       queryParams = queryParams.append('UniversityId', stepperState.selectedUniversityId.toString());
-      return this.http.get<Test[]>(
+      return this.http.get<ClassifiedTests[]>(
         'https://localhost:44344/api/v1/test/recommendation',
         {
           params: queryParams
@@ -106,6 +106,20 @@ export class StepperEffects {
     }),
     map((test) => {
       return new StepperActions.SetTest(test);
+    })
+  );
+
+  @Effect()
+  scoringTest = this.actions$.pipe(
+    ofType(StepperActions.SCORING_TEST),
+    withLatestFrom(this.store.select('stepper')),
+    switchMap(([actionData, stepperState]) => {
+      return this.http.post<TestSubmission>(
+        'https://localhost:44344/api/v1/test-submission', stepperState.testSubmissionParam
+      );
+    }),
+    map((testSubmissionReponse) => {
+      return new StepperActions.SetTestMark(testSubmissionReponse);
     })
   );
 }

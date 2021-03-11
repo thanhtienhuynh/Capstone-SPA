@@ -33,7 +33,54 @@ mat-form-field {
   height: 300px;
 }
 
-.example-header-image {
-  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  background-size: cover;
+.test-scroll {
+  overflow:scroll;
+  height: 400px;
 }
+
+.top-title-2 { 
+  color: #124be7; 
+  font-family: "Great Vibes", 
+  cursive; 
+  justify-content: center;
+  font-size: 3em; 
+  font-weight: normal; 
+  text-align: center; 
+  text-shadow: 0 1px 1px #fff; 
+  padding: 20px;
+}
+
+.top-title-1 { 
+  color: #124be7; 
+  font-family: "Great Vibes", 
+  cursive; 
+  justify-content: center;
+  font-size: 3.5em; 
+  font-weight: normal; 
+  text-align: center; 
+  text-shadow: 0 1px 1px #fff; 
+  padding: 30px;
+}
+
+.group-top2-name {
+  color: #CEF0D4;
+   font-family: 'Rouge Script', cursive;
+    font-size: 5em; 
+    font-weight: normal;  
+    margin: 0 0 50px; 
+    text-align: center; 
+    text-shadow: 1px 1px 2px #082b34; 
+    padding-top: 30px;
+}
+
+.group-top1-name {
+  color: #CEF0D4;
+   font-family: 'Rouge Script', cursive;
+    font-size: 6.5em; 
+    font-weight: normal;  
+    margin: 0 0 50px; 
+    text-align: center; 
+    text-shadow: 1px 1px 2px #082b34; 
+    padding-top: 40px;
+}
+

@@ -25,27 +25,39 @@ import {MatCardModule} from '@angular/material/card';
 import {MatListModule} from '@angular/material/list';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MathModule } from './_helper/math/math.module';
 import { AppRoutingModule } from './app-routing.module';
 import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-page.component';
 import { WaitingComponent } from './_sharings/components/waiting/waiting.component';
-import { MessageComponent } from './_sharings/components/message/message.component';
 import { AnswerComponent } from './major-suggestion-stepper/exam-page/answer/answer.component';
-import { ListAnswersComponent } from './major-suggestion-stepper/exam-page/list-answers/list-answers.component';
-
-
+import { ResultDialogComponent } from './major-suggestion-stepper/exam-page/result-dialog/result-dialog.component';
+import { CountdownModule } from 'ngx-countdown';
+import { TestCardComponent } from './major-suggestion-stepper/exam-page/test-card/test-card.component';
+import { HeaderComponent } from './header/header.component';
+import { HomeComponent } from './home/home.component';
+import { MatSelectModule } from '@angular/material/select';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatTabsModule} from '@angular/material/tabs';
+import { SafeHtmlPipe } from './_helper/safe-html-pipe';
+import { AuthenticationComponent } from './authentication/authentication.component';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 @NgModule({
-  declarations: [	
+  declarations: [					
     AppComponent,
     StepperComponent,
     ExamPageComponent,
     WaitingComponent,
-    MessageComponent,
     AnswerComponent,
-    ListAnswersComponent,    
+    ResultDialogComponent,
+    TestCardComponent,
+    HeaderComponent,
+    HomeComponent,
+    SafeHtmlPipe,
+      AuthenticationComponent
    ],
   imports: [
+    MatAutocompleteModule,
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
@@ -54,21 +66,25 @@ import { ListAnswersComponent } from './major-suggestion-stepper/exam-page/list-
     MatFormFieldModule,
     MatProgressSpinnerModule,
     MatInputModule,
+    MatTabsModule,
     MatButtonModule,
     MatRadioModule,
     MatDividerModule,
     MatGridListModule,
     MatCardModule,
     MatDialogModule,  
+    MatSelectModule,
     FlexLayoutModule,  
     CommonModule,
     HttpClientModule,
     MatListModule,
     StoreModule.forRoot(fromApp.appReducer),
-    MathModule,
     EffectsModule.forRoot([StepperEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
-    AppRoutingModule
+    AppRoutingModule,
+    CountdownModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

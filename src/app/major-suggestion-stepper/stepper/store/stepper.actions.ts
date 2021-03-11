@@ -1,8 +1,12 @@
 import { Action } from "@ngrx/store";
+import { ClassifiedTests } from "src/app/_models/classified-tests";
 import { Mark } from "src/app/_models/mark";
 import { SuggestedSubjectsGroup } from "src/app/_models/suggested-subjects-group";
 import { Test } from "src/app/_models/test";
+import { TestSubmission } from "src/app/_models/test-submission";
 import { University } from "src/app/_models/university";
+import { MarkParam } from "src/app/_params/mark-param";
+import { TestSubmissionParam } from "src/app/_params/question-param";
 import { Subject } from "../../../_models/subject";
 
 export const LOAD_SUBJECTS = '[Stepper] Load Subjects';
@@ -15,6 +19,9 @@ export const SET_TESTS = '[Stepper] Set Tests';
 export const LOAD_TESTS = '[Stepper] Load Tests';
 export const LOAD_TEST = '[Stepper] Load Test';
 export const SET_TEST = '[Stepper] Set Test';
+export const SCORING_TEST = '[Stepper] Scoring Test';
+export const SET_TEST_MARK = '[Stepper] Set Test Mark';
+export const RESET_STATE = '[Stepper] Reset State';
 
 export class LoadSubjects implements Action {
   readonly type = LOAD_SUBJECTS;
@@ -47,7 +54,7 @@ export class SetUniversities implements Action {
 
 export class SetTests implements Action {
   readonly type = SET_TESTS;
-  constructor(public payload: Test[]) {}
+  constructor(public payload: ClassifiedTests[]) {}
 }
 
 export class LoadTests implements Action {
@@ -66,4 +73,18 @@ export class SetTest implements Action {
   constructor(public payload: Test) {}
 }
 
-export type StepperActions = LoadTest | SetTest | LoadSubjects | SetSubjects | SetMarks | SetSuggestedSubjectsGroup | LoadUniversities | SetUniversities | LoadTests | SetTests;
+export class ScoringTest implements Action {
+  readonly type = SCORING_TEST;
+  constructor(public payload: TestSubmissionParam) {}
+}
+
+export class SetTestMark implements Action {
+  readonly type = SET_TEST_MARK;
+  constructor(public payload: TestSubmission) {}
+}
+
+export class ResetState implements Action {
+  readonly type = RESET_STATE;
+}
+
+export type StepperActions = ResetState | ScoringTest | SetTestMark | LoadTest | SetTest | LoadSubjects | SetSubjects | SetMarks | SetSuggestedSubjectsGroup | LoadUniversities | SetUniversities | LoadTests | SetTests;

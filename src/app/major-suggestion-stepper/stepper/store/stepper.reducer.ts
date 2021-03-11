@@ -1,7 +1,10 @@
+import { ClassifiedTests } from 'src/app/_models/classified-tests';
 import { Mark } from 'src/app/_models/mark';
 import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group';
 import { Test } from 'src/app/_models/test';
+import { TestSubmission } from 'src/app/_models/test-submission';
 import { University } from 'src/app/_models/university';
+import { TestSubmissionParam } from 'src/app/_params/question-param';
 import { Subject } from '../../../_models/subject';
 import * as StepperActions from './stepper.actions';
 
@@ -11,13 +14,15 @@ export interface State {
   isLoading: boolean;
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
   universities: University[];
-  tests: Test[];
+  tests: ClassifiedTests[];
   test: Test;
   totalMark: number;
   selectedGroupId: number;
   selectedMajorId: number;
   selectedUniversityId: number;
   selectedTestId: number;
+  testSubmissionParam: TestSubmissionParam;
+  testSubmissionReponse: TestSubmission;
 }
 
 const initialState: State = {
@@ -32,7 +37,9 @@ const initialState: State = {
   selectedGroupId: null,
   selectedMajorId: null,
   selectedUniversityId: null,
-  selectedTestId: null
+  selectedTestId: null,
+  testSubmissionParam: null,
+  testSubmissionReponse: null
 };
 
 export function stepReducer(
@@ -54,6 +61,10 @@ export function stepReducer(
     case StepperActions.SET_MARKS:
       return {
         ...state,
+        suggestedSubjectsGroup: null,
+        universities: [],
+        tests: [],
+        test: null,
         marks: [...action.payload],
       };
     case StepperActions.SET_SUGGESTED_SUBJECTS_GROUP:
@@ -75,12 +86,15 @@ export function stepReducer(
         ...state,
         universities: action.payload,
         isLoading: false,
+        tests: [],
+        test: null,
       };
     case StepperActions.LOAD_TESTS:
       return {
         ...state,
         selectedUniversityId: action.payload,
         isLoading: true,
+        test: null,
       };
     case StepperActions.SET_TESTS:
       return {
@@ -99,6 +113,22 @@ export function stepReducer(
         ...state,
         test: action.payload,
         isLoading: false,
+      };
+    case StepperActions.SCORING_TEST:
+      return {
+        ...state,
+        testSubmissionParam: action.payload,
+        isLoading: true,
+      };
+    case StepperActions.SET_TEST_MARK:
+      return {
+        ...state,
+        testSubmissionReponse: action.payload,
+        isLoading: false,
+      };
+    case StepperActions.RESET_STATE:
+      return {
+        ...state, ...initialState
       };
     default:
       return state;
