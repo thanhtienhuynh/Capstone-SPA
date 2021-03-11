@@ -41,6 +41,7 @@ import { SafeHtmlPipe } from './_helper/safe-html-pipe';
 import { AuthenticationComponent } from './authentication/authentication.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AuthEffects } from './authentication/store/auth.affects';
 
 @NgModule({
   declarations: [					
@@ -79,7 +80,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     HttpClientModule,
     MatListModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([StepperEffects]),
+    EffectsModule.forRoot([StepperEffects, AuthEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     AppRoutingModule,
     CountdownModule,
