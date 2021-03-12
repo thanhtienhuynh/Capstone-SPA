@@ -1,0 +1,27 @@
+.flex {
+    display: flex;    
+}
+
+.flex-auto {
+    flex: 1 1 auto;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+}
+
+.footer {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 1rem;
+}
+
+.footer button {
+    margin: 0 0 0 1rem;
+}
+
+.display-none {
+    display: none;
+}
+

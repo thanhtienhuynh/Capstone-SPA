@@ -1,0 +1,70 @@
+<div>
+  <div class="flex items-center py-3">
+    <div class="text-xl">Thêm Ngành</div>
+    <div class="flex-auto"></div>
+    <button nbButton (click)="closeModal()"><nb-icon pack="eva" icon="close-outline"></nb-icon></button>
+  </div>
+  <div class="flex">
+    <div class="col-md-12">
+      <label for="">Tên Ngành</label>
+      
+      <nb-select placeholder="Tên Ngành" fullWidth [formControl]="majorForm.get('name')">
+        <nb-option *ngFor="let major of listOfMajor" [value]="major.name">{{major.name}}</nb-option>
+      </nb-select>
+    </div>                
+  </div>
+  <div class="flex mt-2">
+    <div class="col-md-6">
+      <label for="">Code</label>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="code-outline" pack="eva"></nb-icon>
+        <input [formControl]="majorForm.get('code')" type="text" placeholder="" fullWidth nbInput [status]="majorForm.get('code').invalid && (majorForm.get('code').touched || majorForm.get('code').dirty) ? 'danger' : 'info'"/>        
+      </nb-form-field>
+    </div>
+    <div class="col-md-6">
+      <label for="">Chỉ Tiêu</label>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="code-outline" pack="eva"></nb-icon>
+        <input [formControl]="majorForm.get('numberOfStudent')" type="text" placeholder="" fullWidth nbInput [status]="majorForm.get('numberOfStudent').invalid && (majorForm.get('numberOfStudent').touched || majorForm.get('numberOfStudent').dirty) ? 'danger' : 'info'"/>        
+      </nb-form-field>
+    </div>    
+  </div>
+  <div *ngFor="let field of listField; let i = index" class="flex mt-2">
+    <div class="col-md-6">
+      <label for="">Khối</label>
+      <nb-select placeholder="" fullWidth [formControl]="majorForm.get('subjectGroup')">
+        <nb-option *ngFor="let major of listOfMajor" [value]="major.name">{{major.name}}</nb-option>
+      </nb-select>
+    </div>    
+    <div [class]="listField.length === 1 ? 'col-md-3': 'col-md-2'">
+      <label for="">Điểm chuẩn</label>
+      <input [formControl]="majorForm.get('entryMark1')" type="number" placeholder="2019" fullWidth nbInput/>        
+    </div>
+    <div [class]="listField.length === 1 ? 'col-md-3': 'col-md-2'">     
+      <label for="" style="color: transparent;">Điểm chuẩn</label> 
+      <input [formControl]="majorForm.get('entryMark2')" type="number" placeholder="2020" fullWidth nbInput/>        
+    </div>
+    <div [class]="listField.length != 1 ? 'col-md-2': 'display-none'">     
+      <label for="" style="color: transparent;">Remove</label> 
+      <button (click)="removeField(i)" nbButton status="danger">
+        <nb-icon icon="minus-outline"></nb-icon>
+      </button>       
+    </div>
+  </div>
+  <div class="footer">
+    <button (click)="addField()" nz-button nzType="default" nzTooltipTitle="Thêm Khối" nz-tooltip>
+      <nb-icon icon="plus"></nb-icon>
+    </button>
+    <button (click)="submitForm()" [disabled]="majorForm?.invalid" nz-button [nzSize]="'medium'" nzType="primary">
+      Thêm 
+    </button>
+    <button (click)="cancle()"  nz-button [nzSize]="'medium'" nzType="basic">
+      Thoát 
+    </button>
+  </div>
+</div>
+
+<!-- <nb-form-field>        
+        <nb-icon nbPrefix icon="book-open-outline" pack="eva"></nb-icon>
+        <input [formControl]="majorForm.get('name')" type="text" placeholder="" fullWidth nbInput [status]="majorForm.get('name').invalid && (majorForm.get('name').touched || majorForm.get('name').dirty) ? 'danger' : 'info'"/>
+      </nb-form-field> -->

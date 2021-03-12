@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-page.component';
 import { StepperComponent } from './major-suggestion-stepper/stepper/stepper.component';
 // import { TestResolverService } from './_resolver/exam-resolver.service';
 
@@ -17,9 +16,10 @@ import { StepperComponent } from './major-suggestion-stepper/stepper/stepper.com
 // ];
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: 'admin', pathMatch: 'full' },
   { path: 'stepper', component: StepperComponent},
   { path: 'home', component: HomeComponent},
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule)}  
 ];
 
 @NgModule({
