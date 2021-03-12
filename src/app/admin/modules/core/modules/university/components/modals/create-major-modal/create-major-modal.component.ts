@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { MajorRM } from 'src/app/admin/view-models';
@@ -11,6 +11,8 @@ import { MajorRM } from 'src/app/admin/view-models';
 })
 export class CreateMajorModalComponent implements OnInit {
 
+  @Input() data: string;
+  
   //Style
   col_md_3 = 'col-md-3';
 
@@ -35,25 +37,32 @@ export class CreateMajorModalComponent implements OnInit {
     }    
   ];
 
-  listField: any[] = [1];
+  listField: FormGroup[] = [];
   constructor(
     private _fb: FormBuilder,
     private _modalRef: NzModalRef,
-  ) { }
+  ) { 
+    this.initMajorForm();
+    this.addField();
+  }
 
   ngOnInit() {
-    this.initMajorForm();
+    console.log(this.data);
   }
 
   initMajorForm(): void {
     this.majorForm = this._fb.group({
       'name': [''],
       'code': [''],
-      'subjectGroup': [''],      
-      'entryMark1': [''],
-      'entryMark2': [''],      
+      // 'subjectGroup': [''],      
+      // 'entryMark1': [''],
+      // 'entryMark2': [''],      
       'numberOfStudent': ['']
     })
+  }
+
+  setData(): void {
+
   }
 
   cancle(): void {
@@ -66,13 +75,18 @@ export class CreateMajorModalComponent implements OnInit {
 
   submitForm(): void {
     console.log(this.majorForm.get('name').value);
+    console.log(this.listField.map(e => e.value));
   }
 
   addField(): void {
-    this.listField.push(1);    
+    this.listField.push(this._fb.group({
+      'subjectGroup': [''],      
+      'entryMark1': [''],
+      'entryMark2': [''], 
+    }));    
   }
 
   removeField(index: number): void {
-    this.listField.splice(index);
+    this.listField.splice(index, 1);
   }
 }

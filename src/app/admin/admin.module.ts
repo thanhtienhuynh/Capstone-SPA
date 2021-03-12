@@ -7,7 +7,8 @@ import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   imports: [
-    SharedModule.forRoot(),    
+    // SharedModule.forRoot(),    
+    SharedModule.forChild(),    
     AdminRoutes
   ],
   declarations: [AdminComponent],  

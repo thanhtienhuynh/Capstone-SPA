@@ -32,17 +32,17 @@
   <div *ngFor="let field of listField; let i = index" class="flex mt-2">
     <div class="col-md-6">
       <label for="">Khối</label>
-      <nb-select placeholder="" fullWidth [formControl]="majorForm.get('subjectGroup')">
+      <nb-select placeholder="" fullWidth [formControl]="field.get('subjectGroup')">
         <nb-option *ngFor="let major of listOfMajor" [value]="major.name">{{major.name}}</nb-option>
       </nb-select>
     </div>    
     <div [class]="listField.length === 1 ? 'col-md-3': 'col-md-2'">
       <label for="">Điểm chuẩn</label>
-      <input [formControl]="majorForm.get('entryMark1')" type="number" placeholder="2019" fullWidth nbInput/>        
+      <input [formControl]="field.get('entryMark1')" type="number" placeholder="2019" fullWidth nbInput/>        
     </div>
     <div [class]="listField.length === 1 ? 'col-md-3': 'col-md-2'">     
       <label for="" style="color: transparent;">Điểm chuẩn</label> 
-      <input [formControl]="majorForm.get('entryMark2')" type="number" placeholder="2020" fullWidth nbInput/>        
+      <input [formControl]="field.get('entryMark2')" type="number" placeholder="2020" fullWidth nbInput/>        
     </div>
     <div [class]="listField.length != 1 ? 'col-md-2': 'display-none'">     
       <label for="" style="color: transparent;">Remove</label> 
@@ -52,7 +52,7 @@
     </div>
   </div>
   <div class="footer">
-    <button (click)="addField()" nz-button nzType="default" nzTooltipTitle="Thêm Khối" nz-tooltip>
+    <button (click)="addField()" nz-button nzType="default" nz-tooltip>
       <nb-icon icon="plus"></nb-icon>
     </button>
     <button (click)="submitForm()" [disabled]="majorForm?.invalid" nz-button [nzSize]="'medium'" nzType="primary">

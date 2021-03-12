@@ -46,6 +46,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { NZ_I18N, vi_VN } from 'ng-zorro-antd/i18n';
 import vi from '@angular/common/locales/vi';
+import { SharedModule } from './admin/shared/shared.module';
 
 
 registerLocaleData(vi);
@@ -95,7 +96,9 @@ registerLocaleData(vi);
 
     FormsModule,
     ReactiveFormsModule,
-    CommonModule    
+    CommonModule,  
+
+    SharedModule.forRoot()
   ],
   providers: [{ provide: NZ_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent]

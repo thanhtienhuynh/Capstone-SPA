@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { NbIconLibraries } from '@nebular/theme';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,15 @@ export class AppComponent {
     // console.log(this.title);
     // this.p.appendChild(this.doc);
     // this.p.nativeElement.insertAdjacentHTML('beforeend', this.title);
+  }
+
+  constructor(
+    protected readonly iconLibraries: NbIconLibraries
+  ) { 
+    this.iconLibraries.setDefaultPack('eva');
+    this.iconLibraries.registerFontPack('font-awesome', { iconClassPrefix: 'fa', packClass: 'fa' });
+    // this.iconLibraries.registerFontPack('far', { packClass: 'far', iconClassPrefix: 'fa' });
+    this.iconLibraries.registerFontPack('ion', { iconClassPrefix: 'ion' });
   }
 }
   

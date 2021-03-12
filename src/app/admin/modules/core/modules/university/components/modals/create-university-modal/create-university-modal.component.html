@@ -1,10 +1,21 @@
 <div>
-  <div class="flex items-center py-3">
+  <div class="flex items-center py-3">    
     <div class="text-xl">Thêm Trường</div>
     <div class="flex-auto"></div>
     <button nbButton (click)="closeModal()"><nb-icon pack="eva" icon="close-outline"></nb-icon></button>
   </div>
   <div class="flex">
+    <div class="col-md-12 d-flex justify-content-center align-items-center">
+      <div style="width: 200px; height: 200px; border: 1px solid;" class="justify-content-center align-items-center position-relative">
+        <img style="width: 200px; height: 200px;" [src]="logo" alt="" *ngIf="logo">
+        <input #logoUpload type="file" style="display: none;" (change)="uploadLogo($event)">
+        <button (click)="logoUpload.click()" style="top: 86px; left: 86px;" class="position-absolute" nbButton size="small">
+          <nb-icon icon="upload-outline"></nb-icon>          
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="flex">        
     <div class="col-md-6">
       <label for="">Tên Trường</label>
       <nb-form-field>        
@@ -16,7 +27,8 @@
       <label for="">Code</label>
       <nb-form-field>
         <!-- <nb-icon nbPrefix icon="key-outline" pack="eva"></nb-icon> -->
-        <i nz-icon nzType="key" nzTheme="outline"></i>
+        <!-- <i nz-icon nzType="key" nzTheme="outline"></i> -->
+        <nb-icon nbPrefix icon="key" pack="font-awesome"></nb-icon>
         <input [formControl]="createUniversityForm.get('code')" type="text" placeholder="" fullWidth nbInput [status]="createUniversityForm.get('code').invalid && (createUniversityForm.get('code').touched || createUniversityForm.get('code').dirty) ? 'danger' : 'info'"/>        
       </nb-form-field>
     </div>            
@@ -31,14 +43,14 @@
     </div> 
   </div>
   <div class="flex mt-2">
-    <div class="col-md-9">
+    <div class="col-md-12">
       <label for="">Thông Tin Liên Hệ</label>
       <nb-form-field>
         <nb-icon nbPrefix icon="link-2-outline" pack="eva"></nb-icon>
         <input [formControl]="createUniversityForm.get('infomation')" type="text" placeholder="" fullWidth nbInput/>        
       </nb-form-field>
     </div> 
-    <div class="col-md-3">
+    <!-- <div class="col-md-3">
       <label for="" style="margin-left: 10px;">Logo</label>
       <div class="clearfix">
         <nz-upload nzListType="picture" style="margin-left: 10px;">
@@ -48,7 +60,7 @@
           </button>
         </nz-upload>
       </div>
-    </div> 
+    </div>  -->
   </div>
   <div class="flex mt-2">
     <div class="col-md-12">

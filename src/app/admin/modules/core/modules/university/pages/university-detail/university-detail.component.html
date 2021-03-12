@@ -160,44 +160,49 @@
                     <th>2020</th>
                   </tr>
                 </thead>
+
                 <tbody>
-                  <tr>
-                    <td rowspan="2">1</td>
-                    <td rowspan="2">Quản trị kinh doanh</td>
-                    <td rowspan="2">Code</td>
-                    <td>A1</td>
-                    <td>25.5</td>
-                    <td>26.5</td>
-                    <td>100</td>
-                    <td rowspan="2">
-                      <i
-                        style="cursor: pointer"
-                        [nzDropdownMenu]="menu1"
-                        nz-icon
-                        nz-dropdown
-                        nzType="ellipsis"
-                      ></i>
-                      <nz-dropdown-menu #menu1="nzDropdownMenu">
-                        <ul nz-menu>
-                          <li nz-menu-item (click)="openCreateMajorModal()">
-                            <i nz-icon nzType="edit" nzTheme="outline"></i>
-                            <span class="p-3">Sửa</span>
-                          </li>
-                          <li nz-menu-divider></li>
-                          <li nz-menu-item>
-                            <nb-icon icon="trash"></nb-icon>
-                            <span class="p-3">Xóa</span>
-                          </li>
-                        </ul>
-                      </nz-dropdown-menu>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>A</td>
-                    <td>26</td>
-                    <td>29</td>
-                    <td>90</td>
-                  </tr>
+                  <ng-container *ngFor="let item of listOfMajor">
+                    <tr >
+                      <td rowspan="2">1</td>
+                      <td rowspan="2">Quản trị kinh doanh</td>
+                      <td rowspan="2">Code</td>
+                      <td>A1</td>
+                      <td>25.5</td>
+                      <td>26.5</td>
+                      <td>100</td>
+                      <td rowspan="2">
+                        <i
+                          style="cursor: pointer"
+                          [nzDropdownMenu]="menu1"
+                          nz-icon
+                          nz-dropdown
+                          nzType="ellipsis"
+                        ></i>
+                        <nz-dropdown-menu #menu1="nzDropdownMenu">
+                          <ul nz-menu>
+                            <li nz-menu-item (click)="openCreateMajorModal()">
+                              <i nz-icon nzType="edit" nzTheme="outline"></i>
+                              <span class="p-3">Sửa</span>
+                            </li>
+                            <li nz-menu-divider></li>
+                            <li nz-menu-item>
+                              <nb-icon icon="trash"></nb-icon>
+                              <span class="p-3">Xóa</span>
+                            </li>
+                          </ul>
+                        </nz-dropdown-menu>
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      <td>A</td>
+                      <td>26</td>
+                      <td>29</td>
+                      <td>90</td>
+                    </tr>
+                  </ng-container>
+                  
                 </tbody>
               </nz-table>
             </div>

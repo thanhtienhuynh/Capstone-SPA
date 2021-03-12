@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { isThisSecond } from 'date-fns';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { of } from 'rxjs';
@@ -16,6 +17,7 @@ import Swal from 'sweetalert2';
 })
 export class CreateUniversityModalComponent implements OnInit {
 
+  logo: string | ArrayBuffer;
   createUniversityForm: FormGroup;
   editorOptions = quillConfiguration;
 
@@ -78,4 +80,29 @@ export class CreateUniversityModalComponent implements OnInit {
 
   fileList1 = [...this.defaultFileList];
   fileList2 = [...this.defaultFileList];
+
+
+  uploadLogo(evt): void {
+    console.log(evt);
+    const files: File[] = evt.target.files;
+    if (files.length > 1) {
+      Swal.fire('Error', 'Chọn 1 cái thối', 'error');
+    } else {
+      const file = files[0];
+      const extensions: string[] = ['image/png', 'image/jpeg', 'image/jpg'];
+      if (extensions.includes(file.type)) {
+        if (file.size < 1024*1024*2) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            this.logo = reader.result
+          };
+          reader.readAsDataURL(file);
+        } else {
+          Swal.fire('Error', 'Chỉ đc 2MB', 'error');
+        }
+      } else {
+        Swal.fire('Error', 'Chỉ được chọn ảnh', 'error');
+      }
+    }
+  }
 }

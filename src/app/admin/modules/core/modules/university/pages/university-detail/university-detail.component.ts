@@ -56,7 +56,8 @@ export class UniversityDetailComponent implements OnInit {
       nzContent: CreateMajorModalComponent,
       nzClosable: false,
       nzFooter: null,
-      nzWidth: 700
+      nzWidth: 700,   
+      nzComponentParams: {data: '1'}   
     })
   }
 }
