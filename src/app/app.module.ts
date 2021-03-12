@@ -43,9 +43,12 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { NzButtonModule } from 'ng-zorro-antd/button';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import { NZ_I18N, vi_VN } from 'ng-zorro-antd/i18n';
+import vi from '@angular/common/locales/vi';
 
+
+registerLocaleData(vi);
 @NgModule({
   declarations: [					
     AppComponent,
@@ -94,7 +97,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
     ReactiveFormsModule,
     CommonModule    
   ],
-  providers: [],
+  providers: [{ provide: NZ_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

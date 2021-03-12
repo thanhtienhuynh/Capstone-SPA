@@ -4,11 +4,12 @@ import { AdminRoutes } from './admin.routing';
 import { SharedModule } from './shared/shared.module';
 
 
+
 @NgModule({
   imports: [
     SharedModule.forRoot(),    
     AdminRoutes
   ],
-  declarations: [AdminComponent]
+  declarations: [AdminComponent],  
 })
 export class AdminModule { }
