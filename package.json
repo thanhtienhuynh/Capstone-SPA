@@ -47,7 +47,7 @@
     "@nebular/date-fns": "^6.2.1",
     "@nebular/eva-icons": "^6.2.1",
     "@nebular/moment": "^6.2.1",
-    "@nebular/theme": "^6.2.1",
+    "@nebular/theme": "^7.0.0",
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "@ngrx/component": "^10.0.1",
     "@ngrx/component-store": "^10.0.1",
