@@ -16,7 +16,7 @@
       <label for="">Code</label>
       <nb-form-field>
         <!-- <nb-icon nbPrefix icon="key-outline" pack="eva"></nb-icon> -->
-        <!-- <i nz-icon nzType="key" nzTheme="outline"></i> -->
+        <i nz-icon nzType="key" nzTheme="outline"></i>
         <input [formControl]="createUniversityForm.get('code')" type="text" placeholder="" fullWidth nbInput [status]="createUniversityForm.get('code').invalid && (createUniversityForm.get('code').touched || createUniversityForm.get('code').dirty) ? 'danger' : 'info'"/>        
       </nb-form-field>
     </div>            
