@@ -84,8 +84,7 @@ export class UniversityMainComponent implements OnInit {
     private _modalService: NzModalService
   ) { }
 
-  ngOnInit() {
-    console.log('university-main');
+  ngOnInit() {    
   }
 
   openCreateUniversityModal(): void {
@@ -97,13 +96,11 @@ export class UniversityMainComponent implements OnInit {
     });
   }
 
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
+  onQueryParamsChange(params: NzTableQueryParams): void {    
     const { pageSize, pageIndex, sort, filter } = params;
     const currentSort = sort.find(item => item.value !== null);
     const sortField = (currentSort && currentSort.key) || null;
-    const sortOrder = (currentSort && currentSort.value) || null;
-    
+    const sortOrder = (currentSort && currentSort.value) || null;    
   }
 
 }

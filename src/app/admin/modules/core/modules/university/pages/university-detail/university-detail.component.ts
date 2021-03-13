@@ -30,17 +30,21 @@ export class UniversityDetailComponent implements OnInit {
     {
       'id': 1,
       'code': 'QTKD',
-      'name': 'Quản trị kinh doanh'
+      'name': 'Quản trị kinh doanh', 
+      'numberOfStudent': 100
     },
     {
       'id': 2,
       'code': 'IT',
-      'name': 'Công nghệ thông tin'
+      'name': 'Công nghệ thông tin',
+      'numberOfStudent': 300
     },
     {
       'id': 3,
       'code': 'GV',
-      'name': 'Sư phạm'
+      'name': 'Sư phạm',
+      'numberOfStudent': 200
+
     }    
   ];
   constructor(
@@ -51,13 +55,13 @@ export class UniversityDetailComponent implements OnInit {
     console.log(this.listOfSubjectGroup.length);
   }
 
-  openCreateMajorModal(): void {
+  openCreateMajorModal(data: any | undefined): void {    
     this._modalService.create({
       nzContent: CreateMajorModalComponent,
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,   
-      nzComponentParams: {data: '1'}   
+      nzComponentParams: {data: data}   
     })
   }
 }

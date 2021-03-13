@@ -1,3 +1,13 @@
+label {
+    font-size: smaller;
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; 
+}
+
+input {
+    font-size: smaller;
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 .flex {
     display: flex;    
 }
@@ -23,5 +33,9 @@
 
 .display-none {
     display: none;
+}
+
+.pt-4 {
+    padding-top: 1.7rem !important;
 }
 

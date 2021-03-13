@@ -86,7 +86,7 @@ export class CreateUniversityModalComponent implements OnInit {
     console.log(evt);
     const files: File[] = evt.target.files;
     if (files.length > 1) {
-      Swal.fire('Error', 'Chọn 1 cái thối', 'error');
+      Swal.fire('Lỗi', 'Chọn 1 cái thối', 'error');
     } else {
       const file = files[0];
       const extensions: string[] = ['image/png', 'image/jpeg', 'image/jpg'];
@@ -98,10 +98,10 @@ export class CreateUniversityModalComponent implements OnInit {
           };
           reader.readAsDataURL(file);
         } else {
-          Swal.fire('Error', 'Chỉ đc 2MB', 'error');
+          Swal.fire('Oversize', 'Vui lòng chọn anh có kích thước từ 2MB trở xuống', 'error');
         }
       } else {
-        Swal.fire('Error', 'Chỉ được chọn ảnh', 'error');
+        Swal.fire('Lỗi', 'Vui lòng chỉ chọn file ảnh (.png, .jpeg, .jpg)', 'error');
       }
     }
   }

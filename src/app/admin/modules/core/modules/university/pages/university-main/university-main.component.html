@@ -49,6 +49,7 @@
               >
                 <thead>
                   <tr>
+                    <th>STT</th>
                     <th>Tên Trường</th>
                     <th nzColumnKey="code" [nzSortFn]="true">Code</th>
                     <th>Địa Chỉ</th> 
@@ -59,7 +60,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let university of listOfUniversity">
+                  <tr *ngFor="let university of listOfUniversity; let i = index">
+                    <td>{{i + 1}}</td>
                     <td>
                       <div class="media align-items-center">
                         <nz-avatar

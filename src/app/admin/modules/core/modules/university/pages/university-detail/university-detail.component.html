@@ -135,7 +135,7 @@
             <div style="width: 100%; min-height: 42rem">
               <button
                 style="float: right; margin-bottom: 1rem"
-                (click)="openCreateMajorModal()"
+                (click)="openCreateMajorModal(undefined)"
                 nbButton
                 status="primary"
               >
@@ -164,9 +164,9 @@
                 <tbody>
                   <ng-container *ngFor="let item of listOfMajor">
                     <tr >
-                      <td rowspan="2">1</td>
-                      <td rowspan="2">Quản trị kinh doanh</td>
-                      <td rowspan="2">Code</td>
+                      <td rowspan="2">{{item.id}}</td>
+                      <td rowspan="2">{{item.name}}</td>
+                      <td rowspan="2">{{item.code}}</td>
                       <td>A1</td>
                       <td>25.5</td>
                       <td>26.5</td>
@@ -181,7 +181,7 @@
                         ></i>
                         <nz-dropdown-menu #menu1="nzDropdownMenu">
                           <ul nz-menu>
-                            <li nz-menu-item (click)="openCreateMajorModal()">
+                            <li nz-menu-item (click)="openCreateMajorModal(item)">
                               <i nz-icon nzType="edit" nzTheme="outline"></i>
                               <span class="p-3">Sửa</span>
                             </li>

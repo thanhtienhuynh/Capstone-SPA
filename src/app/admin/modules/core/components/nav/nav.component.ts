@@ -18,7 +18,6 @@ export class NavComponent implements OnInit {
   useUpdate(link?: string): void {
     if(link){
       this.router.navigate(['admin/core/' + link]);    
-    }
-    console.log('admin/core/' + link);
+    }    
   }
 }

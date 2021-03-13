@@ -11,14 +11,20 @@ import { MajorRM } from 'src/app/admin/view-models';
 })
 export class CreateMajorModalComponent implements OnInit {
 
-  @Input() data: string;
+  //Decorator
+  @Input() data: MajorRM | undefined;
   
   //Style
   col_md_3 = 'col-md-3';
 
+  //Title
+  modalTitle: string = "Thêm Ngành";
 
+  //FormGroup
   majorForm: FormGroup;
+  listField: FormGroup[] = [];
 
+  //Prototype Data
   listOfMajor: MajorRM[] = [
     {
       'id': 1,
@@ -35,9 +41,8 @@ export class CreateMajorModalComponent implements OnInit {
       'code': 'GV',
       'name': 'Sư phạm'
     }    
-  ];
+  ];  
 
-  listField: FormGroup[] = [];
   constructor(
     private _fb: FormBuilder,
     private _modalRef: NzModalRef,
@@ -46,23 +51,25 @@ export class CreateMajorModalComponent implements OnInit {
     this.addField();
   }
 
-  ngOnInit() {
-    console.log(this.data);
+  ngOnInit() {    
+    this.setData();
   }
 
   initMajorForm(): void {
     this.majorForm = this._fb.group({
       'name': [''],
-      'code': [''],
-      // 'subjectGroup': [''],      
-      // 'entryMark1': [''],
-      // 'entryMark2': [''],      
+      'code': [''],           
       'numberOfStudent': ['']
     })
   }
 
   setData(): void {
-
+    if (this.data != undefined) {
+      this.modalTitle = "Sửa Thông Tin Ngành";
+      this.majorForm.get('name').setValue(this.data.name);
+      this.majorForm.get('code').setValue(this.data.code);
+      this.majorForm.get('numberOfStudent').setValue(this.data.numberOfStudent);
+    }
   }
 
   cancle(): void {
