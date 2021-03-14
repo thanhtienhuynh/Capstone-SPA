@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { isThisSecond } from 'date-fns';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { quillConfiguration } from 'src/app/admin/config';
 import { UniversityService } from 'src/app/admin/services';
 import Swal from 'sweetalert2';
+
 
 
 @Component({
@@ -15,12 +16,15 @@ import Swal from 'sweetalert2';
   templateUrl: './create-university-modal.component.html',
   styleUrls: ['./create-university-modal.component.scss']
 })
-export class CreateUniversityModalComponent implements OnInit {
+export class CreateUniversityModalComponent implements OnInit {  
+
+  @Input() callBack: any;
 
   logo: string | ArrayBuffer;
   createUniversityForm: FormGroup;
   editorOptions = quillConfiguration;
 
+  selectedItem = '0';
   constructor(
     private _fb: FormBuilder,
     private _modalRef: NzModalRef,
@@ -38,8 +42,14 @@ export class CreateUniversityModalComponent implements OnInit {
       'name': ['', Validators.required],
       'code': ['', Validators.required],
       'address': [''],
-      'tuition': [''],
-      'infomation': [''],     
+      'phone': [''],
+      'webUrl': [''],
+      'tuitionType': [''],
+      'tuitionFrom': [''],
+      'tuitionTo': [''],
+      'description': [''],  
+      'rating': [''],
+      'status': ['']
     })
   };
 
@@ -52,8 +62,26 @@ export class CreateUniversityModalComponent implements OnInit {
   }
 
   submitForm(): void {    
-    if(this.createUniversityForm.valid){      
-      this._uniService.createUniversity({} as any).pipe(
+    if(this.createUniversityForm.valid){    
+      const newUni = {
+        'Code': this.createUniversityForm.get('code').value,
+        'Name': this.createUniversityForm.get('name').value,
+        'Address': this.createUniversityForm.get('address').value,
+        'LogoUrl': '',
+        'Description': this.createUniversityForm.get('description').value,
+        'Phone': this.createUniversityForm.get('phone').value,
+        'WebUrl': this.createUniversityForm.get('webUrl').value,
+        'TuitionType': this.createUniversityForm.get('tuitionType').value,
+        'TuitionFrom': this.createUniversityForm.get('tuitionFrom').value,
+        'TuitionTo': this.createUniversityForm.get('tuitionTo').value,
+        'Rating': this.createUniversityForm.get('rating').value,
+        'Status': this.createUniversityForm.get('status').value
+      }      
+      this._uniService.createUniversity(newUni).pipe(
+        tap((rs) => {
+          
+          Swal.fire('Thành Công', 'Thêm mới trường đại học thành công', 'success');          
+        }),
         catchError((err) => {
           Swal.fire('Lỗi', 'Thêm mới trường đại học thất bại', 'error');
           return of(undefined);          
@@ -62,24 +90,7 @@ export class CreateUniversityModalComponent implements OnInit {
       this.closeModal();
     } 
   }  
-
-  defaultFileList: NzUploadFile[] = [
-    {
-      uid: '-1',
-      name: 'xxx.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      thumbUrl: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-    },
-    {
-      uid: '-2',
-      name: 'yyy.png',
-      status: 'error'
-    }
-  ];
-
-  fileList1 = [...this.defaultFileList];
-  fileList2 = [...this.defaultFileList];
+  
 
 
   uploadLogo(evt): void {
@@ -91,14 +102,14 @@ export class CreateUniversityModalComponent implements OnInit {
       const file = files[0];
       const extensions: string[] = ['image/png', 'image/jpeg', 'image/jpg'];
       if (extensions.includes(file.type)) {
-        if (file.size < 1024*1024*2) {
+        if (file.size < 1024) {
           const reader = new FileReader();
           reader.onloadend = () => {
             this.logo = reader.result
           };
           reader.readAsDataURL(file);
         } else {
-          Swal.fire('Oversize', 'Vui lòng chọn anh có kích thước từ 2MB trở xuống', 'error');
+          Swal.fire('Oversize', 'Vui lòng chọn ảnh có kích thước từ 2MB trở xuống', 'error');
         }
       } else {
         Swal.fire('Lỗi', 'Vui lòng chỉ chọn file ảnh (.png, .jpeg, .jpg)', 'error');

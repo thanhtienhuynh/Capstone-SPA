@@ -1,18 +1,37 @@
 th {
     font-size: 14px;
     font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; 
+    
 }
 
 td {
-    font-size: 1rem;
-    // font-family: 'Courier New', Courier, monospace; 
+    font-size: 0.8rem;    
     font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: justify;   
+    width: 23.3333333%; 
 }
 
-.uni-name {
-    font-size: 1rem;
-    font-family: 'Courier New', Courier, monospace;   
-    margin-left: 10px;
+.stt, .code, .action {
+    width: 2%;
+}
+.name {
+    width: 20%;
+}
+.status {
+    width: 4%;
+}
+.tuition {
+    width: 10%;
+}
+.phone {
+    width: 5%;
+}
+
+.importantInfo {
+    font-size: 0.8rem;
+    // font-family: 'Courier New', Courier, monospace;   
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 500;    
 }
 
 .university-main {
@@ -36,6 +55,7 @@ td {
 .ant-modal-body {
     padding: 0;
 }
+
 
 @media (max-width: 789px) {
     .page-header {

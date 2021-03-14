@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { MajorRM, SubjectGroupRM } from 'src/app/admin/view-models';
+import { of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { UniversityService } from 'src/app/admin/services';
+import { MajorRM, UniversityRM } from 'src/app/admin/view-models';
+import Swal from 'sweetalert2';
 
 import { CreateMajorModalComponent } from '../../components';
 
@@ -10,49 +16,82 @@ import { CreateMajorModalComponent } from '../../components';
   styleUrls: ['./university-detail.component.scss']
 })
 export class UniversityDetailComponent implements OnInit {
+  
 
-  listOfSubjectGroup: SubjectGroupRM[] = [
-    {
-      id: 1,
-      groupCode: 'A'
-    },
-    {
-      id: 2,
-      groupCode: 'A1'
-    },
-    {
-      id: 3,
-      groupCode: 'D'
-    }
-  ];
+  listOfMajor: MajorRM[] = [];
+  university: UniversityRM = null;
 
-  listOfMajor: MajorRM[] = [
-    {
-      'id': 1,
-      'code': 'QTKD',
-      'name': 'Quản trị kinh doanh', 
-      'numberOfStudent': 100
-    },
-    {
-      'id': 2,
-      'code': 'IT',
-      'name': 'Công nghệ thông tin',
-      'numberOfStudent': 300
-    },
-    {
-      'id': 3,
-      'code': 'GV',
-      'name': 'Sư phạm',
-      'numberOfStudent': 200
-
-    }    
-  ];
+  uniId: any;
+  //binding
+  rowspan: number = 5;
+  //Form
+  updateUniForm: FormGroup;
   constructor(
-    private _modalService: NzModalService
-  ) { }
+    private _modalService: NzModalService,
+    private _activatedRoute: ActivatedRoute,
+    private _universityService: UniversityService,
+    private _fb: FormBuilder
+  ) { 
+    this.initUpdateUniForm();    
+  }
 
-  ngOnInit() {
-    console.log(this.listOfSubjectGroup.length);
+  ngOnInit() {    
+    this.getUniversityById();    
+  }
+
+  getUniversityById(): void {
+    this._activatedRoute.params.subscribe((param) => {      
+      this._universityService.getUniversityById(param.id).pipe(
+        tap((rs) => {  
+          this.uniId = param.id;        
+          this.university = rs;
+          this.listOfMajor = rs.majors                    
+          console.log(this.university);          
+          this.setDataToForm(this.university);
+        }),
+        catchError((err) => {
+          console.log(err);
+          return of(undefined);
+        })
+      ).subscribe();
+    });
+  }
+
+  setDataToForm(university: UniversityRM): void {
+    this._activatedRoute.params.subscribe((param) => {      
+      this._universityService.getUniversityById(param.id).pipe(
+        tap((rs) => {          
+          this.university = rs;
+          this.updateUniForm.get('name').setValue(university.name);
+          this.updateUniForm.get('address').setValue(university.address);
+          this.updateUniForm.get('phone').setValue(university.phone);
+          this.updateUniForm.get('webUrl').setValue(university.webUrl);
+          this.updateUniForm.get('tuitionType').setValue(university.tuitionType);
+          this.updateUniForm.get('tuitionFrom').setValue(university.tuitionFrom);
+          this.updateUniForm.get('tuitionTo').setValue(university.tuitionTo);
+        }),
+        catchError((err) => {
+          console.log(err);
+          return of(undefined);
+        })
+      ).subscribe();
+    });
+  }
+
+  initUpdateUniForm(): void {
+    this.updateUniForm = this._fb.group({
+      'name': [''],
+      'code': [''],
+      'address': [''],
+      'phone': [''],
+      'webUrl': [''],
+      'tuitionType': [''],
+      'tuitionFrom': [''],
+      'tuitionTo': [''],
+      'description': [''],  
+      'rating': [''],
+      'status': [''],    
+    });
   }
 
   openCreateMajorModal(data: any | undefined): void {    
@@ -63,5 +102,33 @@ export class UniversityDetailComponent implements OnInit {
       nzWidth: 700,   
       nzComponentParams: {data: data}   
     })
+  }
+
+  updateUni(): void {
+    const newValue = {
+      "id": Number.parseInt(this.uniId),
+      "code": "ZED",
+      "name": this.updateUniForm.get('name').value,
+      "address": this.updateUniForm.get('address').value,
+      "logoUrl": "",
+      "description": this.updateUniForm.get('description').value,
+      "phone": this.updateUniForm.get('phone').value,
+      "webUrl": this.updateUniForm.get('webUrl').value,
+      "tuitionType": Number.parseInt(this.updateUniForm.get('tuitionType').value),
+      "tuitionFrom": this.updateUniForm.get('tuitionFrom').value,
+      "tuitionTo": this.updateUniForm.get('tuitionTo').value,
+      "rating": 5,
+      "status": 1
+    }   
+    console.log(newValue);
+    this._universityService.updateUniversity(newValue).pipe(
+      tap((rs) => {
+        Swal.fire('Thành Công', 'Cập nhật thông tin trường thành công', 'success');
+      }),
+      catchError((err) => {
+        Swal.fire('Lỗi', 'Cập nhật thông tin trường thất bại', 'error');
+        return of(undefined);
+      })
+    ).subscribe();
   }
 }

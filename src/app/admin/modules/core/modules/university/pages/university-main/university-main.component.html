@@ -53,7 +53,7 @@
                     <th>Tên Trường</th>
                     <th nzColumnKey="code" [nzSortFn]="true">Code</th>
                     <th>Địa Chỉ</th> 
-                    <th>Học Phí</th>                   
+                    <th>Học Phí (Đơn vị: VNĐ)</th>                   
                     <th>Thông Tin Liên Hệ</th>
                     <th>Trạng Thái</th>
                     <th>Thao Tác</th>
@@ -61,44 +61,57 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let university of listOfUniversity; let i = index">
-                    <td>{{i + 1}}</td>
-                    <td>
-                      <div class="media align-items-center">
-                        <nz-avatar
-                          nzShape="square"
-                          [nzSrc]="university.logoUrl"
-                        >
-                          <!-- <img [src]="university.logoUrl"> -->
-                        </nz-avatar>
-                        <div>
-                          <h5 class="mb-0 uni-name">{{ university.name }}</h5>
-                        </div>
+                    <td class="stt importantInfo">{{i + 1}}</td>
+                    <td class="name">
+                      <div class="align-items-center importantInfo">                        
+                        {{ university.name }}           
                       </div>
                     </td>
-                    <td>{{ university.code }}</td>
-                    <td>{{ university.address }}</td>
-                    <td>{{ university.tuition}}</td>
-                    <td>{{ university.information }}</td>
-                    <!-- <td>
-                      <nz-rate
-                        [ngModel]="university.rating"
-                        [nzTooltips]="ratingTooltips"
-                        nzAllowHalf
-                        nzDisabled
-                      ></nz-rate>
-                    </td> -->
+                    <td class="code importantInfo">{{ university.code }}</td>
                     <td>
+                      <span *ngIf="university.address != null || university.address != ''; else missaddress">
+                        {{ university.address }}
+                      </span>
+                      <ng-template #missaddress>
+                        <nb-icon icon="close-outline" status="danger" size=""></nb-icon>
+                      </ng-template>  
+                    </td>
+                    <td class="tuition">
+                      <p *ngIf="university.tuitionType == 0">
+                        <span *ngIf="university.tuitionFrom != null; else missTuitionYear">{{university.tuitionFrom}}</span>
+                        <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> - </span> 
+                        <span *ngIf="university.tuitionFrom != null">{{university.tuitionTo}}</span>
+                        <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> / Năm</span>  
+                        <ng-template #missTuitionYear>
+                          <nb-icon icon="close-outline" status="danger"></nb-icon>
+                        </ng-template>                           
+                      </p>
+                      <p *ngIf="university.tuitionType != 0">
+                        <span *ngIf="university.tuitionFrom != null; else missTuitionSemester">{{university.tuitionFrom}}</span>
+                        <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> - </span> 
+                        <span *ngIf="university.tuitionFrom != null">{{university.tuitionTo}}</span>
+                        <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> / Kì</span>  
+                        <ng-template #missTuitionSemester>
+                          <nb-icon icon="close-outline" status="danger"></nb-icon>
+                        </ng-template> 
+                      </p>
+                      <ng-template #updating>
+                        <p>Đang cập nhật</p>
+                      </ng-template>
+                    </td>
+                    <td class="phone">{{ university.phone }}</td>                    
+                    <td class="status">
                       <nz-tag [nzColor]="university.status == 1 ? 'success' : 'error'">
                         <span *ngIf="university.status == 1">Đang hoạt động</span>
                         <span *ngIf="university.status != 1">Không hoạt động</span>
                       </nz-tag>
                     </td>
-                    <td>
+                    <td class="action">
                         <i style="cursor: pointer;" [nzDropdownMenu]="menu1" nz-icon nz-dropdown nzType="ellipsis"></i>
                         <nz-dropdown-menu #menu1="nzDropdownMenu">
                             <ul nz-menu>
                                 <li nz-menu-item>
-                                    <a [routerLink]="[university.code]" routerLinkActive="router-link-active" >
+                                    <a [routerLink]="['details/' + university.id]" routerLinkActive="router-link-active" >
                                       <i nz-icon nzType="eye" nzTheme="outline"></i>
                                       <span class="p-3">Xem</span>
                                     </a>

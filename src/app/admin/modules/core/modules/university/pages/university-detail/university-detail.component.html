@@ -44,8 +44,15 @@
                       nz-size="150"
                     >
                     </nz-avatar>
-                    <div class="text-center text-sm-left m-v-15 p-l-30">
-                      <h5>Trường Đại học Khoa học Tự nhiên - ĐHQG TPHCM</h5>
+                    <div class="text-center text-sm-left m-v-15 p-l-30 col-md-8">
+                      <nb-form-field>                                                
+                        <input [formControl]="updateUniForm.get('name')" type="text" placeholder=""  fullWidth nbInput />
+                      </nb-form-field>
+                      <div class="mt-2">
+                        <nb-form-field>
+                          <textarea [formControl]="updateUniForm.get('description')" nbInput fullWidth placeholder="Miêu tả" fieldSize="large"></textarea>
+                        </nb-form-field>
+                      </div>                                            
                     </div>
                   </div>
                 </div>
@@ -54,19 +61,23 @@
                     <div class="d-md-block border-left col-1"></div>
                     <div class="col">
                       <ul class="list-unstyled m-t-10">
-                        <li class="row">
+                        <li class="row mt-2">
                           <p
                             class="col-sm-3 col-4 font-weight-semibold text-dark m-b-5"
                           >
                             <nb-icon
                               status="info"
-                              icon="email-outline"
+                              icon="globe-outline"
                             ></nb-icon>
-                            <span class="label">Email: </span>
+                            <span class="label">Website: </span>
                           </p>
-                          <p class="col">hcm@khtn.edu.vn</p>
+                          <div class="col">
+                            <nb-form-field>
+                              <input [formControl]="updateUniForm.get('webUrl')" nbInput fullWidth type="text">
+                            </nb-form-field>
+                          </div>
                         </li>
-                        <li class="row">
+                        <li class="row mt-2">
                           <p
                             class="col-sm-3 col-4 font-weight-semibold text-dark m-b-5"
                           >
@@ -76,9 +87,11 @@
                             ></nb-icon>
                             <span class="label">Điện Thoại: </span>
                           </p>
-                          <p class="col">+84.987.654.321</p>
+                          <div class="col">
+                            <input [formControl]="updateUniForm.get('phone')" nbInput type="text" fullWidth>
+                          </div>
                         </li>
-                        <li class="row">
+                        <li class="row mt-2">
                           <p
                             class="col-sm-3 col-4 font-weight-semibold text-dark m-b-5"
                           >
@@ -88,17 +101,45 @@
                             ></nb-icon>
                             <span class="label">Địa Chỉ: </span>
                           </p>
-                          <p class="col">
-                            227 Đ. Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ
-                            Chí Minh
+                          <div class="col">
+                            <nb-form-field>
+                              <input nbInput type="text" [formControl]="updateUniForm.get('address')" fullWidth>
+                            </nb-form-field>
+                          </div>
+                        </li>
+                        <li class="row mt-2">
+                          <p
+                            class="col-sm-3 col-4 font-weight-semibold text-dark m-b-5"
+                          >
+                            <nb-icon
+                              status="info"
+                              icon="layers-outline"
+                            ></nb-icon>
+                            <span class="label">Học Phí: </span>
                           </p>
+                          <div class="col-md-4">
+                            <nb-select [formControl]="updateUniForm.get('tuitionType')">        
+                              <nb-option value="0">Theo Năm</nb-option>
+                              <nb-option value="1">Theo Kì</nb-option>        
+                            </nb-select>
+                          </div>
+                          <div class="col-md-2 p-0 ml-4">
+                            <nb-form-field>
+                              <input nbInput type="number" [formControl]="updateUniForm.get('tuitionFrom')" fullWidth>
+                            </nb-form-field>
+                          </div>
+                          <div class="col-md-2 p-0 ml-3">
+                            <nb-form-field>
+                              <input nbInput type="number" [formControl]="updateUniForm.get('tuitionTo')" fullWidth>
+                            </nb-form-field>
+                          </div>
                         </li>
                       </ul>
                       <div class="d-flex">
                         <div class="col-md-1">
                           <div class="d-flex">
                             <a href="" class="text-gray p-r-20">
-                              <nb-icon icon="facebook-outline"></nb-icon>
+                              <nb-icon nbTooltip="This is a tooltip" nbTooltipPlacement="top" icon="facebook-outline"></nb-icon>
                             </a>
                             <a href="" class="text-gray p-r-20">
                               <nb-icon icon="globe-outline"></nb-icon>
@@ -106,7 +147,7 @@
                           </div>
                         </div>
                         <div class="col-md-9"></div>
-                        <button nbButton status="primary">Save</button>
+                        <button (click)="updateUni()" nbButton status="primary">Lưu</button>
                       </div>
                     </div>
                   </div>
@@ -162,16 +203,14 @@
                 </thead>
 
                 <tbody>
-                  <ng-container *ngFor="let item of listOfMajor">
+                  <ng-container *ngFor="let major of listOfMajor; let i = index">
                     <tr >
-                      <td rowspan="2">{{item.id}}</td>
-                      <td rowspan="2">{{item.name}}</td>
-                      <td rowspan="2">{{item.code}}</td>
-                      <td>A1</td>
-                      <td>25.5</td>
-                      <td>26.5</td>
-                      <td>100</td>
-                      <td rowspan="2">
+                      <td [attr.rowspan]="major.subjectGroups.length + 1">{{i + 1}}</td>
+                      <td [attr.rowspan]="major.subjectGroups.length + 1">{{major.name}}</td>
+                      <td [attr.rowspan]="major.subjectGroups.length + 1">{{major.code}}</td> 
+                      <!-- <td [attr.rowspan]="major.subjectGroups.length + 1">100</td> 
+                      <td [attr.rowspan]="major.subjectGroups.length + 1">...</td>                             -->
+                      <!-- <td [rowspan]="major.subjectGroups.length + 1">
                         <i
                           style="cursor: pointer"
                           [nzDropdownMenu]="menu1"
@@ -192,17 +231,19 @@
                             </li>
                           </ul>
                         </nz-dropdown-menu>
-                      </td>
-                    </tr>
+                      </td> -->
+                    </tr>                                        
+
+                    <ng-container *ngFor="let subjectGroup of major.subjectGroups">
+                      <tr>                      
+                        <td>{{subjectGroup.groupCode}}</td>    
+                        <ng-container *ngFor="let entryMark of subjectGroup.entryMarks">
+                          <td>{{entryMark.mark}}</td>                          
+                        </ng-container>
+                      </tr>                                             
+                    </ng-container> 
                     
-                    <tr>
-                      <td>A</td>
-                      <td>26</td>
-                      <td>29</td>
-                      <td>90</td>
-                    </tr>
-                  </ng-container>
-                  
+                  </ng-container>                  
                 </tbody>
               </nz-table>
             </div>

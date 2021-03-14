@@ -98,7 +98,7 @@ registerLocaleData(vi);
     ReactiveFormsModule,
     CommonModule,  
 
-    SharedModule.forRoot()
+    // SharedModule.forRoot()
   ],
   providers: [{ provide: NZ_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent]

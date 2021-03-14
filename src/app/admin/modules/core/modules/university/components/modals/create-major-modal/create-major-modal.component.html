@@ -19,7 +19,8 @@
       <label for="">Code</label>
       <nb-form-field>
         <!-- <nb-icon nbPrefix icon="code-outline" pack="eva"></nb-icon> -->
-        <nb-icon nbPrefix icon="key" pack="font-awesome"></nb-icon>
+        <!-- <nb-icon nbPrefix icon="key" pack="font-awesome"></nb-icon> -->
+        <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
         <input [formControl]="majorForm.get('code')" type="text" placeholder="" fullWidth nbInput [status]="majorForm.get('code').invalid && (majorForm.get('code').touched || majorForm.get('code').dirty) ? 'danger' : 'info'"/>        
       </nb-form-field>
     </div>
