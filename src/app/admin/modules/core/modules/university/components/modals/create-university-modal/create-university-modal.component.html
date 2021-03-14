@@ -1,0 +1,87 @@
+<div>
+  <div class="flex items-center py-3">    
+    <div class="text-xl">Thêm Trường</div>
+    <div class="flex-auto"></div>
+    <button nbButton (click)="closeModal()"><nb-icon pack="eva" icon="close-outline"></nb-icon></button>
+  </div>
+  
+  <div class="flex">        
+    <div class="col-md-6">
+      <label for="">Tên Trường</label>
+      <nb-form-field>        
+        <nb-icon nbPrefix icon="home-outline" pack="eva"></nb-icon>
+        <input [formControl]="createUniversityForm.get('name')" type="text" placeholder="" fullWidth nbInput [status]="createUniversityForm.get('name').invalid && (createUniversityForm.get('name').touched || createUniversityForm.get('name').dirty) ? 'danger' : 'info'"/>
+      </nb-form-field>
+    </div>
+    <div class="col-md-6">
+      <label for="">Code</label>
+      <nb-form-field>
+        <!-- <nb-icon nbPrefix icon="key-outline" pack="eva"></nb-icon> -->
+        <!-- <i nz-icon nzType="key" nzTheme="outline"></i> -->
+        <nb-icon nbPrefix icon="key" pack="font-awesome"></nb-icon>
+        <input [formControl]="createUniversityForm.get('code')" type="text" placeholder="" fullWidth nbInput [status]="createUniversityForm.get('code').invalid && (createUniversityForm.get('code').touched || createUniversityForm.get('code').dirty) ? 'danger' : 'info'"/>        
+      </nb-form-field>
+    </div>            
+  </div>
+  <div class="flex mt-2">
+    <div class="col-md-9">
+      <div class="flex">
+        <div class="col-md-12 p-0">
+          <label for="">Địa Chỉ</label>
+          <nb-form-field>
+            <nb-icon nbPrefix icon="pin-outline" pack="eva"></nb-icon>
+            <input [formControl]="createUniversityForm.get('address')" type="text" placeholder="" fullWidth nbInput/>        
+          </nb-form-field>
+        </div>
+      </div> 
+      <div class="flex mt-2">
+        <div class="col-md-12 p-0">
+          <label for="">Thông Tin Liên Hệ</label>
+            <nb-form-field>
+              <nb-icon nbPrefix icon="link-2-outline" pack="eva"></nb-icon>
+              <input [formControl]="createUniversityForm.get('infomation')" type="text" placeholder="" fullWidth nbInput/>        
+            </nb-form-field>
+        </div>
+      </div>           
+    </div> 
+    <div class="col-md-3">
+      <label class=" d-flex justify-content-center align-items-center" for="">Logo</label>
+      <div class="flex">        
+        <div class="col-md-12 d-flex justify-content-center align-items-center">
+          <div style="width: 115px; height: 115px; border: 1px solid;" class="justify-content-center align-items-center position-relative">
+            <img style="width: 115px; height: 115px;" [src]="logo" alt="" *ngIf="logo">
+            <input #logoUpload type="file" style="display: none;" (change)="uploadLogo($event)">
+            <button (click)="logoUpload.click()" style="top: 37px; left: 37px;" class="position-absolute" nbButton size="small">
+              <nb-icon icon="upload-outline"></nb-icon>          
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="flex mt-2">
+    <div class="col-md-12">
+      
+    </div> 
+    
+  </div> -->
+  <div class="flex mt-2">
+    <div class="col-md-12">
+      <label for="">Thông Tin Học Phí</label>        
+      <quill-editor
+        [formControl]="createUniversityForm.get('tuition')"
+        class="content-editor"        
+        [modules]="editorOptions"
+        [placeholder]="''"
+      ></quill-editor>
+    </div> 
+  </div>
+  <div class="footer">
+    <button (click)="submitForm()" [disabled]="createUniversityForm?.invalid" nz-button [nzSize]="'medium'" nzType="primary">
+      Thêm 
+    </button>
+    <button (click)="cancel()" nz-button [nzSize]="'medium'" nzType="basic">
+      Thoát 
+    </button>
+  </div>
+</div>

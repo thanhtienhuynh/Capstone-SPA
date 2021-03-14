@@ -1,0 +1,214 @@
+<div class="university-detail">
+  <!-- <div class="page-header">
+    <div class="row align-items-md-center">
+      <div class="col-md-6 mb-3">
+        <div class="row">
+          <div class="col-md-5">
+            <nb-form-field>
+              <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
+              <input type="text" placeholder="" fullWidth nbInput />
+            </nb-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="text-md-right m-v-10">
+          <button nbButton status="primary">
+            <nb-icon icon="plus-outline"></nb-icon>Thêm Trường
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>   -->
+  <div class="container-fluid">
+    <div nz-row>
+      <div
+        nz-col
+        [nzXs]="24"
+        [nzSm]="24"
+        [nzMd]="24"
+        [nzLg]="24"
+        [nzXl]="24"
+        [nzXXl]="24"
+        class="mb-2"
+      >
+        <nb-card style="margin: auto; width: 99%; position: relative">
+          <nb-card-body style="width: 100%">
+            <div style="width: 100%">
+              <div class="row align-items-center ng-star-inserted">
+                <div class="col-md-7">
+                  <div class="d-md-flex align-items-center">
+                    <nz-avatar
+                      nzShape="square"
+                      nzSrc="assets/logo-white.png"
+                      nz-size="150"
+                    >
+                    </nz-avatar>
+                    <div class="text-center text-sm-left m-v-15 p-l-30">
+                      <h5>Trường Đại học Khoa học Tự nhiên - ĐHQG TPHCM</h5>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-5">
+                  <div class="row">
+                    <div class="d-md-block border-left col-1"></div>
+                    <div class="col">
+                      <ul class="list-unstyled m-t-10">
+                        <li class="row">
+                          <p
+                            class="col-sm-3 col-4 font-weight-semibold text-dark m-b-5"
+                          >
+                            <nb-icon
+                              status="info"
+                              icon="email-outline"
+                            ></nb-icon>
+                            <span class="label">Email: </span>
+                          </p>
+                          <p class="col">hcm@khtn.edu.vn</p>
+                        </li>
+                        <li class="row">
+                          <p
+                            class="col-sm-3 col-4 font-weight-semibold text-dark m-b-5"
+                          >
+                            <nb-icon
+                              status="info"
+                              icon="phone-outline"
+                            ></nb-icon>
+                            <span class="label">Điện Thoại: </span>
+                          </p>
+                          <p class="col">+84.987.654.321</p>
+                        </li>
+                        <li class="row">
+                          <p
+                            class="col-sm-3 col-4 font-weight-semibold text-dark m-b-5"
+                          >
+                            <nb-icon
+                              status="info"
+                              icon="home-outline"
+                            ></nb-icon>
+                            <span class="label">Địa Chỉ: </span>
+                          </p>
+                          <p class="col">
+                            227 Đ. Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ
+                            Chí Minh
+                          </p>
+                        </li>
+                      </ul>
+                      <div class="d-flex">
+                        <div class="col-md-1">
+                          <div class="d-flex">
+                            <a href="" class="text-gray p-r-20">
+                              <nb-icon icon="facebook-outline"></nb-icon>
+                            </a>
+                            <a href="" class="text-gray p-r-20">
+                              <nb-icon icon="globe-outline"></nb-icon>
+                            </a>
+                          </div>
+                        </div>
+                        <div class="col-md-9"></div>
+                        <button nbButton status="primary">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div nz-row>
+      <div
+        nz-col
+        [nzXs]="24"
+        [nzSm]="24"
+        [nzMd]="24"
+        [nzLg]="24"
+        [nzXl]="24"
+        [nzXXl]="24"
+        class="mb-2"
+      >
+        <nb-card style="margin: auto; width: 99%; position: relative">
+          <nb-card-body style="width: 100%">
+            <div style="width: 100%; min-height: 42rem">
+              <button
+                style="float: right; margin-bottom: 1rem"
+                (click)="openCreateMajorModal(undefined)"
+                nbButton
+                status="primary"
+              >
+                <nb-icon icon="plus-outline"></nb-icon>Thêm Ngành
+              </button>
+              <nz-table nzBordered [nzData]="listOfMajor">
+                <thead>
+                  <tr>
+                    <th rowspan="3">STT</th>
+                    <th rowspan="3">Ngành</th>
+                    <th rowspan="3">Code</th>
+                    <th colspan="3">Khối</th>
+                    <th rowspan="3">Chỉ Tiêu</th>
+                    <th rowspan="3">Thao Tác</th>
+                  </tr>
+                  <tr>
+                    <th rowspan="2">Tên</th>
+                    <th colspan="2">Năm</th>
+                  </tr>
+                  <tr>
+                    <th>2019</th>
+                    <th>2020</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <ng-container *ngFor="let item of listOfMajor">
+                    <tr >
+                      <td rowspan="2">{{item.id}}</td>
+                      <td rowspan="2">{{item.name}}</td>
+                      <td rowspan="2">{{item.code}}</td>
+                      <td>A1</td>
+                      <td>25.5</td>
+                      <td>26.5</td>
+                      <td>100</td>
+                      <td rowspan="2">
+                        <i
+                          style="cursor: pointer"
+                          [nzDropdownMenu]="menu1"
+                          nz-icon
+                          nz-dropdown
+                          nzType="ellipsis"
+                        ></i>
+                        <nz-dropdown-menu #menu1="nzDropdownMenu">
+                          <ul nz-menu>
+                            <li nz-menu-item (click)="openCreateMajorModal(item)">
+                              <i nz-icon nzType="edit" nzTheme="outline"></i>
+                              <span class="p-3">Sửa</span>
+                            </li>
+                            <li nz-menu-divider></li>
+                            <li nz-menu-item>
+                              <nb-icon icon="trash"></nb-icon>
+                              <span class="p-3">Xóa</span>
+                            </li>
+                          </ul>
+                        </nz-dropdown-menu>
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      <td>A</td>
+                      <td>26</td>
+                      <td>29</td>
+                      <td>90</td>
+                    </tr>
+                  </ng-container>
+                  
+                </tbody>
+              </nz-table>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>      
+    </div>
+  </div>
+</div>

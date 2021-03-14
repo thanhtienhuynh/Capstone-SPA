@@ -1,0 +1,127 @@
+<div class="university-main">
+  <div class="page-header">
+    <div class="row align-items-md-center">
+      <div class="col-md-6 mb-3">
+        <div class="row">
+          <div class="col-md-5">
+            <nb-form-field>
+              <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
+              <input type="text" placeholder="Tìm kiếm trường đại học" fullWidth nbInput />
+            </nb-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="text-md-right m-v-10">
+          <button nbButton status="primary" (click)="openCreateUniversityModal()">
+            <nb-icon icon="plus-outline"></nb-icon>Thêm Trường
+          </button>
+          <!-- <button nz-button nzType="primary"><nb-icon icon="plus-outline" pack="eva"></nb-icon>Thêm trường</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div nz-row>
+      <div
+        nz-col
+        [nzXs]="24"
+        [nzSm]="24"
+        [nzMd]="24"
+        [nzLg]="24"
+        [nzXl]="24"
+        [nzXXl]="24"
+        class="mb-2"
+      >
+        <nb-card style="margin: auto; width: 99%; position: relative">
+          <nb-card-body style="width: 100%">
+            <div style="width: 100%; min-height: 42rem">
+              <nz-table
+                nzShowSizeChanger
+                [nzData]="listOfUniversity"
+                [nzFrontPagination]="false"
+                [nzLoading]="loading"
+                [nzTotal]="total"
+                [nzPageSize]="pageSize"
+                [nzPageIndex]="pageIndex"
+                nzBordered
+                (nzQueryParams)="onQueryParamsChange($event)"
+              >
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Tên Trường</th>
+                    <th nzColumnKey="code" [nzSortFn]="true">Code</th>
+                    <th>Địa Chỉ</th> 
+                    <th>Học Phí</th>                   
+                    <th>Thông Tin Liên Hệ</th>
+                    <th>Trạng Thái</th>
+                    <th>Thao Tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let university of listOfUniversity; let i = index">
+                    <td>{{i + 1}}</td>
+                    <td>
+                      <div class="media align-items-center">
+                        <nz-avatar
+                          nzShape="square"
+                          [nzSrc]="university.logoUrl"
+                        >
+                          <!-- <img [src]="university.logoUrl"> -->
+                        </nz-avatar>
+                        <div>
+                          <h5 class="mb-0 uni-name">{{ university.name }}</h5>
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{ university.code }}</td>
+                    <td>{{ university.address }}</td>
+                    <td>{{ university.tuition}}</td>
+                    <td>{{ university.information }}</td>
+                    <!-- <td>
+                      <nz-rate
+                        [ngModel]="university.rating"
+                        [nzTooltips]="ratingTooltips"
+                        nzAllowHalf
+                        nzDisabled
+                      ></nz-rate>
+                    </td> -->
+                    <td>
+                      <nz-tag [nzColor]="university.status == 1 ? 'success' : 'error'">
+                        <span *ngIf="university.status == 1">Đang hoạt động</span>
+                        <span *ngIf="university.status != 1">Không hoạt động</span>
+                      </nz-tag>
+                    </td>
+                    <td>
+                        <i style="cursor: pointer;" [nzDropdownMenu]="menu1" nz-icon nz-dropdown nzType="ellipsis"></i>
+                        <nz-dropdown-menu #menu1="nzDropdownMenu">
+                            <ul nz-menu>
+                                <li nz-menu-item>
+                                    <a [routerLink]="[university.code]" routerLinkActive="router-link-active" >
+                                      <i nz-icon nzType="eye" nzTheme="outline"></i>
+                                      <span class="p-3">Xem</span>
+                                    </a>
+                                </li>                                
+                                <li nz-menu-divider></li>
+                                <li nz-menu-item>
+                                    <a>
+                                      <!-- <i nz-icon nzType="eye" nzTheme="outline"></i> -->
+                                      <nb-icon [icon]="university.status != 1 ? 'checkmark-outline' : 'close-outline'"></nb-icon>
+                                      <span class="p-3" *ngIf="university.status == 1">Ngưng kích hoạt</span>
+                                      <span class="p-3" *ngIf="university.status != 1">Kích hoạt</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nz-dropdown-menu>
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+th {
+    font-size: 14px;
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; 
+}
+
+td {
+    font-size: 1rem;
+    // font-family: 'Courier New', Courier, monospace; 
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.uni-name {
+    font-size: 1rem;
+    font-family: 'Courier New', Courier, monospace;   
+    margin-left: 10px;
+}
+
+.university-main {
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    overflow: auto;
+    position: relative;
+}
+
+.university-main .page-header {
+    margin-left: -1rem;
+    margin-right: -1rem;
+    margin-top: -1rem;
+    margin-bottom: 25px;
+    background-color: #fff;
+    border-bottom: 1px solid #e5e5e5; 
+    padding: 2rem 3rem;
+}
+
+.ant-modal-body {
+    padding: 0;
+}
+
+@media (max-width: 789px) {
+    .page-header {
+        padding: 2rem 0 2rem 6rem;
+    }
+}
