@@ -8,10 +8,15 @@
     <div class="col-md-12">
       <label for="">Tên Ngành</label>
       
-      <nb-select placeholder="Tên Ngành" fullWidth [formControl]="majorForm.get('name')">
-        <nb-option *ngFor="let major of listOfMajor" [value]="major.name">{{major.name}}</nb-option>
-      </nb-select>
-      <!-- <input #autoInput nbInput type="text" (input)="onChange()" placeholder="Enter value" [nbAutocomplete]="auto" /> -->
+      <nb-form-field>
+        <nb-icon nbPrefix icon="briefcase-outline"></nb-icon>
+        <input fullWidth [formControl]="majorForm.get('name')" nbInput type="text" placeholder="Nhập tên ngành" [nbAutocomplete]="autoControl" [status]="majorForm.get('name').invalid && (majorForm.get('name').touched || majorForm.get('name').dirty) ? 'danger' : 'info'"/>
+        <nb-autocomplete #autoControl>
+          <nb-option *ngFor="let option of filteredControlOptions$ | async" [value]="option">
+            {{ option }}
+          </nb-option>
+        </nb-autocomplete>
+      </nb-form-field>      
     </div>                
   </div>
   <div class="flex mt-2">
@@ -28,16 +33,14 @@
       <label for="">Chỉ Tiêu</label>
       <nb-form-field>
         <nb-icon nbPrefix icon="layers-outline" pack="eva"></nb-icon>
-        <input [formControl]="majorForm.get('numberOfStudent')" type="text" placeholder="" fullWidth nbInput [status]="majorForm.get('numberOfStudent').invalid && (majorForm.get('numberOfStudent').touched || majorForm.get('numberOfStudent').dirty) ? 'danger' : 'info'"/>        
+        <input [formControl]="majorForm.get('numberOfStudent')" type="text" placeholder="" fullWidth nbInput/>        
       </nb-form-field>
     </div>    
   </div>
   <div *ngFor="let field of listField; let i = index" class="flex mt-2">
     <div class="col-md-6">
       <label for="">Khối</label>
-      <nb-select placeholder="" fullWidth [formControl]="field.get('subjectGroup')">
-        <nb-option *ngFor="let major of listOfMajor" [value]="major.name">{{major.name}}</nb-option>
-      </nb-select>
+      <input type="text" [formControl]="field.get('groupCode')" fullWidth nbInput>
     </div>    
     <div [class]="listField.length === 1 ? 'col-md-3': 'col-md-2 pr-0'">
       <label for="" style="font-size: smaller;">Điểm chuẩn 2019</label>
@@ -57,8 +60,11 @@
     <button (click)="addField()" nz-button nzType="default" nz-tooltip>
       <nb-icon icon="plus"></nb-icon>
     </button>
-    <button (click)="submitForm()" [disabled]="majorForm?.invalid" nz-button [nzSize]="'medium'" nzType="primary">
+    <button *ngIf="!data" (click)="submitForm()" [disabled]="majorForm?.invalid" nz-button [nzSize]="'medium'" nzType="primary">
       Thêm 
+    </button>
+    <button *ngIf="data" (click)="updateForm()" [disabled]="majorForm?.invalid" nz-button [nzSize]="'medium'" nzType="primary">
+      Lưu 
     </button>
     <button (click)="cancle()"  nz-button [nzSize]="'medium'" nzType="basic">
       Thoát 

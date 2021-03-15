@@ -36,18 +36,27 @@
           <nb-card-body style="width: 100%">
             <div style="width: 100%">
               <div class="row align-items-center ng-star-inserted">
-                <div class="col-md-7">
+                <div class="col-md-6">
                   <div class="d-md-flex align-items-center">
                     <nz-avatar
                       nzShape="square"
-                      nzSrc="assets/logo-white.png"
+                      [nzSrc]="university != undefined ?  university.logoUrl : ''"
                       nz-size="150"
                     >
                     </nz-avatar>
                     <div class="text-center text-sm-left m-v-15 p-l-30 col-md-8">
-                      <nb-form-field>                                                
-                        <input [formControl]="updateUniForm.get('name')" type="text" placeholder=""  fullWidth nbInput />
-                      </nb-form-field>
+                      <div class="d-flex">
+                        <div class="col-md-8 pl-0">
+                          <nb-form-field>                                                
+                            <input [formControl]="updateUniForm.get('name')" type="text" placeholder=""  fullWidth nbInput />
+                          </nb-form-field>
+                        </div>
+                        <div class="col-md-4 pr-0">
+                          <nb-form-field>                                                
+                            <input [formControl]="updateUniForm.get('code')" type="text" placeholder=""  fullWidth nbInput />
+                          </nb-form-field>
+                        </div>
+                      </div>                      
                       <div class="mt-2">
                         <nb-form-field>
                           <textarea [formControl]="updateUniForm.get('description')" nbInput fullWidth placeholder="Miêu tả" fieldSize="large"></textarea>
@@ -56,97 +65,77 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                   <div class="row">
-                    <div class="d-md-block border-left col-1"></div>
+                    <div class="d-md-block border-left p-0" style="width: 20px;"></div>
                     <div class="col">
                       <ul class="list-unstyled m-t-10">
                         <li class="row mt-2">
-                          <p
-                            class="col-sm-3 col-4 font-weight-semibold text-dark m-b-5"
-                          >
+                          <p class="col-sm-2 col-4 font-weight-semibold text-dark m-b-5 p-0">
                             <nb-icon
                               status="info"
                               icon="globe-outline"
                             ></nb-icon>
                             <span class="label">Website: </span>
                           </p>
-                          <div class="col">
+                          <div class="col pl-0">
                             <nb-form-field>
                               <input [formControl]="updateUniForm.get('webUrl')" nbInput fullWidth type="text">
                             </nb-form-field>
                           </div>
                         </li>
                         <li class="row mt-2">
-                          <p
-                            class="col-sm-3 col-4 font-weight-semibold text-dark m-b-5"
-                          >
-                            <nb-icon
-                              status="info"
-                              icon="phone-outline"
-                            ></nb-icon>
+                          <p class="col-sm-2 col-3 font-weight-semibold text-dark m-b-5 p-0">
+                            <nb-icon status="info" icon="phone-outline"></nb-icon>
                             <span class="label">Điện Thoại: </span>
                           </p>
-                          <div class="col">
+                          <div class="col pl-0">
                             <input [formControl]="updateUniForm.get('phone')" nbInput type="text" fullWidth>
                           </div>
                         </li>
                         <li class="row mt-2">
-                          <p
-                            class="col-sm-3 col-4 font-weight-semibold text-dark m-b-5"
-                          >
-                            <nb-icon
-                              status="info"
-                              icon="home-outline"
-                            ></nb-icon>
+                          <p class="col-sm-2 col-4 font-weight-semibold text-dark m-b-5 p-0">
+                            <nb-icon status="info" icon="home-outline"></nb-icon>
                             <span class="label">Địa Chỉ: </span>
                           </p>
-                          <div class="col">
+                          <div class="col pl-0">
                             <nb-form-field>
                               <input nbInput type="text" [formControl]="updateUniForm.get('address')" fullWidth>
                             </nb-form-field>
                           </div>
                         </li>
                         <li class="row mt-2">
-                          <p
-                            class="col-sm-3 col-4 font-weight-semibold text-dark m-b-5"
-                          >
-                            <nb-icon
-                              status="info"
-                              icon="layers-outline"
-                            ></nb-icon>
+                          <p class="col-sm-2 col-4 font-weight-semibold text-dark m-b-5 p-0">
+                            <nb-icon status="info" icon="layers-outline"></nb-icon>
                             <span class="label">Học Phí: </span>
                           </p>
-                          <div class="col-md-4">
-                            <nb-select [formControl]="updateUniForm.get('tuitionType')">        
-                              <nb-option value="0">Theo Năm</nb-option>
-                              <nb-option value="1">Theo Kì</nb-option>        
-                            </nb-select>
+                          <div class="col-md-1 pl-0 pr-0 pt-2">
+                            <span>Từ</span>
                           </div>
-                          <div class="col-md-2 p-0 ml-4">
-                            <nb-form-field>
+                          <div class="col-md-2 p-0">
+                            <nb-form-field>                              
                               <input nbInput type="number" [formControl]="updateUniForm.get('tuitionFrom')" fullWidth>
                             </nb-form-field>
                           </div>
-                          <div class="col-md-2 p-0 ml-3">
+                          <div class="col-md-1 pr-0 pt-2">
+                            <span>Đến</span>
+                          </div>
+                          <div class="col-md-2 p-0">
                             <nb-form-field>
                               <input nbInput type="number" [formControl]="updateUniForm.get('tuitionTo')" fullWidth>
                             </nb-form-field>
-                          </div>
+                          </div>   
+                          <div class="pr-0 pt-2 pl-4" style="width: 3.9rem;">
+                            <span>/</span>
+                          </div>                       
+                          <nb-select [formControl]="updateUniForm.get('tuitionType')">        
+                            <nb-option value="0">Năm</nb-option>
+                            <nb-option value="1">Kì</nb-option>        
+                          </nb-select>
+                          
                         </li>
                       </ul>
-                      <div class="d-flex">
-                        <div class="col-md-1">
-                          <div class="d-flex">
-                            <a href="" class="text-gray p-r-20">
-                              <nb-icon nbTooltip="This is a tooltip" nbTooltipPlacement="top" icon="facebook-outline"></nb-icon>
-                            </a>
-                            <a href="" class="text-gray p-r-20">
-                              <nb-icon icon="globe-outline"></nb-icon>
-                            </a>
-                          </div>
-                        </div>
-                        <div class="col-md-9"></div>
+                      <div class="d-flex justify-content-end">                                                
                         <button (click)="updateUni()" nbButton status="primary">Lưu</button>
                       </div>
                     </div>
@@ -182,15 +171,15 @@
               >
                 <nb-icon icon="plus-outline"></nb-icon>Thêm Ngành
               </button>
-              <nz-table nzBordered [nzData]="listOfMajor">
+              <nz-table nzBordered [nzData]="listOfMajor" nzBreakWord="true">
                 <thead>
                   <tr>
                     <th rowspan="3">STT</th>
-                    <th rowspan="3">Ngành</th>
-                    <th rowspan="3">Code</th>
-                    <th colspan="3">Khối</th>
-                    <th rowspan="3">Chỉ Tiêu</th>
                     <th rowspan="3">Thao Tác</th>
+                    <th rowspan="3">Ngành</th>                    
+                    <th rowspan="3">Code</th>
+                    <th rowspan="3">Chỉ Tiêu</th>                    
+                    <th colspan="3">Khối</th>                    
                   </tr>
                   <tr>
                     <th rowspan="2">Tên</th>
@@ -204,12 +193,8 @@
 
                 <tbody>
                   <ng-container *ngFor="let major of listOfMajor; let i = index">
-                    <tr >
-                      <td [attr.rowspan]="major.subjectGroups.length + 1">{{i + 1}}</td>
-                      <td [attr.rowspan]="major.subjectGroups.length + 1">{{major.name}}</td>
-                      <td [attr.rowspan]="major.subjectGroups.length + 1">{{major.code}}</td> 
-                      <!-- <td [attr.rowspan]="major.subjectGroups.length + 1">100</td> 
-                      <td [attr.rowspan]="major.subjectGroups.length + 1">...</td>                             -->
+                    <tr>
+                      <td class="stt importantInfo" [attr.rowspan]="major.subjectGroups.length + 1">{{i + 1}}</td>
                       <!-- <td [rowspan]="major.subjectGroups.length + 1">
                         <i
                           style="cursor: pointer"
@@ -220,7 +205,7 @@
                         ></i>
                         <nz-dropdown-menu #menu1="nzDropdownMenu">
                           <ul nz-menu>
-                            <li nz-menu-item (click)="openCreateMajorModal(item)">
+                            <li nz-menu-item (click)="openCreateMajorModal(major)">
                               <i nz-icon nzType="edit" nzTheme="outline"></i>
                               <span class="p-3">Sửa</span>
                             </li>
@@ -232,13 +217,45 @@
                           </ul>
                         </nz-dropdown-menu>
                       </td> -->
+                      <td class="action" [attr.rowspan]="major.subjectGroups.length + 1">
+                        <i style="cursor: pointer" [nzDropdownMenu]="menu1" nz-icon nz-dropdown nzType="ellipsis"></i>
+                        <nz-dropdown-menu #menu1="nzDropdownMenu">
+                          <ul nz-menu>
+                            <li nz-menu-item (click)="openCreateMajorModal(major)">
+                              <i nz-icon nzType="edit" nzTheme="outline"></i>
+                              <span class="p-3">Sửa</span>
+                            </li>
+                            <li nz-menu-divider></li>
+                            <li nz-menu-item>
+                              <nb-icon icon="trash"></nb-icon>
+                              <span class="p-3">Xóa</span>
+                            </li>
+                          </ul>
+                        </nz-dropdown-menu>
+                      </td>
+                      <td class="name importantInfo" [attr.rowspan]="major.subjectGroups.length + 1">{{major.name}}</td>
+                      <td class="code importantInfo" [attr.rowspan]="major.subjectGroups.length + 1">{{major.code}}</td>
+                      <td [attr.rowspan]="major.subjectGroups.length + 1">                        
+                        <span *ngIf="major.numberOfStudents !== 0; else missNumberOfStudent">{{major.numberOfStudents}}</span>
+                        <ng-template #missNumberOfStudent>
+                          <span>
+                            <nb-icon status="danger" size="large" icon="close-outline"></nb-icon>
+                          </span>
+                        </ng-template>
+                      </td>                       
+                      <!-- <td [attr.rowspan]="major.subjectGroups.length + 1">{{major.numberOfStudent}}</td>                                                                          -->
                     </tr>                                        
 
                     <ng-container *ngFor="let subjectGroup of major.subjectGroups">
                       <tr>                      
                         <td>{{subjectGroup.groupCode}}</td>    
                         <ng-container *ngFor="let entryMark of subjectGroup.entryMarks">
-                          <td>{{entryMark.mark}}</td>                          
+                          <td>
+                            <span *ngIf="entryMark.mark !== 0; else missEntryMark">{{entryMark.mark}}</span>    
+                            <ng-template #missEntryMark>
+                              <nb-icon status="danger" size="large" icon="close-outline"></nb-icon>
+                            </ng-template>                        
+                          </td>                          
                         </ng-container>
                       </tr>                                             
                     </ng-container> 

@@ -102,7 +102,7 @@ export class CreateUniversityModalComponent implements OnInit {
       const file = files[0];
       const extensions: string[] = ['image/png', 'image/jpeg', 'image/jpg'];
       if (extensions.includes(file.type)) {
-        if (file.size < 1024) {
+        if (file.size < 1024*1204*2) {
           const reader = new FileReader();
           reader.onloadend = () => {
             this.logo = reader.result

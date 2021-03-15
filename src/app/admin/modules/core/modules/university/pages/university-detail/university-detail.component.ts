@@ -19,7 +19,7 @@ export class UniversityDetailComponent implements OnInit {
   
 
   listOfMajor: MajorRM[] = [];
-  university: UniversityRM = null;
+  university: UniversityRM;
 
   uniId: any;
   //binding
@@ -60,10 +60,12 @@ export class UniversityDetailComponent implements OnInit {
   setDataToForm(university: UniversityRM): void {
     this._activatedRoute.params.subscribe((param) => {      
       this._universityService.getUniversityById(param.id).pipe(
-        tap((rs) => {          
+        tap((rs) => {                    
           this.university = rs;
           this.updateUniForm.get('name').setValue(university.name);
+          this.updateUniForm.get('code').setValue(university.code);
           this.updateUniForm.get('address').setValue(university.address);
+          this.updateUniForm.get('description').setValue(university.description);
           this.updateUniForm.get('phone').setValue(university.phone);
           this.updateUniForm.get('webUrl').setValue(university.webUrl);
           this.updateUniForm.get('tuitionType').setValue(university.tuitionType);
@@ -100,14 +102,14 @@ export class UniversityDetailComponent implements OnInit {
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,   
-      nzComponentParams: {data: data}   
+      nzComponentParams: {data: data, universityId: this.uniId}   
     })
   }
 
   updateUni(): void {
     const newValue = {
       "id": Number.parseInt(this.uniId),
-      "code": "ZED",
+      "code": this.updateUniForm.get('code').value,
       "name": this.updateUniForm.get('name').value,
       "address": this.updateUniForm.get('address').value,
       "logoUrl": "",
