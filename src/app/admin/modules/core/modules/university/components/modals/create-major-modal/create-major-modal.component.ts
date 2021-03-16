@@ -52,10 +52,9 @@ export class CreateMajorModalComponent implements OnInit {
 
   getAllMajor(): void {    
     this._majorService.getAllMajor().subscribe((rs) => {                
-      this.result = rs;  
-      console.log(this.result);    
-      const temp: any[] = this.result.map((rs) => rs.name);             
-      this.options = temp;     
+      this.result = rs;          
+      // const temp: any[] = this.result.map((rs) => rs.name);             
+      this.options = rs;     
       // this.getIdByName(rs[0].name, rs[0].code); 
       this.filteredControlOptions$ = of(this.options);  
       console.log(rs[0].code);
@@ -113,7 +112,7 @@ export class CreateMajorModalComponent implements OnInit {
     console.log(this.majorForm.get('name').value);
     const newValue = {
       'universityId': Number.parseInt(this.universityId),
-      'majorId': '',
+      'majorId': this.majorForm.get('name').value,
       "majorName": '',
       "numberOfStudents": Number.parseInt(this.majorForm.get('numberOfStudent').value),
       "code": this.majorForm.get('code').value,
@@ -163,7 +162,6 @@ export class CreateMajorModalComponent implements OnInit {
   //------------------------------------ Auto complete -----------------------
   options: string[];
   filteredControlOptions$: Observable<string[]>;
-  inputFormControl: FormControl;
 
   private filter(value: string): string[] {
     const filterValue = value.toLowerCase();

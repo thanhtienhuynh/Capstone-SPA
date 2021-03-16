@@ -12,8 +12,8 @@
         <nb-icon nbPrefix icon="briefcase-outline"></nb-icon>
         <input fullWidth [formControl]="majorForm.get('name')" nbInput type="text" placeholder="Nhập tên ngành" [nbAutocomplete]="autoControl" [status]="majorForm.get('name').invalid && (majorForm.get('name').touched || majorForm.get('name').dirty) ? 'danger' : 'info'"/>
         <nb-autocomplete #autoControl>
-          <nb-option *ngFor="let option of filteredControlOptions$ | async" [value]="option">
-            {{ option }}
+          <nb-option *ngFor="let option of filteredControlOptions$ | async" [value]="option.id">
+            {{ option.name }}
           </nb-option>
         </nb-autocomplete>
       </nb-form-field>      
