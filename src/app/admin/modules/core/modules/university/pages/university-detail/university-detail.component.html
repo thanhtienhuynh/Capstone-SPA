@@ -1,57 +1,25 @@
-<div class="university-detail">
-  <!-- <div class="page-header">
-    <div class="row align-items-md-center">
-      <div class="col-md-6 mb-3">
-        <div class="row">
-          <div class="col-md-5">
-            <nb-form-field>
-              <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
-              <input type="text" placeholder="" fullWidth nbInput />
-            </nb-form-field>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="text-md-right m-v-10">
-          <button nbButton status="primary">
-            <nb-icon icon="plus-outline"></nb-icon>Thêm Trường
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>   -->
+<div class="university-detail"> 
   <div class="container-fluid">
     <div nz-row>
-      <div
-        nz-col
-        [nzXs]="24"
-        [nzSm]="24"
-        [nzMd]="24"
-        [nzLg]="24"
-        [nzXl]="24"
-        [nzXXl]="24"
-        class="mb-2"
-      >
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
         <nb-card style="margin: auto; width: 99%; position: relative">
           <nb-card-body style="width: 100%">
             <div style="width: 100%">
               <div class="row align-items-center ng-star-inserted">
                 <div class="col-md-6">
                   <div class="d-md-flex align-items-center">
-                    <nz-avatar
-                      nzShape="square"
-                      [nzSrc]="university != undefined ?  university.logoUrl : ''"
-                      nz-size="150"
-                    >
-                    </nz-avatar>
+                    <nz-avatar nzShape="square" [nzSrc]="university != undefined ?  university.logoUrl : ''" nz-size="150"></nz-avatar>
                     <div class="text-center text-sm-left m-v-15 p-l-30 col-md-8">
                       <div class="d-flex">
                         <div class="col-md-8 pl-0">
-                          <nb-form-field>                                                
-                            <input [formControl]="updateUniForm.get('name')" type="text" placeholder=""  fullWidth nbInput />
+                          <nb-icon status="primary" nbPrefix icon="home-outline"></nb-icon>                                                                                                    
+                          <label class="ml-1" for="">Tên trường</label>                          
+                          <nb-form-field>  
+                            <input  text-hint-color [formControl]="updateUniForm.get('name')" type="text" placeholder=""  fullWidth nbInput />
                           </nb-form-field>
                         </div>
                         <div class="col-md-4 pr-0">
+                          <label for="">Code</label>
                           <nb-form-field>                                                
                             <input [formControl]="updateUniForm.get('code')" type="text" placeholder=""  fullWidth nbInput />
                           </nb-form-field>
@@ -72,10 +40,7 @@
                       <ul class="list-unstyled m-t-10">
                         <li class="row mt-2">
                           <p class="col-sm-2 col-4 font-weight-semibold text-dark m-b-5 p-0">
-                            <nb-icon
-                              status="info"
-                              icon="globe-outline"
-                            ></nb-icon>
+                            <nb-icon status="primary" icon="globe-outline"></nb-icon>
                             <span class="label">Website: </span>
                           </p>
                           <div class="col pl-0">
@@ -86,7 +51,7 @@
                         </li>
                         <li class="row mt-2">
                           <p class="col-sm-2 col-3 font-weight-semibold text-dark m-b-5 p-0">
-                            <nb-icon status="info" icon="phone-outline"></nb-icon>
+                            <nb-icon status="primary" icon="phone-outline"></nb-icon>
                             <span class="label">Điện Thoại: </span>
                           </p>
                           <div class="col pl-0">
@@ -95,8 +60,8 @@
                         </li>
                         <li class="row mt-2">
                           <p class="col-sm-2 col-4 font-weight-semibold text-dark m-b-5 p-0">
-                            <nb-icon status="info" icon="home-outline"></nb-icon>
-                            <span class="label">Địa Chỉ: </span>
+                            <nb-icon status="primary" icon="home-outline"></nb-icon>
+                            <span class="label" style="font-weight: bold;">Địa Chỉ: </span>
                           </p>
                           <div class="col pl-0">
                             <nb-form-field>
@@ -106,7 +71,7 @@
                         </li>
                         <li class="row mt-2">
                           <p class="col-sm-2 col-4 font-weight-semibold text-dark m-b-5 p-0">
-                            <nb-icon status="info" icon="layers-outline"></nb-icon>
+                            <nb-icon status="primary" icon="layers-outline"></nb-icon>
                             <span class="label">Học Phí: </span>
                           </p>
                           <div class="col-md-1 pl-0 pr-0 pt-2">
@@ -132,7 +97,6 @@
                             <nb-option value="0">Năm</nb-option>
                             <nb-option value="1">Kì</nb-option>        
                           </nb-select>
-                          
                         </li>
                       </ul>
                       <div class="d-flex justify-content-end">                                                
@@ -148,75 +112,61 @@
       </div>
     </div>
   </div>
+  
+
   <div class="container-fluid">
     <div nz-row>
-      <div
-        nz-col
-        [nzXs]="24"
-        [nzSm]="24"
-        [nzMd]="24"
-        [nzLg]="24"
-        [nzXl]="24"
-        [nzXXl]="24"
-        class="mb-2"
-      >
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
         <nb-card style="margin: auto; width: 99%; position: relative">
           <nb-card-body style="width: 100%">
             <div style="width: 100%; min-height: 42rem">
-              <button
-                style="float: right; margin-bottom: 1rem"
-                (click)="openCreateMajorModal(undefined)"
-                nbButton
-                status="primary"
-              >
+              <button style="float: right; margin-bottom: 1rem" (click)="openCreateMajorModal(undefined)" nbButton status="primary">
                 <nb-icon icon="plus-outline"></nb-icon>Thêm Ngành
               </button>
-              <nz-table nzBordered [nzData]="listOfMajor" nzBreakWord="true">
+              <nz-table #majorTable nzBordered [nzData]="listOfMajor" [nzShowTotal]="totalTemplate"  >
                 <thead>
                   <tr>
-                    <th rowspan="3">STT</th>
-                    <th rowspan="3">Thao Tác</th>
-                    <th rowspan="3">Ngành</th>                    
-                    <th rowspan="3">Code</th>
-                    <th rowspan="3">Chỉ Tiêu</th>                    
-                    <th colspan="3">Khối</th>                    
+                    <th rowspan="3">
+                      <div style="width: 100%; text-align: center;">STT</div>
+                    </th>
+                    <th rowspan="3">
+                      <div style="width: 100%; text-align: center;">Thao Tác</div>
+                    </th>
+                    <th rowspan="3">
+                      <div style="width: 100%; text-align: center;">Ngành</div>
+                    </th>                    
+                    <th rowspan="3">
+                      <div style="width: 100%; text-align: center;">Code</div>
+                    </th>
+                    <th rowspan="3">
+                      <div style="width: 100%; text-align: center;">Chỉ Tiêu</div>
+                    </th>                    
+                    <th colspan="3">
+                      <div style="width: 100%; text-align: center;">Khối</div>
+                    </th>                    
                   </tr>
                   <tr>
-                    <th rowspan="2">Tên</th>
-                    <th colspan="2">Năm</th>
+                    <th rowspan="2">
+                      <div style="width: 100%; text-align: center;">Tên</div>
+                    </th>
+                    <th colspan="2">
+                      <div style="width: 100%; text-align: center;">Năm</div>
+                    </th>
                   </tr>
                   <tr>
-                    <th>2019</th>
-                    <th>2020</th>
+                    <th>
+                      <div style="width: 100%; text-align: center;">2019</div>
+                    </th>
+                    <th>
+                      <div style="width: 100%; text-align: center;">2020</div>
+                    </th>
                   </tr>
                 </thead>
 
-                <tbody>
+                <!-- <tbody>
                   <ng-container *ngFor="let major of listOfMajor; let i = index">
                     <tr>
-                      <td class="stt importantInfo" [attr.rowspan]="major.subjectGroups.length + 1">{{i + 1}}</td>
-                      <!-- <td [rowspan]="major.subjectGroups.length + 1">
-                        <i
-                          style="cursor: pointer"
-                          [nzDropdownMenu]="menu1"
-                          nz-icon
-                          nz-dropdown
-                          nzType="ellipsis"
-                        ></i>
-                        <nz-dropdown-menu #menu1="nzDropdownMenu">
-                          <ul nz-menu>
-                            <li nz-menu-item (click)="openCreateMajorModal(major)">
-                              <i nz-icon nzType="edit" nzTheme="outline"></i>
-                              <span class="p-3">Sửa</span>
-                            </li>
-                            <li nz-menu-divider></li>
-                            <li nz-menu-item>
-                              <nb-icon icon="trash"></nb-icon>
-                              <span class="p-3">Xóa</span>
-                            </li>
-                          </ul>
-                        </nz-dropdown-menu>
-                      </td> -->
+                      <td class="stt importantInfo" [attr.rowspan]="major.subjectGroups.length + 1">{{i + 1}}</td>                      
                       <td class="action" [attr.rowspan]="major.subjectGroups.length + 1">
                         <i style="cursor: pointer" [nzDropdownMenu]="menu1" nz-icon nz-dropdown nzType="ellipsis"></i>
                         <nz-dropdown-menu #menu1="nzDropdownMenu">
@@ -243,7 +193,55 @@
                           </span>
                         </ng-template>
                       </td>                       
-                      <!-- <td [attr.rowspan]="major.subjectGroups.length + 1">{{major.numberOfStudent}}</td>                                                                          -->
+                    </tr>                                        
+
+                    <ng-container *ngFor="let subjectGroup of major.subjectGroups">
+                      <tr>                      
+                        <td>{{subjectGroup.groupCode}}</td>    
+                        <ng-container *ngFor="let entryMark of subjectGroup.entryMarks">
+                          <td>
+                            <span *ngIf="entryMark.mark !== 0; else missEntryMark">{{entryMark.mark}}</span>    
+                            <ng-template #missEntryMark>
+                              <nb-icon status="danger" size="large" icon="close-outline"></nb-icon>
+                            </ng-template>                        
+                          </td>                          
+                        </ng-container>
+                      </tr>                                             
+                    </ng-container> 
+                    
+                  </ng-container>                  
+                </tbody> -->
+
+                <tbody>
+                  <ng-container *ngFor="let major of majorTable.data; let i = index">
+                    <tr>
+                      <td class="stt importantInfo" [attr.rowspan]="major.subjectGroups.length + 1">{{i + 1}}</td>                      
+                      <td class="action" [attr.rowspan]="major.subjectGroups.length + 1">
+                        <i style="cursor: pointer" [nzDropdownMenu]="menu1" nz-icon nz-dropdown nzType="ellipsis"></i>
+                        <nz-dropdown-menu #menu1="nzDropdownMenu">
+                          <ul nz-menu>
+                            <li nz-menu-item (click)="openCreateMajorModal(major)">
+                              <i nz-icon nzType="edit" nzTheme="outline"></i>
+                              <span class="p-3">Sửa</span>
+                            </li>
+                            <li nz-menu-divider></li>
+                            <li nz-menu-item>
+                              <nb-icon icon="trash"></nb-icon>
+                              <span class="p-3">Xóa</span>
+                            </li>
+                          </ul>
+                        </nz-dropdown-menu>
+                      </td>
+                      <td class="name importantInfo" [attr.rowspan]="major.subjectGroups.length + 1">{{major.name}}</td>
+                      <td class="code importantInfo" [attr.rowspan]="major.subjectGroups.length + 1">{{major.code}}</td>
+                      <td [attr.rowspan]="major.subjectGroups.length + 1">                        
+                        <span *ngIf="major.numberOfStudents !== 0; else missNumberOfStudent">{{major.numberOfStudents}}</span>
+                        <ng-template #missNumberOfStudent>
+                          <span>
+                            <nb-icon status="danger" size="large" icon="close-outline"></nb-icon>
+                          </span>
+                        </ng-template>
+                      </td>                       
                     </tr>                                        
 
                     <ng-container *ngFor="let subjectGroup of major.subjectGroups">
@@ -270,3 +268,5 @@
     </div>
   </div>
 </div>
+
+<ng-template #totalTemplate let-total>Total {{ total }} items</ng-template>

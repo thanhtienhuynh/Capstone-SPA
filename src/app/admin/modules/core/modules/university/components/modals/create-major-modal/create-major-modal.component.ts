@@ -2,8 +2,8 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { Observable, of } from 'rxjs';
-import { catchError, map, startWith, tap } from 'rxjs/operators';
-import { MajorService } from 'src/app/admin/services';
+import { catchError, tap } from 'rxjs/operators';
+import { MajorService, SubjectGroupService } from 'src/app/admin/services';
 import { MajorRM, SubjectGroupRM } from 'src/app/admin/view-models';
 import Swal from 'sweetalert2';
 
@@ -34,37 +34,36 @@ export class CreateMajorModalComponent implements OnInit {
   ];  
 
   result: any[];
+  subjectGroupResult: any[];
 
   listOfSubjectGroup: SubjectGroupRM[] = [];
   constructor(
     private _fb: FormBuilder,
     private _modalRef: NzModalRef,
-    private _majorService: MajorService
+    private _majorService: MajorService,
+    private _subjectGroupService: SubjectGroupService
   ) { 
     this.initMajorForm();    
   }  
   ngOnInit() {    
     this.setData();    
-    this.getAllMajor();    
-    // this.options = ['Công nghệ thông tin', 'Quản trị khách sạn'];     
-                 
+    this.getAllMajor();
+    this.getAllSubjectGroup();
   }
 
   getAllMajor(): void {    
     this._majorService.getAllMajor().subscribe((rs) => {                
-      this.result = rs;          
-      // const temp: any[] = this.result.map((rs) => rs.name);             
-      this.options = rs;     
-      // this.getIdByName(rs[0].name, rs[0].code); 
-      this.filteredControlOptions$ = of(this.options);  
-      console.log(rs[0].code);
+      this.result = rs;                         
+      this.options = rs;           
+      this.filteredControlOptions$ = of(this.options);        
     });
   }
 
-  // getIdByName(name: any, code: any): void {
-  //   const temp: MajorRM[] = this.result.filter((rs) => rs.name == name && rs.code == code);
-  //   console.log(temp[0].id);    
-  // }
+  getAllSubjectGroup(): void {
+    this._subjectGroupService.getAllSubjectGroup().subscribe((rs) => {
+      this.subjectGroupResult = rs;
+    })
+  }
 
   getIdByNameAndCode(name: any, code: any): number {
     const temp: MajorRM[] = this.result.filter((rs) => rs.name == name && rs.code == code);
@@ -109,14 +108,31 @@ export class CreateMajorModalComponent implements OnInit {
   }
 
   submitForm(): void {
-    console.log(this.majorForm.get('name').value);
+    const subjectGroups: SubjectGroupRM[] = [];
+    const tmp = this.listField.map(e => e.value);
+    for (let i = 0; i < tmp.length; i++) {
+      subjectGroups.push({
+        id: Number.parseInt(tmp[i].groupCode),               
+        entryMarks: [
+          {
+            mark: tmp[i].entryMark1,
+            year: 2019
+          },
+          {
+            mark: tmp[i].entryMark2,
+            year: 2020
+          }
+        ]
+      });      
+    }   
+    console.log(subjectGroups); 
     const newValue = {
       'universityId': Number.parseInt(this.universityId),
       'majorId': this.majorForm.get('name').value,
       "majorName": '',
       "numberOfStudents": Number.parseInt(this.majorForm.get('numberOfStudent').value),
       "code": this.majorForm.get('code').value,
-      "subjectGroups": []
+      "subjectGroups": subjectGroups
     }
     console.log(newValue);
     this._majorService.createMajor({} as any).pipe(
@@ -128,7 +144,7 @@ export class CreateMajorModalComponent implements OnInit {
         return of(undefined);
       })
     ).subscribe();
-    console.log(this.listField.map(e => e.value));
+    // console.log(this.listField.map(e => e.value));
   }
 
   updateForm(): void {    
@@ -168,5 +184,6 @@ export class CreateMajorModalComponent implements OnInit {
     return this.options.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
   }    
   
-  
+  selectedValue = null;
+  selectedSubjectGroupValue = null;
 }

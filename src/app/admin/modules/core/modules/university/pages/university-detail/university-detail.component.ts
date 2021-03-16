@@ -21,6 +21,8 @@ export class UniversityDetailComponent implements OnInit {
   listOfMajor: MajorRM[] = [];
   university: UniversityRM;
 
+  pageSize: 10;
+  pageIndex: 1;
   uniId: any;
   //binding
   rowspan: number = 5;

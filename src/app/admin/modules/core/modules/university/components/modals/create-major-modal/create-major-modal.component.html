@@ -4,29 +4,28 @@
     <div class="flex-auto"></div>
     <button nbButton (click)="closeModal()"><nb-icon pack="eva" icon="close-outline"></nb-icon></button>
   </div>
+
+
+  
   <div class="flex">
     <div class="col-md-12">
-      <label for="">Tên Ngành</label>
-      
-      <nb-form-field>
-        <nb-icon nbPrefix icon="briefcase-outline"></nb-icon>
-        <input fullWidth [formControl]="majorForm.get('name')" nbInput type="text" placeholder="Nhập tên ngành" [nbAutocomplete]="autoControl" [status]="majorForm.get('name').invalid && (majorForm.get('name').touched || majorForm.get('name').dirty) ? 'danger' : 'info'"/>
-        <nb-autocomplete #autoControl>
-          <nb-option *ngFor="let option of filteredControlOptions$ | async" [value]="option.id">
-            {{ option.name }}
-          </nb-option>
-        </nb-autocomplete>
-      </nb-form-field>      
+      <label for="">Tên Ngành</label>      
+      <nz-select [nzSize]="'large'" [formControl]="majorForm.get('name')" nzShowSearch nzAllowClear nzPlaceHolder="Nhập tên ngành" [(ngModel)]="selectedValue">
+        <nz-option *ngFor="let option of filteredControlOptions$ | async" [nzLabel]="option.name" [nzValue]="option.id"></nz-option>      
+      </nz-select>
     </div>                
   </div>
+
+
+
+
+
   <div class="flex mt-2">
     <div class="col-md-6">
       <label for="">Code</label>
-      <nb-form-field>
-        <!-- <nb-icon nbPrefix icon="code-outline" pack="eva"></nb-icon> -->
-        <!-- <nb-icon nbPrefix icon="key" pack="font-awesome"></nb-icon> -->
+      <nb-form-field>        
         <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
-        <input [formControl]="majorForm.get('code')" type="text" placeholder="" fullWidth nbInput [status]="majorForm.get('code').invalid && (majorForm.get('code').touched || majorForm.get('code').dirty) ? 'danger' : 'info'"/>        
+        <input [formControl]="majorForm.get('code')" type="text" placeholder="" fullWidth nbInput/>        
       </nb-form-field>
     </div>
     <div class="col-md-6">
@@ -40,7 +39,10 @@
   <div *ngFor="let field of listField; let i = index" class="flex mt-2">
     <div class="col-md-6">
       <label for="">Khối</label>
-      <input type="text" [formControl]="field.get('groupCode')" fullWidth nbInput>
+      <!-- <input type="text" [formControl]="field.get('groupCode')" fullWidth nbInput> -->
+      <nz-select [nzSize]="'large'" [formControl]="field.get('groupCode')" nzShowSearch nzAllowClear nzPlaceHolder="Nhập tên khối">
+        <nz-option *ngFor="let option of subjectGroupResult" [nzLabel]="option.groupCode" [nzValue]="option.id"></nz-option>      
+      </nz-select>
     </div>    
     <div [class]="listField.length === 1 ? 'col-md-3': 'col-md-2 pr-0'">
       <label for="" style="font-size: smaller;">Điểm chuẩn 2019</label>
@@ -56,6 +58,21 @@
       </button>       
     </div>
   </div>
+
+  
+  <!-- <div *ngFor="let field of listField; let i = index" class="flex mt-2">
+    <div class="col-md-1">
+      <label for="">Khối</label>      
+    </div>
+    <div class="col-md-3">      
+      <nz-select [nzSize]="'large'" [formControl]="field.get('groupCode')" nzShowSearch nzAllowClear nzPlaceHolder="Nhập tên ngành" [(ngModel)]="selectedSubjectGroupValue">
+        <nz-option *ngFor="let option of subjectGroupResult" [nzLabel]="option.groupCode" [nzValue]="option.id"></nz-option>      
+      </nz-select>
+    </div> 
+
+  </div> -->
+
+
   <div class="footer">
     <button (click)="addField()" nz-button nzType="default" nz-tooltip>
       <nb-icon icon="plus"></nb-icon>
