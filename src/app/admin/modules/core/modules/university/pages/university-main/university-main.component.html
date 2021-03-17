@@ -8,6 +8,7 @@
               <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
               <input type="text" placeholder="Tìm kiếm trường đại học" fullWidth nbInput />
             </nb-form-field>
+            
           </div>
         </div>
       </div>
@@ -139,19 +140,19 @@
                     </td>
                     <td class="tuition">
                       <p *ngIf="university.tuitionType == 0">
-                        <span *ngIf="university.tuitionFrom != null; else missTuitionYear">{{university.tuitionFrom}}</span>
+                        <span *ngIf="university.tuitionFrom != null; else missTuitionYear">{{university.tuitionFrom | mask: 'separator':'.'}}</span><span *ngIf="university.tuitionFrom != null; else missTuitionYear">.000</span>
                         <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> - </span> 
-                        <span *ngIf="university.tuitionFrom != null">{{university.tuitionTo}}</span>
+                        <span *ngIf="university.tuitionFrom != null">{{university.tuitionTo | mask: 'separator':'.'}}</span><span *ngIf="university.tuitionFrom != null">.000</span>
                         <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> / Năm</span>  
                         <ng-template #missTuitionYear>
                           <nb-icon icon="close-outline" status="danger"></nb-icon>
                         </ng-template>                           
                       </p>
                       <p *ngIf="university.tuitionType != 0">
-                        <span *ngIf="university.tuitionFrom != null; else missTuitionSemester">{{university.tuitionFrom}}</span>
+                        <span *ngIf="university.tuitionFrom != null; else missTuitionSemester">{{university.tuitionFrom | mask: 'separator':'.'}}</span><span>.000</span>
                         <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> - </span> 
-                        <span *ngIf="university.tuitionFrom != null">{{university.tuitionTo}}</span>
-                        <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> / Kì</span>  
+                        <span *ngIf="university.tuitionFrom != null">{{university.tuitionTo | mask: 'separator':'.'}}</span><span>.000</span>
+                        <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> / Kì</span>
                         <ng-template #missTuitionSemester>
                           <nb-icon icon="close-outline" status="danger"></nb-icon>
                         </ng-template> 

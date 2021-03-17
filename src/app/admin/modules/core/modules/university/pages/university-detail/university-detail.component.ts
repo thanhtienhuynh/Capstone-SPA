@@ -47,8 +47,7 @@ export class UniversityDetailComponent implements OnInit {
         tap((rs) => {  
           this.uniId = param.id;        
           this.university = rs;
-          this.listOfMajor = rs.majors                    
-          console.log(this.university);          
+          this.listOfMajor = rs.majors                                        
           this.setDataToForm(this.university);
         }),
         catchError((err) => {
@@ -104,7 +103,9 @@ export class UniversityDetailComponent implements OnInit {
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,   
-      nzComponentParams: {data: data, universityId: this.uniId}   
+      nzComponentParams: {data: data, universityId: this.uniId, universityName: this.university.name, callBack: (majors) => {
+        this.listOfMajor = majors;
+      }}   
     })
   }
 
@@ -119,20 +120,67 @@ export class UniversityDetailComponent implements OnInit {
       "phone": this.updateUniForm.get('phone').value,
       "webUrl": this.updateUniForm.get('webUrl').value,
       "tuitionType": Number.parseInt(this.updateUniForm.get('tuitionType').value),
-      "tuitionFrom": this.updateUniForm.get('tuitionFrom').value,
-      "tuitionTo": this.updateUniForm.get('tuitionTo').value,
+      "tuitionFrom": Number.parseInt(this.updateUniForm.get('tuitionFrom').value),
+      "tuitionTo": Number.parseInt(this.updateUniForm.get('tuitionTo').value),
       "rating": 5,
       "status": 1
     }   
-    console.log(newValue);
-    this._universityService.updateUniversity(newValue).pipe(
-      tap((rs) => {
-        Swal.fire('Thành Công', 'Cập nhật thông tin trường thành công', 'success');
-      }),
-      catchError((err) => {
-        Swal.fire('Lỗi', 'Cập nhật thông tin trường thất bại', 'error');
-        return of(undefined);
-      })
-    ).subscribe();
+    Swal.fire({
+      title: 'Bạn có muốn lưu những thông tin đã thay đổi hay không?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: `Lưu`,
+      denyButtonText: `Không lưu`,
+      cancelButtonText: `Thoát`      
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._universityService.updateUniversity(newValue).pipe(
+          tap((rs) => {            
+            let timerInterval;
+            Swal.fire({
+              title: 'Vui lòng chờ!',
+              html: 'Đang xử lí...',
+              timer: 1000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading()
+                timerInterval = setInterval(() => {}, 100)
+              },
+              willClose: () => {
+                clearInterval(timerInterval)
+              }
+            }).then((result) => {              
+              if (result.dismiss === Swal.DismissReason.timer) {
+                Swal.fire('Thành Công', 'Cập nhật thông tin trường thành công', 'success');
+              }
+            });
+          }),
+          catchError((err) => {
+            let timerInterval;
+            Swal.fire({
+              title: 'Vui lòng chờ!',
+              html: 'Đang xử lí...',
+              timer: 1000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading()
+                timerInterval = setInterval(() => {}, 100)
+              },
+              willClose: () => {
+                clearInterval(timerInterval)
+              }
+            }).then((result) => {              
+              if (result.dismiss === Swal.DismissReason.timer) {
+                Swal.fire('Lỗi', 'Cập nhật thông tin trường thất bại', 'error');
+              }
+            });            
+            return of(undefined);
+          })
+        ).subscribe();
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+      }
+    })
+    
   }
 }

@@ -19,15 +19,18 @@
                           </nb-form-field>
                         </div>
                         <div class="col-md-4 pr-0">
-                          <label for="">Code</label>
+                          <i nz-icon nzType="key" nzTheme="outline" style="font-size: large; color: #3366ff;"></i>
+                          <label class="ml-1" for="">Code</label>
                           <nb-form-field>                                                
                             <input [formControl]="updateUniForm.get('code')" type="text" placeholder=""  fullWidth nbInput />
                           </nb-form-field>
                         </div>
                       </div>                      
                       <div class="mt-2">
+                        <nb-icon status="primary" icon="edit-2-outline"></nb-icon>
+                        <label class="ml-2" for="">Mô tả</label>
                         <nb-form-field>
-                          <textarea [formControl]="updateUniForm.get('description')" nbInput fullWidth placeholder="Miêu tả" fieldSize="large"></textarea>
+                          <textarea [formControl]="updateUniForm.get('description')" nbInput fullWidth placeholder="Mô tả" fieldSize="large"></textarea>
                         </nb-form-field>
                       </div>                                            
                     </div>
@@ -74,28 +77,34 @@
                             <nb-icon status="primary" icon="layers-outline"></nb-icon>
                             <span class="label">Học Phí: </span>
                           </p>
-                          <div class="col-md-1 pl-0 pr-0 pt-2">
+                          <div class="pl-0 pr-0 pt-2" style="width: 30px;">
                             <span>Từ</span>
                           </div>
-                          <div class="col-md-2 p-0">
-                            <nb-form-field>                              
-                              <input nbInput type="number" [formControl]="updateUniForm.get('tuitionFrom')" fullWidth>
-                            </nb-form-field>
+                          <div class="p-0" style="width: 190px;">
+                            <!-- <nb-form-field>                              
+                              <input nbInput type="text" style="text-align: right;" [formControl]="updateUniForm.get('tuitionFrom')" fullWidth mask="separator.2" thousandSeparator=".">
+                            </nb-form-field> -->
+                            <nz-input-group nzAddOnAfter=".000 (VNĐ)" [nzSize]="'large'">
+                              <input [formControl]="updateUniForm.get('tuitionFrom')" mask="separator.2" thousandSeparator="." type="text" nz-input style="text-align: right; background-color: #f7f9fc;" />
+                            </nz-input-group>
                           </div>
-                          <div class="col-md-1 pr-0 pt-2">
+                          <div class="pr-0 pt-2 mr-2 ml-2" style="width: 30px;">
                             <span>Đến</span>
                           </div>
-                          <div class="col-md-2 p-0">
-                            <nb-form-field>
-                              <input nbInput type="number" [formControl]="updateUniForm.get('tuitionTo')" fullWidth>
-                            </nb-form-field>
+                          <div class="p-0" style="width: 190px;">
+                            <!-- <nb-form-field>
+                              <input nbInput type="text" style="text-align: right;" [formControl]="updateUniForm.get('tuitionTo')" fullWidth mask="separator.2" thousandSeparator=".">
+                            </nb-form-field> -->
+                            <nz-input-group nzAddOnAfter=".000 (VNĐ)" [nzSize]="'large'">
+                              <input [formControl]="updateUniForm.get('tuitionTo')" mask="separator.2" thousandSeparator="." type="text" nz-input style="text-align: right; background-color: #f7f9fc;" />
+                            </nz-input-group>
                           </div>   
-                          <div class="pr-0 pt-2 pl-4" style="width: 3.9rem;">
+                          <div class="pr-0 pt-2 mr-2 ml-3" style="width: 10px;">
                             <span>/</span>
                           </div>                       
                           <nb-select [formControl]="updateUniForm.get('tuitionType')">        
-                            <nb-option value="0">Năm</nb-option>
-                            <nb-option value="1">Kì</nb-option>        
+                            <nb-option [value]="0">Năm</nb-option>
+                            <nb-option [value]="1">Kì</nb-option>        
                           </nb-select>
                         </li>
                       </ul>
@@ -120,6 +129,13 @@
         <nb-card style="margin: auto; width: 99%; position: relative">
           <nb-card-body style="width: 100%">
             <div style="width: 100%; min-height: 42rem">
+              <nb-card style="float: left;">
+                <nb-card-header>Hướng dẫn</nb-card-header>
+                <nb-card-body>
+                  <nb-icon status="danger" icon="close-outline"></nb-icon>
+                  <label class="ml-2" for="">: Thông tin đang thiếu sót, cần được bổ sung</label>
+                </nb-card-body>                
+              </nb-card>
               <button style="float: right; margin-bottom: 1rem" (click)="openCreateMajorModal(undefined)" nbButton status="primary">
                 <nb-icon icon="plus-outline"></nb-icon>Thêm Ngành
               </button>
@@ -235,7 +251,7 @@
                       <td class="name importantInfo" [attr.rowspan]="major.subjectGroups.length + 1">{{major.name}}</td>
                       <td class="code importantInfo" [attr.rowspan]="major.subjectGroups.length + 1">{{major.code}}</td>
                       <td [attr.rowspan]="major.subjectGroups.length + 1">                        
-                        <span *ngIf="major.numberOfStudents !== 0; else missNumberOfStudent">{{major.numberOfStudents}}</span>
+                        <span *ngIf="major.numberOfStudents !== 0; else missNumberOfStudent">{{major.numberOfStudents  | mask: 'separator':'.'}}</span>
                         <ng-template #missNumberOfStudent>
                           <span>
                             <nb-icon status="danger" size="large" icon="close-outline"></nb-icon>

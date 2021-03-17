@@ -39,8 +39,7 @@ export class UniversityMainComponent implements OnInit {
 
   getAllUniversity(): void {
     this._universityService.getAllUniversity().pipe(
-      tap((rs) => {     
-        console.log(rs);                      
+      tap((rs) => {                                   
         this.listOfUniversity = rs;  
         this.total = this.listOfUniversity.length;
         this.total = this.listOfUniversity.length;      
@@ -58,7 +57,10 @@ export class UniversityMainComponent implements OnInit {
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,  
-      nzComponentParams: {callBack: this.getAllUniversity}    
+      nzComponentParams: {callBack: (item) => {             
+        this.listOfUniversity.push(item);
+        console.log(this.listOfUniversity);
+      }}    
     });
   }
 

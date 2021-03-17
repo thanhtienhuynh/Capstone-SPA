@@ -9,10 +9,19 @@
   
   <div class="flex">
     <div class="col-md-12">
-      <label for="">Tên Ngành</label>      
-      <nz-select [nzSize]="'large'" [formControl]="majorForm.get('name')" nzShowSearch nzAllowClear nzPlaceHolder="Nhập tên ngành" [(ngModel)]="selectedValue">
+      <label for="">Tên Ngành <span style="color: red;">*</span></label>      
+      <!-- <nz-select [nzSize]="'large'" [formControl]="majorForm.get('name')" nzShowSearch nzAllowClear nzPlaceHolder="Nhập tên ngành" [(ngModel)]="selectedValue">
         <nz-option *ngFor="let option of filteredControlOptions$ | async" [nzLabel]="option.name" [nzValue]="option.id"></nz-option>      
-      </nz-select>
+      </nz-select> -->
+      <nb-form-field>
+        <nb-icon nbPrefix icon="briefcase-outline"></nb-icon>
+        <input [disabled]="data!=undefined" type="text" [value]="majorForm.get('name').value?.name" readonly nz-dropdown [placeholder]="'Chọn ngành'" [nzDropdownMenu]="selectMajorName" nzTrigger="click" nzPlacement="bottomCenter" fullWidth nbInput
+      [status]="majorForm.get('name').invalid && (majorForm.get('name').touched || majorForm.get('name').dirty) ? 'danger' : 'info'"
+      >
+      </nb-form-field>      
+      <nz-dropdown-menu #selectMajorName="nzDropdownMenu">
+        <app-custom-select [control]="majorForm.get('name')" [data]="majorResult | async" [name]="'name'" [label]="'name'" [placeholder]="'Tìm kiếm theo tên khối'" [titleNewItem]="'Ngành'"></app-custom-select>
+      </nz-dropdown-menu>
     </div>                
   </div>
 
@@ -22,38 +31,60 @@
 
   <div class="flex mt-2">
     <div class="col-md-6">
-      <label for="">Code</label>
+      <label for="">Code <span style="color: red;">*</span></label>
       <nb-form-field>        
         <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
-        <input [formControl]="majorForm.get('code')" type="text" placeholder="" fullWidth nbInput/>        
+        <input [disabled]="data != undefined" [formControl]="majorForm.get('code')" type="text" placeholder="Nhập mã ngành" fullWidth nbInput
+        [status]="majorForm.get('code').invalid && (majorForm.get('code').touched || majorForm.get('code').dirty) ? 'danger' : 'info'"
+        />        
       </nb-form-field>
     </div>
     <div class="col-md-6">
-      <label for="">Chỉ Tiêu</label>
+      <label for="">Chỉ Tiêu <span style="color: red;">*</span></label>
       <nb-form-field>
         <nb-icon nbPrefix icon="layers-outline" pack="eva"></nb-icon>
-        <input [formControl]="majorForm.get('numberOfStudent')" type="text" placeholder="" fullWidth nbInput/>        
+        <input style="text-align: right;" [formControl]="majorForm.get('numberOfStudent')" mask="separator.2" thousandSeparator=","  type="text" placeholder="Nhập số lượng sinh viên" fullWidth nbInput
+        [status]="majorForm.get('numberOfStudent').invalid && (majorForm.get('numberOfStudent').touched || majorForm.get('numberOfStudent').dirty) ? 'danger' : 'info'"
+        />        
       </nb-form-field>
     </div>    
   </div>
   <div *ngFor="let field of listField; let i = index" class="flex mt-2">
     <div class="col-md-6">
-      <label for="">Khối</label>
-      <!-- <input type="text" [formControl]="field.get('groupCode')" fullWidth nbInput> -->
-      <nz-select [nzSize]="'large'" [formControl]="field.get('groupCode')" nzShowSearch nzAllowClear nzPlaceHolder="Nhập tên khối">
+      <label for="">Khối <span style="color: red;">*</span></label>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="cube-outline"></nb-icon>
+        <input type="text" [value]="field.get('subjectGroup').value?.groupCode" readonly nz-dropdown [placeholder]="'Chọn khối'" [nzDropdownMenu]="selectGroupCode" nzTrigger="click" nzPlacement="bottomCenter" fullWidth nbInput
+      [status]="field.get('subjectGroup').invalid && (field.get('subjectGroup').touched || field.get('subjectGroup').dirty) ? 'danger' : 'info'"
+      >
+      </nb-form-field>
+      
+      <nz-dropdown-menu #selectGroupCode="nzDropdownMenu">
+        <app-custom-select [control]="field.get('subjectGroup')" [data]="subjectGroupResult | async" [name]="'id'" [label]="'groupCode'" [placeholder]="'Tìm kiếm theo tên khối'" [titleNewItem]="'Khối'"></app-custom-select>
+      </nz-dropdown-menu>
+      <!-- <nz-select [nzSize]="'large'" [formControl]="field.get('groupCode')" nzShowSearch nzAllowClear nzPlaceHolder="Nhập tên khối">
         <nz-option *ngFor="let option of subjectGroupResult" [nzLabel]="option.groupCode" [nzValue]="option.id"></nz-option>      
-      </nz-select>
+      </nz-select> -->
     </div>    
     <div [class]="listField.length === 1 ? 'col-md-3': 'col-md-2 pr-0'">
       <label for="" style="font-size: smaller;">Điểm chuẩn 2019</label>
-      <input [formControl]="field.get('entryMark1')" type="number" placeholder="" fullWidth nbInput/>        
+      <nb-form-field>
+        <nb-icon nbPrefix icon="edit-2-outline"></nb-icon>
+        <input [formControl]="field.get('entryMark1')" mask="separator.2" style="text-align: right;" thousandSeparator="," type="text" placeholder="Nhập điểm" fullWidth nbInput
+      [status]="field.get('entryMark1').invalid && (field.get('entryMark1').touched || field.get('entryMark1').dirty) ? 'danger' : 'info'"/> 
+      </nb-form-field>             
     </div>
     <div [class]="listField.length === 1 ? 'col-md-3': 'col-md-2 pr-0'">     
       <label for="" style="font-size: smaller;">Điểm chuẩn 2020</label> 
-      <input [formControl]="field.get('entryMark2')" type="number" placeholder="" fullWidth nbInput/>        
+      <nb-form-field>
+        <nb-icon nbPrefix icon="edit-2-outline"></nb-icon>
+        <input [formControl]="field.get('entryMark2')" type="text" style="text-align: right;" mask="separator.2" thousandSeparator="," placeholder="Nhập điểm" fullWidth nbInput
+        [status]="field.get('entryMark2').invalid && (field.get('entryMark2').touched || field.get('entryMark2').dirty) ? 'danger' : 'info'"  
+        /> 
+      </nb-form-field>             
     </div>
     <div [class]="listField.length != 1 ? 'col-md-2 d-flex justify-content-end pt-4': 'display-none'">            
-      <button (click)="removeField(i)" nbButton status="danger">
+      <button (click)="removeField(i, field)" nbButton status="danger">
         <nb-icon icon="minus-outline"></nb-icon>
       </button>       
     </div>

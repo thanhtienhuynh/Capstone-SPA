@@ -71,58 +71,55 @@
     <div class="col-md-4">
       <label for="">Loại Học Phí</label>
       <nb-select [formControl]="createUniversityForm.get('tuitionType')" fullWidth>        
-        <nb-option value="0">Theo Năm</nb-option>
-        <nb-option value="1">Theo Kì</nb-option>        
+        <nb-option [value]="0">Theo Năm</nb-option>
+        <nb-option [value]="1">Theo Kì</nb-option>        
       </nb-select>
     </div>
     <div class="col-md-4 ml-3 pl-0">
       <label for="">Học phí tối thiểu</label>
-      <nb-form-field>
-        <input [formControl]="createUniversityForm.get('tuitionFrom')" type="number" nbInput fullWidth>
-      </nb-form-field>
+      <!-- <nb-form-field>
+        <input [formControl]="createUniversityForm.get('tuitionFrom')" type="text" nbInput mask="separator.2" thousandSeparator="." fullWidth style="text-align: right;">
+      </nb-form-field> -->
+      <nz-input-group nzAddOnAfter=".000" [nzSize]="'large'">
+        <input   [formControl]="createUniversityForm.get('tuitionFrom')" mask="separator.2" thousandSeparator="." type="text" nz-input style="text-align: right; background-color: #f7f9fc;" />
+      </nz-input-group>
     </div>
     <div class="col-md-4 pl-0">
       <label for="">Học phí tối đa</label>
-      <nb-form-field>
-        <input [formControl]="createUniversityForm.get('tuitionTo')" type="number" nbInput fullWidth>
-      </nb-form-field>
+      <!-- <nb-form-field>
+        <input [formControl]="createUniversityForm.get('tuitionTo')" type="text" nbInput mask="separator.2" thousandSeparator="." fullWidth style="text-align: right;">
+        
+      </nb-form-field> -->
+      <nz-input-group nzAddOnAfter=".000" [nzSize]="'large'">
+        <input [formControl]="createUniversityForm.get('tuitionTo')" mask="separator.2" thousandSeparator="." type="text" nz-input style="text-align: right; background-color: #f7f9fc;" />
+      </nz-input-group>
     </div>
   </div> 
   <div class="flex mt-3">
     <div class="col-md-6">
       <label for="">Trạng Thái</label>
-      <nb-select [formControl]="createUniversityForm.get('status')" fullWidth>        
-        <nb-option value="1">Hoạt Động</nb-option>
-        <nb-option value="0">Không Hoạt Động</nb-option>        
+      <nb-select [formControl]="createUniversityForm.get('status') " [selected]="'1'" fullWidth>        
+        <nb-option [value]="1">Hoạt Động</nb-option>
+        <nb-option [value]="0">Không Hoạt Động</nb-option>        
       </nb-select>
     </div>    
     <div class="col-md-6">
       <label for="">Đánh Giá</label>
       <nb-select [formControl]="createUniversityForm.get('rating')" fullWidth>        
         <nb-option value="1">
-          <nb-icon status="warning" icon="star"></nb-icon>
+          ⭐️
         </nb-option>
         <nb-option value="2">
-          <nb-icon status="warning" icon="star"></nb-icon>
-          <nb-icon status="warning" icon="star"></nb-icon>
+          <div>⭐️⭐️</div>
         </nb-option>
         <nb-option value="3">
-          <nb-icon status="warning" icon="star"></nb-icon>
-          <nb-icon status="warning" icon="star"></nb-icon>
-          <nb-icon status="warning" icon="star"></nb-icon>
+          <div>⭐️⭐️⭐️</div>
         </nb-option>
         <nb-option value="4">
-          <nb-icon status="warning" icon="star"></nb-icon>
-          <nb-icon status="warning" icon="star"></nb-icon>
-          <nb-icon status="warning" icon="star"></nb-icon>
-          <nb-icon status="warning" icon="star"></nb-icon>
+          <div>⭐️⭐️⭐️⭐️</div>
         </nb-option>
         <nb-option value="5">
-          <nb-icon status="warning" icon="star"></nb-icon>
-          <nb-icon status="warning" icon="star"></nb-icon>
-          <nb-icon status="warning" icon="star"></nb-icon>
-          <nb-icon status="warning" icon="star"></nb-icon>
-          <nb-icon status="warning" icon="star"></nb-icon>
+          <div>⭐️⭐️⭐️⭐️⭐️</div>
         </nb-option>
       </nb-select>
     </div>
