@@ -5,6 +5,9 @@ import {
   NebularModule,
   NgxModule
 } from './modules';
+import {
+  CustomSelectComponent
+} from './components';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const SHARE_MODULES = [
   AntModule,
@@ -17,8 +20,15 @@ export const ANGULAR_MODULES = [
   ReactiveFormsModule,
   // CommonModule,  
 ];
+
+const COMPONENTS = [CustomSelectComponent];
 @NgModule({
-  exports: [...SHARE_MODULES, ...ANGULAR_MODULES],
+  exports: [...SHARE_MODULES, ...ANGULAR_MODULES, ...COMPONENTS],
+  declarations: [...COMPONENTS],
+  imports: [
+    ...ANGULAR_MODULES,
+    ...SHARE_MODULES,
+  ],
 })
 export class SharedModule {
   static forRoot(name: string = 'default'): ModuleWithProviders<SharedModule> {

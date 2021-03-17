@@ -7,6 +7,7 @@ import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { quillConfiguration } from 'src/app/admin/config';
 import { UniversityService } from 'src/app/admin/services';
+import { UniversityRM } from 'src/app/admin/view-models';
 import Swal from 'sweetalert2';
 
 
@@ -18,7 +19,7 @@ import Swal from 'sweetalert2';
 })
 export class CreateUniversityModalComponent implements OnInit {  
 
-  @Input() callBack: any;
+  @Input() callBack: (item: UniversityRM) => void;
 
   logo: string | ArrayBuffer;
   createUniversityForm: FormGroup;
@@ -78,8 +79,8 @@ export class CreateUniversityModalComponent implements OnInit {
         'Status': this.createUniversityForm.get('status').value
       }      
       this._uniService.createUniversity(newUni).pipe(
-        tap((rs) => {
-          
+        tap((rs) => {          
+          this.callBack(rs);
           Swal.fire('Thành Công', 'Thêm mới trường đại học thành công', 'success');          
         }),
         catchError((err) => {

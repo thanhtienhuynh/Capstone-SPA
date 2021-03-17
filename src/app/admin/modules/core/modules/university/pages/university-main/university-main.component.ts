@@ -24,7 +24,7 @@ export class UniversityMainComponent implements OnInit {
   loading: true;
 
   //Paging
-  total = 20;
+  total = 1;
   pageSize = 10;
   pageIndex = 1;
   listOfUniversity: UniversityRM[] = [];
@@ -39,8 +39,10 @@ export class UniversityMainComponent implements OnInit {
 
   getAllUniversity(): void {
     this._universityService.getAllUniversity().pipe(
-      tap((rs) => {                
-        this.listOfUniversity = rs;        
+      tap((rs) => {                                   
+        this.listOfUniversity = rs;  
+        this.total = this.listOfUniversity.length;
+        this.total = this.listOfUniversity.length;      
       }),
       catchError((err) => {
         console.log(err);
@@ -55,7 +57,10 @@ export class UniversityMainComponent implements OnInit {
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,  
-      nzComponentParams: {callBack: this.getAllUniversity}    
+      nzComponentParams: {callBack: (item) => {             
+        this.listOfUniversity.push(item);
+        console.log(this.listOfUniversity);
+      }}    
     });
   }
 

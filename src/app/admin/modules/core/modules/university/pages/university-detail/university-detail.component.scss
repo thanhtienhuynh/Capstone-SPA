@@ -50,16 +50,17 @@ nz-avatar {
 
 
 th {
-    font-size: 14px;
-    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; 
-    
+    font-size: 1rem;
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;         
+    text-align: center;
 }
 
+
 td {
-    font-size: 0.8rem;    
+    font-size: 1rem;    
     font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    text-align: justify;   
-    width: 23.3333333%; 
+    text-align: center;   
+    width: 10%; 
 }
 
 .stt, .code, .action {
@@ -67,7 +68,7 @@ td {
 }
 
 .importantInfo {
-    font-size: 0.8rem;
+    font-size: 1rem;
     // font-family: 'Courier New', Courier, monospace;   
     font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 500;    
@@ -75,4 +76,9 @@ td {
 
 .name {
     width: 20%;
+}
+
+.my-text {
+    font-family: nb-theme(font-family-primary);
+    color: nb-theme(text-hint-color);
 }
