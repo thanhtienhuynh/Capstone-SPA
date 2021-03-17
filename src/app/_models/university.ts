@@ -4,6 +4,11 @@ export interface University {
   name: string;
   address: string;
   logoUrl: string;
-  infomation: string;
+  description: string;
   rating: number;
+  tuitionFrom: number;
+  tuitionType: number;
+  tuitionTo: number;
+  webUrl: string;
+  phone: string;
 }

@@ -13,7 +13,6 @@ import { environment } from 'src/environments/environment';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
 import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-page.component';
-import { WaitingComponent } from './_sharings/components/waiting/waiting.component';
 import { AnswerComponent } from './major-suggestion-stepper/exam-page/answer/answer.component';
 import { ResultDialogComponent } from './major-suggestion-stepper/exam-page/result-dialog/result-dialog.component';
 import { CountdownModule } from 'ngx-countdown';
@@ -41,12 +40,18 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { NZ_I18N, vi_VN } from 'ng-zorro-antd/i18n';
 import vi from '@angular/common/locales/vi';
 import { SharedModule } from './admin/shared/shared.module';
+import { AuthService } from './admin/services';
+import { ShortenPipe } from './_helper/shorten-pipe';
+import { ProgressSpinnerComponent } from './_sharings/components/progress-spinner/progress-spinner.component';
+import { AuthEffects } from './authentication/store/auth.affects';
+import {MatMenuModule} from '@angular/material/menu';
 
 
 registerLocaleData(vi);
@@ -55,14 +60,15 @@ registerLocaleData(vi);
     AppComponent,
     StepperComponent,
     ExamPageComponent,
-    WaitingComponent,
     AnswerComponent,
     ResultDialogComponent,
     TestCardComponent,
     HeaderComponent,
     HomeComponent,
     SafeHtmlPipe,
-    AuthenticationComponent
+    AuthenticationComponent,
+    ShortenPipe,
+    ProgressSpinnerComponent
    ],
   imports: [
     BrowserModule,
@@ -70,14 +76,14 @@ registerLocaleData(vi);
     BrowserAnimationsModule,        
     FlexLayoutModule,           
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([StepperEffects]),
+    EffectsModule.forRoot([StepperEffects, AuthEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     
     AppRoutingModule,
     CountdownModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
-
+    
 
     MatAutocompleteModule,
     MatStepperModule,
@@ -93,6 +99,8 @@ registerLocaleData(vi);
     MatDialogModule,  
     MatSelectModule,
     MatListModule,
+    MatMenuModule,
+    MatIconModule,
 
     FormsModule,
     ReactiveFormsModule,
@@ -100,7 +108,7 @@ registerLocaleData(vi);
 
     // SharedModule.forRoot()
   ],
-  providers: [{ provide: NZ_I18N, useValue: vi_VN }],
+  providers: [AuthService, { provide: NZ_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

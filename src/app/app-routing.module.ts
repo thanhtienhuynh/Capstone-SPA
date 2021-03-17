@@ -16,7 +16,7 @@ import { StepperComponent } from './major-suggestion-stepper/stepper/stepper.com
 // ];
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: 'admin', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'stepper', component: StepperComponent},
   { path: 'home', component: HomeComponent},
   { path: 'admin', loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule)}  

@@ -65,6 +65,7 @@ export function stepReducer(
         universities: [],
         tests: [],
         test: null,
+        isLoading: true,
         marks: [...action.payload],
       };
     case StepperActions.SET_SUGGESTED_SUBJECTS_GROUP:

@@ -3,9 +3,7 @@
     <button mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/">Trang chủ</button>
   </div>
   <div class="login" >
-    <button (click)="onGoogleLoginClick()" mat-raised-button color="primary">
-      Đăng nhập bằng Google
-    </button>
+    <app-authentication></app-authentication>
   </div>
 </div>
 

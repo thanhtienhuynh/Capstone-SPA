@@ -7,9 +7,8 @@ import {
 } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { GenernalHelperService } from 'src/app/_services/genernal-helper.service';
-import { NUMBER_OF_DEFAULT_COLUMNS } from 'src/app/_common/constants';
 import { Mark } from 'src/app/_models/mark';
 import { Subject } from 'src/app/_models/subject';
 import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group';
@@ -18,14 +17,6 @@ import * as fromApp from '../../_store/app.reducer';
 import * as StepperActions from '../stepper/store/stepper.actions';
 import { ClassifiedTests } from 'src/app/_models/classified-tests';
 import { Test } from 'src/app/_models/test';
-
-// export interface Tile {
-//   color: string;
-//   cols: number;
-//   rows: number;
-//   suggestedGroup: SuggestedSubjectsGroup;
-//   isUsed: boolean;
-// }
 
 @Component({
   selector: 'app-stepper',
@@ -57,51 +48,47 @@ export class StepperComponent implements OnInit, OnDestroy {
   constructor(
     private _formBuilder: FormBuilder,
     private store: Store<fromApp.AppState>,
-    public _generalService: GenernalHelperService
+    public _generalService: GenernalHelperService,
   ) {}
 
   ngOnInit() {
+    console.log("Init");
     this.secondFormGroup = this._formBuilder.group({});
     this.inputFormControl = this._formBuilder.group({});
-    this.thirdFormGroup = this._formBuilder.group({
-      // resultType: [null, Validators.required],
-    });
-
+    this.thirdFormGroup = this._formBuilder.group({});
+    this.store.dispatch(new StepperActions.ResetState());
     this.store.dispatch(new StepperActions.LoadSubjects());
 
     this.subscription = this.store
       .select('stepper')
       .subscribe(
         (stepperState) => {
-          if (stepperState.subjects) {
-            this.subjects = stepperState.subjects;
-          }
+          this.subjects = stepperState.subjects;
           this.isLoading = stepperState.isLoading;
+          this.suggestedSubjectsGroup = stepperState.suggestedSubjectsGroup;
           if ( stepperState.suggestedSubjectsGroup &&  stepperState.suggestedSubjectsGroup.length > 0) {
-            this.suggestedSubjectsGroup = stepperState.suggestedSubjectsGroup;
             this.myStepper.selectedIndex = 1;
-          }      
+          }
+          this.universities = stepperState.universities;    
           if (stepperState.universities && stepperState.universities.length > 0) {
-            this.universities = stepperState.universities;
             this.myStepper.selectedIndex = 2;
           }      
-          if (stepperState.tests != null && stepperState.tests.length > 0) {
-            this.tests = stepperState.tests;
+          this.tests = stepperState.tests;
+          if (stepperState.tests && stepperState.tests.length > 0) {
             this.myStepper.selectedIndex = 3;
           }
-
+          this.test = stepperState.test;
           if (stepperState.test) {
-            this.test = stepperState.test;
             this.myStepper.selectedIndex = 4;
           }
-              
-          for (let subject of this.subjects) {
-            this.secondFormGroup.addControl(
-              subject.id.toString(),
-              new FormControl("0", [Validators.required, Validators.min(0), Validators.max(10)])
-            );
+          if (this.subjects && this.subjects.length > 0) {
+            for (let subject of this.subjects) {
+              this.secondFormGroup.addControl(
+                subject.id.toString(),
+                new FormControl("0", [Validators.required, Validators.min(0), Validators.max(10)])
+              );
+            }
           }
-          this.initResult();
         },
         (error) => {
           console.log(error);
@@ -113,7 +100,7 @@ export class StepperComponent implements OnInit, OnDestroy {
     this.marks = [];
     for(let subject of this.subjects) {
       this.marks.push({subjectId: subject.id, mark: this.secondFormGroup.value[subject.id] ? this.secondFormGroup.value[subject.id] : 0});
-    }    
+    }
     this.store.dispatch(new StepperActions.SetMarks(this.marks));
     if (!this.isLoading) {
       this.myStepper.selectedIndex = 1;
@@ -124,21 +111,7 @@ export class StepperComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-  }
-
-  initResult() {
-    if (this.suggestedSubjectsGroup && this.suggestedSubjectsGroup.length > 0) {
-      // this.column = this.suggestedSubjectsGroup.length > NUMBER_OF_DEFAULT_COLUMNS ? this.suggestedSubjectsGroup.length : NUMBER_OF_DEFAULT_COLUMNS;
-      
-      // let resultTiles: Tile[] = [];
-      // let emptyTiles: Tile[] = [];
-      // this.suggestedSubjectsGroup.forEach((suggestGroup, index) => {
-      //   emptyTiles.push({ ...this.emptyTile, suggestedGroup: this.suggestedSubjectsGroup[this.suggestedSubjectsGroup.length - (index + 1)], rows: (this.suggestedSubjectsGroup.length - index)});
-      //   resultTiles.push( {suggestedGroup: suggestGroup, cols: 1, rows: (this.suggestedSubjectsGroup.length - index + 1), color: this.colors[index], isUsed: true});
-      // });
-      // this.finalResultTiles = [];
-      // this.finalResultTiles = [...emptyTiles, ...resultTiles];
-    }
+    console.log("Destroy");
   }
 
   getUniversity(suggestedGroupId: number, majorId: number, totalMark: number) {

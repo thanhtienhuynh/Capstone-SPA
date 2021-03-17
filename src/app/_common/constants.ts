@@ -1,3 +1,10 @@
 export const NUMBER_OF_DEFAULT_COLUMNS = 3;
 export const DEFAULT_UNSELECTED_ANSWER = "0";
 export const DEFAULT_SELECTED_ANSWER = "1";
+export const JWT_ROLE = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+export const JWT_EMAIL = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+export const JWT_NAME = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname";
+export const JWT_PHONE = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/mobilephone";
+export const JWT_AVATAR = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/uri";
+export const JWT_ADMIN_ROLE = "Admin";
+export const MAX_LENGTH_MAJOR = 35;
