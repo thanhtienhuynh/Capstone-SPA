@@ -18,16 +18,22 @@ import { CreateUniversityModalComponent } from '../../components';
   styleUrls: ['./university-main.component.scss']
 })
 export class UniversityMainComponent implements OnInit {
-
-  //Rating
-  ratingTooltips = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+    
   loading: true;
 
-  //Paging
   total = 1;
   pageSize = 10;
   pageIndex = 1;
-  listOfUniversity: UniversityRM[] = [];
+  listOfUniversity: (UniversityRM & {stt?:number})[] = [];
+
+  //-----------------------------------------------------
+  listOfStatusFilter: any[] = [
+    {text: 'Hoạt Động', value: 1},
+    {text: 'Không Hoạt Động', value: 0},
+  ]
+
+  filterStatusFn = (status: number, item: UniversityRM) => item.status === status;
+  //-----------------------------------------------------
   constructor(
     private _modalService: NzModalService,
     protected _universityService: UniversityService
@@ -40,9 +46,13 @@ export class UniversityMainComponent implements OnInit {
   getAllUniversity(): void {
     this._universityService.getAllUniversity().pipe(
       tap((rs) => {                                   
-        this.listOfUniversity = rs;  
-        this.total = this.listOfUniversity.length;
-        this.total = this.listOfUniversity.length;      
+        this.listOfUniversity = rs.map((e, i) => ({
+          ...e,
+          phones: e.phone.split('-'),
+          stt: i + 1
+        }));              
+        console.log(this.listOfUniversity[0].status);   
+        this.total = this.listOfUniversity.length;             
       }),
       catchError((err) => {
         console.log(err);
@@ -58,8 +68,7 @@ export class UniversityMainComponent implements OnInit {
       nzFooter: null,
       nzWidth: 700,  
       nzComponentParams: {callBack: (item) => {             
-        this.listOfUniversity.push(item);
-        console.log(this.listOfUniversity);
+        this.listOfUniversity.push(item);        
       }}    
     });
   }
@@ -71,4 +80,7 @@ export class UniversityMainComponent implements OnInit {
     const sortOrder = (currentSort && currentSort.value) || null;    
   }
 
+  searchByName(event): void {
+    console.log(event);
+  }
 }

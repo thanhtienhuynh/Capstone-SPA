@@ -34,7 +34,7 @@
       <label for="">Code <span style="color: red;">*</span></label>
       <nb-form-field>        
         <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
-        <input [disabled]="data != undefined" [formControl]="majorForm.get('code')" type="text" placeholder="Nhập mã ngành" fullWidth nbInput
+        <input [readOnly]="data != null" [formControl]="majorForm.get('code')" type="text" placeholder="Nhập mã ngành" fullWidth nbInput
         [status]="majorForm.get('code').invalid && (majorForm.get('code').touched || majorForm.get('code').dirty) ? 'danger' : 'info'"
         />        
       </nb-form-field>
@@ -43,7 +43,7 @@
       <label for="">Chỉ Tiêu <span style="color: red;">*</span></label>
       <nb-form-field>
         <nb-icon nbPrefix icon="layers-outline" pack="eva"></nb-icon>
-        <input style="text-align: right;" [formControl]="majorForm.get('numberOfStudent')" mask="separator.2" thousandSeparator=","  type="text" placeholder="Nhập số lượng sinh viên" fullWidth nbInput
+        <input [disabled]="data!=undefined" style="text-align: right;" [formControl]="majorForm.get('numberOfStudent')" mask="separator.2" thousandSeparator=","  type="text" placeholder="Nhập số lượng sinh viên" fullWidth nbInput
         [status]="majorForm.get('numberOfStudent').invalid && (majorForm.get('numberOfStudent').touched || majorForm.get('numberOfStudent').dirty) ? 'danger' : 'info'"
         />        
       </nb-form-field>
@@ -70,7 +70,7 @@
       <label for="" style="font-size: smaller;">Điểm chuẩn 2019</label>
       <nb-form-field>
         <nb-icon nbPrefix icon="edit-2-outline"></nb-icon>
-        <input [formControl]="field.get('entryMark1')" mask="separator.2" style="text-align: right;" thousandSeparator="," type="text" placeholder="Nhập điểm" fullWidth nbInput
+        <input [class.isUpdate]="field['isUpdate']" [formControl]="field.get('entryMark1')" mask="separator.2" style="text-align: right;" thousandSeparator="," type="text" placeholder="Nhập điểm" fullWidth nbInput
       [status]="field.get('entryMark1').invalid && (field.get('entryMark1').touched || field.get('entryMark1').dirty) ? 'danger' : 'info'"/> 
       </nb-form-field>             
     </div>

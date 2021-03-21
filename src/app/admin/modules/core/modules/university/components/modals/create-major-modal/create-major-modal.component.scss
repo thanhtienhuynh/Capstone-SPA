@@ -43,3 +43,10 @@ nz-select {
     width: 100%;
 }
 
+input {
+    ::ng-deep {
+        .nb-theme-default [nbInput].size-medium {
+            font-weight: normal;
+      }
+    }
+}

@@ -42,15 +42,15 @@ export class CreateUniversityModalComponent implements OnInit {
     this.createUniversityForm = this._fb.group({
       'name': ['', Validators.required],
       'code': ['', Validators.required],
-      'address': [''],
-      'phone': [''],
-      'webUrl': [''],
-      'tuitionType': [''],
+      'address': ['', Validators.required],
+      'phone': ['', Validators.required],
+      'webUrl': ['', Validators.required],
+      'tuitionType': [0],
       'tuitionFrom': [''],
       'tuitionTo': [''],
       'description': [''],  
-      'rating': [''],
-      'status': ['']
+      'rating': [5],
+      'status': [0]
     })
   };
 

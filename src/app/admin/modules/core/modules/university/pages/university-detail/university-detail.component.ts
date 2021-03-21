@@ -47,7 +47,9 @@ export class UniversityDetailComponent implements OnInit {
         tap((rs) => {  
           this.uniId = param.id;        
           this.university = rs;
-          this.listOfMajor = rs.majors                                        
+          console.log(this.university);
+          this.listOfMajor = rs.majors  
+          console.log(rs);                                      
           this.setDataToForm(this.university);
         }),
         catchError((err) => {
@@ -105,7 +107,7 @@ export class UniversityDetailComponent implements OnInit {
       nzWidth: 700,   
       nzComponentParams: {data: data, universityId: this.uniId, universityName: this.university.name, callBack: (majors) => {
         this.listOfMajor = majors;
-      }}   
+      }},      
     })
   }
 

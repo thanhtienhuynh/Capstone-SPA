@@ -24,7 +24,7 @@ export class CreateMajorModalComponent implements OnInit {
   col_md_3 = 'col-md-3';
 
   //Title
-  modalTitle: string = "Thêm Ngành";
+  modalTitle: string = "Thêm Ngành của";
 
   //FormGroup
   majorForm: FormGroup;
@@ -53,26 +53,20 @@ export class CreateMajorModalComponent implements OnInit {
     this.setData();             
   }
 
-  getAllMajor(): void {    
-    // this._majorService.getAllMajor().subscribe((rs) => {                
-    //   this.result = rs;                         
-    //   this.options = rs;           
-    //   this.filteredControlOptions$ = of(this.options);        
-    // });
-    this.majorResult = this._majorService.getAllMajor();
-  }
-
-  getAllSubjectGroup(): void {
-    this.subjectGroupResult = this._subjectGroupService.getAllSubjectGroup();
-  }
-
-  
   initMajorForm(): void {
     this.majorForm = this._fb.group({
       'name': [undefined, Validators.required],
       'code': ['', Validators.required],           
       'numberOfStudent': ['', Validators.required]
     })
+  }
+
+  getAllMajor(): void {        
+    this.majorResult = this._majorService.getAllMajor();
+  }
+
+  getAllSubjectGroup(): void {
+    this.subjectGroupResult = this._subjectGroupService.getAllSubjectGroup();
   }
 
   setData(): void {
@@ -85,34 +79,33 @@ export class CreateMajorModalComponent implements OnInit {
           code: this.data.code
         };
         this.majorForm.get('name').setValue(tmp);
-        this.majorForm.get('code').setValue(this.data.code);
+        this.majorForm.get('code').setValue(this.data.code , {disabled: true});
+
         this.majorForm.get('numberOfStudent').setValue(this.data.numberOfStudents);        
         if (this.data.subjectGroups.length > 0) {
           for (let i = 0; i < this.data.subjectGroups.length; i++) {            
-            const subJectGroup = this.data.subjectGroups[i];                        
-            this.listField.push(this._fb.group({
+            const subJectGroup = this.data.subjectGroups[i]; 
+            console.log(subJectGroup);
+            const field = this._fb.group({
               'subjectGroup': [data.find((e) => e.id === subJectGroup.id)],   
-              'entryMarkId1': [`${subJectGroup.entryMarks[0].id}`],   
+              'entryMarkId1': [`${subJectGroup.entryMarks[0]?.id}`],   
               'entryMark1': [`${subJectGroup.entryMarks[0].mark}`],
-              'entryMarkId2': [`${subJectGroup.entryMarks[1].id}`],
-              'entryMark2': [`${subJectGroup.entryMarks[1].mark}`], 
-            })); 
+              'entryMarkId2': [`${subJectGroup.entryMarks[1]?.id}`],
+              'entryMark2': [`${subJectGroup.entryMarks[1].mark}`],
+            });
+            field['isUpdate'] = true;   
+            this.listField.push(field); 
           }
           this.listFieldTmp = this.listField.slice();
         }
       } else {
+        this.modalTitle = "Thêm Ngành của " + `${this.universityName}`;  
         this.addField();
       }
     })
   }
 
-  cancle(): void {
-    this.closeModal();
-  }
-
-  closeModal(): void {
-    this._modalRef.close();
-  }
+  
 
   submitForm(): void {
     const subjectGroups: SubjectGroupRM[] = [];
@@ -150,8 +143,7 @@ export class CreateMajorModalComponent implements OnInit {
         Swal.fire('Lỗi', 'Thêm ngành mới thất bại', 'error');
         return of(undefined);
       })
-    ).subscribe();
-    // console.log(this.listField.map(e => e.value));
+    ).subscribe();    
   }
 
   updateForm(): void {  
@@ -196,14 +188,14 @@ export class CreateMajorModalComponent implements OnInit {
       'majorId': this.majorForm.get('name').value.id,      
       "numberOfStudents": Number.parseInt(this.majorForm.get('numberOfStudent').value),  
       "subjectGroups": subjectGroups
-    }
-    // console.log(this.listField.map(e => e.value));   
+    }    
     console.log(newValue); 
     this._majorService.updateMajor(newValue).pipe(
       tap((rs) => {
         console.log(rs);
         this.callBack(rs.majors);
         Swal.fire('Thành công', 'Thay đổi thông tin thành công', 'success');
+        this._modalRef.close();
       }),
       catchError((err) => {
         Swal.fire('Lỗi', 'Thay đổi thông tin thất bại', 'error');
@@ -231,29 +223,17 @@ export class CreateMajorModalComponent implements OnInit {
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {                     
-        this.listField.splice(index, 1);                  
-        this.returnSubjectGroupId(field.value.subjectGroup?.id);        
+        this.listField.splice(index, 1);                               
       }
     })         
+  }     
+    
+  //--- UI ---
+  cancle(): void {
+    this.closeModal();
   }
 
-  returnSubjectGroupId(id: any | undefined): number {
-    if (id === undefined) {
-      return -1;
-    }
-    return id;
+  closeModal(): void {
+    this._modalRef.close();
   }
-
-
-  //------------------------------------ Auto complete -----------------------
-  options: string[];
-  filteredControlOptions$: Observable<string[]>;
-
-  private filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    return this.options.filter(optionValue => optionValue.toLowerCase().includes(filterValue));
-  }    
-  
-  selectedValue = null;
-  selectedSubjectGroupValue = null;
 }
