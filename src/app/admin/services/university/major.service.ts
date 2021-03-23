@@ -26,7 +26,7 @@ export class MajorService {
   }
 
   addNewMajorSystem(body: any): Observable<any>{
-    return this._http.post('', body);
+    return this._http.post('https://localhost:44344/api/v1/major', body);
   }
 
 }

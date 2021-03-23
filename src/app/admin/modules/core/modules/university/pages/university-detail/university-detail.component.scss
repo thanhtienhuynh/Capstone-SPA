@@ -96,6 +96,14 @@ label {
   display: flex;
   justify-content: start;
   align-items: center;
+  width: 80px;
+}
+
+.rating {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  width: 60px;
 }
 
 label {

@@ -8,32 +8,79 @@
               <div class="row">
 
                 <div class="col-md-7">
-                  <div class="d-md-flex align-items-center">
-                    <nz-avatar nzShape="square" [nzSrc]="university != undefined ?  university.logoUrl : ''" nz-size="150"></nz-avatar>
-                    <div class="text-center text-sm-left m-v-15 p-l-30 col-md-8">
+                  <div class="d-md-flex">
+                    <div class="col-md-3 pl-0">
+                      <nz-avatar nzShape="square" [nzSrc]="university != undefined ?  university.logoUrl : ''" [nzSize]="240"></nz-avatar>
+                    </div>
+                    
+                    <div class="col-md-9 pr-0 mt-4">
                       <div class="d-flex">
-                        <div class="col-md-8 pl-0">                                                                                                                            
-                          <label class="ml-1" for="">Tên trường</label>                          
+                        <div class="label-form mr-1">
+                          <label for="">Tên trường: </label>  
+                        </div>                        
+                        <div class="pl-0" style="width: 39.3rem;">                                                                                                                                                                              
                           <nb-form-field>  
                             <nb-icon status="info" nbPrefix icon="home-outline"></nb-icon>  
                             <input  text-hint-color [formControl]="updateUniForm.get('name')" type="text" placeholder=""  fullWidth nbInput 
                             [status]="updateUniForm.get('name').invalid && (updateUniForm.get('name').touched || updateUniForm.get('name').dirty) ? 'danger' : 'basic'"/>
                           </nb-form-field>
+                        </div>                        
+                      </div>  
+                      <div class="d-flex mt-4">
+                        <div class="label-form mr-1">
+                          <label for="">Trạng Thái:</label>
                         </div>
-                        <div class="col-md-4 pr-0">                          
-                          <label class="ml-1" for="">Code</label>
+                        <div style="width: 205px">                          
+                          <nb-select [formControl]="updateUniForm.get('status') " fullWidth>        
+                            <nb-option [value]="1">Hoạt Động ✔️</nb-option>
+                            <nb-option [value]="0">Không Hoạt Động ❌</nb-option>        
+                          </nb-select>
+                        </div>
+                        <div class="label-form ml-3" style="width: 67px">
+                          <label for="">Đánh giá:</label>
+                        </div>
+                        <div style="width: 155px;">                          
+                          <nb-select [formControl]="updateUniForm.get('rating')" fullWidth>        
+                            <nb-option [value]="1">
+                              ⭐️
+                            </nb-option>
+                            <nb-option [value]="2">
+                              <div>⭐️⭐️</div>
+                            </nb-option>
+                            <nb-option [value]="3">
+                              <div>⭐️⭐️⭐️</div>
+                            </nb-option>
+                            <nb-option [value]="4">
+                              <div>⭐️⭐️⭐️⭐️</div>
+                            </nb-option>
+                            <nb-option [value]="5">
+                              <div>⭐️⭐️⭐️⭐️⭐️</div>
+                            </nb-option>
+                          </nb-select>
+                        </div>
+                        <div class="label-form ml-3" style="width: 40px;">
+                          <label for="">Code:</label>                          
+                        </div>
+                        <div style="width: 8rem;">
                           <nb-form-field>    
-                            <i nbPrefix nz-icon nzType="key" nzTheme="outline" style="font-size: large"></i>                                            
+                            <!-- <i nbPrefix nz-icon nzType="key" nzTheme="outline" style="font-size: large"></i>                                             -->
                             <input [formControl]="updateUniForm.get('code')" type="text" placeholder=""  fullWidth nbInput 
                             [status]="updateUniForm.get('code').invalid && (updateUniForm.get('code').touched || updateUniForm.get('code').dirty) ? 'danger' : 'basic'"/>
                           </nb-form-field>
-                        </div>
-                      </div>                      
-                      <div class="mt-2">                        
-                        <nb-form-field>
-                          <textarea [formControl]="updateUniForm.get('description')" nbInput fullWidth placeholder="Mô tả" fieldSize="large"></textarea>
-                        </nb-form-field>
-                      </div>                                            
+                        </div>                                                
+                      </div>                                               
+                      <div class="mt-4"> 
+                        <div class="d-flex">
+                          <div class="label-form mr-1">
+                            <label for="">Mô tả:</label>
+                          </div>
+                          <div style="width: 39.3rem;">
+                            <nb-form-field>
+                              <textarea [formControl]="updateUniForm.get('description')" nbInput fullWidth placeholder="Mô tả" fieldSize="large"></textarea>
+                            </nb-form-field>
+                          </div>
+                        </div>                        
+                      </div>                                         
                     </div>
                   </div>
                 </div>
@@ -178,20 +225,19 @@
                   </tr>
                   <tr>
                     <th  rowspan="2" style="background-color: #87ceeb;">
-                      <div style="width: 100%; text-align: center;">Tên</div>
+                      <div style="width: 100%; text-align: center;">Tên Khối</div>
                     </th>
-                    <th colspan="2" style="background-color: #87ceeb;">
+                    <!-- <th colspan="2" style="background-color: #87ceeb;">
                       <div style="width: 100%; text-align: center;">Năm</div>
-                    </th>
-                  </tr>
-                  <tr>
+                    </th> -->
                     <th style="background-color: #87ceeb; height: 0.5rem;">
-                      <div style="width: 100%; text-align: center;">2019</div>
+                      <div style="width: 100%; text-align: center;">Điểm chuẩn năm 2019</div>
                     </th>
                     <th nzWidth="5%" style="background-color: #87ceeb; height: 0.5rem;">
-                      <div style="width: 100%; text-align: center;">2020</div>
+                      <div style="width: 100%; text-align: center;">Điểm chuẩn năm 2020</div>
                     </th>
                   </tr>
+                  
                 </thead>
 
                 <!-- <thead>
@@ -306,10 +352,10 @@
                             <td>{{major.numberOfStudents}}</td>
                             <td>{{major.subjectGroups[0]?.groupCode}}</td>
                             <td class="mark2019">
-                              <span *ngIf="major.subjectGroups[0].entryMarks[0].mark !== 0; else missEntryMark">{{major.subjectGroups[0]?.entryMarks[0].mark}}</span>                              
+                              <span *ngIf="major.subjectGroups[0]?.entryMarks[0].mark !== 0; else missEntryMark">{{major.subjectGroups[0]?.entryMarks[0]?.mark}}</span>                              
                             </td>
                             <td class="mark2020">
-                              <span *ngIf="major.subjectGroups[0].entryMarks[1].mark; else missEntryMark">{{major.subjectGroups[0]?.entryMarks[1].mark}}</span>                              
+                              <span *ngIf="major.subjectGroups[0]?.entryMarks[1].mark; else missEntryMark">{{major.subjectGroups[0]?.entryMarks[1]?.mark}}</span>                              
                             </td>                                              
                         </ng-container>
                         <ng-container *ngSwitchDefault>                        
@@ -347,14 +393,14 @@
                             <td style="padding: 0;" class="mark2019">
                               <div class="flex-container-custom" >
                                 <div class="td-border-children" *ngFor="let subjectGroup of major.subjectGroups">
-                                  <span *ngIf="subjectGroup.entryMarks[0].mark !== 0; else missEntryMark">{{subjectGroup.entryMarks[0].mark}}</span>
+                                  <span *ngIf="subjectGroup?.entryMarks[0].mark !== 0; else missEntryMark">{{subjectGroup?.entryMarks[0]?.mark}}</span>
                                 </div>                              
                               </div>
                             </td>
                             <td style="padding: 0;" class="mark2020">
                               <div class="flex-container-custom">
                                 <div class="td-border-children" *ngFor="let subjectGroup of major.subjectGroups">
-                                  <span *ngIf="subjectGroup.entryMarks[1].mark !== 0; else missEntryMark">{{subjectGroup.entryMarks[1].mark}}</span>
+                                  <span *ngIf="subjectGroup?.entryMarks[1].mark !== 0; else missEntryMark">{{subjectGroup?.entryMarks[1]?.mark}}</span>
                                 </div>                              
                               </div>
                             </td>                        

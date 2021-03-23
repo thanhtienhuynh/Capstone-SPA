@@ -57,7 +57,7 @@ export class UniversityDetailComponent implements OnInit {
             stt: i + 1
           }));             
           this.listOfDisplayMajor = [...this.listOfMajor];                                                              
-          this.setDataToForm(this.university);
+          this.setDataToForm(this.university);          
         }),
         catchError((err) => {
           console.log(err);
@@ -81,6 +81,7 @@ export class UniversityDetailComponent implements OnInit {
           this.updateUniForm.get('tuitionType').setValue(university.tuitionType);
           this.updateUniForm.get('tuitionFrom').setValue(university.tuitionFrom);
           this.updateUniForm.get('tuitionTo').setValue(university.tuitionTo);
+          this.updateUniForm.get('status').setValue(university.status);          
         }),
         catchError((err) => {
           console.log(err);
@@ -101,7 +102,7 @@ export class UniversityDetailComponent implements OnInit {
       'tuitionFrom': [''],
       'tuitionTo': [''],
       'description': [''],  
-      'rating': [5],
+      'rating': [1],
       'status': [0],    
     });
   }
@@ -135,9 +136,10 @@ export class UniversityDetailComponent implements OnInit {
       "tuitionType": Number.parseInt(this.updateUniForm.get('tuitionType').value),
       "tuitionFrom": Number.parseInt(this.updateUniForm.get('tuitionFrom').value),
       "tuitionTo": Number.parseInt(this.updateUniForm.get('tuitionTo').value),
-      "rating": 5,
-      "status": 1
+      "rating": this.updateUniForm.get('rating').value,
+      "status": this.updateUniForm.get('status').value
     }   
+    console.log(newValue);
     Swal.fire({
       title: 'Bạn có muốn lưu những thông tin đã thay đổi hay không?',
       showDenyButton: true,
@@ -196,8 +198,9 @@ export class UniversityDetailComponent implements OnInit {
     })
   }
 
-  searchByName(value: string): void {    
+  searchByName(value: string): void {        
     this.listOfDisplayMajor = this.listOfMajor.filter((item: UniversityRM & {stt?:number}) => item.name.toLowerCase().indexOf(value.toLowerCase()) !== -1);
+    console.log(this.listOfDisplayMajor);
   }
 
 

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { MajorService, SubjectGroupService } from 'src/app/admin/services';
@@ -45,7 +46,8 @@ export class CreateMajorModalComponent implements OnInit {
     private _fb: FormBuilder,
     private _modalRef: NzModalRef,
     private _majorService: MajorService,
-    private _subjectGroupService: SubjectGroupService
+    private _subjectGroupService: SubjectGroupService,
+    private _notification: NzNotificationService
   ) {
     this.initMajorForm();
     this.initMajorSystemForm();
@@ -67,7 +69,7 @@ export class CreateMajorModalComponent implements OnInit {
   getAllMajor(): void {
     this.majorResult = this._majorService.getAllMajor().pipe(      
       map((rs) => rs.filter((mj) => (mj.id !== this.majors.find((e) => e.id === mj.id)?.id))) // chuyen gia tri rs thanh 1 gia tri khac dang. Observeble. đúng chưa?
-    );    
+    );        
   }
 
   getAllSubjectGroup(): void {
@@ -78,8 +80,7 @@ export class CreateMajorModalComponent implements OnInit {
   }  
 
   setData(): void {
-    this.subjectGroupResult.subscribe((data) => {
-      console.log(data);
+    this.subjectGroupResult.subscribe((data) => {      
       if (this.data != undefined) {
         this.modalTitle = "Sửa Thông Tin Ngành của " + `${this.universityName}`;
         const tmp = {
@@ -91,8 +92,7 @@ export class CreateMajorModalComponent implements OnInit {
         this.majorForm.get('numberOfStudent').setValue(this.data.numberOfStudents);
         if (this.data.subjectGroups.length > 0) {
           for (let i = 0; i < this.data.subjectGroups.length; i++) {
-            const subJectGroup = this.data.subjectGroups[i];
-            console.log(data.find((e) => e.id === subJectGroup.id));
+            const subJectGroup = this.data.subjectGroups[i];            
             const field = this._fb.group({
               'subjectGroup': [data.find((e) => e.id === subJectGroup.id)],
               'entryMarkId1': [`${subJectGroup.entryMarks[0]?.id}`],
@@ -194,8 +194,7 @@ export class CreateMajorModalComponent implements OnInit {
       "subjectGroups": subjectGroups
     }
     this._majorService.updateMajor(newValue).pipe(
-      tap((rs) => {
-        console.log(rs);
+      tap((rs) => {        
         this.callBack(rs.majors);
         Swal.fire('Thành công', 'Thay đổi thông tin thành công', 'success');
         this._modalRef.close();
@@ -215,10 +214,8 @@ export class CreateMajorModalComponent implements OnInit {
     });
     this.listField.push(group);
   }
-  useSelect(item) {
-    console.log(item);
-    const list = this.listField.filter((e) => !e['isUpdate']).map((e) => e.value);
-    console.log(list);
+  useSelect(item) {    
+    const list = this.listField.filter((e) => !e['isUpdate']).map((e) => e.value);    
     this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(
       map((rs) => this.data ? rs.filter((sb) => (sb.id !== this.data.subjectGroups.find((e) => e.id === sb.id)?.id)) : rs),
       // tap(rs => console.log('before', rs)),
@@ -263,33 +260,30 @@ export class CreateMajorModalComponent implements OnInit {
     })
   }
 
-  addNewMajorSystem(): void {
-    console.log(this.majorSystemForm.get('majorSystemName').value);
+  addNewMajorSystem(): void {    
     const newValue = {
-
+      'name': this.majorSystemForm.get('majorSystemName').value,
+      'code': this.majorSystemForm.get('majorSystemCode').value
     }
-    this._majorService.addNewMajorSystem({} as any).pipe(
-      tap((rs) => {        
+    console.log(newValue);
+    this._majorService.addNewMajorSystem(newValue).pipe(
+      tap((res) => {                 
         this.hidePopover();
-        Swal.fire({
-          position: 'bottom-end',
-          icon: 'success',
-          title: 'Your work has been saved',
-          showConfirmButton: false,
-          timer: 1500
-        })
+        this.getAllMajor();
+        this.createNotification('success', 'Thành công', 'Thêm mới ngành vào hệ thống thành công');                        
       }),
       catchError((err) => {
-        Swal.fire({
-          position: 'bottom-end',
-          icon: 'error',
-          title: 'Thêm ngành mới vào hệ thống thất bại',
-          showConfirmButton: false,
-          timer: 1500
-        })
+        this.createNotification('error', 'Thất bại', 'Thêm mới ngành vào hệ thống thất bại');
         return of(undefined);
       })
     ).subscribe();
   }
   
+  createNotification(type: string, title: string, description: string): void {
+    this._notification.create(
+      type,
+      title,
+      description
+    );
+  }
 }

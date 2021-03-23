@@ -120,7 +120,7 @@
         <div class="col-md-12 mt-3">
           <nb-form-field>
             <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
-            <input nbInput fullWidth status="info" placeholder="Nhập code của ngành"
+            <input nbInput fullWidth status="info" placeholder="Nhập code của ngành" [formControl]="majorSystemForm.get('majorSystemCode')"
             [status]="majorSystemForm.get('majorSystemCode').invalid && (majorSystemForm.get('majorSystemCode').touched || majorSystemForm.get('majorSystemCode').dirty) ? 'danger' : 'info'"
             />
           </nb-form-field> 
