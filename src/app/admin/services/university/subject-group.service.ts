@@ -11,7 +11,5 @@ export class SubjectGroupService {
 
   getAllSubjectGroup(): Observable<any>{
     return this._http.get('https://localhost:44344/api/v1/subject-group');
-  }
-  
-
+  }  
 }

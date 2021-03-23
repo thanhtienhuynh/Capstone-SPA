@@ -4,18 +4,13 @@
   padding: 1rem;
   overflow: auto;
   position: relative;
+  // max-height: 50rem;
 }
 
 span.label {
   margin: 0.2rem;
 }
 
-h5,
-p {
-  font-family: "Poppins", "Segoe UI", "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: rgba(42, 42, 42, 0.75);
-}
 nz-avatar {
   width: 150px;
   height: 150px;
@@ -63,22 +58,9 @@ td {
 .numberOfStudent {
   width: 4%;
 }
-.importantInfo {
-  font-size: 1rem;
-  // font-family: 'Courier New', Courier, monospace;
-  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
-    Helvetica, Arial, sans-serif;
-  font-weight: 500;
-}
 
 .name {
-  width: 20%;
-}
-
-.my-text {
-  font-family: nb-theme(font-family-primary);
-  color: nb-theme(text-hint-color);
+  width: 15%;
 }
 
 .flex-container-custom {
@@ -88,7 +70,7 @@ td {
 
 .td-border-children {
   border-bottom: 1px solid #f0f0f0;
-  height: 1.5rem;
+  height: 2rem;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -101,7 +83,36 @@ td {
 nb-select {
   ::ng-deep {
     button {
-      min-width: 5rem !important;
+      min-width: 4rem !important;
     }
   }
+}
+
+label {
+  margin: 0;
+}
+
+.label-form {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+label {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.bold500 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 500;
+}
+
+.groupCodeName, .mark2019, .mark2020 {
+  width: 5%;
 }

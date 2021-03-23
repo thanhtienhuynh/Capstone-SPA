@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { isThisSecond } from 'date-fns';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { UniversityService } from 'src/app/admin/services';
+import { CustomSelectComponent } from 'src/app/admin/shared/components';
 import { MajorRM, UniversityRM } from 'src/app/admin/view-models';
 import Swal from 'sweetalert2';
 
@@ -17,8 +19,10 @@ import { CreateMajorModalComponent } from '../../components';
 })
 export class UniversityDetailComponent implements OnInit {
   
+  
 
-  listOfMajor: MajorRM[] = [];
+  listOfMajor: (MajorRM & {stt?:number})[] = [];
+  listOfDisplayMajor: (MajorRM & {stt?:number})[] = [];
   university: UniversityRM;
 
   pageSize: 10;
@@ -26,6 +30,7 @@ export class UniversityDetailComponent implements OnInit {
   uniId: any;
   //binding
   rowspan: number = 5;
+  searchValueName = "";
   //Form
   updateUniForm: FormGroup;
   constructor(
@@ -46,10 +51,12 @@ export class UniversityDetailComponent implements OnInit {
       this._universityService.getUniversityById(param.id).pipe(
         tap((rs) => {  
           this.uniId = param.id;        
-          this.university = rs;
-          console.log(this.university);
-          this.listOfMajor = rs.majors  
-          console.log(rs);                                      
+          this.university = rs;          
+          this.listOfMajor = rs.majors.map((e, i) => ({
+            ...e,
+            stt: i + 1
+          }));             
+          this.listOfDisplayMajor = [...this.listOfMajor];                                                              
           this.setDataToForm(this.university);
         }),
         catchError((err) => {
@@ -94,8 +101,8 @@ export class UniversityDetailComponent implements OnInit {
       'tuitionFrom': [''],
       'tuitionTo': [''],
       'description': [''],  
-      'rating': [''],
-      'status': [''],    
+      'rating': [5],
+      'status': [0],    
     });
   }
 
@@ -105,8 +112,12 @@ export class UniversityDetailComponent implements OnInit {
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,   
-      nzComponentParams: {data: data, universityId: this.uniId, universityName: this.university.name, callBack: (majors) => {
-        this.listOfMajor = majors;
+      nzComponentParams: {data: data, majors: this.listOfMajor, universityId: this.uniId, universityName: this.university.name, callBack: (majors) => {
+        this.listOfMajor = majors;  
+        this.listOfDisplayMajor = majors.map((e, i) => ({
+          ...e,
+          stt: i + 1
+        }));              
       }},      
     })
   }
@@ -183,6 +194,11 @@ export class UniversityDetailComponent implements OnInit {
         Swal.fire('Changes are not saved', '', 'info')
       }
     })
-    
   }
+
+  searchByName(value: string): void {    
+    this.listOfDisplayMajor = this.listOfMajor.filter((item: UniversityRM & {stt?:number}) => item.name.toLowerCase().indexOf(value.toLowerCase()) !== -1);
+  }
+
+
 }

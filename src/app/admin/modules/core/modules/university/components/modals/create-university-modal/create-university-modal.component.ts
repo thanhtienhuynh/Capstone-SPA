@@ -1,8 +1,6 @@
-import { Component, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { isThisSecond } from 'date-fns';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { quillConfiguration } from 'src/app/admin/config';

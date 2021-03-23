@@ -1,20 +1,21 @@
 <div class="university-main">
   <div class="page-header">
     <div class="row align-items-md-center">
-      <div class="col-md-6 mb-3">
+      <div class="col-md-6">
         <div class="row">
           <div class="col-md-5">
-            <nb-form-field>
-              <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
-              <input type="text" placeholder="Tìm kiếm trường đại học" fullWidth nbInput (change)="searchByName($event)"/>
-            </nb-form-field>
-            
+            <div class="text-md-left ">
+              <nb-form-field>
+                <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
+                <input type="text" placeholder="Tìm kiếm trường đại học" fullWidth nbInput [ngModel]="searchValueName" (ngModelChange)="searchByName($event)"/>
+              </nb-form-field>
+            </div>                        
           </div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="text-md-right m-v-10">
-          <button nz-button [nzSize]="'large'" [nzType]="'primary'" (click)="openCreateUniversityModal()">
+          <button nbButton status="info" (click)="openCreateUniversityModal()">
             <nb-icon icon="plus-outline"></nb-icon>
             <span style="margin-left: 0.2rem;">Thêm trường</span>
           </button>
@@ -28,33 +29,38 @@
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
         <nb-card style="margin: auto; width: 99%; position: relative">
           <nb-card-body style="width: 100%">
-            <div style="width: 100%; min-height: 42rem">
+            <div style="width: 100%; max-height: 47rem">
               <nz-table #basicTable
                 nzBordered 
                 nzShowSizeChanger 
                 nzShowQuickJumper
-                [nzData]="listOfUniversity" 
-                nzFrontPagination=true                 
+                [nzData]="listOfDisplayUniversity" 
+                nzFrontPagination=true                
                 [nzTotal]="total" 
                 [nzPageSize]="pageSize" 
                 [nzPageIndex]="pageIndex"  
-                [nzShowTotal]="totalTemplate"               
-                (nzQueryParams)="onQueryParamsChange($event)"
+                [nzShowTotal]="totalTemplate"
+                [nzPageSizeOptions]="[5, 10, 15]" 
+                [nzScroll]="{ y: '38rem', x: '50rem' }"                            
               >
                 <thead >
                   <tr>
-                    <th style="background-color: #87ceeb; text-align: center;">STT</th>
+                    <th nzWidth="5%" style="background-color: #87ceeb; text-align: center;">STT</th>
                     <th style="background-color: #87ceeb;">Tên Trường</th>
-                    <th style="background-color: #87ceeb; text-align: center;">Code</th>
+                    <th nzWidth="5%" style="background-color: #87ceeb; text-align: center;">Code</th>
                     <th style="background-color: #87ceeb;">Địa Chỉ</th> 
-                    <th style="background-color: #87ceeb;">Học Phí (Đơn vị: VNĐ)</th>                   
-                    <th style="background-color: #87ceeb; text-align: center;">Thông Tin Liên Hệ</th>
-                    <th style="background-color: #87ceeb; text-align: center;"  
+                    <th nzWidth="15%" style="background-color: #87ceeb;"
+                    [nzFilterMultiple]="false"                    
+                    [nzFilters]="listOfTuitionType"
+                    [nzFilterFn]="filterTuitionTypeFn"
+                    >Học Phí (Đơn vị: VNĐ)</th>                   
+                    <th nzWidth="10%" style="background-color: #87ceeb; text-align: center;">Thông Tin Liên Hệ</th>
+                    <th nzWidth="10%" style="background-color: #87ceeb; text-align: center;"  
                     [nzFilterMultiple]="false"                    
                     [nzFilters]="listOfStatusFilter"
                     [nzFilterFn]="filterStatusFn"
                     >Trạng Thái</th>
-                    <th style="background-color: #87ceeb; text-align: center;">Thao Tác</th>
+                    <th nzWidth="5%" style="background-color: #87ceeb; text-align: center;">Thao Tác</th>
                   </tr>
                 </thead>
                 <tbody>                  
@@ -73,15 +79,15 @@
                     </td>
                     <td class="tuition">
                       <p *ngIf="university.tuitionType == 0">
-                        <span *ngIf="university.tuitionFrom != null; else missTuitionYear">{{university.tuitionFrom | mask: 'separator':'.'}}</span><span *ngIf="university.tuitionFrom != null; else missTuitionYear">.000</span>
+                        <span *ngIf="university.tuitionFrom != null; else missTuitionYear">{{university.tuitionFrom | mask: 'separator':'.'}}</span><span *ngIf="university.tuitionFrom != null">.000</span>
                         <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> - </span> 
                         <span *ngIf="university.tuitionFrom != null">{{university.tuitionTo | mask: 'separator':'.'}}</span><span *ngIf="university.tuitionFrom != null">.000</span>
                         <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> / Năm</span>                                                     
                       </p>
                       <p *ngIf="university.tuitionType != 0">
-                        <span *ngIf="university.tuitionFrom != null; else missTuitionSemester">{{university.tuitionFrom | mask: 'separator':'.'}}</span><span>.000</span>
+                        <span *ngIf="university.tuitionFrom != null; else missTuitionSemester">{{university.tuitionFrom | mask: 'separator':'.'}}</span ><span *ngIf="university.tuitionTo != null">.000</span>
                         <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> - </span> 
-                        <span *ngIf="university.tuitionFrom != null">{{university.tuitionTo | mask: 'separator':'.'}}</span><span>.000</span>
+                        <span *ngIf="university.tuitionFrom != null">{{university.tuitionTo | mask: 'separator':'.'}}</span><span *ngIf="university.tuitionTo != null">.000</span>
                         <span *ngIf="university.tuitionFrom != null || university.tuitionTo != null"> / Kì</span>                        
                       </p>                      
                     </td>

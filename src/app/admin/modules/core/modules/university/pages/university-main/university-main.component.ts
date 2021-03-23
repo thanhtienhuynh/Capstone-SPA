@@ -25,14 +25,19 @@ export class UniversityMainComponent implements OnInit {
   pageSize = 10;
   pageIndex = 1;
   listOfUniversity: (UniversityRM & {stt?:number})[] = [];
+  listOfDisplayUniversity:  (UniversityRM & {stt?:number})[] = [];
+  //------------------SEARCH SORT FILTER------------------------
+  searchValueName: string = '';
 
-  //-----------------------------------------------------
   listOfStatusFilter: any[] = [
     {text: 'Hoạt Động', value: 1},
     {text: 'Không Hoạt Động', value: 0},
   ]
-
-  filterStatusFn = (status: number, item: UniversityRM) => item.status === status;
+  
+  listOfTuitionType: any[] = [
+    {text: 'Theo Năm', value: 0},
+    {text: 'Theo Kì', value: 1},
+  ]
   //-----------------------------------------------------
   constructor(
     private _modalService: NzModalService,
@@ -51,7 +56,7 @@ export class UniversityMainComponent implements OnInit {
           phones: e.phone.split('-'),
           stt: i + 1
         }));              
-        console.log(this.listOfUniversity[0].status);   
+        this.listOfDisplayUniversity = [...this.listOfUniversity];        
         this.total = this.listOfUniversity.length;             
       }),
       catchError((err) => {
@@ -71,16 +76,13 @@ export class UniversityMainComponent implements OnInit {
         this.listOfUniversity.push(item);        
       }}    
     });
-  }
+  }  
 
-  onQueryParamsChange(params: NzTableQueryParams): void {    
-    const { pageSize, pageIndex, sort, filter } = params;
-    const currentSort = sort.find(item => item.value !== null);
-    const sortField = (currentSort && currentSort.key) || null;
-    const sortOrder = (currentSort && currentSort.value) || null;    
+  
+  
+  searchByName(searchValue: string): void {    
+    this.listOfDisplayUniversity = this.listOfUniversity.filter((item: UniversityRM & {stt?:number}) => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1);
   }
-
-  searchByName(event): void {
-    console.log(event);
-  }
+  filterStatusFn = (status: number, item: UniversityRM) => item.status === status;
+  filterTuitionTypeFn = (tuitionType: number, item: UniversityRM) => item.tuitionType === tuitionType;
 }
