@@ -270,7 +270,7 @@ export class CreateMajorModalComponent implements OnInit {
       tap((res) => {                 
         this.hidePopover();
         this.getAllMajor();
-        this.createNotification('success', 'Thành công', 'Thêm mới ngành vào hệ thống thành công');                        
+        this.createNotification('success', 'Thành công', 'Thêm mới ngành vào hệ thống thành công');         
       }),
       catchError((err) => {
         this.createNotification('error', 'Thất bại', 'Thêm mới ngành vào hệ thống thất bại');
