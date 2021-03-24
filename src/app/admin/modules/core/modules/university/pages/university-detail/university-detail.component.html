@@ -3,174 +3,179 @@
     <div nz-row>
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
         <nb-card style="margin: auto; width: 99%; position: relative">
-          <nb-card-body style="width: 100%">
-            <div style="width: 100%">
-              <div class="row">
-
-                <div class="col-md-7">
-                  <div class="d-md-flex">
-                    <div class="col-md-3 pl-0">
-                      <nz-avatar nzShape="square" [nzSrc]="university != undefined ?  university.logoUrl : ''" [nzSize]="240"></nz-avatar>
-                    </div>
-                    
-                    <div class="col-md-9 pr-0 mt-4">
-                      <div class="d-flex">
-                        <div class="label-form mr-1">
-                          <label for="">Tên trường: </label>  
-                        </div>                        
-                        <div class="pl-0" style="width: 39.3rem;">                                                                                                                                                                              
+          <nb-card-body style="width: 100%">            
+            <div class="row">
+              <div class="col-xl-7 col-lg-12">
+                <div class="row">
+                  <div class="col-xl-3 col-lg-3 pr-0">
+                    <nz-avatar nzShape="square" [nzSrc]="university != undefined ?  university.logoUrl : ''" [nzSize]="161"></nz-avatar>
+                  </div>
+                  <div class="col-xl-9 col-lg-9 pl-0">
+                    <div class="mt-2">
+                      <div class="row">
+                        <div class="col-xl-2 col-lg-2 pr-0" style="display: flex; justify-content: start; text-align: center; align-items: center;">
+                          <div >
+                            <label for="">Tên trường:</label>
+                          </div>
+                        </div>
+                        <div class="col-xl-10 col-lg-10 inline-items-input">                                                                                                                                                                              
                           <nb-form-field>  
                             <nb-icon status="info" nbPrefix icon="home-outline"></nb-icon>  
-                            <input  text-hint-color [formControl]="updateUniForm.get('name')" type="text" placeholder=""  fullWidth nbInput 
+                            <input fieldSize="small"  text-hint-color [formControl]="updateUniForm.get('name')" type="text" placeholder=""  fullWidth nbInput 
                             [status]="updateUniForm.get('name').invalid && (updateUniForm.get('name').touched || updateUniForm.get('name').dirty) ? 'danger' : 'basic'"/>
                           </nb-form-field>
-                        </div>                        
-                      </div>  
-                      <div class="d-flex mt-4">
-                        <div class="label-form mr-1">
-                          <label for="">Trạng Thái:</label>
+                        </div> 
+                      </div>
+                    </div>
+                    <div class="mt-2">
+                      <div class="row">
+                        <div class="col-xl-2 col-lg-2 pr-0" style="display: flex; justify-content: start; text-align: center; align-items: center;">
+                          <div >
+                            <label for="">Trạng thái:</label>
+                          </div>
                         </div>
-                        <div style="width: 205px">                          
-                          <nb-select [formControl]="updateUniForm.get('status') " fullWidth>        
+                        <div class="col-xl-4 col-lg-4 inline-items-input">
+                          <nb-select [size]="'small'" [formControl]="updateUniForm.get('status') " fullWidth>        
                             <nb-option [value]="1">Hoạt Động ✔️</nb-option>
                             <nb-option [value]="0">Không Hoạt Động ❌</nb-option>        
                           </nb-select>
                         </div>
-                        <div class="label-form ml-3" style="width: 67px">
+                        <div class="inline-items-label" style="display: flex; justify-content: start; text-align: center; align-items: center; width: 70px;">
                           <label for="">Đánh giá:</label>
                         </div>
-                        <div style="width: 155px;">                          
-                          <nb-select [formControl]="updateUniForm.get('rating')" fullWidth>        
+                        <div class="col-xl-2 col-lg-2 inline-items-input">
+                          <nb-select [size]="'small'" [formControl]="updateUniForm.get('rating')" fullWidth>        
                             <nb-option [value]="1">
-                              ⭐️
+                              1 ⭐️
                             </nb-option>
                             <nb-option [value]="2">
-                              <div>⭐️⭐️</div>
+                              <div>2 ⭐️</div>
                             </nb-option>
                             <nb-option [value]="3">
-                              <div>⭐️⭐️⭐️</div>
+                              <div>3 ⭐️</div>
                             </nb-option>
                             <nb-option [value]="4">
-                              <div>⭐️⭐️⭐️⭐️</div>
+                              <div>4 ⭐️</div>
                             </nb-option>
                             <nb-option [value]="5">
-                              <div>⭐️⭐️⭐️⭐️⭐️</div>
+                              <div>5 ⭐️</div>
                             </nb-option>
                           </nb-select>
                         </div>
-                        <div class="label-form ml-3" style="width: 40px;">
-                          <label for="">Code:</label>                          
+                        <div class="inline-items-label-code" style="display: flex; justify-content: start; text-align: center; align-items: center;">
+                          <label for="">Code:</label>
                         </div>
-                        <div style="width: 8rem;">
-                          <nb-form-field>    
-                            <!-- <i nbPrefix nz-icon nzType="key" nzTheme="outline" style="font-size: large"></i>                                             -->
-                            <input [formControl]="updateUniForm.get('code')" type="text" placeholder=""  fullWidth nbInput 
-                            [status]="updateUniForm.get('code').invalid && (updateUniForm.get('code').touched || updateUniForm.get('code').dirty) ? 'danger' : 'basic'"/>
-                          </nb-form-field>
-                        </div>                                                
-                      </div>                                               
-                      <div class="mt-4"> 
-                        <div class="d-flex">
-                          <div class="label-form mr-1">
+                        <div class="col-xl-1 col-lg-2 pl-0">
+                          <div class="inline-items-input-code">
+                            <nb-form-field>    
+                              <input fieldSize="small" [formControl]="updateUniForm.get('code')" type="text" placeholder=""  fullWidth nbInput 
+                              [status]="updateUniForm.get('code').invalid && (updateUniForm.get('code').touched || updateUniForm.get('code').dirty) ? 'danger' : 'basic'"/>
+                            </nb-form-field>
+                          </div>                          
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-2">
+                      <div class="row">
+                        <div class="col-xl-2 col-lg-2 pr-0" style="display: flex; justify-content: start; text-align: center;">
+                          <div >
                             <label for="">Mô tả:</label>
                           </div>
-                          <div style="width: 39.3rem;">
-                            <nb-form-field>
-                              <textarea [formControl]="updateUniForm.get('description')" nbInput fullWidth placeholder="Mô tả" fieldSize="large"></textarea>
-                              
-                            </nb-form-field>
-                          </div>
-                        </div>                        
-                      </div>                                         
+                        </div>
+                        <div class="col-xl-10 col-lg-10 inline-items-input">                                                                                                                                                                              
+                          <nb-form-field>                              
+                            <textarea [formControl]="updateUniForm.get('description')" nbInput fullWidth placeholder="Mô tả" fieldSize="large"></textarea>
+                          </nb-form-field>
+                        </div> 
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                
-                <div class="col-md-5">
-                  <div class="row">
-                    <div class="d-md-block border-left col-md-1 col-sm-12"></div>
-                    <div class="col-md-11">
-                      <ul class="list-unstyled m-t-10">
-                        <li class="row mt-2">
-                          <div class="col-md-2 pr-0 pl-0 label-form">
-                            <label for="">Website:</label>
-                          </div>
-                          <div class="col-md-10 pl-0">
-                            <nb-form-field>
-                              <nb-icon [status]="'info'" nbPrefix icon="globe-outline"></nb-icon>
-                              <input [formControl]="updateUniForm.get('webUrl')" nbInput fullWidth type="text"
-                              [status]="updateUniForm.get('webUrl').invalid && (updateUniForm.get('webUrl').touched || updateUniForm.get('webUrl').dirty) ? 'danger' : 'basic'">
-                            </nb-form-field>
-                          </div>
-                        </li>
-                        <li class="row mt-2">
-                          <div class="col-md-2 pr-0 pl-0 label-form">
-                            <label for="" style="font-weight: 500;">Điện thoại:</label>
-                          </div>
-                          <div class="col-md-10 pl-0">
-                            <nb-form-field>
-                              <nb-icon status="info" nbPrefix icon="phone-outline"></nb-icon>
-                              <input [formControl]="updateUniForm.get('phone')" nbInput type="text" fullWidth
-                              [status]="updateUniForm.get('phone').invalid && (updateUniForm.get('phone').touched || updateUniForm.get('phone').dirty) ? 'danger' : 'basic'">
-                              
-                            </nb-form-field>                            
-                          </div>
-                        </li>
-                        <li class="row mt-2">
-                          <div class="col-md-2 pr-0 pl-0 label-form">
-                            <label for="">Địa chỉ:</label>
-                          </div>
-                          <div class="col-md-10 pl-0">
-                            <nb-form-field>
-                              <nb-icon status="info" nbPrefix icon="home-outline"></nb-icon>
-                              <input nbInput type="text" [formControl]="updateUniForm.get('address')" fullWidth
-                              [status]="updateUniForm.get('address').invalid && (updateUniForm.get('address').touched || updateUniForm.get('webUrl').dirty) ? 'danger' : 'basic'">
-                            </nb-form-field>
-                          </div>
-                        </li>
-                        <li class="row mt-2">
-                          <div class="col-md-2 pr-0 pl-0 label-form">
-                            <label for="">Học phí:</label>
-                          </div>                       
-                          <div class="p-0" style="width: 28%; position: relative;">
-                            <span class="bold500" style="position: absolute;height: 100%;display: flex;align-items: center;left: 5%;">Từ</span>
-                            <span class="bold500" style="position: absolute;height: 100%;display: flex;right: 3%;align-items: center;">.000 (VND)</span>
-                            <nb-form-field>                              
-                              <input nbInput type="text" style="text-align: right; padding-left: 40px; padding-right: 44%;" [formControl]="updateUniForm.get('tuitionFrom')" fullWidth mask="separator.2" thousandSeparator="."
-                              [status]="updateUniForm.get('tuitionFrom').invalid && (updateUniForm.get('tuitionFrom').touched || updateUniForm.get('tuitionFrom').dirty) ? 'danger' : 'basic'">
-                            </nb-form-field>                            
-                          </div>
-                          <div class="p-0 ml-3" style="width: 28%; position: relative;">
-                            <span class="bold500" style="position: absolute;height: 100%;display: flex;align-items: center;left: 5%;">Đến</span>
-                            <span class="bold500" style="position: absolute;height: 100%;display: flex;right: 3%;  align-items: center;">.000 (VND)</span>
-                            <nb-form-field>                              
-                              <input nbInput type="text" style="text-align: right; padding-left: 40px; padding-right: 44%;" [formControl]="updateUniForm.get('tuitionTo')" fullWidth mask="separator.2" thousandSeparator="."
-                              [status]="updateUniForm.get('tuitionTo').invalid && (updateUniForm.get('tuitionTo').touched || updateUniForm.get('tuitionTo').dirty) ? 'danger' : 'basic'">
-                            </nb-form-field>                            
-                          </div>                          
-                          <div class="ml-3" style="width: 20%;">
-                            <nb-select style="width: 100%" [formControl]="updateUniForm.get('tuitionType')"
-                            [status]="updateUniForm.get('tuitionType').invalid && (updateUniForm.get('tuitionType').touched || updateUniForm.get('tuitionType').dirty) ? 'danger' : 'basic'">        
-                              <nb-option [value]="0">Năm</nb-option>
-                              <nb-option [value]="1">Kì</nb-option>        
-                            </nb-select>
-                          </div>                                                                       
-                        </li>
-                      </ul>
-                      <div class="d-flex justify-content-end">                                                
-                        <button [disabled]="updateUniForm?.invalid" size="small" (click)="updateUni()" nbButton status="info">
-                          <nb-icon icon="save-outline"></nb-icon>
-                          Lưu
-                        </button>
-                      </div>
+                </div>                
+              </div>
+              <!-- <div class="col col-lg-3"></div> -->
+              <div class="col-xl-5 col-lg-12">
+                <div class="row">
+                  <div class="d-md-block border-left col-xl-1 col-lg-3"></div>
+                  <div class="col-xl-11 col-lg-9">
+                    <ul class="list-unstyled m-t-10">
+                      <li class="row mt-2">
+                        <div class="col-xl-2 col-lg-2 pr-0 pl-0 label-form">
+                          <label for="">Website:</label>
+                        </div>
+                        <div class="col-xl-10 col-lg-10 pl-0">
+                          <nb-form-field>
+                            <nb-icon [status]="'info'" nbPrefix icon="globe-outline"></nb-icon>
+                            <input fieldSize="small" [formControl]="updateUniForm.get('webUrl')" nbInput fullWidth type="text"
+                            [status]="updateUniForm.get('webUrl').invalid && (updateUniForm.get('webUrl').touched || updateUniForm.get('webUrl').dirty) ? 'danger' : 'basic'">
+                          </nb-form-field>
+                        </div>
+                      </li>
+                      <li class="row mt-2">
+                        <div class="col-md-2 pr-0 pl-0 label-form">
+                          <label for="" style="font-weight: 500;">Điện thoại:</label>
+                        </div>
+                        <div class="col-md-10 pl-0">
+                          <nb-form-field>
+                            <nb-icon status="info" nbPrefix icon="phone-outline"></nb-icon>
+                            <input fieldSize="small" [formControl]="updateUniForm.get('phone')" nbInput type="text" fullWidth
+                            [status]="updateUniForm.get('phone').invalid && (updateUniForm.get('phone').touched || updateUniForm.get('phone').dirty) ? 'danger' : 'basic'">
+                            
+                          </nb-form-field>                            
+                        </div>
+                      </li>
+                      <li class="row mt-2">
+                        <div class="col-md-2 pr-0 pl-0 label-form">
+                          <label for="">Địa chỉ:</label>
+                        </div>
+                        <div class="col-md-10 pl-0">
+                          <nb-form-field>
+                            <nb-icon status="info" nbPrefix icon="home-outline"></nb-icon>
+                            <input fieldSize="small" nbInput type="text" [formControl]="updateUniForm.get('address')" fullWidth
+                            [status]="updateUniForm.get('address').invalid && (updateUniForm.get('address').touched || updateUniForm.get('webUrl').dirty) ? 'danger' : 'basic'">
+                          </nb-form-field>
+                        </div>
+                      </li>
+                      <li class="row mt-2">
+                        <div class="col-md-2 pr-0 pl-0 label-form">
+                          <label for="">Học phí:</label>
+                        </div>                       
+                        <div class="p-0" style="width: 32%; position: relative;">
+                          <span class="bold500" style="position: absolute;height: 100%;display: flex;align-items: center;left: 5%; font-size: 12px;">Từ</span>
+                          <span class="bold500" style="position: absolute;height: 100%;display: flex;right: 3%;align-items: center; font-size: 12px;">.000 (VND)</span>
+                          <nb-form-field>                              
+                            <input fieldSize="small" nbInput type="text" style="text-align: right; padding-left: 30px; padding-right: 40%;" [formControl]="updateUniForm.get('tuitionFrom')" fullWidth mask="separator.2" thousandSeparator="."
+                            [status]="updateUniForm.get('tuitionFrom').invalid && (updateUniForm.get('tuitionFrom').touched || updateUniForm.get('tuitionFrom').dirty) ? 'danger' : 'basic'">
+                          </nb-form-field>                            
+                        </div>
+                        <div class="p-0 ml-2" style="width: 32%; position: relative;">
+                          <span class="bold500" style="position: absolute;height: 100%;display: flex;align-items: center;left: 5%; font-size: 12px;">Đến</span>
+                          <span class="bold500" style="position: absolute;height: 100%;display: flex;right: 3%;  align-items: center; font-size: 12px;">.000 (VND)</span>
+                          <nb-form-field>                              
+                            <input fieldSize="small" nbInput type="text" style="text-align: right; padding-left: 30px; padding-right: 40%;" [formControl]="updateUniForm.get('tuitionTo')" fullWidth mask="separator.2" thousandSeparator="."
+                            [status]="updateUniForm.get('tuitionTo').invalid && (updateUniForm.get('tuitionTo').touched || updateUniForm.get('tuitionTo').dirty) ? 'danger' : 'basic'">
+                          </nb-form-field>                            
+                        </div>                          
+                        <div class="ml-2" style="width: 14%;">
+                          <nb-select size="small" style="width: 100%" [formControl]="updateUniForm.get('tuitionType')"
+                          [status]="updateUniForm.get('tuitionType').invalid && (updateUniForm.get('tuitionType').touched || updateUniForm.get('tuitionType').dirty) ? 'danger' : 'basic'">        
+                            <nb-option [value]="0">Năm</nb-option>
+                            <nb-option [value]="1">Kì</nb-option>        
+                          </nb-select>
+                        </div>                                                                       
+                      </li>
+                    </ul>
+                    <div class="d-flex justify-content-end">                                                
+                      <button [disabled]="updateUniForm?.invalid" size="small" (click)="updateUni()" nbButton status="info">
+                        <nb-icon icon="save-outline"></nb-icon>
+                        Lưu
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </nb-card-body>
-        </nb-card>
+        </nb-card>  
       </div>
     </div>
   </div>
@@ -208,10 +213,10 @@
                     <th nzWidth="5%" rowspan="3" style="background-color: #87ceeb;">
                       <div style="width: 100%; text-align: center;">STT</div>
                     </th>
-                    <th nzWidth="5%" rowspan="3" style="background-color: #87ceeb;">
+                    <th nzWidth="7%" rowspan="3" style="background-color: #87ceeb;">
                       <div style="width: 100%; text-align: center;">Thao Tác</div>
                     </th>
-                    <th nzWidth="30%" rowspan="3" style="background-color: #87ceeb;">
+                    <th nzWidth="25%" rowspan="3" style="background-color: #87ceeb;">
                       <div style="width: 100%; text-align: center;">Tên Ngành</div>
                     </th>                    
                     <th nzWidth="8%" rowspan="3" style="background-color: #87ceeb;"> 

@@ -16,8 +16,7 @@ import { CreateMajorModalComponent } from '../../components';
   styleUrls: ['./university-detail.component.scss']
 })
 export class UniversityDetailComponent implements OnInit {
-  
-  
+    
 
   listOfMajor: (MajorRM & {stt?:number})[] = [];
   listOfDisplayMajor: (MajorRM & {stt?:number})[] = [];
@@ -26,12 +25,14 @@ export class UniversityDetailComponent implements OnInit {
   pageSize: 10;
   pageIndex: 1;
   uniId: any;
-  //binding
+
   rowspan: number = 5;
   searchValueName = "";
-  //Form
+  
   updateUniForm: FormGroup;
   eventValueChange: any = undefined;
+
+
   constructor(
     private _modalService: NzModalService,
     private _activatedRoute: ActivatedRoute,

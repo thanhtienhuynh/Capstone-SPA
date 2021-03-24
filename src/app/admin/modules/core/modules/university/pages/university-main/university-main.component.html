@@ -47,18 +47,18 @@
                   <tr>
                     <th nzWidth="5%" style="background-color: #87ceeb; text-align: center;">STT</th>
                     <th style="background-color: #87ceeb;">Tên Trường</th>
-                    <th nzWidth="5%" style="background-color: #87ceeb; text-align: center;">Code</th>
+                    <th nzWidth="6%" style="background-color: #87ceeb; text-align: center;">Code</th>
                     <th style="background-color: #87ceeb;">Địa Chỉ</th> 
-                    <th nzWidth="15%" style="background-color: #87ceeb;"
+                    <th style="background-color: #87ceeb;"
                     [nzFilterMultiple]="false"                    
                     [nzFilters]="listOfTuitionType"
                     [nzFilterFn]="filterTuitionTypeFn"
                     >Học Phí (Đơn vị: VNĐ)</th>                   
-                    <th nzWidth="10%" style="background-color: #87ceeb; text-align: center;">Thông Tin Liên Hệ</th>
-                    <th nzWidth="10%" style="background-color: #87ceeb; text-align: center;"  
+                    <th nzWidth="12%" style="background-color: #87ceeb; text-align: center;">Thông Tin Liên Hệ</th>
+                    <th nzWidth="13%" style="background-color: #87ceeb; text-align: center;"  
                     [nzFilterMultiple]="false"                    
                     [nzFilters]="listOfStatusFilter"
-                    [nzFilterFn]="filterStatusFn"
+                    [nzFilterFn]="filterStatusFn"                    
                     >Trạng Thái</th>
                     <th nzWidth="5%" style="background-color: #87ceeb; text-align: center;">Thao Tác</th>
                   </tr>
@@ -99,7 +99,7 @@
                     </td>                    
                     <td class="status" style="text-align: center;">
                       <nz-tag [nzColor]="university.status == 1 ? 'success' : 'error'">
-                        <span *ngIf="university.status == 1">Đang hoạt động</span>
+                        <span style="width: 50%;" *ngIf="university.status == 1">Đang hoạt động</span>
                         <span *ngIf="university.status != 1">Không hoạt động</span>
                       </nz-tag>
                     </td>
