@@ -130,34 +130,8 @@
                           </div>
                         </li>
                         <li class="row mt-2">
-                          <p class="col-sm-2 col-4 font-weight-semibold text-dark m-b-5 p-0">
-                            <nb-icon status="primary" icon="layers-outline"></nb-icon>
-                            <span class="label">Học Phí: </span>
-                          </p>
-                          <div class="pl-0 pr-0 pt-2" style="width: 30px;">
-                            <span>Từ</span>
-                          </div>
-                          <div class="p-0" style="width: 150px;">
-                            <!-- <nb-form-field>                              
-                              <input nbInput type="text" style="text-align: right;" [formControl]="updateUniForm.get('tuitionFrom')" fullWidth mask="separator.2" thousandSeparator=".">
-                            </nb-form-field> -->
-                            <nz-input-group nzAddOnAfter=".000" [nzSize]="'large'">
-                              <input [formControl]="updateUniForm.get('tuitionFrom')" mask="separator.2" thousandSeparator="." type="text" nz-input style="text-align: right; background-color: #f7f9fc;" />
-                            </nz-input-group>
-                          </div>
-                          <div class="pr-0 pt-2 mr-2 ml-2" style="width: 30px;">
-                            <span>Đến</span>
-                          </div>
-                          <div class="p-0" style="width: 150px;">
-                            <!-- <nb-form-field>
-                              <input nbInput type="text" style="text-align: right;" [formControl]="updateUniForm.get('tuitionTo')" fullWidth mask="separator.2" thousandSeparator=".">
-                            </nb-form-field> -->
-                            <nz-input-group nzAddOnAfter=".000" [nzSize]="'large'">
-                              <input [formControl]="updateUniForm.get('tuitionTo')" mask="separator.2" thousandSeparator="." type="text" nz-input style="text-align: right; background-color: #f7f9fc;" />
-                            </nz-input-group>
-                          </div>   
-                          <div class="pr-0 pt-2 mr-2 ml-3" style="width: 10px;">
-                            <span>/</span>
+                          <div class="col-md-2 pr-0 pl-0 label-form">
+                            <label for="">Học phí:</label>
                           </div>                       
                           <div class="p-0" style="width: 28%; position: relative;">
                             <span class="bold500" style="position: absolute;height: 100%;display: flex;align-items: center;left: 5%;">Từ</span>
@@ -206,16 +180,15 @@
     <div nz-row>
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
         <nb-card style="margin: auto; width: 99%; position: relative">
-          <nb-card-body style="width: 100%">
-            <div style="width: 100%; min-height: 42rem">
-              <nb-card style="float: left;">
-                <nb-card-header>Chú thích</nb-card-header>
-                <nb-card-body>
-                  <nb-icon status="danger" icon="close-outline"></nb-icon>
-                  <label class="ml-2" for="">: Thông tin đang thiếu sót, cần được bổ sung</label>
-                </nb-card-body>                
-              </nb-card>
-              <button style="float: right; margin-bottom: 1rem" (click)="openCreateMajorModal(undefined)" nbButton status="primary">
+          <nb-card-body style="width: 100%; max-height: 60rem">
+            <div style="width: 100%;">   
+              <div style="float: left; margin-bottom: 1rem;">
+                <nb-form-field>
+                  <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
+                  <input fieldSize="small" type="text" placeholder="Tìm kiếm theo tên ngành" fullWidth nbInput [ngModel]="searchValueName" (ngModelChange)="searchByName($event)"/>
+                </nb-form-field>
+              </div>           
+              <button size="small" style="float: right; margin-bottom: 1rem" (click)="openCreateMajorModal(undefined)" nbButton status="info">
                 <nb-icon icon="plus-outline"></nb-icon>Thêm Ngành
               </button>
               <nz-table #majorTable 
