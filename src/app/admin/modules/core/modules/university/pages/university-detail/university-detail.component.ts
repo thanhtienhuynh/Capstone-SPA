@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewChildren } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, DoCheck   } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { isThisSecond } from 'date-fns';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { UniversityService } from 'src/app/admin/services';
-import { CustomSelectComponent } from 'src/app/admin/shared/components';
 import { MajorRM, UniversityRM } from 'src/app/admin/view-models';
 import Swal from 'sweetalert2';
 
@@ -33,6 +31,7 @@ export class UniversityDetailComponent implements OnInit {
   searchValueName = "";
   //Form
   updateUniForm: FormGroup;
+  eventValueChange: any = undefined;
   constructor(
     private _modalService: NzModalService,
     private _activatedRoute: ActivatedRoute,
@@ -43,7 +42,10 @@ export class UniversityDetailComponent implements OnInit {
   }
 
   ngOnInit() {    
-    this.getUniversityById();    
+    this.getUniversityById();      
+  }
+  ngDoCheck(){
+        
   }
 
   getUniversityById(): void {
@@ -93,15 +95,15 @@ export class UniversityDetailComponent implements OnInit {
 
   initUpdateUniForm(): void {
     this.updateUniForm = this._fb.group({
-      'name': [''],
-      'code': [''],
-      'address': [''],
-      'phone': [''],
-      'webUrl': [''],
+      'name': ['', Validators.required],
+      'code': ['', Validators.required],
+      'address': ['', Validators.required],
+      'phone': ['', Validators.required],
+      'webUrl': ['', Validators.required],
       'tuitionType': [''],
       'tuitionFrom': [''],
       'tuitionTo': [''],
-      'description': [''],  
+      'description': ['', Validators.required],  
       'rating': [1],
       'status': [0],    
     });
