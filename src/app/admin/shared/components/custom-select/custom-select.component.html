@@ -9,9 +9,16 @@
     </div>
   </div>
   <div *ngIf="dataFilters.length === 0" class="addNewItem">
-    <span>Không có sẵn</span>
-    <button nb-size="'small'" style="float: right; margin-bottom: 1rem" nbButton status="primary">      
-      <nb-icon icon="plus-outline"></nb-icon>Thêm {{titleNewItem}}
-    </button>
+    <div style="display: flex; justify-content: center;align-items: center; margin-bottom: 1rem;">
+      <span style="font-size: small; font-weight: 500;">Không có sẵn, hoặc đã tồn tại</span>
+    </div>    
+    <div style="display: flex; justify-content: center;align-items: center;">
+      <button (click)="open()" size="small" nbButton status="info" >      
+        <nb-icon size="small" icon="plus-outline"></nb-icon>
+        <span style="font-size: small;">Thêm {{titleNewItem}}</span>
+      </button>  
+      <div [nbPopover]="templateRef" nbPopoverTrigger="noop" nbPopoverPlacement="right"></div>    
+    </div>    
   </div>
 </div>
+

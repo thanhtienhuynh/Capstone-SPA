@@ -18,16 +18,27 @@ import { CreateUniversityModalComponent } from '../../components';
   styleUrls: ['./university-main.component.scss']
 })
 export class UniversityMainComponent implements OnInit {
-
-  //Rating
-  ratingTooltips = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+    
   loading: true;
 
-  //Paging
   total = 1;
   pageSize = 10;
   pageIndex = 1;
-  listOfUniversity: UniversityRM[] = [];
+  listOfUniversity: (UniversityRM & {stt?:number})[] = [];
+  listOfDisplayUniversity:  (UniversityRM & {stt?:number})[] = [];
+  //------------------SEARCH SORT FILTER------------------------
+  searchValueName: string = '';
+
+  listOfStatusFilter: any[] = [
+    {text: 'Hoạt Động', value: 1},
+    {text: 'Không Hoạt Động', value: 0},
+  ]
+  
+  listOfTuitionType: any[] = [
+    {text: 'Theo Năm', value: 0},
+    {text: 'Theo Kì', value: 1},
+  ]
+  //-----------------------------------------------------
   constructor(
     private _modalService: NzModalService,
     protected _universityService: UniversityService
@@ -40,9 +51,13 @@ export class UniversityMainComponent implements OnInit {
   getAllUniversity(): void {
     this._universityService.getAllUniversity().pipe(
       tap((rs) => {                                   
-        this.listOfUniversity = rs;  
-        this.total = this.listOfUniversity.length;
-        this.total = this.listOfUniversity.length;      
+        this.listOfUniversity = rs.map((e, i) => ({
+          ...e,
+          phones: e.phone.split('-'),
+          stt: i + 1
+        }));              
+        this.listOfDisplayUniversity = [...this.listOfUniversity];        
+        this.total = this.listOfUniversity.length;             
       }),
       catchError((err) => {
         console.log(err);
@@ -58,17 +73,16 @@ export class UniversityMainComponent implements OnInit {
       nzFooter: null,
       nzWidth: 700,  
       nzComponentParams: {callBack: (item) => {             
-        this.listOfUniversity.push(item);
-        console.log(this.listOfUniversity);
+        this.listOfUniversity.push(item);        
       }}    
     });
-  }
+  }  
 
-  onQueryParamsChange(params: NzTableQueryParams): void {    
-    const { pageSize, pageIndex, sort, filter } = params;
-    const currentSort = sort.find(item => item.value !== null);
-    const sortField = (currentSort && currentSort.key) || null;
-    const sortOrder = (currentSort && currentSort.value) || null;    
+  
+  
+  searchByName(searchValue: string): void {    
+    this.listOfDisplayUniversity = this.listOfUniversity.filter((item: UniversityRM & {stt?:number}) => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1);
   }
-
+  filterStatusFn = (status: number, item: UniversityRM) => item.status === status;
+  filterTuitionTypeFn = (tuitionType: number, item: UniversityRM) => item.tuitionType === tuitionType;
 }

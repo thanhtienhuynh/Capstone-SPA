@@ -25,4 +25,8 @@ export class MajorService {
     return this._http.put<any>('https://localhost:44344/api/v1/university/major-updation', body);
   }
 
+  addNewMajorSystem(body: any): Observable<any>{
+    return this._http.post('https://localhost:44344/api/v1/major', body);
+  }
+
 }

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, DoCheck   } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { of } from 'rxjs';
@@ -17,8 +17,10 @@ import { CreateMajorModalComponent } from '../../components';
 })
 export class UniversityDetailComponent implements OnInit {
   
+  
 
-  listOfMajor: MajorRM[] = [];
+  listOfMajor: (MajorRM & {stt?:number})[] = [];
+  listOfDisplayMajor: (MajorRM & {stt?:number})[] = [];
   university: UniversityRM;
 
   pageSize: 10;
@@ -26,8 +28,10 @@ export class UniversityDetailComponent implements OnInit {
   uniId: any;
   //binding
   rowspan: number = 5;
+  searchValueName = "";
   //Form
   updateUniForm: FormGroup;
+  eventValueChange: any = undefined;
   constructor(
     private _modalService: NzModalService,
     private _activatedRoute: ActivatedRoute,
@@ -38,7 +42,10 @@ export class UniversityDetailComponent implements OnInit {
   }
 
   ngOnInit() {    
-    this.getUniversityById();    
+    this.getUniversityById();      
+  }
+  ngDoCheck(){
+        
   }
 
   getUniversityById(): void {
@@ -46,9 +53,13 @@ export class UniversityDetailComponent implements OnInit {
       this._universityService.getUniversityById(param.id).pipe(
         tap((rs) => {  
           this.uniId = param.id;        
-          this.university = rs;
-          this.listOfMajor = rs.majors                                        
-          this.setDataToForm(this.university);
+          this.university = rs;          
+          this.listOfMajor = rs.majors.map((e, i) => ({
+            ...e,
+            stt: i + 1
+          }));             
+          this.listOfDisplayMajor = [...this.listOfMajor];                                                              
+          this.setDataToForm(this.university);          
         }),
         catchError((err) => {
           console.log(err);
@@ -72,6 +83,7 @@ export class UniversityDetailComponent implements OnInit {
           this.updateUniForm.get('tuitionType').setValue(university.tuitionType);
           this.updateUniForm.get('tuitionFrom').setValue(university.tuitionFrom);
           this.updateUniForm.get('tuitionTo').setValue(university.tuitionTo);
+          this.updateUniForm.get('status').setValue(university.status);          
         }),
         catchError((err) => {
           console.log(err);
@@ -83,17 +95,17 @@ export class UniversityDetailComponent implements OnInit {
 
   initUpdateUniForm(): void {
     this.updateUniForm = this._fb.group({
-      'name': [''],
-      'code': [''],
-      'address': [''],
-      'phone': [''],
-      'webUrl': [''],
+      'name': ['', Validators.required],
+      'code': ['', Validators.required],
+      'address': ['', Validators.required],
+      'phone': ['', Validators.required],
+      'webUrl': ['', Validators.required],
       'tuitionType': [''],
       'tuitionFrom': [''],
       'tuitionTo': [''],
-      'description': [''],  
-      'rating': [''],
-      'status': [''],    
+      'description': ['', Validators.required],  
+      'rating': [1],
+      'status': [0],    
     });
   }
 
@@ -103,9 +115,13 @@ export class UniversityDetailComponent implements OnInit {
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,   
-      nzComponentParams: {data: data, universityId: this.uniId, universityName: this.university.name, callBack: (majors) => {
-        this.listOfMajor = majors;
-      }}   
+      nzComponentParams: {data: data, majors: this.listOfMajor, universityId: this.uniId, universityName: this.university.name, callBack: (majors) => {
+        this.listOfMajor = majors;  
+        this.listOfDisplayMajor = majors.map((e, i) => ({
+          ...e,
+          stt: i + 1
+        }));              
+      }},      
     })
   }
 
@@ -122,9 +138,10 @@ export class UniversityDetailComponent implements OnInit {
       "tuitionType": Number.parseInt(this.updateUniForm.get('tuitionType').value),
       "tuitionFrom": Number.parseInt(this.updateUniForm.get('tuitionFrom').value),
       "tuitionTo": Number.parseInt(this.updateUniForm.get('tuitionTo').value),
-      "rating": 5,
-      "status": 1
+      "rating": this.updateUniForm.get('rating').value,
+      "status": this.updateUniForm.get('status').value
     }   
+    console.log(newValue);
     Swal.fire({
       title: 'Bạn có muốn lưu những thông tin đã thay đổi hay không?',
       showDenyButton: true,
@@ -181,6 +198,12 @@ export class UniversityDetailComponent implements OnInit {
         Swal.fire('Changes are not saved', '', 'info')
       }
     })
-    
   }
+
+  searchByName(value: string): void {        
+    this.listOfDisplayMajor = this.listOfMajor.filter((item: UniversityRM & {stt?:number}) => item.name.toLowerCase().indexOf(value.toLowerCase()) !== -1);
+    console.log(this.listOfDisplayMajor);
+  }
+
+
 }
