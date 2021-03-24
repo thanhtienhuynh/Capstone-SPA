@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StepperComponent } from './major-suggestion-stepper/stepper/stepper.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -13,7 +13,6 @@ import { environment } from 'src/environments/environment';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
 import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-page.component';
-import { AnswerComponent } from './major-suggestion-stepper/exam-page/answer/answer.component';
 import { ResultDialogComponent } from './major-suggestion-stepper/exam-page/result-dialog/result-dialog.component';
 import { CountdownModule } from 'ngx-countdown';
 import { TestCardComponent } from './major-suggestion-stepper/exam-page/test-card/test-card.component';
@@ -24,43 +23,26 @@ import { AuthenticationComponent } from './authentication/authentication.compone
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
-
-
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatIconModule } from '@angular/material/icon';
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { NZ_I18N, vi_VN } from 'ng-zorro-antd/i18n';
 import vi from '@angular/common/locales/vi';
-import { SharedModule } from './admin/shared/shared.module';
 import { AuthService } from './admin/services';
 import { ShortenPipe } from './_helper/shorten-pipe';
 import { ProgressSpinnerComponent } from './_sharings/components/progress-spinner/progress-spinner.component';
 import { AuthEffects } from './authentication/store/auth.affects';
-import {MatMenuModule} from '@angular/material/menu';
+import { AuthInterceptorService } from './_helper/auth-interceptor.service';
+import { MaterialModule } from './_sharings/shared.module';
+import { UserEffects } from './user/store/user.effects';
 
 
 registerLocaleData(vi);
 @NgModule({
-  declarations: [					
+  declarations: [							
     AppComponent,
     StepperComponent,
     ExamPageComponent,
-    AnswerComponent,
+    // AnswerComponent,
     ResultDialogComponent,
     TestCardComponent,
     HeaderComponent,
@@ -68,7 +50,8 @@ registerLocaleData(vi);
     SafeHtmlPipe,
     AuthenticationComponent,
     ShortenPipe,
-    ProgressSpinnerComponent
+    // ToArrayPipe,
+    ProgressSpinnerComponent,
    ],
   imports: [
     BrowserModule,
@@ -76,39 +59,26 @@ registerLocaleData(vi);
     BrowserAnimationsModule,        
     FlexLayoutModule,           
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([StepperEffects, AuthEffects]),
+    EffectsModule.forRoot([StepperEffects, AuthEffects, UserEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     
     AppRoutingModule,
     CountdownModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
-    
-
-    MatAutocompleteModule,
-    MatStepperModule,
-    MatFormFieldModule,
-    MatProgressSpinnerModule,
-    MatInputModule,
-    MatTabsModule,
-    MatButtonModule,
-    MatRadioModule,
-    MatDividerModule,
-    MatGridListModule,
-    MatCardModule,
-    MatDialogModule,  
-    MatSelectModule,
-    MatListModule,
-    MatMenuModule,
-    MatIconModule,
 
     FormsModule,
     ReactiveFormsModule,
     CommonModule,  
-
-    // SharedModule.forRoot()
+    MaterialModule
   ],
-  providers: [AuthService, { provide: NZ_I18N, useValue: vi_VN }],
+  providers: [AuthService, { provide: NZ_I18N, useValue: vi_VN },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

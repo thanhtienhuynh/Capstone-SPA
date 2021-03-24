@@ -1,5 +1,3 @@
-import { Major } from "./major";
-
 export interface TestSubmission {
   id: number;
   testId: number;

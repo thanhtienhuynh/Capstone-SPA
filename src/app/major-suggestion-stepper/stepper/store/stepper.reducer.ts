@@ -23,6 +23,7 @@ export interface State {
   selectedTestId: number;
   testSubmissionParam: TestSubmissionParam;
   testSubmissionReponse: TestSubmission;
+  isSaved: boolean;
 }
 
 const initialState: State = {
@@ -39,7 +40,8 @@ const initialState: State = {
   selectedUniversityId: null,
   selectedTestId: null,
   testSubmissionParam: null,
-  testSubmissionReponse: null
+  testSubmissionReponse: null,
+  isSaved: false
 };
 
 export function stepReducer(
@@ -125,6 +127,17 @@ export function stepReducer(
       return {
         ...state,
         testSubmissionReponse: action.payload,
+        isLoading: false,
+      };
+    case StepperActions.SAVE_TEST_SUBMISSION:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case StepperActions.SAVE_TEST_SUBMISSION_SUCCESS:
+      return {
+        ...state,
+        isSaved: action.payload,
         isLoading: false,
       };
     case StepperActions.RESET_STATE:

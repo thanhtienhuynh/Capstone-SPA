@@ -23,13 +23,7 @@ export class AppComponent {
     // this.p.nativeElement.insertAdjacentHTML('beforeend', this.title);
   }
   constructor(
-    private store: Store<fromApp.AppState>,
-    // protected readonly iconLibraries: NbIconLibraries, 
-  ) { 
-    // this.iconLibraries.setDefaultPack('eva');
-    // this.iconLibraries.registerFontPack('font-awesome', { iconClassPrefix: 'fa', packClass: 'fa' });
-    // // this.iconLibraries.registerFontPack('far', { packClass: 'far', iconClassPrefix: 'fa' });
-    // this.iconLibraries.registerFontPack('ion', { iconClassPrefix: 'ion' });
-  }
+    private store: Store<fromApp.AppState>
+  ) { }
 }
   

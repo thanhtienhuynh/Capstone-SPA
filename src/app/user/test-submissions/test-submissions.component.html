@@ -1,0 +1,63 @@
+<div style="width: 100%; height: auto;">
+  <div style="width: 100%; background-color: rgb(218, 235, 240);border-radius: 15px;">
+    <div style="width: 100%; height: 15%; background-color: rgb(57, 199, 235); font-size: 1.5em; font-weight: 600; border-radius: 15px;" class="center-all">DANH SÁCH CÁC BÀI THI BẠN ĐÃ HOÀN THÀNH</div>
+    <div style="width: 100%; height: 10%;" class="center-all">
+      <mat-form-field appearance="fill" style="margin-top: 20px; margin-right: 30px; width: 130px;">
+        <mat-label>Môn học</mat-label>
+        <mat-select>
+          <mat-option value="option1">Toán</mat-option>
+          <mat-option value="option2">Lý</mat-option>
+          <mat-option value="option3">Hóa</mat-option>
+        </mat-select>
+      </mat-form-field>  
+      <div style="margin-right: 30px;">Từ ngày</div>
+      <mat-form-field appearance="fill" style="margin-top: 20px;  width: 170px; margin-right: 30px;">
+        <input matInput [matDatepicker]="dp2" disabled [formControl]="dateStart">
+        <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+        <mat-datepicker #dp2 disabled="false"></mat-datepicker>
+      </mat-form-field>
+      <div style="margin-right: 30px;">Đến ngày</div>
+          <mat-form-field appearance="fill" style="margin-top: 20px; width: 170px; margin-right: 30px;">
+            <input matInput [matDatepicker]="dp3" disabled [formControl]="dateEnd">
+            <mat-datepicker-toggle matSuffix [for]="dp3"></mat-datepicker-toggle>
+            <mat-datepicker #dp3 disabled="false"></mat-datepicker>
+          </mat-form-field>
+          <button mat-raised-button color="primary">Xem</button>
+    </div>
+  </div>
+  <div style="margin: 20px 0 0 20px; font-weight: 600; color: rgb(103, 9, 226);">- Số đề thi đã làm: 5</div>
+  <div *ngIf="testSubmissions" style="width: 100%; padding: 20px;">
+    <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
+      <div *ngFor="let testSubmission of testSubmissions" fxFlex="0 1 calc(50%)"  fxFlex.lt-md="0 1 calc(50%)"
+      fxFlex.lt-sm="100%">
+        <div style="width: 100%; height: auto; padding-top: 12px;" class="test-frame">
+          <div class="date-bar center-all">{{ testSubmission.submissionDate }}</div>
+          <div style=" padding: 15px;">
+            <div class="center-all" routerLink="./1" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><p class="test-title">{{ testSubmission.testName}}</p></div>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <div>Số câu trả lời đúng:</div>
+              <div class="test-value">{{testSubmission.numberOfRightAnswers}}/{{testSubmission.numberOfQuestion}}</div>
+            </div>
+            <mat-divider style="margin-bottom: 5px"></mat-divider>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <div>Điểm:</div>
+              <div class="test-value">{{testSubmission.mark}}/10.0</div>
+            </div>
+            <mat-divider style="margin-bottom: 5px"></mat-divider>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <div>Thời gian làm bài: </div>
+              <div class="test-value">{{testSubmission.spentTime}}/{{testSubmission.timeLimit}}</div>
+            </div>
+            <mat-divider style="margin-bottom: 5px"></mat-divider>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+              <div>Số lần đã làm: </div>
+              <div class="test-value">{{testSubmission.numberOfCompletion}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 
+</div>

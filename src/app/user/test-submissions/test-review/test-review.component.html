@@ -1,0 +1,37 @@
+<div style="width: 100%; background-color: firebrick;">
+  <div style="width: 100%; background-color: fuchsia;">
+    <!-- Thông tin bài thi -->
+    <div style="width: 100%;" fxLayout="row wrap" fxLayoutAlign="flex-start">
+      <div class="center-all" fxFlex="0 1 calc(19%)" style="border: 2px solid rgb(111, 112, 114); border-radius: 15px; padding: 10px 0 10px 0;">
+        <div class="center-all" style="width: 80%; height: 100%; background-color: lightcoral; border-radius: 50%;">
+          <div style="font-size: 2em; font-weight: 900;">10/10</div>
+        </div>
+      </div>
+      <div fxFlex="0 1 calc(81%)" style="border: 2px solid rgb(53, 101, 197); border-radius: 15px; padding: 15px;">
+        <div style="font-weight: 700; font-size: 1.2em; text-align: center;">Kết quả bài thi: ĐỀ THI CHÍNH THỨC THPTQG MÔN TOÁN NĂM 2019 - MÃ ĐỀ 101</div>
+        <div style="width: 100%; margin-top: 5px;" fxLayout="row wrap" fxLayoutAlign="flex-start">
+          <div fxFlex="0 1 calc(50%)">
+            <div>Số câu làm đúng: 25/50 câu</div>
+            <div>Thời gian làm bài: 60/90 phút</div>
+          </div>
+          <div fxFlex="0 1 calc(50%)">
+            <div>Số câu làm đúng: 25/50 câu</div>
+            <div>Thời gian làm bài: 60/90 phút</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="width: 100%;">
+      <!-- Thông tin đáp án -->
+      <div style="border: 2px solid rgb(111, 112, 114); border-radius: 15px; background-color: gold;"
+       fxFlex="0 1 calc(100%)" fxFlex.lt-sm="100%">
+        <div fxLayout="row wrap" fxLayoutGap="6px grid" fxLayoutAlign="flex-start" 
+          style="padding: 7px;">
+          <div fxFlex="0 1 calc(5%)" *ngFor="let question of 50 | toArray; let i = index">
+            <app-answer [numericalOrder]="i" [selectedIndex]="i"></app-answer>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+</div>

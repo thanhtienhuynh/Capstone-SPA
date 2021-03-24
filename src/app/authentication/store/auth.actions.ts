@@ -1,6 +1,5 @@
 import { Action } from "@ngrx/store";
 import { LoginResponse } from "src/app/_models/login-response";
-import { User } from "src/app/_models/user";
 
 export const LOGIN_GOOGLE = '[Auth] Login Goole';
 export const LOGIN_SERVER = '[Auth] Login Server';

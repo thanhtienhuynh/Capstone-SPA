@@ -7,7 +7,6 @@ import * as AuthActions from './auth.actions';
 import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { from } from 'rxjs';
 import { User } from 'src/app/_models/user';
 import { LoginResponse } from 'src/app/_models/login-response';
 import * as Consts from '../../_common/constants';

@@ -10,6 +10,22 @@ export class TestSubmissionParam {
   }
 }
 
+export class SaveTestSubmissionParam {
+  testId: number;
+  spentTime: number;
+  questions: QuestionParam[];
+  mark: number;
+  numberOfRightAnswers: number;
+
+  constructor(testId: number, spentTime: number, questions: QuestionParam[], mark: number, numberOfRightAnswers: number) {
+    this.testId = testId;
+    this.spentTime = spentTime;
+    this.questions = questions;
+    this.mark = mark;
+    this.numberOfRightAnswers = numberOfRightAnswers;
+  }
+}
+
 export class QuestionParam {
   id: number;
   options: string;

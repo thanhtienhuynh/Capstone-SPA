@@ -30,6 +30,7 @@ export class ExamPageComponent implements OnInit, OnDestroy {
 
   selectedIndex: any;
   selectedTestId: number;
+  isSaved: boolean = false;
 
   constructor(private store: Store<fromApp.AppState>,  private _formBuilder: FormBuilder, 
               public dialog: MatDialog) { }
@@ -49,6 +50,7 @@ export class ExamPageComponent implements OnInit, OnDestroy {
             // this.openDialog();
             this.isScored = true;
           }
+          this.isSaved = stepperState.isSaved;
           if (stepperState.test) {
             this.test = stepperState.test;
             console.log("Test: ", this.test.questions);
@@ -100,8 +102,8 @@ export class ExamPageComponent implements OnInit, OnDestroy {
   openDialog(): void {
     const dialogRef = this.dialog.open(ResultDialogComponent, {
       width: '500px',
-      height: '430px',
-      disableClose: true
+      height: '210px',
+      disableClose: false
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -116,7 +118,8 @@ export class ExamPageComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
-    this.store.dispatch(new StepperActions.ResetState());
+    // this.store.dispatch(new StepperActions.ResetState());
+    this.store.dispatch(new StepperActions.SaveTestSubmission());
     this.openDialog();
   }
 

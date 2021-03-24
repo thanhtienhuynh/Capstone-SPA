@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import * as AuthActions from '../../../authentication/store/auth.actions';
   templateUrl: './result-dialog.component.html',
   styleUrls: ['./result-dialog.component.scss']
 })
-export class ResultDialogComponent implements OnInit {
+export class ResultDialogComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   user: User;
   constructor(
@@ -39,4 +39,9 @@ export class ResultDialogComponent implements OnInit {
     this.store.dispatch(new AuthActions.LoginGoogle());
   }
 
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 }
