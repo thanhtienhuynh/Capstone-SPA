@@ -18,6 +18,8 @@ import { CreateMajorModalComponent } from '../../components';
 export class UniversityDetailComponent implements OnInit {
     
 
+  total: number = 1;
+
   listOfMajor: (MajorRM & {stt?:number})[] = [];
   listOfDisplayMajor: (MajorRM & {stt?:number})[] = [];
   university: UniversityRM;
@@ -59,7 +61,8 @@ export class UniversityDetailComponent implements OnInit {
             ...e,
             stt: i + 1
           }));             
-          this.listOfDisplayMajor = [...this.listOfMajor];                                                              
+          this.listOfDisplayMajor = [...this.listOfMajor];   
+          this.total = this.listOfDisplayMajor.length;                                                           
           this.setDataToForm(this.university);          
         }),
         catchError((err) => {
@@ -117,11 +120,15 @@ export class UniversityDetailComponent implements OnInit {
       nzFooter: null,
       nzWidth: 700,   
       nzComponentParams: {data: data, majors: this.listOfMajor, universityId: this.uniId, universityName: this.university.name, callBack: (majors) => {
-        this.listOfMajor = majors;  
+        this.listOfMajor = majors.map((e, i) => ({
+          ...e,
+          stt: i + 1
+        }));  
         this.listOfDisplayMajor = majors.map((e, i) => ({
           ...e,
           stt: i + 1
-        }));              
+        }));
+        this.total = this.listOfDisplayMajor.length;              
       }},      
     })
   }

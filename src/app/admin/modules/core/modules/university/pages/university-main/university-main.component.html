@@ -65,6 +65,18 @@
                 </thead>
                 <tbody>                  
                   <tr *ngFor="let university of basicTable.data; let i = index" [style.backgroundColor]="i % 2 == 1 ? '#f5f5f5' : '#fff'">
+                    <ng-template #missaddress>
+                      <div style="text-align: center; width: 100%; cursor: pointer;" nbTooltip="Thông tin địa chỉ đang bị thiếu, cần được bổ sung" nbTooltipStatus="danger">
+                        <a [routerLink]="['details/' + university.id]" routerLinkActive="router-link-active" >
+                          <nb-icon icon="close-outline" status="danger" size=""></nb-icon>
+                        </a>                        
+                      </div>  
+                    </ng-template>
+                    <ng-template #missTuitionYear style="cursor: pointer;">
+                      <div style="text-align: center; width: 100%; cursor: pointer;" nbTooltip="Thông tin học phí đang bị thiếu, cần được bổ sung" nbTooltipStatus="danger">
+                        <nb-icon icon="close-outline" status="danger"></nb-icon>
+                      </div>
+                    </ng-template>
                     <td class="stt" style="text-align: center;">{{university.stt}}</td>
                     <td class="name">
                       <div class="align-items-center">                        
@@ -135,23 +147,14 @@
   </div>
 </div>
 
-<ng-template #totalTemplate let-total>
+<ng-template #totalTemplate>
   <span>
     Hiện có {{ total }} trường đại học
   </span>  
 </ng-template>
 
-<ng-template #missTuitionYear style="cursor: pointer;">
-  <div style="text-align: center; width: 100%; cursor: pointer;" nbTooltip="Thông tin học phí đang bị thiếu, cần được bổ sung" nbTooltipStatus="danger">
-    <nb-icon icon="close-outline" status="danger"></nb-icon>
-  </div>
-</ng-template>
+
 
 <ng-template #missTuitionSemester style="cursor: pointer;">    
 </ng-template> 
 
-<ng-template #missaddress>
-  <div style="text-align: center; width: 100%; cursor: pointer;" nbTooltip="Thông tin địa chỉ đang bị thiếu, cần được bổ sung" nbTooltipStatus="danger">
-    <nb-icon icon="close-outline" status="danger" size=""></nb-icon>
-  </div>  
-</ng-template>
