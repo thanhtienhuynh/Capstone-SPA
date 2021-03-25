@@ -213,6 +213,16 @@ export class CreateMajorModalComponent implements OnInit {
       'entryMark2': ['', Validators.required],
     });
     this.listField.push(group);
+    this.checkValidateListField();
+    console.log(this.checkValidateListField());
+  }
+
+  checkValidateListField(): boolean {
+    const list = this.listField.map((e) => e.invalid);
+    if (list.includes(true)) {
+      return true;
+    } 
+    return false;
   }
   useSelect(item) {    
     const list = this.listField.filter((e) => !e['isUpdate']).map((e) => e.value);    
@@ -223,6 +233,8 @@ export class CreateMajorModalComponent implements OnInit {
       // tap(rs => console.log('after', rs)),
     )
   }
+
+  
   removeField(index: number, field?: any | undefined): void {
     Swal.fire({
       title: 'Bạn có chắc không?',

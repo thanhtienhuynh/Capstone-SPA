@@ -45,8 +45,8 @@ export class CreateUniversityModalComponent implements OnInit {
       'phone': ['', Validators.required],
       'webUrl': ['', Validators.required],
       'tuitionType': [0],
-      'tuitionFrom': [''],
-      'tuitionTo': [''],
+      'tuitionFrom': ['', Validators.required],
+      'tuitionTo': ['', Validators.required],
       'description': [''],  
       'rating': [5],
       'status': [0]
