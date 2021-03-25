@@ -7,7 +7,7 @@
             <div class="text-md-left ">
               <nb-form-field>
                 <nb-icon nbPrefix icon="search-outline" pack="eva"></nb-icon>
-                <input type="text" placeholder="Tìm kiếm trường đại học" fullWidth nbInput [ngModel]="searchValueName" (ngModelChange)="searchByName($event)"/>
+                <input fieldSize="small" type="text" placeholder="Tìm kiếm trường đại học" fullWidth nbInput [ngModel]="searchValueName" (ngModelChange)="searchByName($event)"/>
               </nb-form-field>
             </div>                        
           </div>
@@ -15,7 +15,7 @@
       </div>
       <div class="col-md-6">
         <div class="text-md-right m-v-10">
-          <button nbButton status="info" (click)="openCreateUniversityModal()">
+          <button size="small" nbButton status="info" (click)="openCreateUniversityModal()">
             <nb-icon icon="plus-outline"></nb-icon>
             <span style="margin-left: 0.2rem;">Thêm trường</span>
           </button>

@@ -225,13 +225,13 @@ export class CreateMajorModalComponent implements OnInit {
   }
   removeField(index: number, field?: any | undefined): void {
     Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      title: 'Bạn có chắc không?',
+      text: "Dữ liệu sẽ không trở lại trạng thái ban đầu!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Vân, tôi đồng ý!'
     }).then((result) => {
       if (result.isConfirmed) {
         this.listField.splice(index, 1);

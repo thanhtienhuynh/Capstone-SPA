@@ -72,16 +72,23 @@ export class UniversityMainComponent implements OnInit {
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,  
-      nzComponentParams: {callBack: (item) => {             
+      nzComponentParams: {callBack: (item) => {   
+        console.log(this.listOfUniversity)          
         this.listOfUniversity.push(item);        
-      }}    
+        this.listOfUniversity.splice(0, 0, item);
+        // this.listOfDisplayUniversity = [...this.listOfUniversity];
+        this.listOfDisplayUniversity = this.listOfUniversity.map((e) => ({
+          ...e,
+          stt: e.stt + 1                   
+        }));
+      }, index: this.listOfUniversity.length}    
     });
   }  
 
   
   
-  searchByName(searchValue: string): void {    
-    this.listOfDisplayUniversity = this.listOfUniversity.filter((item: UniversityRM & {stt?:number}) => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1);
+  searchByName(searchValue: string): void {         
+    this.listOfDisplayUniversity = this.listOfUniversity.filter((item: UniversityRM & {stt?:number, phones?:string[]}) => item?.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1);
   }
   filterStatusFn = (status: number, item: UniversityRM) => item.status === status;
   filterTuitionTypeFn = (tuitionType: number, item: UniversityRM) => item.tuitionType === tuitionType;

@@ -17,8 +17,8 @@ import Swal from 'sweetalert2';
 })
 export class CreateUniversityModalComponent implements OnInit {  
 
-  @Input() callBack: (item: UniversityRM) => void;
-
+  @Input() callBack: (item: UniversityRM & {stt?:number, phones?: string[]}) => void;
+  @Input() index: any;
   logo: string | ArrayBuffer;
   createUniversityForm: FormGroup;
   editorOptions = quillConfiguration;
@@ -34,6 +34,7 @@ export class CreateUniversityModalComponent implements OnInit {
 
   ngOnInit() {
     this.initCreateUniversityForm();
+    console.log(this.callBack);    
   }
 
   initCreateUniversityForm(): void {
@@ -75,13 +76,31 @@ export class CreateUniversityModalComponent implements OnInit {
         'TuitionTo': this.createUniversityForm.get('tuitionTo').value,
         'Rating': this.createUniversityForm.get('rating').value,
         'Status': this.createUniversityForm.get('status').value
-      }      
+      }            
       this._uniService.createUniversity(newUni).pipe(
-        tap((rs) => {          
-          this.callBack(rs);
+        tap((rs) => { 
+          const newValue = {
+            id: rs.id,
+            address: rs.address,
+            code: rs.code,
+            description: rs.description,
+            logoUrl: rs.logoUrl,
+            name: rs.name,
+            phone: rs.phone,
+            rating: rs.rating,
+            status: rs.status,
+            tuitionFrom: rs.tuitionFrom,
+            tuitionTo: rs.tuitionTo,
+            tuitionType: rs.tuitionType,
+            webUrl: rs.webUrl,
+            stt: 0,   
+            phones: rs.phone.split('-')         
+          }                  
+          this.callBack(newValue);
           Swal.fire('Thành Công', 'Thêm mới trường đại học thành công', 'success');          
         }),
         catchError((err) => {
+          console.log(err.message);
           Swal.fire('Lỗi', 'Thêm mới trường đại học thất bại', 'error');
           return of(undefined);          
         })
