@@ -213,6 +213,16 @@ export class CreateMajorModalComponent implements OnInit {
       'entryMark2': ['', Validators.required],
     });
     this.listField.push(group);
+    this.checkValidateListField();
+    console.log(this.checkValidateListField());
+  }
+
+  checkValidateListField(): boolean {
+    const list = this.listField.map((e) => e.invalid);
+    if (list.includes(true)) {
+      return true;
+    } 
+    return false;
   }
   useSelect(item) {    
     const list = this.listField.filter((e) => !e['isUpdate']).map((e) => e.value);    
@@ -223,15 +233,17 @@ export class CreateMajorModalComponent implements OnInit {
       // tap(rs => console.log('after', rs)),
     )
   }
+
+  
   removeField(index: number, field?: any | undefined): void {
     Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
+      title: 'Bạn có chắc không?',
+      text: "Dữ liệu sẽ không trở lại trạng thái ban đầu!",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
+      confirmButtonText: 'Vâng, tôi đồng ý!'
     }).then((result) => {
       if (result.isConfirmed) {
         this.listField.splice(index, 1);

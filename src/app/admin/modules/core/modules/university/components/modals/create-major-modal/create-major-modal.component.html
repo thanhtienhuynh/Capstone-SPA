@@ -92,10 +92,10 @@
     <button (click)="addField()" nz-button nzType="default" nz-tooltip>
       <nb-icon icon="plus"></nb-icon>
     </button>
-    <button *ngIf="!data" (click)="submitForm()" [disabled]="majorForm?.invalid" nz-button [nzSize]="'medium'" nzType="primary">
+    <button *ngIf="!data" (click)="submitForm()" [disabled]="majorForm?.invalid || checkValidateListField()" nz-button [nzSize]="'medium'" nzType="primary">
       Thêm 
     </button>
-    <button *ngIf="data" (click)="updateForm()" [disabled]="majorForm?.invalid" nz-button [nzSize]="'medium'" nzType="primary">
+    <button *ngIf="data" (click)="updateForm()" [disabled]="majorForm?.invalid || checkValidateListField()" nz-button [nzSize]="'medium'" nzType="primary">
       Lưu 
     </button>
     <button (click)="cancle()"  nz-button [nzSize]="'medium'" nzType="basic">
