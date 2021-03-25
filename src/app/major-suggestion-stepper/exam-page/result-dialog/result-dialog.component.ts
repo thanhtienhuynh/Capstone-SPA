@@ -1,8 +1,7 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
-import { MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { TestSubmission } from 'src/app/_models/test-submission';
 import { User } from 'src/app/_models/user';
 import * as fromApp from '../../../_store/app.reducer';
 import * as AuthActions from '../../../authentication/store/auth.actions';
@@ -25,15 +24,11 @@ export class ResultDialogComponent implements OnInit, OnDestroy {
     });
   }
 
-  isLoggedIn: boolean = false;
 
   onOkClick(): void {
     this.dialogRef.close();
   }
 
-  onLoginClick(): void {
-    this.isLoggedIn = true;
-  }
 
   onGoogleLoginClick() {
     this.store.dispatch(new AuthActions.LoginGoogle());

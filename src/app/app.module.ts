@@ -34,24 +34,24 @@ import { AuthEffects } from './authentication/store/auth.affects';
 import { AuthInterceptorService } from './_helper/auth-interceptor.service';
 import { MaterialModule } from './_sharings/shared.module';
 import { UserEffects } from './user/store/user.effects';
+import { SafeUrlPipe } from './_helper/safe-url-pipe';
+import { SubmitDialogComponent } from './major-suggestion-stepper/exam-page/submit-dialog/submit-dialog.component';
 
 
 registerLocaleData(vi);
 @NgModule({
-  declarations: [							
+  declarations: [								
     AppComponent,
     StepperComponent,
     ExamPageComponent,
-    // AnswerComponent,
     ResultDialogComponent,
     TestCardComponent,
-    HeaderComponent,
     HomeComponent,
     SafeHtmlPipe,
-    AuthenticationComponent,
+    SafeUrlPipe,
     ShortenPipe,
-    // ToArrayPipe,
     ProgressSpinnerComponent,
+    SubmitDialogComponent,
    ],
   imports: [
     BrowserModule,

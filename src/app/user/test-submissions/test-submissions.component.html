@@ -25,7 +25,7 @@
           <button mat-raised-button color="primary">Xem</button>
     </div>
   </div>
-  <div style="margin: 20px 0 0 20px; font-weight: 600; color: rgb(103, 9, 226);">- Số đề thi đã làm: 5</div>
+  <div *ngIf="testSubmissions" style="margin: 20px 0 0 20px; font-weight: 600; color: rgb(103, 9, 226);">- Số đề thi đã làm: {{testSubmissions.length}}</div>
   <div *ngIf="testSubmissions" style="width: 100%; padding: 20px;">
     <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
       <div *ngFor="let testSubmission of testSubmissions" fxFlex="0 1 calc(50%)"  fxFlex.lt-md="0 1 calc(50%)"
@@ -41,7 +41,7 @@
             <mat-divider style="margin-bottom: 5px"></mat-divider>
             <div fxLayout="row" fxLayoutAlign="space-between center">
               <div>Điểm:</div>
-              <div class="test-value">{{testSubmission.mark}}/10.0</div>
+              <div class="test-value">{{testSubmission.mark | number : '1.2-2'}}/10.0</div>
             </div>
             <mat-divider style="margin-bottom: 5px"></mat-divider>
             <div fxLayout="row" fxLayoutAlign="space-between center">

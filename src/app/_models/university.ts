@@ -11,4 +11,6 @@ export interface University {
   tuitionTo: number;
   webUrl: string;
   phone: string;
+  nearestYearEntryMark: number;
+  numberOfStudents: number;
 }

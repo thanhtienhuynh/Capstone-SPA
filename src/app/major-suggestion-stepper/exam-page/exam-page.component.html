@@ -31,7 +31,7 @@
           <h1 mat-dialog-title style="font-weight: 700;">{{test.name}}</h1>
           <div mat-dialog-content>
               <p>Điểm:</p>
-              <div class="mark">{{testSubmissionReponse.mark}}</div>
+              <div class="mark">{{testSubmissionReponse.mark | number : '1.2-2'}}</div>
               <p>Số câu trả lời đúng: <span class="result">{{testSubmissionReponse.numberOfRightAnswers}}/{{testSubmissionReponse.numberOfQuestion}}</span></p>
               <p>Thời gian làm bài: <span class="result">{{testSubmissionReponse.spentTime}}/90 phút</span></p>
           </div>
@@ -48,7 +48,7 @@
       </div>
       </div>
   </div>
-  <div fxFlex="0 1 calc(73% - 32px)" fxFlex.lt-sm="100%">
+  <div class="test-exam-scroll" fxFlex="0 1 calc(73% - 32px)" fxFlex.lt-sm="100%">
     <mat-card  class="card" class="question_widget">
       <mat-card-content class="card-body p-0">
         <form  [formGroup]="examSubmissionFormGroup" id="examSubmitForm" (ngSubmit)="onSubmit()">
@@ -60,9 +60,11 @@
           <br/>
           <mat-radio-group formControlName="{{question.id}}"  aria-label="Select an option">
             <div *ngFor="let option of question.options; let j = index">
-              <mat-radio-button value="{{ j }}" (click)="getOrderOfQuestion(i)">
-                <p [innerHtml]="option.optionContent | safeHtml"></p>
-              </mat-radio-button>
+              <div  class="center-vertical">
+                <mat-radio-button  value="{{ j }}" (click)="getOrderOfQuestion(i)">
+                  <p [innerHtml]="option.optionContent | safeHtml"></p>
+                </mat-radio-button>
+              </div>
             </div>
           </mat-radio-group>
         </div>

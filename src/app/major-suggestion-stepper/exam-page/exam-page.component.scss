@@ -19,3 +19,13 @@
   justify-content: center;
   align-items: center;
 }
+
+.test-exam-scroll {
+  overflow-y: scroll;
+  height: 650px;
+}
+
+.center-vertical {
+  display: flex;
+  align-items: center;
+}

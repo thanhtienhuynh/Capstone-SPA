@@ -19,6 +19,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { AnswerComponent } from '../major-suggestion-stepper/exam-page/answer/answer.component';
 import { ToArrayPipe } from '../_helper/to-array-pipe';
+import { HeaderComponent } from '../header/header.component';
+import { AuthenticationComponent } from '../authentication/authentication.component';
+import { RouterModule } from '@angular/router';
 
 const materialModules = [
   MatNativeDateModule,
@@ -38,12 +41,15 @@ const materialModules = [
   MatListModule,
   MatMenuModule,
   MatIconModule,
+  RouterModule
 ];
 
 @NgModule({
   declarations: [
     AnswerComponent,
-    ToArrayPipe
+    ToArrayPipe,
+    HeaderComponent,
+    AuthenticationComponent,
   ],
   imports: [
     ...materialModules,
@@ -52,7 +58,9 @@ const materialModules = [
   exports: [
     ...materialModules,
     AnswerComponent,
-    ToArrayPipe
+    ToArrayPipe,
+    HeaderComponent,
+    AuthenticationComponent,
   ],
 })
 export class MaterialModule {

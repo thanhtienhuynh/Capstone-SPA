@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -17,6 +17,7 @@ import * as fromApp from '../../_store/app.reducer';
 import * as StepperActions from '../stepper/store/stepper.actions';
 import { ClassifiedTests } from 'src/app/_models/classified-tests';
 import { Test } from 'src/app/_models/test';
+import { BIOLOGY_SUBJECT_NAME, CHEMISTRY_SUBJECT_NAME, ENGLISH_SUBJECT_NAME, GEOGRAPHY_SUBJECT_NAME, HISTORY_SUBJECT_NAME, HUMANITY_SUBJECT_NAME, LITERARY_SUBJECT_NAME, MATH_SUBJECT_NAME, PHYSICS_SUBJECT_NAME } from 'src/app/_common/constants';
 
 @Component({
   selector: 'app-stepper',
@@ -25,6 +26,7 @@ import { Test } from 'src/app/_models/test';
 })
 export class StepperComponent implements OnInit, OnDestroy {
   @ViewChild('stepper') private myStepper: MatStepper;
+  typeScore = 1;
 
   secondFormGroup: FormGroup = null;
   thirdFormGroup: FormGroup;
@@ -40,6 +42,7 @@ export class StepperComponent implements OnInit, OnDestroy {
   tests: ClassifiedTests[];
   test: Test;
   selectedTestId: number;
+  suggestedMajorName: string = "Test";
 
   isUniversityLoaded: boolean = false;
 
@@ -49,11 +52,15 @@ export class StepperComponent implements OnInit, OnDestroy {
     private _formBuilder: FormBuilder,
     private store: Store<fromApp.AppState>,
     public _generalService: GenernalHelperService,
-  ) {}
+  ) {
+    this.secondFormGroup = this._formBuilder.group({});
+    this.secondFormGroup.addControl(
+      'scoreType', new FormControl(1)
+    );
+  }
 
   ngOnInit() {
     console.log("Init");
-    this.secondFormGroup = this._formBuilder.group({});
     this.inputFormControl = this._formBuilder.group({});
     this.thirdFormGroup = this._formBuilder.group({});
     this.store.dispatch(new StepperActions.ResetState());
@@ -85,25 +92,34 @@ export class StepperComponent implements OnInit, OnDestroy {
             for (let subject of this.subjects) {
               this.secondFormGroup.addControl(
                 subject.id.toString(),
-                new FormControl("0", [Validators.required, Validators.min(0), Validators.max(10)])
+                new FormControl(0, [ Validators.min(0), Validators.max(10)])
               );
             }
+
+            this.secondFormGroup.valueChanges.subscribe(c => {
+              this.marksValidator();
+            });
           }
+         
         },
         (error) => {
           console.log(error);
         }
       );
+     
   }
 
   onScoreSubmit() {
-    this.marks = [];
-    for(let subject of this.subjects) {
-      this.marks.push({subjectId: subject.id, mark: this.secondFormGroup.value[subject.id] ? this.secondFormGroup.value[subject.id] : 0});
-    }
-    this.store.dispatch(new StepperActions.SetMarks(this.marks));
-    if (!this.isLoading) {
-      this.myStepper.selectedIndex = 1;
+    this.marksValidator();
+    if (this.secondFormGroup.valid) {
+      this.marks = [];
+      for(let subject of this.subjects) {
+        this.marks.push({subjectId: subject.id, mark: this.secondFormGroup.value[subject.id] ? this.secondFormGroup.value[subject.id] : 0});
+      }
+      this.store.dispatch(new StepperActions.SetMarks(this.marks));
+      if (!this.isLoading) {
+        this.myStepper.selectedIndex = 1;
+      }
     }
   }
 
@@ -114,7 +130,10 @@ export class StepperComponent implements OnInit, OnDestroy {
     console.log("Destroy");
   }
 
-  getUniversity(suggestedGroupId: number, majorId: number, totalMark: number) {
+  getUniversity(suggestedGroupId: number, majorId: number, totalMark: number, majorName: string) {
+    this.suggestedMajorName = majorName;
+    console.log(majorName);
+    console.log(this.suggestedMajorName);
     this.store.dispatch(new StepperActions.LoadUniversities({subjectGroupId: suggestedGroupId, majorId: majorId, totalMark: totalMark}));
   }
 
@@ -148,5 +167,78 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   onTestSelected(id: number) {
     this.store.dispatch(new StepperActions.LoadTest(id));
+  }
+
+  marksValidator() {
+    const math = this.secondFormGroup.controls[this.subjects.find(s => s.name === MATH_SUBJECT_NAME).id];
+    const physics = this.secondFormGroup.controls[this.subjects.find(s => s.name === PHYSICS_SUBJECT_NAME).id];
+    const chemistry = this.secondFormGroup.controls[this.subjects.find(s => s.name === CHEMISTRY_SUBJECT_NAME).id];
+    const englis = this.secondFormGroup.controls[this.subjects.find(s => s.name === ENGLISH_SUBJECT_NAME).id];
+    const biology = this.secondFormGroup.controls[this.subjects.find(s => s.name === BIOLOGY_SUBJECT_NAME).id];
+    const geography = this.secondFormGroup.controls[this.subjects.find(s => s.name === GEOGRAPHY_SUBJECT_NAME).id];
+    const history = this.secondFormGroup.controls[this.subjects.find(s => s.name === HISTORY_SUBJECT_NAME).id];
+    const humanity = this.secondFormGroup.controls[this.subjects.find(s => s.name === HUMANITY_SUBJECT_NAME).id];
+    const literaty = this.secondFormGroup.controls[this.subjects.find(s => s.name === LITERARY_SUBJECT_NAME).id];
+    const scoreType = this.secondFormGroup.controls['scoreType'];
+    if (scoreType.value === 1) {
+      if (math.value < 5 || physics.value < 5 || chemistry.value < 5 || englis.value < 5 || biology.value < 5 || 
+        geography.value < 5 || history.value < 5 || humanity.value < 5 || literaty.value < 5) {
+        this.secondFormGroup.setErrors({mustHigherThanFive: 'Điểm học bạ các môn của bạn bắt buộc phải lớn hơn hoặc bằng 5 thì mới có thể xét tuyển đại học!'});
+        console.log("Errors:", this.secondFormGroup.errors);
+      } else {
+        this.secondFormGroup.setErrors(null);
+        console.log("Errors:", this.secondFormGroup.errors);
+
+      }
+    } else {
+      let count = 0;
+      if (math.value != null && math.value > 0) {
+        count++;
+      }
+      if (physics.value != null && physics.value > 0) {
+        count++;
+      }
+      if (chemistry.value != null && chemistry.value > 0) {
+        count++;
+      }
+      if (englis.value != null && englis.value > 0) {
+        count++;
+      }
+      if (biology.value != null && biology.value > 0) {
+        count++;
+      }
+      if (geography.value != null && geography.value > 0) {
+        count++;
+      }
+      if (history.value != null && history.value > 0) {
+        count++;
+      }
+      if (humanity.value != null && humanity.value > 0) {
+        count++;
+      }
+      if (literaty.value != null && literaty.value > 0) {
+        count++;
+      }
+      if (count < 6) {
+        this.secondFormGroup.setErrors({atLeastSixSubjects: 'Bạn phải nhập tối thiểu 6 môn (bao gồm 3 môn bắt buộc và 1 tổ hợp môn là KHTN hoặc KHXH).'});
+      }  else if (!((math.value && math.value >= 1 && literaty.value && literaty.value >= 1 && englis.value && englis.value >= 1)
+        && (
+            (physics.value && physics.value >= 1 && chemistry.value && chemistry.value >= 1 && biology.value && biology.value >= 1)
+            || (history.value && history.value >= 1 && geography.value && geography.value >= 1 && humanity.value && humanity.value >= 1)))
+      ) {
+        console.log('rune ne');
+        this.secondFormGroup.setErrors({mustEnoughSubjects: 'Điểm các môn trong tổ hợp môn phải lớn hơn hoặc bằng 1 thì mới đủ điều kiện xét tuyển!'});
+      } else if (
+      (!(physics.value && physics.value >= 1 && chemistry.value && chemistry.value >= 1 && biology.value && biology.value >= 1)
+      && !((physics.value == null || physics.value == 0) &&  (chemistry.value == null || chemistry.value == 0) && (biology.value == null || biology.value == 0)))
+      || (!(history.value && history.value >= 1 && geography.value && geography.value >= 1 && humanity.value && humanity.value >= 1)
+      && !((history.value == null || history.value == 0) &&  (geography.value == null || geography.value == 0) && (humanity.value == null || humanity.value == 0)))
+      ) {
+        this.secondFormGroup.setErrors({mustMatchGroup: 'Bạn phải nhập đủ điểm các môn trong tổ hợp môn KHTN hoặc KHXH!'});
+      }
+       else {
+        this.secondFormGroup.setErrors(null);
+      }
+    }
   }
 }
