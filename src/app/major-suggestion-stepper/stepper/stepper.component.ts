@@ -33,8 +33,10 @@ export class StepperComponent implements OnInit, OnDestroy {
   inputFormControl: FormGroup = null;
 
   subscription: Subscription;
+  authSubscription: Subscription;
 
   isLoading = true;
+  isAuthLoading = false;
   subjects: Subject[] = [];
   marks: Mark[];
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
@@ -106,6 +108,16 @@ export class StepperComponent implements OnInit, OnDestroy {
           console.log(error);
         }
       );
+    this.authSubscription = this.store
+      .select('auth')
+      .subscribe(
+        (authState) => {
+          this.isAuthLoading = authState.isLoading;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
      
   }
 
@@ -127,7 +139,6 @@ export class StepperComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    console.log("Destroy");
   }
 
   getUniversity(suggestedGroupId: number, majorId: number, totalMark: number, majorName: string) {
@@ -166,6 +177,7 @@ export class StepperComponent implements OnInit, OnDestroy {
   }
 
   onTestSelected(id: number) {
+    this.store.dispatch(new StepperActions.RefreshTest());
     this.store.dispatch(new StepperActions.LoadTest(id));
   }
 
@@ -184,11 +196,8 @@ export class StepperComponent implements OnInit, OnDestroy {
       if (math.value < 5 || physics.value < 5 || chemistry.value < 5 || englis.value < 5 || biology.value < 5 || 
         geography.value < 5 || history.value < 5 || humanity.value < 5 || literaty.value < 5) {
         this.secondFormGroup.setErrors({mustHigherThanFive: 'Điểm học bạ các môn của bạn bắt buộc phải lớn hơn hoặc bằng 5 thì mới có thể xét tuyển đại học!'});
-        console.log("Errors:", this.secondFormGroup.errors);
       } else {
         this.secondFormGroup.setErrors(null);
-        console.log("Errors:", this.secondFormGroup.errors);
-
       }
     } else {
       let count = 0;

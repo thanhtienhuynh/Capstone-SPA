@@ -1,5 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Test } from 'src/app/_models/test';
@@ -38,7 +37,7 @@ export class ExamPageComponent implements OnInit, OnDestroy {
   isSaved: boolean = false;
 
   constructor(private store: Store<fromApp.AppState>,  private _formBuilder: FormBuilder, 
-              public dialog: MatDialog) { }
+              public dialog: MatDialog, public submitDialog: MatDialog) { }
 
   ngOnInit() {    
     this.examSubmissionFormGroup = this._formBuilder.group({}); 
@@ -47,22 +46,32 @@ export class ExamPageComponent implements OnInit, OnDestroy {
       .select('stepper')
       .subscribe(
         (stepperState) => {
-          if (stepperState.testSubmissionReponse) {
-            this.testSubmissionReponse = stepperState.testSubmissionReponse;
-          }
+
+          this.testSubmissionReponse = stepperState.testSubmissionReponse;
+          
           this.selectedTestId = stepperState.selectedTestId;
           if (this.testSubmissionReponse) {
             this.isScored = true;
           }
           this.isSaved = stepperState.isSaved;
-          if (stepperState.test) {
-            this.test = stepperState.test;
+          if (this.isSaved) {
+            this.openDialog();
+            console.log('run 1 ne');
+          }
+          this.test = stepperState.test;
+          if (this.test) {
             for (let question of this.test.questions) {
               this.examSubmissionFormGroup.addControl(
                 question.id.toString(),
                 new FormControl(-1, null)
               );
             }
+          }
+           else {
+            console.log('vao ne');
+            this.isSaving = false;
+            this.isSaved = false;
+            this.isScored  = false;
           }
         },
         (error) => {
@@ -76,6 +85,7 @@ export class ExamPageComponent implements OnInit, OnDestroy {
         (authState) => {
           this.user = authState.user;
           if (this.isSaving && this.user) {
+            this.dialog.closeAll();
             this.store.dispatch(new StepperActions.SaveTestSubmission());
             this.isSaving = false;
           }
@@ -104,7 +114,8 @@ export class ExamPageComponent implements OnInit, OnDestroy {
       questions.push(new QuestionParam(question.id, 
         this.getResult(question.options.length, +this.examSubmissionFormGroup.value[question.id])))
     }
-    if (questions.filter(q => q.options.indexOf(DEFAULT_SELECTED_ANSWER) >= 0).length >= this.test.numberOfQuestion / 2) {
+    // if (questions.filter(q => q.options.indexOf(DEFAULT_SELECTED_ANSWER) >= 0).length >= this.test.numberOfQuestion / 2) {
+    if (questions.filter(q => q.options.indexOf(DEFAULT_SELECTED_ANSWER) >= 0).length >= 0) {
       this.countdown.stop();
       this.store.dispatch(new StepperActions.ScoringTest(
         new TestSubmissionParam(this.test.id, Math.ceil(90 - (this.countdown.left / 60000)), questions)));
@@ -127,16 +138,12 @@ export class ExamPageComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ResultDialogComponent, {
       width: '500px',
       height: '210px',
-      disableClose: false
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log("Exam close");
+      disableClose: true
     });
   }
 
   openSubmitDialog(): void {
-    const dialogRef = this.dialog.open(SubmitDialogComponent, {
+    const dialogRef = this.submitDialog.open(SubmitDialogComponent, {
       width: '500px',
       height: '150px',
       disableClose: true
@@ -155,6 +162,7 @@ export class ExamPageComponent implements OnInit, OnDestroy {
     } else {
       this.isSaving = true;
       this.openDialog();
+      console.log('Run 2 ne');
     }
   }
 

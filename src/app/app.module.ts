@@ -36,6 +36,8 @@ import { MaterialModule } from './_sharings/shared.module';
 import { UserEffects } from './user/store/user.effects';
 import { SafeUrlPipe } from './_helper/safe-url-pipe';
 import { SubmitDialogComponent } from './major-suggestion-stepper/exam-page/submit-dialog/submit-dialog.component';
+import { ToArrayPipe } from './_helper/to-array-pipe';
+import { RouterModule } from '@angular/router';
 
 
 registerLocaleData(vi);
@@ -52,6 +54,7 @@ registerLocaleData(vi);
     ShortenPipe,
     ProgressSpinnerComponent,
     SubmitDialogComponent,
+    HeaderComponent
    ],
   imports: [
     BrowserModule,
@@ -70,7 +73,8 @@ registerLocaleData(vi);
     FormsModule,
     ReactiveFormsModule,
     CommonModule,  
-    MaterialModule
+    MaterialModule,
+    // RouterModule 
   ],
   providers: [AuthService, { provide: NZ_I18N, useValue: vi_VN },
     {

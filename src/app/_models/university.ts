@@ -13,4 +13,5 @@ export interface University {
   phone: string;
   nearestYearEntryMark: number;
   numberOfStudents: number;
+  numberOfCaring: number;
 }

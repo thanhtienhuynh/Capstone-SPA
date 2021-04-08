@@ -158,10 +158,11 @@
               <mat-grid-tile [colspan]="1" [rowspan]="2" style="background-color: rgb(192, 238, 238);">
                <div style="width: 100%; height: 100%; padding: 5px;">
                 <!-- <div>Sđt: {{university.phone}}</div> -->
-                <div>Học phí: Từ {{university.tuitionFrom | number:'1.0':'en-US'}},000 đến {{university.tuitionTo | number:'1.0':'en-US'}},000/{{ university.tuitionType == 0 ? "Kì" : "Năm"}}</div>
-                <div>Web: <a [href]="university.webUrl | safeUrl">{{university.webUrl}}</a></div>
-                <div>Chỉ tiêu năm 2020: {{university.numberOfStudents <= 0 ? 'Chưa có' : university.numberOfStudents}}</div>
-                <div>Điểm chuẩn: {{university.nearestYearEntryMark}}</div>
+                <div><strong>Học phí:</strong> Từ {{university.tuitionFrom | number:'1.0':'en-US'}},000 đến {{university.tuitionTo | number:'1.0':'en-US'}},000/{{ university.tuitionType == 0 ? "Kì" : "Năm"}}</div>
+                <div><strong>Web:</strong> <a [href]="university.webUrl | safeUrl">{{university.webUrl}}</a></div>
+                <div><strong>Chỉ tiêu năm 2020:</strong> {{university.numberOfStudents <= 0 ? 'Chưa có' : university.numberOfStudents}}</div>
+                <div><strong>Số người quan tâm:</strong> {{university.numberOfCaring <= 0 ? '0' : university.numberOfCaring}}</div>
+                <div><strong>Điểm chuẩn:</strong> {{university.nearestYearEntryMark}}</div>
               </div>
               </mat-grid-tile>
               <mat-grid-tile [colspan]="1" [rowspan]="1" style="background-color: lightblue;">
@@ -185,7 +186,7 @@
       fxFlex.lt-sm="100%">
         <h2 *ngIf="getSubjectName(subjectBasedTests.subjectId)">Môn: {{subjectName}}</h2>
         <h2 *ngIf="subjectBasedTests.universityId">{{getUniversityName(subjectBasedTests.universityId)}}</h2>
-        <div class="test-scroll">
+        <div>
           <div *ngFor="let test of subjectBasedTests.tests" style="margin-bottom: 10px;">
             <app-test-card [test]="test" (testSelected)="onTestSelected($event)"></app-test-card>
           </div>
@@ -211,6 +212,6 @@
 
 </mat-horizontal-stepper>
 
-<app-progress-spinner *ngIf="isLoading"></app-progress-spinner>
+<app-progress-spinner *ngIf="isLoading || isAuthLoading"></app-progress-spinner>
 
 

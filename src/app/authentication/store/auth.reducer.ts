@@ -28,7 +28,8 @@ export function authReducer(
     case AuthActions.LOGIN_SERVER:
         return {
           ...state,
-          firebaseToken: action.payload
+          firebaseToken: action.payload,
+        isLoading: true,
         };
     case AuthActions.SET_USER:
         return {

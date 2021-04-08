@@ -117,6 +117,16 @@ export function stepReducer(
         test: action.payload,
         isLoading: false,
       };
+    case StepperActions.REFRESH_TEST:
+      return {
+        ...state,
+        test: null,
+        selectedTestId: null,
+        testSubmissionParam: null,
+        testSubmissionReponse: null,
+        isSaved: false,
+        isLoading: false,
+      };
     case StepperActions.SCORING_TEST:
       return {
         ...state,
