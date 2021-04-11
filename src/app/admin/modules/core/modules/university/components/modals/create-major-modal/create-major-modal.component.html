@@ -4,9 +4,92 @@
     <div class="flex-auto"></div>
     <button nbButton (click)="closeModal()"><nb-icon pack="eva" icon="close-outline"></nb-icon></button>
   </div>
+  <div class="flex">
+    <div class="col-md-12 col-lg-12">
+      <label for="">Tên Ngành <span style="color: red;">*</span></label>        
+      <nb-form-field>
+        <nb-icon nbPrefix icon="briefcase-outline"></nb-icon>
+        <input  readonly nz-dropdown [disabled]="data!=undefined" type="text" [value]="majorForm.get('name').value?.name" [placeholder]="'Chọn ngành'" [nzDropdownMenu]="selectMajorName" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
+      [status]="majorForm.get('name').invalid && (majorForm.get('name').touched || majorForm.get('name').dirty) ? 'danger' : 'info'">        
+      </nb-form-field>                          
+      <nz-dropdown-menu #selectMajorName="nzDropdownMenu">        
+        <app-custom-select (useSelect)="useSelectMajor($event)" [templateRef]="newMajorToSystem" [control]="majorForm.get('name')" [data]="majorResult | async" [name]="'name'" [label]="'name'" [placeholder]="'Tìm kiếm theo tên ngành'" [titleNewItem]="'Ngành'"></app-custom-select>
+      </nz-dropdown-menu>
+    </div>                
+  </div>
+  <div class="flex mt-2">
+    <div class="col-md-4">
+      <label for="">Code <span style="color: red;">*</span></label>
+      <nb-form-field>        
+        <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
+        <input [formControl]="majorForm.get('code')"  type="text" placeholder="Nhập mã ngành" fullWidth nbInput
+        [status]="majorForm.get('code').invalid && (majorForm.get('code').touched || majorForm.get('code').dirty) ? 'danger' : 'info'"
+        />        
+      </nb-form-field>
+    </div>
+    <div class="col-md-4">
+      <label for="">Chỉ Tiêu <span style="color: red;">*</span></label>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="layers-outline" pack="eva"></nb-icon>
+        <input style="text-align: right;" [formControl]="majorForm.get('numberOfStudent')" mask="separator.2" thousandSeparator=","  type="text" placeholder="Nhập số lượng sinh viên" fullWidth nbInput
+        [status]="majorForm.get('numberOfStudent').invalid && (majorForm.get('numberOfStudent').touched || majorForm.get('numberOfStudent').dirty) ? 'danger' : 'info'"
+        /> 
+      </nb-form-field>
+    </div> 
+    <div class="col-md-4">
+      <label for="">Chương Trình Đào Tạo <span style="color: red;">*</span></label>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="cube-outline"></nb-icon>
+        <input type="text" [value]="majorForm.get('trainingProgram').value?.name" readonly nz-dropdown [placeholder]="'Chọn chương trình đào tạo'" [nzDropdownMenu]="selectTrainingProgram" nzTrigger="click" nzPlacement="bottomCenter" fullWidth nbInput>
+      </nb-form-field>
+      <nz-dropdown-menu #selectTrainingProgram="nzDropdownMenu">
+        <app-custom-select [control]="majorForm.get('trainingProgram')"  [data]="trainingProgramResult | async" [name]="'id'" [label]="'name'" [placeholder]="'Tìm kiếm chương trình đào tạo'" [titleNewItem]="'Chương trình đào tạo'"></app-custom-select>
+      </nz-dropdown-menu> 
+    </div>       
+  </div>
+  <div *ngFor="let field of listField; let i = index" class="flex mt-2">
+    <div class="col-md-4">
+      <label for="">Khối <span style="color: red;">*</span></label>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="cube-outline"></nb-icon>
+        <input [disabled]="field['isUpdate']" type="text" [value]="field.get('subjectGroup').value?.groupCode" readonly nz-dropdown [placeholder]="'Chọn khối'" [nzDropdownMenu]="selectGroupCode" nzTrigger="click" nzPlacement="bottomCenter" fullWidth nbInput
+      [status]="field.get('subjectGroup').invalid && (field.get('subjectGroup').touched || field.get('subjectGroup').dirty) ? 'danger' : 'info'"
+      >
+      </nb-form-field>
+      
+      <nz-dropdown-menu #selectGroupCode="nzDropdownMenu">
+        <app-custom-select [control]="field.get('subjectGroup')" (useSelect)="useSelectSubjectGroup($event)"  [data]="listOfDisplaySubjectGroup | async" [name]="'id'" [label]="'groupCode'" [placeholder]="'Tìm kiếm theo tên khối'" [titleNewItem]="'Khối'"></app-custom-select>
+      </nz-dropdown-menu>      
+    </div>    
+    <div [class]="listField.length === 1 ? 'col-md-4': 'col-md-3 pr-0'">
+      <label for="">Điểm chuẩn năm 2019<span style="color: red;">*</span></label>
+      <nb-form-field>
+        <nb-icon nbPrefix icon="edit-2-outline"></nb-icon>
+        <input [class.isUpdate]="field['isUpdate']"  [formControl]="field.get('entryMark1')" mask="separator.2" style="text-align: right;" thousandSeparator="," type="text" placeholder="Nhập điểm" fullWidth nbInput
+      [status]="field.get('entryMark1').invalid && (field.get('entryMark1').touched || field.get('entryMark1').dirty) ? 'danger' : 'info'"/> 
+      </nb-form-field>             
+    </div>
+    <div [class]="listField.length === 1 ? 'col-md-4': 'col-md-3 pr-0'">     
+      <label for="">Điểm chuẩn năm 2020<span style="color: red;">*</span></label> 
+      <nb-form-field>
+        <nb-icon nbPrefix icon="edit-2-outline"></nb-icon>
+        <input [formControl]="field.get('entryMark2')" type="text" style="text-align: right;" mask="separator.2" thousandSeparator="," placeholder="Nhập điểm" fullWidth nbInput
+        [status]="field.get('entryMark2').invalid && (field.get('entryMark2').touched || field.get('entryMark2').dirty) ? 'danger' : 'info'"  
+        /> 
+      </nb-form-field>             
+    </div>
+    <div [class]="listField.length != 1 ? 'col-md-2 d-flex justify-content-end pt-4': 'display-none'">            
+      <button (click)="removeField(i, field)" nbButton status="danger">
+        <nb-icon icon="minus-outline"></nb-icon>
+      </button>       
+    </div>
+  </div>
 
-
-  
+  <!-- <div class="flex items-center py-3">
+    <div class="text-xl">{{modalTitle}}</div>
+    <div class="flex-auto"></div>
+    <button nbButton (click)="closeModal()"><nb-icon pack="eva" icon="close-outline"></nb-icon></button>
+  </div>
   <div class="flex">
     <div class="col-md-12">
       <label for="">Tên Ngành <span style="color: red;">*</span></label>            
@@ -22,13 +105,8 @@
       </nz-dropdown-menu>
     </div>                
   </div>
-
-
-
-
-
   <div class="flex mt-2">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <label for="">Code <span style="color: red;">*</span></label>
       <nb-form-field>        
         <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
@@ -37,7 +115,7 @@
         />        
       </nb-form-field>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-4">
       <label for="">Chỉ Tiêu <span style="color: red;">*</span></label>
       <nb-form-field>
         <nb-icon nbPrefix icon="layers-outline" pack="eva"></nb-icon>
@@ -45,10 +123,17 @@
         [status]="majorForm.get('numberOfStudent').invalid && (majorForm.get('numberOfStudent').touched || majorForm.get('numberOfStudent').dirty) ? 'danger' : 'info'"
         />        
       </nb-form-field>
-    </div>    
+    </div>  
+    <div class="col-md-4">
+      <label for="">Loại Đào Tạo <span style="color: red;">*</span></label>
+      <nb-select style="width: 100%" (selected)="'1'">        
+        <nb-option [value]="0">Chất Lượng Cao</nb-option>
+        <nb-option [value]="1">Kì</nb-option>        
+      </nb-select>
+    </div>  
   </div>
   <div *ngFor="let field of listField; let i = index" class="flex mt-2">
-    <div class="col-md-6">
+    <div class="col-md-4">
       <label for="">Khối <span style="color: red;">*</span></label>
       <nb-form-field>
         <nb-icon nbPrefix icon="cube-outline"></nb-icon>
@@ -61,16 +146,16 @@
         <app-custom-select [control]="field.get('subjectGroup')" (useSelect)="useSelect($event)"  [data]="listOfDisplaySubjectGroup | async" [name]="'id'" [label]="'groupCode'" [placeholder]="'Tìm kiếm theo tên khối'" [titleNewItem]="'Khối'"></app-custom-select>
       </nz-dropdown-menu>      
     </div>    
-    <div [class]="listField.length === 1 ? 'col-md-3': 'col-md-2 pr-0'">
-      <label for="" style="font-size: smaller;">Điểm chuẩn 2019</label>
+    <div [class]="listField.length === 1 ? 'col-md-4': 'col-md-3 pr-0'">
+      <label for="">Điểm chuẩn năm 2019 <span style="color: red;">*</span></label>
       <nb-form-field>
         <nb-icon nbPrefix icon="edit-2-outline"></nb-icon>
         <input [class.isUpdate]="field['isUpdate']"  [formControl]="field.get('entryMark1')" mask="separator.2" style="text-align: right;" thousandSeparator="," type="text" placeholder="Nhập điểm" fullWidth nbInput
       [status]="field.get('entryMark1').invalid && (field.get('entryMark1').touched || field.get('entryMark1').dirty) ? 'danger' : 'info'"/> 
       </nb-form-field>             
     </div>
-    <div [class]="listField.length === 1 ? 'col-md-3': 'col-md-2 pr-0'">     
-      <label for="" style="font-size: smaller;">Điểm chuẩn 2020</label> 
+    <div [class]="listField.length === 1 ? 'col-md-4': 'col-md-3 pr-0'">     
+      <label for="">Điểm chuẩn năm 2020 <span style="color: red;">*</span></label> 
       <nb-form-field>
         <nb-icon nbPrefix icon="edit-2-outline"></nb-icon>
         <input [formControl]="field.get('entryMark2')" type="text" style="text-align: right;" mask="separator.2" thousandSeparator="," placeholder="Nhập điểm" fullWidth nbInput
@@ -83,8 +168,7 @@
         <nb-icon icon="minus-outline"></nb-icon>
       </button>       
     </div>
-  </div>
-
+  </div> -->
     
 
 

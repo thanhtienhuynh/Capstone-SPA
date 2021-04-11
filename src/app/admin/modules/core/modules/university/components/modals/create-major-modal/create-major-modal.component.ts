@@ -4,7 +4,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { MajorService, SubjectGroupService } from 'src/app/admin/services';
+import { MajorService, SubjectGroupService, TrainingProgramService } from 'src/app/admin/services';
 import { CustomSelectComponent } from 'src/app/admin/shared/components';
 import { MajorRM, SubjectGroupRM } from 'src/app/admin/view-models';
 import Swal from 'sweetalert2';
@@ -35,11 +35,11 @@ export class CreateMajorModalComponent implements OnInit {
   listFieldTmp: FormGroup[] = [];
 
   //Behavior
-  majorResult: Observable<any[]> = new BehaviorSubject([]);
-  listOfDisplayMajorResult: any[] = [];
+  majorResult: Observable<any[]> = new BehaviorSubject([]);  
   subjectGroupResult: Observable<any[]> = new BehaviorSubject([]);
+  trainingProgramResult: Observable<any[]> = new BehaviorSubject([]);
   listOfDisplaySubjectGroup: Observable<any[]> = new BehaviorSubject([]);
-  listExistSubjectGroup: any[] = [];
+  
 
 
   constructor(
@@ -47,7 +47,8 @@ export class CreateMajorModalComponent implements OnInit {
     private _modalRef: NzModalRef,
     private _majorService: MajorService,
     private _subjectGroupService: SubjectGroupService,
-    private _notification: NzNotificationService
+    private _notification: NzNotificationService,
+    private _trainingProgramService: TrainingProgramService
   ) {
     this.initMajorForm();
     this.initMajorSystemForm();
@@ -55,6 +56,7 @@ export class CreateMajorModalComponent implements OnInit {
   ngOnInit() {
     this.getAllMajor();
     this.getAllSubjectGroup();
+    this.getAllTrainingProgram();
     this.setData();
   }
 
@@ -62,6 +64,8 @@ export class CreateMajorModalComponent implements OnInit {
     this.majorForm = this._fb.group({
       'name': [undefined, Validators.required],
       'code': [''],
+      'trainingProgram': [undefined, Validators.required],
+      'oldTrainingProgram': [undefined],
       'numberOfStudent': ['', Validators.required]
     })
   }
@@ -79,16 +83,28 @@ export class CreateMajorModalComponent implements OnInit {
     )    
   }  
 
+  getAllTrainingProgram(): void {
+    this.trainingProgramResult = this._trainingProgramService.getAllTrainingProgram().pipe();
+  }
+
   setData(): void {
-    this.subjectGroupResult.subscribe((data) => {      
+    this.subjectGroupResult.subscribe((data) => {  
+      console.log(this.data);    
       if (this.data != undefined) {
         this.modalTitle = "Sửa Thông Tin Ngành của " + `${this.universityName}`;
         const tmp = {
           id: this.data.id,
           name: this.data.name,
           code: this.data.code
-        };
-        this.majorForm.get('name').setValue(tmp);
+        };  
+        const tmpTrainingProgram = {
+          id: this.data.trainingProgramId,
+          name: this.data.trainingProgramName
+        }      
+        this.majorForm.get('name').setValue(tmp);        
+        this.majorForm.get('code').setValue(tmp.code);  
+        this.majorForm.get('oldTrainingProgram').setValue(tmpTrainingProgram);
+        this.majorForm.get('trainingProgram').setValue(tmpTrainingProgram);
         this.majorForm.get('numberOfStudent').setValue(this.data.numberOfStudents);
         if (this.data.subjectGroups.length > 0) {
           for (let i = 0; i < this.data.subjectGroups.length; i++) {
@@ -134,12 +150,13 @@ export class CreateMajorModalComponent implements OnInit {
     }
     const newValue = {
       'universityId': Number.parseInt(this.universityId),
-      'majorId': this.majorForm.get('name').value.id,
-      "majorName": '',
-      "numberOfStudents": Number.parseInt(this.majorForm.get('numberOfStudent').value),
-      "code": this.majorForm.get('name').value.code,
+      'majorId': this.majorForm.get('name').value.id,      
+      "numberOfStudents": Number.parseInt(this.majorForm.get('numberOfStudent').value),      
+      "majorCode": this.majorForm.get('code').value,
+      "trainingProgramId": this.majorForm.get('trainingProgram').value?.id,
       "subjectGroups": subjectGroups
     };
+    console.log(newValue);
     this._majorService.createMajor(newValue).pipe(
       tap((rs) => {
         this.callBack(rs.majors);
@@ -189,8 +206,11 @@ export class CreateMajorModalComponent implements OnInit {
     }
     const newValue = {
       'universityId': Number.parseInt(this.universityId),
-      'majorId': this.majorForm.get('name').value.id,
+      'majorId': this.majorForm.get('name').value.id,    
+      "majorCode": this.majorForm.get('code').value,  
       "numberOfStudents": Number.parseInt(this.majorForm.get('numberOfStudent').value),
+      "oldTrainingProgramId": this.majorForm.get('oldTrainingProgram').value?.id,
+      "NewTrainingProgramId": this.majorForm.get('trainingProgram').value?.id,
       "subjectGroups": subjectGroups
     }
     this._majorService.updateMajor(newValue).pipe(
@@ -213,8 +233,8 @@ export class CreateMajorModalComponent implements OnInit {
       'entryMark2': ['', Validators.required],
     });
     this.listField.push(group);
-    this.checkValidateListField();
-    console.log(this.checkValidateListField());
+    console.log(this.listField);
+    this.checkValidateListField();    
   }
 
   checkValidateListField(): boolean {
@@ -224,13 +244,18 @@ export class CreateMajorModalComponent implements OnInit {
     } 
     return false;
   }
-  useSelect(item) {    
-    const list = this.listField.filter((e) => !e['isUpdate']).map((e) => e.value);    
-    this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(
+
+  useSelectMajor(item){
+    this.majorForm.get('code').setValue(item?.code);
+  }
+
+  useSelectSubjectGroup(item) {         
+    const list = this.listField.filter((e) => !e['isUpdate']).map((e) => e.value);        
+    this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(      
       map((rs) => this.data ? rs.filter((sb) => (sb.id !== this.data.subjectGroups.find((e) => e.id === sb.id)?.id)) : rs),
-      // tap(rs => console.log('before', rs)),
-      map((rs) => rs.filter((e) => !list.some((_) => _.subjectGroup.id === e.id)) ),
-      // tap(rs => console.log('after', rs)),
+      tap(rs => console.log('before', rs)),
+      map((rs) => rs.filter((e) => !list.some((_) => _.subjectGroup?.id === e.id)) ),
+      tap(rs => console.log('after', rs)),
     )
   }
 
@@ -246,8 +271,15 @@ export class CreateMajorModalComponent implements OnInit {
       confirmButtonText: 'Vâng, tôi đồng ý!',
       cancelButtonText: 'Thoát'
     }).then((result) => {
-      if (result.isConfirmed) {
+      if (result.isConfirmed) {                               
         this.listField.splice(index, 1);
+        const list = this.listField.filter((e) => !e['isUpdate']);  
+        console.log(list); 
+        if (field !== null) {           
+          this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(                                          
+            tap(rs => console.log(rs))
+          )
+        }
       }
     })
   }

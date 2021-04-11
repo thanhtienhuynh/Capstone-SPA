@@ -75,9 +75,7 @@ export class AuthEffects {
       const user = this.helper.decodeToken(token);
       if (!user) {
         return { type: 'DUMMY' };
-      }
-      console.log("User: ", user);
-
+      }      
       const loadedUser: User = {
         avatarUrl: user[Consts.JWT_AVATAR],
         email: user[Consts.JWT_EMAIL],
@@ -89,8 +87,7 @@ export class AuthEffects {
 
       if (token) {
         const expirationDuration =
-        this.helper.getTokenExpirationDate(token).getTime() - new Date().getTime();
-        console.log("Time: ", expirationDuration, " Exp: ", this.helper.getTokenExpirationDate(token));
+        this.helper.getTokenExpirationDate(token).getTime() - new Date().getTime();        
         this.authService.setLogoutTimer(expirationDuration);
         return new AuthActions.SetUser({
           user: loadedUser,

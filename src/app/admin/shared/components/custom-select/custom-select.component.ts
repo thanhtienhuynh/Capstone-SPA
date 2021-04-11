@@ -48,15 +48,15 @@ export class CustomSelectComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.filter('');
-    this.searchControl.valueChanges.subscribe((value) => this.filter(value));
+    this.searchControl.valueChanges.subscribe((value) => this.filter(value));    
   }
   ngOnChanges() {    
-    this.filter(this.searchControl.value);    
+    this.filter(this.searchControl.value);        
   }
   filter(value: string) {
     this.dataFilters = this.data ? this.data.filter((item) => (item[this.label] as string).includes(value)) : [];    
   }
-  selecteItem(item: unknown) {
+  selecteItem(item: unknown) {      
     if (this.control) {
       this.control.setValue(item);
     }

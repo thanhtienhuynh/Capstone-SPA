@@ -29,4 +29,7 @@ export class MajorService {
     return this._http.post('https://localhost:44344/api/v1/major', body);
   }
 
+  getAllTrainingProgram(): Observable<any> {
+    return this._http.get<any>('https://localhost:44344/api/v1/trainingprogram');
+  }
 }

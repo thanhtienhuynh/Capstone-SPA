@@ -11,7 +11,7 @@ const appRoutes: Routes = [
   // { path: 'stepper', component: StepperComponent},
   // { path: 'user', loadChildren: () => import('./user/user.module').then((m) => m.UserModule)},
   // { path: 'home', component: HomeComponent},
-  { path: 'admin', canActivate: [AuthGuard], loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule)}  
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule)}  
 ];
 
 @NgModule({

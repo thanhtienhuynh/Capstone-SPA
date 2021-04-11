@@ -56,7 +56,8 @@ export class UniversityDetailComponent implements OnInit {
       this._universityService.getUniversityById(param.id).pipe(
         tap((rs) => {  
           this.uniId = param.id;        
-          this.university = rs;          
+          this.university = rs;  
+          console.log(rs);        
           this.listOfMajor = rs.majors.map((e, i) => ({
             ...e,
             stt: i + 1

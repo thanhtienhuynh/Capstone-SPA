@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
-import { NavComponent, ContentComponent } from './components';
+import { NavComponent, ContentComponent, IdentificationComponent } from './components';
 import { CoreRoutes } from './core.routing';
 import { LayoutComponent } from './pages';
 
 const COMPONENTS = [
   NavComponent,
-  ContentComponent
+  ContentComponent,
+  IdentificationComponent
 ];
 const PAGES = [
   LayoutComponent
