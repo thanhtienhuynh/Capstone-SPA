@@ -12,7 +12,7 @@ import { GenernalHelperService } from 'src/app/_services/genernal-helper.service
 import { Mark } from 'src/app/_models/mark';
 import { Subject } from 'src/app/_models/subject';
 import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group';
-import { University } from 'src/app/_models/university';
+import { University, UniversityBaseOnTrainingProgram } from 'src/app/_models/university';
 import * as fromApp from '../../_store/app.reducer';
 import * as StepperActions from '../stepper/store/stepper.actions';
 import { ClassifiedTests } from 'src/app/_models/classified-tests';
@@ -40,7 +40,7 @@ export class StepperComponent implements OnInit, OnDestroy {
   subjects: Subject[] = [];
   marks: Mark[];
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
-  universities: University[];
+  universitiesBaseOnTrainingProgram: UniversityBaseOnTrainingProgram[];
   tests: ClassifiedTests[];
   test: Test;
   selectedTestId: number;
@@ -78,8 +78,8 @@ export class StepperComponent implements OnInit, OnDestroy {
           if ( stepperState.suggestedSubjectsGroup &&  stepperState.suggestedSubjectsGroup.length > 0) {
             this.myStepper.selectedIndex = 1;
           }
-          this.universities = stepperState.universities;    
-          if (stepperState.universities && stepperState.universities.length > 0) {
+          this.universitiesBaseOnTrainingProgram = stepperState.universitiesBaseOnTrainingProgram;    
+          if (stepperState.universitiesBaseOnTrainingProgram && stepperState.universitiesBaseOnTrainingProgram.length > 0) {
             this.myStepper.selectedIndex = 2;
           }      
           this.tests = stepperState.tests;
@@ -172,8 +172,8 @@ export class StepperComponent implements OnInit, OnDestroy {
     return this.subjectName;
   }
 
-  getUniversityName(id: number): string {
-    return this.universities.find(u => u.id === id).name;
+  getUniversityName(trainingProgramId: number, uniId): string {
+    return this.universitiesBaseOnTrainingProgram.find(t => t.id === trainingProgramId).universities.find(u => u.id === uniId).name;
   }
 
   onTestSelected(id: number) {

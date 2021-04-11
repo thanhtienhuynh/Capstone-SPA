@@ -13,6 +13,7 @@ import * as Consts from '../../_common/constants';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from '../auth.service'; 
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable()
@@ -52,7 +53,7 @@ export class AuthEffects {
     withLatestFrom(this.store.select('auth')),
     switchMap(([actionData, authState]) => {
       return this.http.post<LoginResponse>(
-        'https://localhost:44344/api/v1/user/auth/google',
+        environment.apiUrl + 'api/v1/user/auth/google',
         { uidToken: authState.firebaseToken }
       );
     }),

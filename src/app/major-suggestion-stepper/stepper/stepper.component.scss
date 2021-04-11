@@ -33,13 +33,13 @@ mat-form-field {
   height: 300px;
 }
 
-.test-scroll {
-  overflow:scroll;
-  height: 400px;
+.major-scroll {
+  overflow-y: scroll;
+  // height: 400px;
 }
 
 .test-exam-scroll {
-  overflow:scroll;
+  overflow: scroll;
   height: 600px;
 }
 

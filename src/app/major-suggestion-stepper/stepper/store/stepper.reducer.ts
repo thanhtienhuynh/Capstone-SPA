@@ -3,7 +3,7 @@ import { Mark } from 'src/app/_models/mark';
 import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group';
 import { Test } from 'src/app/_models/test';
 import { TestSubmission } from 'src/app/_models/test-submission';
-import { University } from 'src/app/_models/university';
+import { University, UniversityBaseOnTrainingProgram } from 'src/app/_models/university';
 import { TestSubmissionParam } from 'src/app/_params/question-param';
 import { Subject } from '../../../_models/subject';
 import * as StepperActions from './stepper.actions';
@@ -13,7 +13,7 @@ export interface State {
   marks: Mark[];
   isLoading: boolean;
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
-  universities: University[];
+  universitiesBaseOnTrainingProgram: UniversityBaseOnTrainingProgram[];
   tests: ClassifiedTests[];
   test: Test;
   totalMark: number;
@@ -31,7 +31,7 @@ const initialState: State = {
   isLoading: false,
   marks: [],
   suggestedSubjectsGroup: [],
-  universities: [],
+  universitiesBaseOnTrainingProgram: [],
   tests: [],
   test: null,
   totalMark: null,
@@ -64,7 +64,7 @@ export function stepReducer(
       return {
         ...state,
         suggestedSubjectsGroup: null,
-        universities: [],
+        universitiesBaseOnTrainingProgram: [],
         tests: [],
         test: null,
         isLoading: true,
@@ -87,7 +87,7 @@ export function stepReducer(
     case StepperActions.SET_UNIVERSIIES:
       return {
         ...state,
-        universities: action.payload,
+        universitiesBaseOnTrainingProgram: action.payload,
         isLoading: false,
         tests: [],
         test: null,
