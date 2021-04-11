@@ -36,7 +36,7 @@ export class AuthGuard implements CanActivate {
         if (isAuth && user.isAdmin) {
           return true;
         }
-        return this.router.createUrlTree(['/home']);
+        return this.router.createUrlTree(['/customer']);
       })
       // tap(isAuth => {
       //   if (!isAuth) {
