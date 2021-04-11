@@ -15,13 +15,14 @@ import { Injectable } from '@angular/core';
 import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group';
 import * as fromApp from '../../../_store/app.reducer';
 import { Store } from '@ngrx/store';
-import { University } from 'src/app/_models/university';
+import { University, UniversityBaseOnTrainingProgram } from 'src/app/_models/university';
 import { Test } from 'src/app/_models/test';
 import { MarkParam } from 'src/app/_params/mark-param';
 import { TestSubmission } from 'src/app/_models/test-submission';
 import { ClassifiedTests } from 'src/app/_models/classified-tests';
 import { BaseResponse } from 'src/app/_models/base-response';
 import { SaveTestSubmissionParam, TestSubmissionParam } from 'src/app/_params/question-param';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class StepperEffects {
@@ -35,7 +36,7 @@ export class StepperEffects {
   loadSubjects = this.actions$.pipe(
     ofType(StepperActions.LOAD_SUBJECTS),
     switchMap(() => {
-      return this.http.get<Subject[]>('https://localhost:44344/api/v1/subject');
+      return this.http.get<Subject[]>(environment.apiUrl + 'api/v1/subject');
     }),
     map((subjects) => {
       return new StepperActions.SetSubjects(subjects);
@@ -48,7 +49,7 @@ export class StepperEffects {
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
       return this.http.post<SuggestedSubjectsGroup[]>(
-        'https://localhost:44344/api/v1/subject-group/top-subject-group',
+        environment.apiUrl + 'api/v1/subject-group/top-subject-group',
         new MarkParam(stepperState.marks, true)
       );
     }),
@@ -66,15 +67,15 @@ export class StepperEffects {
       queryParams = queryParams.append('SubjectGroupId', stepperState.selectedGroupId.toString());
       queryParams = queryParams.append('MajorId', stepperState.selectedMajorId.toString());
       queryParams = queryParams.append('TotalMark', stepperState.totalMark.toString());
-      return this.http.get<University[]>(
-        'https://localhost:44344/api/v1/university/suggestion',
+      return this.http.get<UniversityBaseOnTrainingProgram[]>(
+        environment.apiUrl + 'api/v1/university/suggestion',
         {
           params: queryParams
         }
       );
     }),
-    map((universities) => {
-      return new StepperActions.SetUniversities(universities);
+    map((universitiesBaseOnTrainingProgram) => {
+      return new StepperActions.SetUniversities(universitiesBaseOnTrainingProgram);
     })
   );
 
@@ -87,7 +88,7 @@ export class StepperEffects {
       queryParams = queryParams.append('SubjectGroupId', stepperState.selectedGroupId.toString());
       queryParams = queryParams.append('UniversityId', stepperState.selectedUniversityId.toString());
       return this.http.get<ClassifiedTests[]>(
-        'https://localhost:44344/api/v1/test/recommendation',
+        environment.apiUrl + 'api/v1/test/recommendation',
         {
           params: queryParams
         }
@@ -104,7 +105,7 @@ export class StepperEffects {
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
       return this.http.get<Test>(
-        'https://localhost:44344/api/v1/test/' + stepperState.selectedTestId.toString()
+        environment.apiUrl + 'api/v1/test/' + stepperState.selectedTestId.toString()
       );
     }),
     map((test) => {
@@ -118,7 +119,7 @@ export class StepperEffects {
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
       return this.http.post<TestSubmission>(
-        'https://localhost:44344/api/v1/test-submission', stepperState.testSubmissionParam
+        environment.apiUrl + 'api/v1/test-submission', stepperState.testSubmissionParam
       );
     }),
     map((testSubmissionReponse) => {
@@ -133,7 +134,7 @@ export class StepperEffects {
     switchMap(([actionData, stepperState]) => {
       let testParam = stepperState.testSubmissionParam;
       return this.http.post<BaseResponse>(
-        'https://localhost:44344/api/v1/test-submission/saving',
+        environment.apiUrl + 'api/v1/test-submission/saving',
         new SaveTestSubmissionParam(
           testParam.testId,
           testParam.spentTime,
