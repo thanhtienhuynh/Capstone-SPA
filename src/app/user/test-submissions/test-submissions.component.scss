@@ -1,0 +1,49 @@
+.center {
+  margin: 2% auto 0 auto;
+  width: 80%;
+  padding: 10px;
+  height: 100%;
+}
+
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-vertical {
+  display: flex;
+  align-items: center;
+}
+
+.center-horizontal {
+  display: flex;
+  justify-content: center;
+}
+
+.date-bar {
+  width: 190px;
+  height: 40px;
+  background: #ebebeb;
+  clip-path: polygon(0% 0, 91% 0, 100% 50%, 91% 100%, 0 100%);
+  color: #2f4cab;
+}
+
+.test-frame {
+  border-radius: 14px;
+  box-shadow: 0 0 6px 3px #cac8c8;
+}
+
+.test-value {
+  font-weight: 600;
+}
+
+.test-title {
+  font-weight: 600;
+  color: #4f73eb;
+}
+
+.test-title:hover {
+  font-weight: 700;
+  cursor: pointer;
+}

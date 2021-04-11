@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
+import { BehaviorSubject, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { UniversityService } from 'src/app/admin/services';
 import { UniversityRM } from 'src/app/admin/view-models';
+import Swal from 'sweetalert2';
 
 
 
@@ -14,77 +18,52 @@ import { CreateUniversityModalComponent } from '../../components';
   styleUrls: ['./university-main.component.scss']
 })
 export class UniversityMainComponent implements OnInit {
-
-  //Rating
-  ratingTooltips = ['terrible', 'bad', 'normal', 'good', 'wonderful'];
+    
   loading: true;
 
-  //Paging
-  total = 20;
+  total = 1;
   pageSize = 10;
   pageIndex = 1;
-  listOfUniversity: UniversityRM[] = [
-    {
-      'id': '1',
-      'code': 'QSB',
-      'name': 'Trường Đại học Khoa học Tự nhiên - ĐHQG TPHCM',
-      'address': '227 Đ. Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh',
-      'logoUrl': 'assets/logo-white.png',
-      'tuition': 'học phí 1 kì là 200.000đ',
-      'information': 'Trường Đại học Khoa học Tự nhiên - ĐHQG TPHCM',
-      'rating': 4,
-      'status': 1
-    },
-    {
-      'id': '2',
-      'code': 'QSK',
-      'name': 'Trường Đại học Kinh tế - Luật',
-      'address': '669 QL1A, khu phố 3, Thủ Đức, Thành phố Hồ Chí Minh',
-      'logoUrl': 'assets/logo-white.png',
-      'tuition': 'học phí 1 kì là 200.000đ',
-      'information': '+84.987.6543',
-      'rating': 3.5,
-      'status': 0
-    },
-    {
-      'id': '3',
-      'code': 'FPT',
-      'name': 'Trường Đại học FPT - HCM',
-      'address': 'Lô E2a-7, Đường D1, Khu Công Nghệ Cao, Long Thạnh Mỹ, Quận 9, Thành phố Hồ Chí Minh 700000',
-      'logoUrl': 'assets/logo-white.png',
-      'tuition': 'học phí 1 kì là 27.500.000đ',
-      'information': '+84.123.456.78',
-      'rating': 5,
-      'status': 1
-    },
-    {
-      'id': '4',
-      'code': 'YDS',
-      'name': 'Trường Đại học Y Dược TP.HCM',
-      'address': '217 Hồng Bàng, Phường 11, Quận 5, Thành phố Hồ Chí Minh',
-      'logoUrl': 'assets/logo-white.png',
-      'tuition': 'học phí 1 kì là 200.000đ',
-      'information': '+84.987.6543',
-      'rating': 3.5,
-      'status': 0
-    },
-    {
-      'id': '5',
-      'code': 'SPK',
-      'name': 'Trường Đại học Sư phạm Kỹ thuật TP.HCM',
-      'address': '1 Võ Văn Ngân, Linh Chiểu, Thủ Đức, Thành phố Hồ Chí Minh',
-      'logoUrl': 'assets/logo-white.png',
-      'tuition': 'học phí 1 kì là 200.000đ',
-      'information': '+84.987.6543',
-      'rating': 3.5,
-      'status': 1
-    },
-  ];
+  listOfUniversity: (UniversityRM & {stt?:number})[] = [];
+  listOfDisplayUniversity:  (UniversityRM & {stt?:number})[] = [];
+  //------------------SEARCH SORT FILTER------------------------
+  searchValueName: string = '';
+
+  listOfStatusFilter: any[] = [
+    {text: 'Hoạt Động', value: 1},
+    {text: 'Không Hoạt Động', value: 0},
+  ]
+  
+  listOfTuitionType: any[] = [
+    {text: 'Theo Năm', value: 0},
+    {text: 'Theo Kì', value: 1},
+  ]
+  //-----------------------------------------------------
   constructor(
-    private _modalService: NzModalService
+    private _modalService: NzModalService,
+    protected _universityService: UniversityService
   ) { }
 
   ngOnInit() {    
+    this.getAllUniversity();    
+  }
+
+  getAllUniversity(): void {
+    this._universityService.getAllUniversity().pipe(
+      tap((rs) => {                                   
+        this.listOfUniversity = rs.map((e, i) => ({
+          ...e,
+          phones: e.phone.split('-'),
+          stt: i + 1
+        }));              
+        this.listOfDisplayUniversity = [...this.listOfUniversity];        
+        this.total = this.listOfUniversity.length;             
+      }),
+      catchError((err) => {
+        console.log(err);
+        return of(undefined);
+      })
+    ).subscribe();
   }
 
   openCreateUniversityModal(): void {
@@ -92,15 +71,25 @@ export class UniversityMainComponent implements OnInit {
       nzContent: CreateUniversityModalComponent,
       nzClosable: false,
       nzFooter: null,
-      nzWidth: 700      
+      nzWidth: 700,  
+      nzComponentParams: {callBack: (item) => {   
+        console.log(this.listOfUniversity)          
+        this.listOfUniversity.push(item);        
+        this.listOfUniversity.splice(0, 0, item);
+        // this.listOfDisplayUniversity = [...this.listOfUniversity];
+        this.listOfDisplayUniversity = this.listOfUniversity.map((e) => ({
+          ...e,
+          stt: e.stt + 1                   
+        }));
+      }, index: this.listOfUniversity.length}    
     });
-  }
+  }  
 
-  onQueryParamsChange(params: NzTableQueryParams): void {    
-    const { pageSize, pageIndex, sort, filter } = params;
-    const currentSort = sort.find(item => item.value !== null);
-    const sortField = (currentSort && currentSort.key) || null;
-    const sortOrder = (currentSort && currentSort.value) || null;    
+  
+  
+  searchByName(searchValue: string): void {         
+    this.listOfDisplayUniversity = this.listOfUniversity.filter((item: UniversityRM & {stt?:number, phones?:string[]}) => item?.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1);
   }
-
+  filterStatusFn = (status: number, item: UniversityRM) => item.status === status;
+  filterTuitionTypeFn = (tuitionType: number, item: UniversityRM) => item.tuitionType === tuitionType;
 }

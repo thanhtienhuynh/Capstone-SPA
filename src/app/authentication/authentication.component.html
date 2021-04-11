@@ -1,3 +1,18 @@
-<p>
-  authentication works!
-</p>
+<button *ngIf="!user" (click)="onGoogleLoginClick()" mat-raised-button style="background-color: rgb(231, 16, 16); color: azure;">
+  Đăng nhập bằng Google
+</button>
+<div *ngIf="user">
+  <button mat-stroked-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    {{ user.fullname }} <mat-icon>account_circle</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item routerLink="/user" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <mat-icon>portrait</mat-icon>
+      <span>Thông tin tài khoản</span>
+    </button>
+    <button mat-menu-item (click)="onLogout()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span>Đăng xuất</span>
+    </button>
+  </mat-menu>
+</div>

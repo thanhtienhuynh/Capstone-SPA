@@ -5,5 +5,4 @@ export interface User {
   phone: string;
   avatarUrl: string;
   isAdmin: boolean;
-  token: string;
 }

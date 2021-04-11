@@ -14,7 +14,7 @@ import { User } from '../_models/user';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private store: Store<fromApp.AppState>, private angularAuth: AngularFireAuth) { }
+  constructor(private store: Store<fromApp.AppState>,) { }
 
   subscription: Subscription;
   user: User;

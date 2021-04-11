@@ -3,10 +3,7 @@
     <button mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/">Trang chủ</button>
   </div>
   <div class="login" >
-    <button *ngIf="!user" (click)="onGoogleLoginClick()" mat-raised-button color="primary">
-      Đăng nhập bằng Google
-    </button>
-    <div *ngIf="user">{{ user.fullname }}</div>
+    <app-authentication></app-authentication>
   </div>
 </div>
 

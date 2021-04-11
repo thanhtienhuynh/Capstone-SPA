@@ -38,6 +38,11 @@ mat-form-field {
   height: 400px;
 }
 
+.test-exam-scroll {
+  overflow:scroll;
+  height: 600px;
+}
+
 .top-title-2 { 
   color: #124be7; 
   font-family: "Great Vibes", 
@@ -47,7 +52,6 @@ mat-form-field {
   font-weight: normal; 
   text-align: center; 
   text-shadow: 0 1px 1px #fff; 
-  padding: 20px;
 }
 
 .top-title-1 { 
@@ -59,28 +63,40 @@ mat-form-field {
   font-weight: normal; 
   text-align: center; 
   text-shadow: 0 1px 1px #fff; 
-  padding: 30px;
 }
 
 .group-top2-name {
   color: #CEF0D4;
-   font-family: 'Rouge Script', cursive;
-    font-size: 5em; 
-    font-weight: normal;  
-    margin: 0 0 50px; 
-    text-align: center; 
-    text-shadow: 1px 1px 2px #082b34; 
-    padding-top: 30px;
+  font-family: 'Rouge Script', cursive;
+  font-size: 3.5em; 
+  font-weight: normal;  
+  text-align: center; 
+  text-shadow: 1px 1px 2px #082b34; 
 }
 
 .group-top1-name {
   color: #CEF0D4;
-   font-family: 'Rouge Script', cursive;
-    font-size: 6.5em; 
-    font-weight: normal;  
-    margin: 0 0 50px; 
-    text-align: center; 
-    text-shadow: 1px 1px 2px #082b34; 
-    padding-top: 40px;
+  font-family: 'Rouge Script', cursive;
+  font-size: 3.7em; 
+  font-weight: normal;  
+  text-align: center; 
+  text-shadow: 1px 1px 2px #082b34; 
 }
 
+.transparent .mat-dialog-container {
+  box-shadow: none;
+  background: rgba(219, 14, 14, 0);
+}
+
+.center-horizontal {
+  display: flex;
+  justify-content: center;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 26px;
+}
+
+// ::ng-deep .mat-horizontal-stepper-header{
+//   pointer-events: none !important;
+// }

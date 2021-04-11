@@ -1,24 +1,16 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { StepperComponent } from './major-suggestion-stepper/stepper/stepper.component';
-// import { TestResolverService } from './_resolver/exam-resolver.service';
-
-// const appRoutes: Routes = [
-//   { path: '', redirectTo: '/recipes', pathMatch: 'full' },
-//   { path: 'stepper', component: RecipesComponent, children: [
-//     { path: '', component: RecipeStartComponent },
-//     { path: 'new', component: RecipeEditComponent },
-//     { path: ':id', component: RecipeDetailComponent },
-//     { path: ':id/edit', component: RecipeEditComponent },
-//   ] },
-//   { path: 'shopping-list', component: ShoppingListComponent },
-// ];
+import { UserComponent } from './user/user.component';
+import { AuthGuard } from './_helper/auth.guard';
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'stepper', component: StepperComponent},
-  { path: 'home', component: HomeComponent},
+  { path: '', redirectTo: 'customer', pathMatch: 'full' },
+  { path: 'customer', loadChildren: () => import('./customer/customer.module').then((m) => m.CustomerModule)},
+  // { path: 'stepper', component: StepperComponent},
+  // { path: 'user', loadChildren: () => import('./user/user.module').then((m) => m.UserModule)},
+  // { path: 'home', component: HomeComponent},
   { path: 'admin', loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule)}  
 ];
 

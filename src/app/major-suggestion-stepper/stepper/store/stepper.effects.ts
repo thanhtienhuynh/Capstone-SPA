@@ -7,6 +7,7 @@ import {
   map,
   tap,
   withLatestFrom,
+  delay,
 } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { Subject } from '../../../_models/subject';
@@ -19,6 +20,8 @@ import { Test } from 'src/app/_models/test';
 import { MarkParam } from 'src/app/_params/mark-param';
 import { TestSubmission } from 'src/app/_models/test-submission';
 import { ClassifiedTests } from 'src/app/_models/classified-tests';
+import { BaseResponse } from 'src/app/_models/base-response';
+import { SaveTestSubmissionParam, TestSubmissionParam } from 'src/app/_params/question-param';
 
 @Injectable()
 export class StepperEffects {
@@ -120,6 +123,30 @@ export class StepperEffects {
     }),
     map((testSubmissionReponse) => {
       return new StepperActions.SetTestMark(testSubmissionReponse);
+    })
+  );
+
+  @Effect()
+  saveTestSubmission = this.actions$.pipe(
+    ofType(StepperActions.SAVE_TEST_SUBMISSION),
+    withLatestFrom(this.store.select('stepper')),
+    switchMap(([actionData, stepperState]) => {
+      let testParam = stepperState.testSubmissionParam;
+      return this.http.post<BaseResponse>(
+        'https://localhost:44344/api/v1/test-submission/saving',
+        new SaveTestSubmissionParam(
+          testParam.testId,
+          testParam.spentTime,
+          testParam.questions,
+          stepperState.testSubmissionReponse.mark,
+          stepperState.testSubmissionReponse.numberOfRightAnswers,
+          stepperState.selectedMajorId,
+          stepperState.selectedUniversityId
+        )
+      );
+    }),
+    map((response) => {
+      return new StepperActions.SaveTestSubmissionSuccess(response.isSuccess);
     })
   );
 }

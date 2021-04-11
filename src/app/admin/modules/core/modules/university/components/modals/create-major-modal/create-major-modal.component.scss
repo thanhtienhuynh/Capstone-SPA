@@ -1,6 +1,7 @@
-label {
-    font-size: smaller;
+label {    
     font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; 
+    font-weight: 500;
+    font-size: small;
 }
 
 input {
@@ -18,6 +19,8 @@ input {
 
 .text-xl {
     font-size: 1.25rem;
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; 
+    font-weight: 500;
 }
 
 .footer {
@@ -39,3 +42,41 @@ input {
     padding-top: 1.7rem !important;
 }
 
+nz-select {
+    width: 100%;
+}
+
+input {
+    ::ng-deep {
+        .nb-theme-default [nbInput].size-medium {
+            font-weight: normal;
+      }
+    }
+}
+
+.flex-custom-container header {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    font-weight: 500;
+    margin-top: 1rem;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;    
+}
+
+.action-footer {
+    float: right;
+    padding: 15px;
+}
+
+nb-select {
+    ::ng-deep {
+      button {
+        min-width: 4rem !important;
+      }
+    }
+  }

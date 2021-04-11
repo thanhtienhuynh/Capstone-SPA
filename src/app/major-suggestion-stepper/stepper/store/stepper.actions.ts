@@ -5,7 +5,6 @@ import { SuggestedSubjectsGroup } from "src/app/_models/suggested-subjects-group
 import { Test } from "src/app/_models/test";
 import { TestSubmission } from "src/app/_models/test-submission";
 import { University } from "src/app/_models/university";
-import { MarkParam } from "src/app/_params/mark-param";
 import { TestSubmissionParam } from "src/app/_params/question-param";
 import { Subject } from "../../../_models/subject";
 
@@ -19,8 +18,11 @@ export const SET_TESTS = '[Stepper] Set Tests';
 export const LOAD_TESTS = '[Stepper] Load Tests';
 export const LOAD_TEST = '[Stepper] Load Test';
 export const SET_TEST = '[Stepper] Set Test';
+export const REFRESH_TEST = '[Stepper] Refresh Test';
 export const SCORING_TEST = '[Stepper] Scoring Test';
 export const SET_TEST_MARK = '[Stepper] Set Test Mark';
+export const SAVE_TEST_SUBMISSION = '[Stepper] Save Test Submission';
+export const SAVE_TEST_SUBMISSION_SUCCESS = '[Stepper] Save Test Submission Success';
 export const RESET_STATE = '[Stepper] Reset State';
 
 export class LoadSubjects implements Action {
@@ -73,6 +75,10 @@ export class SetTest implements Action {
   constructor(public payload: Test) {}
 }
 
+export class RefreshTest implements Action {
+  readonly type = REFRESH_TEST;
+}
+
 export class ScoringTest implements Action {
   readonly type = SCORING_TEST;
   constructor(public payload: TestSubmissionParam) {}
@@ -83,8 +89,19 @@ export class SetTestMark implements Action {
   constructor(public payload: TestSubmission) {}
 }
 
+export class SaveTestSubmission implements Action {
+  readonly type = SAVE_TEST_SUBMISSION;
+}
+
+export class SaveTestSubmissionSuccess implements Action {
+  readonly type = SAVE_TEST_SUBMISSION_SUCCESS;
+  constructor(public payload: boolean) {}
+}
+
 export class ResetState implements Action {
   readonly type = RESET_STATE;
 }
 
-export type StepperActions = ResetState | ScoringTest | SetTestMark | LoadTest | SetTest | LoadSubjects | SetSubjects | SetMarks | SetSuggestedSubjectsGroup | LoadUniversities | SetUniversities | LoadTests | SetTests;
+export type StepperActions = ResetState | ScoringTest | SetTestMark | LoadTest | SetTest | LoadSubjects |
+            SetSubjects | SetMarks | SetSuggestedSubjectsGroup | LoadUniversities | SetUniversities |
+            LoadTests | SetTests | SaveTestSubmission | SaveTestSubmissionSuccess | RefreshTest;

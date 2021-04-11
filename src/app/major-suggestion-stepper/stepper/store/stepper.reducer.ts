@@ -23,6 +23,7 @@ export interface State {
   selectedTestId: number;
   testSubmissionParam: TestSubmissionParam;
   testSubmissionReponse: TestSubmission;
+  isSaved: boolean;
 }
 
 const initialState: State = {
@@ -39,7 +40,8 @@ const initialState: State = {
   selectedUniversityId: null,
   selectedTestId: null,
   testSubmissionParam: null,
-  testSubmissionReponse: null
+  testSubmissionReponse: null,
+  isSaved: false
 };
 
 export function stepReducer(
@@ -65,6 +67,7 @@ export function stepReducer(
         universities: [],
         tests: [],
         test: null,
+        isLoading: true,
         marks: [...action.payload],
       };
     case StepperActions.SET_SUGGESTED_SUBJECTS_GROUP:
@@ -114,6 +117,16 @@ export function stepReducer(
         test: action.payload,
         isLoading: false,
       };
+    case StepperActions.REFRESH_TEST:
+      return {
+        ...state,
+        test: null,
+        selectedTestId: null,
+        testSubmissionParam: null,
+        testSubmissionReponse: null,
+        isSaved: false,
+        isLoading: false,
+      };
     case StepperActions.SCORING_TEST:
       return {
         ...state,
@@ -124,6 +137,17 @@ export function stepReducer(
       return {
         ...state,
         testSubmissionReponse: action.payload,
+        isLoading: false,
+      };
+    case StepperActions.SAVE_TEST_SUBMISSION:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case StepperActions.SAVE_TEST_SUBMISSION_SUCCESS:
+      return {
+        ...state,
+        isSaved: action.payload,
         isLoading: false,
       };
     case StepperActions.RESET_STATE:

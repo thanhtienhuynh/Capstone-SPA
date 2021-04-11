@@ -1,0 +1,47 @@
+<div *ngIf="user">  
+  <ul class="nav-right pointer">
+    <li>
+      <a nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="menu" nzTrigger="click">
+        <nz-badge [nzDot]="true">
+          <i nz-icon nzType="bell" nzTheme="outline" style="font-size: 20px;"></i>
+        </nz-badge>
+      </a>
+    </li>
+    <li>
+      <span nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="menu" nzTrigger="click">
+        <nz-avatar [nzSize]="42" nzIcon="user"></nz-avatar>
+      </span>
+    </li>
+  </ul>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu class="menu">
+      <li nz-menu-item class="first-child border-bottom">
+        <div class="first-child-container">
+          <nz-avatar nzSize="large"></nz-avatar>
+          <div class="first-child-content">
+            <p class="fullname">{{user.fullname}}</p>
+            <p class="role">Admin</p>
+          </div>
+        </div>
+      </li>  
+      <li nz-menu-item class="last-child">
+        <a class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">            
+            <i nz-icon nzType="user" nzTheme="outline" class="opacity-04 font-size-16" style="color: #53535f;"></i>
+            <span class="li-item">Sửa thông tin</span>
+          </div>   
+          <i nz-icon nzType="right" nzTheme="outline" style="font-size: 10px; color: #53535f;"></i>       
+        </a>
+      </li>    
+      <li nz-menu-item class="last-child" (click)="onLogout()">
+        <a class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <i nz-icon nzType="logout" nzTheme="outline" class="opacity-04 font-size-16" style="color: #53535f;"></i>
+            <span class="li-item">Đăng xuất</span>
+          </div> 
+          <i nz-icon nzType="right" nzTheme="outline" style="font-size: 10px; color: #53535f;"></i>         
+        </a>
+      </li>
+    </ul>
+  </nz-dropdown-menu>
+</div>
