@@ -126,6 +126,15 @@ export class CreateMajorModalComponent implements OnInit {
             this.listField.push(field);
           }
           this.listFieldTmp = this.listField.slice();
+        } else {
+          const field = this._fb.group({
+            'subjectGroup': [undefined],
+            'entryMarkId1': [''],
+            'entryMark1': [0],
+            'entryMarkId2': [''],
+            'entryMark2': [0],
+          });
+          this.listField.push(field);
         }
       } else {
         this.modalTitle = "Thêm Ngành của " + `${this.universityName}`;

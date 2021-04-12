@@ -245,88 +245,13 @@
                   </tr>
                   
                 </thead>
-
-                <!-- <thead>
-                  <tr>
-                    <th nzWidth="5%" style="background-color: #87ceeb;">
-                      <div style="width: 100%; text-align: center;">STT</div>
-                    </th>
-                    <th nzWidth="5%" style="background-color: #87ceeb;">
-                      <div style="width: 100%; text-align: center;">Thao Tác</div>
-                    </th>
-                    <th style="background-color: #87ceeb;">
-                      <div style="width: 100%; text-align: center;">Ngành</div>
-                    </th>                    
-                    <th nzWidth="7%" style="background-color: #87ceeb;"> 
-                      <div style="width: 100%; text-align: center;">Code</div>
-                    </th>
-                    <th nzWidth="7%" style="background-color: #87ceeb;">
-                      <div style="width: 100%; text-align: center;">Chỉ Tiêu</div>
-                    </th>                    
-                    <th nzWidth="10%" colspan="3" style="background-color: #87ceeb;">
-                      <div class=".flex-container-custom" style="width: 100%; text-align: center;">
-                        <div>Khối</div>
-                        <div class="d-flex">
-                          <div>Tên</div>
-                          <div>Năm</div>
-                        </div>
-                      </div>
-                    </th>                    
-                  </tr>                  
-                </thead> -->
                 
-
-                <!-- <tbody>
-                  <ng-container *ngFor="let major of majorTable.data; let i = index">
-                    <tr [style.backgroundColor]="i % 2 == 1 ? '#f7f7f7' : '#fff'">
-                      <td class="stt" [attr.rowspan]="major.subjectGroups.length + 1">{{i + 1}}</td>                      
-                      <td class="action" [attr.rowspan]="major.subjectGroups.length + 1">
-                        <i style="cursor: pointer" [nzDropdownMenu]="menu1" nz-icon nz-dropdown nzType="ellipsis"></i>
-                        <nz-dropdown-menu #menu1="nzDropdownMenu">
-                          <ul nz-menu>
-                            <li nz-menu-item (click)="openCreateMajorModal(major)">
-                              <i nz-icon nzType="edit" nzTheme="outline"></i>
-                              <span class="p-3">Sửa</span>
-                            </li>
-                            <li nz-menu-divider></li>
-                            <li nz-menu-item>
-                              <nb-icon icon="trash"></nb-icon>
-                              <span class="p-3">Xóa</span>
-                            </li>
-                          </ul>
-                        </nz-dropdown-menu>
-                      </td>
-                      <td class="name" [attr.rowspan]="major.subjectGroups.length + 1">{{major.name}}</td>
-                      <td class="code" [attr.rowspan]="major.subjectGroups.length + 1">{{major.code}}</td>
-                      <td [attr.rowspan]="major.subjectGroups.length + 1">                        
-                        <span *ngIf="major.numberOfStudents !== 0; else missNumberOfStudent">{{major.numberOfStudents  | mask: 'separator':'.'}}</span>
-                        <ng-template #missNumberOfStudent>
-                          <span>
-                            <nb-icon status="danger" size="large" icon="close-outline"></nb-icon>
-                          </span>
-                        </ng-template>
-                      </td>                       
-                    </tr>                                        
-
-                    <ng-container *ngFor="let subjectGroup of major.subjectGroups; let y = index">
-                      <tr [style.backgroundColor]="y % 2 == 0 ? '#f7f7f7' : '#fff'">                      
-                        <td>{{subjectGroup.groupCode}}</td>    
-                        <ng-container *ngFor="let entryMark of subjectGroup.entryMarks">
-                          <td>
-                            <span *ngIf="entryMark.mark !== 0; else missEntryMark">{{entryMark.mark}}</span>    
-                            <ng-template #missEntryMark>
-                              <nb-icon status="danger" size="large" icon="close-outline"></nb-icon>
-                            </ng-template>                        
-                          </td>                          
-                        </ng-container>
-                      </tr>                                             
-                    </ng-container> 
-                    
-                  </ng-container>                  
-                </tbody> -->
                 <tbody>
                   <ng-container *ngFor="let major of majorTable.data; let i = index">
                     <ng-template #missEntryMark>
+                      <nb-icon (click)="openCreateMajorModal(major)" style="cursor: pointer;" nbTooltip="Thông tin điểm số đang bị thiếu, cần được bổ sung" nbTooltipStatus="danger" status="danger" size="large" icon="close-outline"></nb-icon>
+                    </ng-template> 
+                    <ng-template #missNumberOfStudents>
                       <nb-icon (click)="openCreateMajorModal(major)" style="cursor: pointer;" nbTooltip="Thông tin điểm số đang bị thiếu, cần được bổ sung" nbTooltipStatus="danger" status="danger" size="large" icon="close-outline"></nb-icon>
                     </ng-template> 
                     <tr [style.backgroundColor]="i % 2 == 1 ? '#f7f7f7' : '#fff'">
@@ -351,11 +276,13 @@
                             </td>
                             <td>
                               <div style="padding-left: 5rem;">
-                                <span style="display: flex; justify-content: start; text-align: center; align-items: center;">{{major.name}}</span>
+                                <span style="display: flex; justify-content: start; text-align: center; align-items: center;">{{major.name}} - {{major.trainingProgramName}}</span>
                               </div> 
                             </td>
                             <td>{{major.code}}</td>
-                            <td>{{major.numberOfStudents}}</td>
+                            <td>
+                              <span *ngIf="major.numberOfStudents !== -1; else missNumberOfStudents">{{major.numberOfStudents}}</span>
+                            </td>
                             <td>{{major.subjectGroups[0]?.groupCode}}</td>
                             <td class="mark2019">
                               <span *ngIf="major.subjectGroups[0]?.entryMarks[0].mark !== 0; else missEntryMark">{{major.subjectGroups[0]?.entryMarks[0]?.mark}}</span>                              
@@ -384,11 +311,13 @@
                             </td>
                             <td>
                               <div style="padding-left: 5rem;">
-                                <span style="display: flex; justify-content: start; text-align: center; align-items: center;">{{major.name}}</span>
+                                <span style="display: flex; justify-content: start; text-align: center; align-items: center;">{{major.name}} - {{major.trainingProgramName}}</span>
                               </div>                              
                             </td>
                             <td>{{major.code}}</td>
-                            <td>{{major.numberOfStudents}}</td>
+                            <td>
+                              <span *ngIf="major.numberOfStudents !== -1; else missNumberOfStudents">{{major.numberOfStudents}}</span>
+                            </td>
                             <td style="padding: 0;">
                               <div class="flex-container-custom">
                                 <div class="td-border-children" *ngFor="let subjectGroup of major.subjectGroups">

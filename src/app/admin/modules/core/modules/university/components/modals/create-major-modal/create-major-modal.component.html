@@ -20,14 +20,14 @@
       <label for="">Code <span style="color: red;">*</span></label>
       <nb-form-field>        
         <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
-        <input [formControl]="majorForm.get('code')"  type="text" placeholder="Nhập mã ngành" fullWidth nbInput
+        <input style="text-align: right;" [formControl]="majorForm.get('code')"  type="text" placeholder="Nhập mã ngành" fullWidth nbInput
         [status]="majorForm.get('code').invalid && (majorForm.get('code').touched || majorForm.get('code').dirty) ? 'danger' : 'info'"
         />        
       </nb-form-field>
     </div>             
   </div>
   <div class="flex mt-2">
-    <div class="col-md-6">
+    <div class="col-md-8">
       <label for="">Chương Trình Đào Tạo <span style="color: red;">*</span></label>
       <nb-form-field>
         <nb-icon nbPrefix icon="book-open-outline"></nb-icon>
@@ -38,11 +38,11 @@
         <app-custom-select [control]="majorForm.get('trainingProgram')"  [data]="trainingProgramResult | async" [name]="'id'" [label]="'name'" [placeholder]="'Tìm kiếm chương trình đào tạo'" [titleNewItem]="'Chương trình đào tạo'"></app-custom-select>
       </nz-dropdown-menu> 
     </div> 
-    <div class="col-md-6">
+    <div class="col-md-4">
       <label for="">Chỉ Tiêu <span style="color: red;">*</span></label>
       <nb-form-field>
         <nb-icon nbPrefix icon="layers-outline" pack="eva"></nb-icon>
-        <input style="text-align: right;" [formControl]="majorForm.get('numberOfStudent')" mask="separator.2" thousandSeparator=","  type="text" placeholder="Nhập số lượng sinh viên" fullWidth nbInput
+        <input style="text-align: right;" [formControl]="majorForm.get('numberOfStudent')" mask="separator.2" thousandSeparator=","  type="text" placeholder="Nhập chỉ tiêu" fullWidth nbInput
         [status]="majorForm.get('numberOfStudent').invalid && (majorForm.get('numberOfStudent').touched || majorForm.get('numberOfStudent').dirty) ? 'danger' : 'info'"
         /> 
       </nb-form-field>
