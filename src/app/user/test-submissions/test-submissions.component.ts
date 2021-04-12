@@ -26,7 +26,6 @@ export class TestSubmissionsComponent implements OnInit {
           this.testSubmissions = userState.testSubmissions;
         },
         (error) => {
-          console.log(error);
         }
       );
   }

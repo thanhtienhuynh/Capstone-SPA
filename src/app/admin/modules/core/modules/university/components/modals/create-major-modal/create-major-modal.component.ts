@@ -95,7 +95,6 @@ export class CreateMajorModalComponent implements OnInit {
 
   setData(): void {
     this.subjectGroupResult.subscribe((data) => {  
-      console.log(this.data);    
       if (this.data != undefined) {
         this.modalTitle = "Sửa Thông Tin Ngành của " + `${this.universityName}`;
         const tmp = {
@@ -172,8 +171,7 @@ export class CreateMajorModalComponent implements OnInit {
       "majorCode": this.majorForm.get('code').value,
       "trainingProgramId": this.majorForm.get('trainingProgram').value?.id,
       "subjectGroups": subjectGroups
-    };
-    console.log(newValue);    
+    };  
     this._majorService.createMajor(newValue).pipe(
       tap((rs) => {
         this.callBack(rs.majors);
@@ -191,7 +189,6 @@ export class CreateMajorModalComponent implements OnInit {
     const subjectGroups: SubjectGroupRM[] = [];
     const tmp = this.listField.map(e => e.value);
     const tmpSubmit = this.listFieldTmp.map(e => e.value);
-    console.log(tmpSubmit);
     for (let i = 0; i < tmpSubmit.length; i++) {
       if (tmp.find((e) => e.subjectGroup?.id === tmpSubmit[i].subjectGroup?.id)) {
         tmpSubmit[i] = tmp.find((e) => e.subjectGroup?.id === tmpSubmit[i].subjectGroup?.id)
@@ -254,7 +251,6 @@ export class CreateMajorModalComponent implements OnInit {
       
     });
     this.listField.push(group);
-    console.log(this.listField);
     this.checkValidateListField();    
   }
 
@@ -274,9 +270,7 @@ export class CreateMajorModalComponent implements OnInit {
     const list = this.listField.filter((e) => !e['isUpdate']).map((e) => e.value);        
     this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(      
       map((rs) => this.data ? rs.filter((sb) => (sb.id !== this.data.subjectGroups.find((e) => e.id === sb.id)?.id)) : rs),
-      tap(rs => console.log('before', rs)),
       map((rs) => rs.filter((e) => !list.some((_) => _.subjectGroup?.id === e.id)) ),
-      tap(rs => console.log('after', rs)),
     )
   }
 
@@ -295,10 +289,8 @@ export class CreateMajorModalComponent implements OnInit {
       if (result.isConfirmed) {                               
         this.listField.splice(index, 1);
         const list = this.listField.filter((e) => !e['isUpdate']);  
-        console.log(list); 
         if (field !== null) {           
           this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(                                          
-            tap(rs => console.log(rs))
           )
         }
       }
@@ -331,7 +323,6 @@ export class CreateMajorModalComponent implements OnInit {
       'name': this.majorSystemForm.get('majorSystemName').value,
       'code': this.majorSystemForm.get('majorSystemCode').value
     }
-    console.log(newValue);
     this._majorService.addNewMajorSystem(newValue).pipe(
       tap((res) => {                 
         this.hidePopover();

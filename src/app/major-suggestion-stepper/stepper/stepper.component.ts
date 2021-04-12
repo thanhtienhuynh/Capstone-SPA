@@ -62,7 +62,6 @@ export class StepperComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log("Init");
     this.inputFormControl = this._formBuilder.group({});
     this.thirdFormGroup = this._formBuilder.group({});
     this.store.dispatch(new StepperActions.ResetState());
@@ -105,7 +104,6 @@ export class StepperComponent implements OnInit, OnDestroy {
          
         },
         (error) => {
-          console.log(error);
         }
       );
     this.authSubscription = this.store
@@ -115,7 +113,6 @@ export class StepperComponent implements OnInit, OnDestroy {
           this.isAuthLoading = authState.isLoading;
         },
         (error) => {
-          console.log(error);
         }
       );
      
@@ -143,8 +140,6 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   getUniversity(suggestedGroupId: number, majorId: number, totalMark: number, majorName: string) {
     this.suggestedMajorName = majorName;
-    console.log(majorName);
-    console.log(this.suggestedMajorName);
     this.store.dispatch(new StepperActions.LoadUniversities({subjectGroupId: suggestedGroupId, majorId: majorId, totalMark: totalMark}));
   }
 
@@ -235,7 +230,6 @@ export class StepperComponent implements OnInit, OnDestroy {
             (physics.value && physics.value >= 1 && chemistry.value && chemistry.value >= 1 && biology.value && biology.value >= 1)
             || (history.value && history.value >= 1 && geography.value && geography.value >= 1 && humanity.value && humanity.value >= 1)))
       ) {
-        console.log('rune ne');
         this.secondFormGroup.setErrors({mustEnoughSubjects: 'Điểm các môn trong tổ hợp môn phải lớn hơn hoặc bằng 1 thì mới đủ điều kiện xét tuyển!'});
       } else if (
       (!(physics.value && physics.value >= 1 && chemistry.value && chemistry.value >= 1 && biology.value && biology.value >= 1)

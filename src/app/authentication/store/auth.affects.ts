@@ -42,7 +42,6 @@ export class AuthEffects {
       return firebaseUser.user.getIdToken();
     }),
     map((token: string) => {
-      console.log(token);
       return new AuthActions.LoginServer(token);
     })
   );

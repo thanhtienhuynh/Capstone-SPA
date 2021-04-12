@@ -62,12 +62,10 @@ export class UniversityDetailComponent implements OnInit {
             stt: i + 1                       
           }));             
           this.listOfDisplayMajor = [...this.listOfMajor];  
-          console.log(this.listOfDisplayMajor);
           this.total = this.listOfDisplayMajor.length;                                                           
           this.setDataToForm(this.university);          
         }),
         catchError((err) => {
-          console.log(err);
           return of(undefined);
         })
       ).subscribe();
@@ -91,7 +89,6 @@ export class UniversityDetailComponent implements OnInit {
           this.updateUniForm.get('status').setValue(university.status);          
         }),
         catchError((err) => {
-          console.log(err);
           return of(undefined);
         })
       ).subscribe();

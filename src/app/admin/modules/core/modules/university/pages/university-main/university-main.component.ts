@@ -60,7 +60,6 @@ export class UniversityMainComponent implements OnInit {
         this.total = this.listOfUniversity.length;             
       }),
       catchError((err) => {
-        console.log(err);
         return of(undefined);
       })
     ).subscribe();
@@ -72,8 +71,7 @@ export class UniversityMainComponent implements OnInit {
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,  
-      nzComponentParams: {callBack: (item) => {   
-        console.log(this.listOfUniversity)          
+      nzComponentParams: {callBack: (item) => {          
         this.listOfUniversity.push(item);        
         this.listOfUniversity.splice(0, 0, item);
         // this.listOfDisplayUniversity = [...this.listOfUniversity];
