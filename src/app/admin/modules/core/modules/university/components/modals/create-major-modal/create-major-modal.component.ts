@@ -129,9 +129,9 @@ export class CreateMajorModalComponent implements OnInit {
         } else {
           const field = this._fb.group({
             'subjectGroup': [undefined],
-            'entryMarkId1': [''],
+            'entryMarkId1': [-1],
             'entryMark1': [0],
-            'entryMarkId2': [''],
+            'entryMarkId2': [-1],
             'entryMark2': [0],
           });
           this.listField.push(field);
@@ -153,10 +153,12 @@ export class CreateMajorModalComponent implements OnInit {
         id: Number.parseInt(tmpUI[i].subjectGroup?.id),
         entryMarks: [
           {
+            id: -1,
             mark: Number.parseInt(tmpUI[i]?.entryMark1),
             year: 2019
           },
           {
+            id: -1,
             mark: Number.parseInt(tmpUI[i]?.entryMark2),
             year: 2020
           }
@@ -189,6 +191,7 @@ export class CreateMajorModalComponent implements OnInit {
     const subjectGroups: SubjectGroupRM[] = [];
     const tmp = this.listField.map(e => e.value);
     const tmpSubmit = this.listFieldTmp.map(e => e.value);
+    console.log(tmpSubmit);
     for (let i = 0; i < tmpSubmit.length; i++) {
       if (tmp.find((e) => e.subjectGroup?.id === tmpSubmit[i].subjectGroup?.id)) {
         tmpSubmit[i] = tmp.find((e) => e.subjectGroup?.id === tmpSubmit[i].subjectGroup?.id)
@@ -208,12 +211,12 @@ export class CreateMajorModalComponent implements OnInit {
         entryMarks: [
           {
             id: tmpSubmit[i].entryMarkId1 ? Number.parseInt(tmpSubmit[i].entryMarkId1) : -1,
-            mark: Number.parseInt(tmpSubmit[i].entryMark1),
+            mark: Number.parseFloat(tmpSubmit[i].entryMark1),
             year: 2019
           },
           {
             id: tmpSubmit[i].entryMarkId2 ? Number.parseInt(tmpSubmit[i].entryMarkId2) : -1,
-            mark: Number.parseInt(tmpSubmit[i].entryMark2),
+            mark: Number.parseFloat(tmpSubmit[i].entryMark2),
             year: 2020
           }
         ]
@@ -227,7 +230,7 @@ export class CreateMajorModalComponent implements OnInit {
       "oldTrainingProgramId": this.majorForm.get('oldTrainingProgram').value?.id,
       "NewTrainingProgramId": this.majorForm.get('trainingProgram').value?.id,
       "subjectGroups": subjectGroups
-    }
+    }    
     this._majorService.updateMajor(newValue).pipe(
       tap((rs) => {        
         this.callBack(rs.majors);
@@ -243,9 +246,12 @@ export class CreateMajorModalComponent implements OnInit {
 
   addField(): void {
     const group = this._fb.group({
-      'subjectGroup': [undefined, Validators.required],
+      'subjectGroup': [undefined, Validators.required],   
+      'entryMarkId1': [-1],
       'entryMark1': ['', Validators.required],
-      'entryMark2': ['', Validators.required],
+      'entryMarkId2': [-1],
+      'entryMark2': ['', Validators.required]
+      
     });
     this.listField.push(group);
     console.log(this.listField);

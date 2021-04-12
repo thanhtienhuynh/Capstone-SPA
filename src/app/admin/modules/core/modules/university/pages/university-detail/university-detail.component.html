@@ -252,7 +252,7 @@
                       <nb-icon (click)="openCreateMajorModal(major)" style="cursor: pointer;" nbTooltip="Thông tin điểm số đang bị thiếu, cần được bổ sung" nbTooltipStatus="danger" status="danger" size="large" icon="close-outline"></nb-icon>
                     </ng-template> 
                     <ng-template #missNumberOfStudents>
-                      <nb-icon (click)="openCreateMajorModal(major)" style="cursor: pointer;" nbTooltip="Thông tin điểm số đang bị thiếu, cần được bổ sung" nbTooltipStatus="danger" status="danger" size="large" icon="close-outline"></nb-icon>
+                      <nb-icon (click)="openCreateMajorModal(major)" style="cursor: pointer;" nbTooltip="Thông tin về chỉ tiêu đang bị thiếu, cần được bổ sung" nbTooltipStatus="danger" status="danger" size="large" icon="close-outline"></nb-icon>
                     </ng-template> 
                     <tr [style.backgroundColor]="i % 2 == 1 ? '#f7f7f7' : '#fff'">
                       <ng-container [ngSwitch]="major.subjectGroups.length">
@@ -281,7 +281,7 @@
                             </td>
                             <td>{{major.code}}</td>
                             <td>
-                              <span *ngIf="major.numberOfStudents !== -1; else missNumberOfStudents">{{major.numberOfStudents}}</span>
+                              <span *ngIf="major.numberOfStudents !== -1 && major.numberOfStudents !== null; else missNumberOfStudents">{{major.numberOfStudents}}</span>
                             </td>
                             <td>{{major.subjectGroups[0]?.groupCode}}</td>
                             <td class="mark2019">
@@ -316,7 +316,7 @@
                             </td>
                             <td>{{major.code}}</td>
                             <td>
-                              <span *ngIf="major.numberOfStudents !== -1; else missNumberOfStudents">{{major.numberOfStudents}}</span>
+                              <span *ngIf="major.numberOfStudents !== -1 && major.numberOfStudents !== null; else missNumberOfStudents">{{major.numberOfStudents}}</span>
                             </td>
                             <td style="padding: 0;">
                               <div class="flex-container-custom">
