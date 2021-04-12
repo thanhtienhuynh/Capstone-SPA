@@ -84,7 +84,13 @@ export class CreateMajorModalComponent implements OnInit {
   }  
 
   getAllTrainingProgram(): void {
-    this.trainingProgramResult = this._trainingProgramService.getAllTrainingProgram().pipe();
+    this.trainingProgramResult = this._trainingProgramService.getAllTrainingProgram().pipe(
+      tap(rs => {
+        if (!this.data) {
+          this.majorForm.get('trainingProgram').setValue(rs[0]);
+        }
+      })
+    );
   }
 
   setData(): void {
