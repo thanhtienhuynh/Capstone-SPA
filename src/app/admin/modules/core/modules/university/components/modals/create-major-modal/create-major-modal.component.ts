@@ -66,7 +66,7 @@ export class CreateMajorModalComponent implements OnInit {
       'code': [''],
       'trainingProgram': [undefined, Validators.required],
       'oldTrainingProgram': [undefined],
-      'numberOfStudent': ['', Validators.required]
+      'numberOfStudent': [null]
     })
   }
 
@@ -168,12 +168,12 @@ export class CreateMajorModalComponent implements OnInit {
     const newValue = {
       'universityId': Number.parseInt(this.universityId),
       'majorId': this.majorForm.get('name').value.id,      
-      "numberOfStudents": Number.parseInt(this.majorForm.get('numberOfStudent').value),      
+      "numberOfStudents": this.majorForm.get('numberOfStudent').value,      
       "majorCode": this.majorForm.get('code').value,
       "trainingProgramId": this.majorForm.get('trainingProgram').value?.id,
       "subjectGroups": subjectGroups
     };
-    console.log(newValue);
+    console.log(newValue);    
     this._majorService.createMajor(newValue).pipe(
       tap((rs) => {
         this.callBack(rs.majors);
