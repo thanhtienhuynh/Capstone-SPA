@@ -11,7 +11,7 @@
         <div style="font-weight: 700; font-size: 1.2em; text-align: center;">Kết quả bài thi: {{detailTestSubmission.testName}}</div>
         <div style="width: 100%; margin-top: 5px;" fxLayout="row wrap" fxLayoutAlign="flex-start">
           <div fxFlex="0 1 calc(50%)">
-            <div>Số câu làm đúng: {{detailTestSubmission.numberOfRightAnswers}}/50 câu</div>
+            <div>Số câu làm đúng: {{detailTestSubmission.numberOfRightAnswers}}/{{detailTestSubmission.numberOfQuestion}} câu</div>
             <div>Thời gian làm bài: {{detailTestSubmission.spentTime}}/{{detailTestSubmission.timeLimit}} phút</div>
           </div>
           <div fxFlex="0 1 calc(50%)">
