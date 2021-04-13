@@ -3,4 +3,5 @@ export interface Major {
   name: string;
   code: string;
   weightMark: number;
+  highestEntryMark: number;
 }

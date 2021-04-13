@@ -15,3 +15,9 @@ export interface University {
   numberOfStudents: number;
   numberOfCaring: number;
 }
+
+export interface UniversityBaseOnTrainingProgram {
+  id: number;
+  name: string;
+  universities: University[];
+}

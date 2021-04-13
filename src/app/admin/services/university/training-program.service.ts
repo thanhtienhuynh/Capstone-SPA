@@ -6,13 +6,13 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class SubjectGroupService {
+export class TrainingProgramService {
 
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient) { }  
 
   baseUrl = environment.apiUrl;
 
-  getAllSubjectGroup(): Observable<any>{
-    return this._http.get(this.baseUrl + 'api/v1/subject-group');
-  }  
+  getAllTrainingProgram(): Observable<any> {
+    return this._http.get<any>(this.baseUrl + 'api/v1/trainingprogram');
+  }
 }

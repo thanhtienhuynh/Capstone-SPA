@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import * as fromApp from '../../_store/app.reducer';
+import * as UserActions from '../store/user.actions';
 import { UserTestSubmission } from '../../_models/user-test-submission';
 
 @Component({
@@ -13,8 +14,7 @@ import { UserTestSubmission } from '../../_models/user-test-submission';
 export class TestSubmissionsComponent implements OnInit {
   dateStart = new FormControl(new Date((new Date().getTime() - 3888000000)))
   dateEnd = new FormControl(new Date())
-  a = [1, 2, 3, 4];
-  constructor( private store: Store<fromApp.AppState>) { }
+  constructor(private store: Store<fromApp.AppState>) { }
   subscription: Subscription;
   testSubmissions: UserTestSubmission[];
 
@@ -26,9 +26,12 @@ export class TestSubmissionsComponent implements OnInit {
           this.testSubmissions = userState.testSubmissions;
         },
         (error) => {
-          console.log(error);
         }
-      );
+    );
+  }
+
+  testReviewClick(id: number) {
+    this.store.dispatch(new UserActions.LoadDetailSubmission(id));
   }
 
 }

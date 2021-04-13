@@ -22,7 +22,7 @@ export class UniversityMainComponent implements OnInit {
   loading: true;
 
   total = 1;
-  pageSize = 10;
+  pageSize = 5;
   pageIndex = 1;
   listOfUniversity: (UniversityRM & {stt?:number})[] = [];
   listOfDisplayUniversity:  (UniversityRM & {stt?:number})[] = [];
@@ -54,13 +54,12 @@ export class UniversityMainComponent implements OnInit {
         this.listOfUniversity = rs.map((e, i) => ({
           ...e,
           phones: e.phone.split('-'),
-          stt: i + 1
+          stt: i + 1        
         }));              
         this.listOfDisplayUniversity = [...this.listOfUniversity];        
         this.total = this.listOfUniversity.length;             
       }),
       catchError((err) => {
-        console.log(err);
         return of(undefined);
       })
     ).subscribe();
@@ -72,8 +71,7 @@ export class UniversityMainComponent implements OnInit {
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,  
-      nzComponentParams: {callBack: (item) => {   
-        console.log(this.listOfUniversity)          
+      nzComponentParams: {callBack: (item) => {          
         this.listOfUniversity.push(item);        
         this.listOfUniversity.splice(0, 0, item);
         // this.listOfDisplayUniversity = [...this.listOfUniversity];

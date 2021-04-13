@@ -12,7 +12,7 @@ import { GenernalHelperService } from 'src/app/_services/genernal-helper.service
 import { Mark } from 'src/app/_models/mark';
 import { Subject } from 'src/app/_models/subject';
 import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group';
-import { University } from 'src/app/_models/university';
+import { University, UniversityBaseOnTrainingProgram } from 'src/app/_models/university';
 import * as fromApp from '../../_store/app.reducer';
 import * as StepperActions from '../stepper/store/stepper.actions';
 import { ClassifiedTests } from 'src/app/_models/classified-tests';
@@ -40,7 +40,7 @@ export class StepperComponent implements OnInit, OnDestroy {
   subjects: Subject[] = [];
   marks: Mark[];
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
-  universities: University[];
+  universitiesBaseOnTrainingProgram: UniversityBaseOnTrainingProgram[];
   tests: ClassifiedTests[];
   test: Test;
   selectedTestId: number;
@@ -62,7 +62,6 @@ export class StepperComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log("Init");
     this.inputFormControl = this._formBuilder.group({});
     this.thirdFormGroup = this._formBuilder.group({});
     this.store.dispatch(new StepperActions.ResetState());
@@ -78,8 +77,8 @@ export class StepperComponent implements OnInit, OnDestroy {
           if ( stepperState.suggestedSubjectsGroup &&  stepperState.suggestedSubjectsGroup.length > 0) {
             this.myStepper.selectedIndex = 1;
           }
-          this.universities = stepperState.universities;    
-          if (stepperState.universities && stepperState.universities.length > 0) {
+          this.universitiesBaseOnTrainingProgram = stepperState.universitiesBaseOnTrainingProgram;    
+          if (stepperState.universitiesBaseOnTrainingProgram && stepperState.universitiesBaseOnTrainingProgram.length > 0) {
             this.myStepper.selectedIndex = 2;
           }      
           this.tests = stepperState.tests;
@@ -105,7 +104,6 @@ export class StepperComponent implements OnInit, OnDestroy {
          
         },
         (error) => {
-          console.log(error);
         }
       );
     this.authSubscription = this.store
@@ -115,7 +113,6 @@ export class StepperComponent implements OnInit, OnDestroy {
           this.isAuthLoading = authState.isLoading;
         },
         (error) => {
-          console.log(error);
         }
       );
      
@@ -143,8 +140,6 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   getUniversity(suggestedGroupId: number, majorId: number, totalMark: number, majorName: string) {
     this.suggestedMajorName = majorName;
-    console.log(majorName);
-    console.log(this.suggestedMajorName);
     this.store.dispatch(new StepperActions.LoadUniversities({subjectGroupId: suggestedGroupId, majorId: majorId, totalMark: totalMark}));
   }
 
@@ -172,8 +167,8 @@ export class StepperComponent implements OnInit, OnDestroy {
     return this.subjectName;
   }
 
-  getUniversityName(id: number): string {
-    return this.universities.find(u => u.id === id).name;
+  getUniversityName(trainingProgramId: number, uniId): string {
+    return this.universitiesBaseOnTrainingProgram.find(t => t.id === trainingProgramId).universities.find(u => u.id === uniId).name;
   }
 
   onTestSelected(id: number) {
@@ -235,7 +230,6 @@ export class StepperComponent implements OnInit, OnDestroy {
             (physics.value && physics.value >= 1 && chemistry.value && chemistry.value >= 1 && biology.value && biology.value >= 1)
             || (history.value && history.value >= 1 && geography.value && geography.value >= 1 && humanity.value && humanity.value >= 1)))
       ) {
-        console.log('rune ne');
         this.secondFormGroup.setErrors({mustEnoughSubjects: 'Điểm các môn trong tổ hợp môn phải lớn hơn hoặc bằng 1 thì mới đủ điều kiện xét tuyển!'});
       } else if (
       (!(physics.value && physics.value >= 1 && chemistry.value && chemistry.value >= 1 && biology.value && biology.value >= 1)

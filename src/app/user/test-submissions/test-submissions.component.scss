@@ -47,3 +47,9 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+.test-submissions-scroll {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 600px;
+}

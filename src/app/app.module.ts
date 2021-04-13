@@ -42,7 +42,7 @@ import { RouterModule } from '@angular/router';
 
 registerLocaleData(vi);
 @NgModule({
-  declarations: [								
+  declarations: [									
     AppComponent,
     StepperComponent,
     ExamPageComponent,
@@ -53,8 +53,8 @@ registerLocaleData(vi);
     SafeUrlPipe,
     ShortenPipe,
     ProgressSpinnerComponent,
-    SubmitDialogComponent,
-    HeaderComponent
+    SubmitDialogComponent    ,
+    // HeaderComponent    
    ],
   imports: [
     BrowserModule,
@@ -75,7 +75,7 @@ registerLocaleData(vi);
     CommonModule,  
     MaterialModule,
     // RouterModule 
-  ],
+  ],  
   providers: [AuthService, { provide: NZ_I18N, useValue: vi_VN },
     {
       provide: HTTP_INTERCEPTORS,

@@ -56,17 +56,16 @@ export class UniversityDetailComponent implements OnInit {
       this._universityService.getUniversityById(param.id).pipe(
         tap((rs) => {  
           this.uniId = param.id;        
-          this.university = rs;          
+          this.university = rs;                 
           this.listOfMajor = rs.majors.map((e, i) => ({
             ...e,
-            stt: i + 1
+            stt: i + 1                       
           }));             
-          this.listOfDisplayMajor = [...this.listOfMajor];   
+          this.listOfDisplayMajor = [...this.listOfMajor];  
           this.total = this.listOfDisplayMajor.length;                                                           
           this.setDataToForm(this.university);          
         }),
         catchError((err) => {
-          console.log(err);
           return of(undefined);
         })
       ).subscribe();
@@ -90,7 +89,6 @@ export class UniversityDetailComponent implements OnInit {
           this.updateUniForm.get('status').setValue(university.status);          
         }),
         catchError((err) => {
-          console.log(err);
           return of(undefined);
         })
       ).subscribe();
@@ -148,8 +146,7 @@ export class UniversityDetailComponent implements OnInit {
       "tuitionTo": Number.parseInt(this.updateUniForm.get('tuitionTo').value),
       "rating": this.updateUniForm.get('rating').value,
       "status": this.updateUniForm.get('status').value
-    }   
-    console.log(newValue);
+    }       
     Swal.fire({
       title: 'Bạn có muốn lưu những thông tin đã thay đổi hay không?',
       showDenyButton: true,
@@ -209,8 +206,7 @@ export class UniversityDetailComponent implements OnInit {
   }
 
   searchByName(value: string): void {        
-    this.listOfDisplayMajor = this.listOfMajor.filter((item: UniversityRM & {stt?:number}) => item.name.toLowerCase().indexOf(value.toLowerCase()) !== -1);
-    console.log(this.listOfDisplayMajor);
+    this.listOfDisplayMajor = this.listOfMajor.filter((item: UniversityRM & {stt?:number}) => item.name.toLowerCase().indexOf(value.toLowerCase()) !== -1);    
   }
 
 

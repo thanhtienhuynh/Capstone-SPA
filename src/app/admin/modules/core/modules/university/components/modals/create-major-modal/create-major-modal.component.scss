@@ -1,6 +1,7 @@
 label {    
     font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif; 
     font-weight: 500;
+    font-size: small;
 }
 
 input {
@@ -71,3 +72,11 @@ input {
     float: right;
     padding: 15px;
 }
+
+nb-select {
+    ::ng-deep {
+      button {
+        min-width: 4rem !important;
+      }
+    }
+  }
