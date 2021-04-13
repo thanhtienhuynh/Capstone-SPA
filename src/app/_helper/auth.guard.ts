@@ -32,6 +32,7 @@ export class AuthGuard implements CanActivate {
         return authState.user;
       }),
       map(user => {
+        console.log("User: ", user);
         const isAuth = !!user;
         if (isAuth && user.isAdmin) {
           return true;
