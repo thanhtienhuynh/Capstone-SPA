@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { UserTestSubmission } from "src/app/_models/user-test-submission";
+import { UserDetailTestSubmission, UserTestSubmission } from "src/app/_models/user-test-submission";
 
 export const LOAD_SUBMISSIONS = '[User] Load Submissions';
 export const SET_SUBMISSIONS = '[User] Set Submissions';
@@ -14,4 +14,15 @@ export class SetSubmissions implements Action {
   readonly type = SET_SUBMISSIONS;
   constructor(public payload: UserTestSubmission[]) {}
 }
-export type UserActions = LoadSubmissions | SetSubmissions;
+
+export class LoadDetailSubmission implements Action {
+  readonly type = LOAD_DETAIL_SUBMISSION;
+  constructor(public payload: number) {}
+}
+
+export class SetDetailSubmission implements Action {
+  readonly type = SET_DETAIL_SUBMISSION;
+  constructor(public payload: UserDetailTestSubmission) {}
+}
+
+export type UserActions = LoadSubmissions | SetSubmissions | LoadDetailSubmission | SetDetailSubmission;

@@ -5,13 +5,15 @@ import * as UserActions from './user.actions';
 export interface State {
   isLoading: boolean;
   testSubmissions: UserTestSubmission[];
-  detailTestSubmission: UserDetailTestSubmission[];
+  detailTestSubmission: UserDetailTestSubmission;
+  selectedTestSubmissionId: number;
 }
 
 const initialState: State = {
   isLoading: false,
   testSubmissions: null,
-  detailTestSubmission: null
+  detailTestSubmission: null,
+  selectedTestSubmissionId: null
 };
 
 export function userReducer(
@@ -29,6 +31,18 @@ export function userReducer(
         ...state,
         isLoading: false,
         testSubmissions: action.payload
+      };
+    case UserActions.LOAD_DETAIL_SUBMISSION:
+      return {
+        ...state,
+        isLoading: true,
+        selectedTestSubmissionId: action.payload
+      };
+    case UserActions.SET_DETAIL_SUBMISSION:
+      return {
+        ...state,
+        isLoading: false,
+        detailTestSubmission: action.payload
       };
    
     default:
