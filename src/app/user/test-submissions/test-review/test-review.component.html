@@ -1,35 +1,58 @@
-<div style="width: 100%; background-color: firebrick;">
-  <div style="width: 100%; background-color: fuchsia;">
+<div *ngIf="detailTestSubmission" style="width: 100%;">
+  <div style="width: 100%;">
     <!-- Thông tin bài thi -->
     <div style="width: 100%;" fxLayout="row wrap" fxLayoutAlign="flex-start">
-      <div class="center-all" fxFlex="0 1 calc(19%)" style="border: 2px solid rgb(111, 112, 114); border-radius: 15px; padding: 10px 0 10px 0;">
-        <div class="center-all" style="width: 80%; height: 100%; background-color: lightcoral; border-radius: 50%;">
-          <div style="font-size: 2em; font-weight: 900;">10/10</div>
+      <div class="center-all" fxFlex="0 1 calc(19%)" style="padding: 10px 0 10px 0;">
+        <div class="center-all" style="width: 75%; height: 100%; background-color: lightcoral; border-radius: 50%;">
+          <div style="font-size: 2em; font-weight: 900;">{{detailTestSubmission.mark}}/10</div>
         </div>
       </div>
-      <div fxFlex="0 1 calc(81%)" style="border: 2px solid rgb(53, 101, 197); border-radius: 15px; padding: 15px;">
-        <div style="font-weight: 700; font-size: 1.2em; text-align: center;">Kết quả bài thi: ĐỀ THI CHÍNH THỨC THPTQG MÔN TOÁN NĂM 2019 - MÃ ĐỀ 101</div>
+      <div fxFlex="0 1 calc(81%)" style="padding: 15px;">
+        <div style="font-weight: 700; font-size: 1.2em; text-align: center;">Kết quả bài thi: {{detailTestSubmission.testName}}</div>
         <div style="width: 100%; margin-top: 5px;" fxLayout="row wrap" fxLayoutAlign="flex-start">
           <div fxFlex="0 1 calc(50%)">
-            <div>Số câu làm đúng: 25/50 câu</div>
-            <div>Thời gian làm bài: 60/90 phút</div>
+            <div>Số câu làm đúng: {{detailTestSubmission.numberOfRightAnswers}}/50 câu</div>
+            <div>Thời gian làm bài: {{detailTestSubmission.spentTime}}/{{detailTestSubmission.timeLimit}} phút</div>
           </div>
           <div fxFlex="0 1 calc(50%)">
-            <div>Số câu làm đúng: 25/50 câu</div>
-            <div>Thời gian làm bài: 60/90 phút</div>
+            <div>Số lần đã làm: {{detailTestSubmission.numberOfCompletion}} lần</div>
           </div>
         </div>
       </div>
     </div>
+    <!-- Thông tin đáp án -->
     <div style="width: 100%;">
-      <!-- Thông tin đáp án -->
-      <div style="border: 2px solid rgb(111, 112, 114); border-radius: 15px; background-color: gold;"
+      <div style="border: 2px solid rgb(111, 112, 114)"
        fxFlex="0 1 calc(100%)" fxFlex.lt-sm="100%">
         <div fxLayout="row wrap" fxLayoutGap="6px grid" fxLayoutAlign="flex-start" 
           style="padding: 7px;">
-          <div fxFlex="0 1 calc(5%)" *ngFor="let question of 50 | toArray; let i = index">
+          <div fxFlex="0 1 calc(5%)" *ngFor="let question of detailTestSubmission.numberOfQuestion | toArray; let i = index">
             <app-answer [numericalOrder]="i" [selectedIndex]="i"></app-answer>
           </div>
+        </div>
+      </div>  
+    </div>
+    <div style="width: 100%;" class="test-review-scroll">
+      <div fxFlex="0 1 calc(100%)" fxFlex.lt-sm="100%">
+        <div fxLayout="row wrap" fxLayoutGap="6px grid" fxLayoutAlign="flex-start" 
+          style="padding: 7px;">
+          <div fxFlex="0 1 calc(100%)"  *ngFor="let question of detailTestSubmission.questionSubmissions; let i = index">
+            <br/>
+            <span style="font-weight: bold; font-size: 1.2em">Câu {{ i + 1 }}.
+              <div [innerHtml]="question.questionContent"></div>
+            </span>
+            <br/>
+            <mat-radio-group aria-label="Select an option">
+              <div *ngFor="let option of question.options; let j = index">
+                <div  class="center-vertical">
+                  <mat-radio-button [disabled]='true' [value]="j" [checked]="question.rightResult.indexOf('1') === j">
+                    <p [innerHtml]="option.optionContent"></p>
+                  </mat-radio-button>
+                </div>
+              </div>
+            </mat-radio-group>
+          </div>
+          
         </div>
       </div>  
     </div>

@@ -12,7 +12,7 @@ const routes: Routes = [
     children: [
       { path: '', pathMatch: 'full', component:  InformationComponent},
       { path: 'test-submissions', component: TestSubmissionsComponent },
-      { path: 'test-submissions/:id', component: TestReviewComponent },
+      { path: 'test-submissions/detail', component: TestReviewComponent },
       { path: 'information', component: InformationComponent },
     ]
   }
