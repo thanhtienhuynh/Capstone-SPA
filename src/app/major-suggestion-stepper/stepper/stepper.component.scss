@@ -34,8 +34,27 @@ mat-form-field {
 }
 
 .major-scroll {
-  overflow-y: scroll;
-  // height: 400px;
+	float: left;
+	// background: #F5F5F5;
+	overflow-y: scroll;
+}
+
+#style-7::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	// background-color: #F5F5F5;
+	border-radius: 10px;
+}
+
+#style-7::-webkit-scrollbar
+{
+	width: 6px;
+}
+
+#style-7::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+  background-color:  rgb(73,125,189);
 }
 
 .test-exam-scroll {
@@ -95,6 +114,17 @@ mat-form-field {
 
 .mat-radio-button ~ .mat-radio-button {
   margin-left: 26px;
+}
+
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-vertical {
+  display: flex;
+  align-items: center;
 }
 
 // ::ng-deep .mat-horizontal-stepper-header{

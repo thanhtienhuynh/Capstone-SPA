@@ -18,6 +18,8 @@ import * as StepperActions from '../stepper/store/stepper.actions';
 import { ClassifiedTests } from 'src/app/_models/classified-tests';
 import { Test } from 'src/app/_models/test';
 import { BIOLOGY_SUBJECT_NAME, CHEMISTRY_SUBJECT_NAME, ENGLISH_SUBJECT_NAME, GEOGRAPHY_SUBJECT_NAME, HISTORY_SUBJECT_NAME, HUMANITY_SUBJECT_NAME, LITERARY_SUBJECT_NAME, MATH_SUBJECT_NAME, PHYSICS_SUBJECT_NAME } from 'src/app/_common/constants';
+import { MatDialog } from '@angular/material/dialog';
+import { DetailUniversityDialogComponent } from './detail-university-dialog/detail-university-dialog.component';
 
 @Component({
   selector: 'app-stepper',
@@ -54,6 +56,7 @@ export class StepperComponent implements OnInit, OnDestroy {
     private _formBuilder: FormBuilder,
     private store: Store<fromApp.AppState>,
     public _generalService: GenernalHelperService,
+    public dialog: MatDialog
   ) {
     this.secondFormGroup = this._formBuilder.group({});
     this.secondFormGroup.addControl(
@@ -174,6 +177,17 @@ export class StepperComponent implements OnInit, OnDestroy {
   onTestSelected(id: number) {
     this.store.dispatch(new StepperActions.RefreshTest());
     this.store.dispatch(new StepperActions.LoadTest(id));
+  }
+
+  openDetailDialog(university: University): void {
+    const dialogRef = this.dialog.open(DetailUniversityDialogComponent, {
+      width: '800px',
+      height: '400px',
+      disableClose: false,
+      data: {
+        university: university
+      }
+    });
   }
 
   marksValidator() {

@@ -38,6 +38,7 @@ import { SafeUrlPipe } from './_helper/safe-url-pipe';
 import { SubmitDialogComponent } from './major-suggestion-stepper/exam-page/submit-dialog/submit-dialog.component';
 import { ToArrayPipe } from './_helper/to-array-pipe';
 import { RouterModule } from '@angular/router';
+import { DetailUniversityDialogComponent } from './major-suggestion-stepper/stepper/detail-university-dialog/detail-university-dialog.component';
 
 
 registerLocaleData(vi);
@@ -53,7 +54,8 @@ registerLocaleData(vi);
     SafeUrlPipe,
     ShortenPipe,
     ProgressSpinnerComponent,
-    SubmitDialogComponent    ,
+    SubmitDialogComponent,
+    DetailUniversityDialogComponent
     // HeaderComponent    
    ],
   imports: [
