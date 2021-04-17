@@ -127,6 +127,51 @@ mat-form-field {
   align-items: center;
 }
 
+//Button thi thử
+
+.blob {
+  background-color: #1c87c9;
+  -webkit-border-radius: 60px;
+  border-radius: 60px;
+  border: none;
+  color: #eeeeee;
+  cursor: pointer;
+  display: inline-block;
+  font-family: sans-serif;
+  font-size: 20px;
+  padding: 10px 20px;;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+  transform: scale(1);
+  animation: pulse-black 2s infinite;
+}
+
+.blob.blue {
+background: rgba(52, 172, 224, 1);
+box-shadow: 0 0 0 0 rgba(52, 172, 224, 1);
+animation: pulse-blue 2s infinite;
+}
+
+@keyframes pulse-blue {
+0% {
+transform: scale(0.95);
+box-shadow: 0 0 0 0 rgba(52, 172, 224, 0.7);
+}
+
+70% {
+transform: scale(1);
+box-shadow: 0 0 0 10px rgba(52, 172, 224, 0);
+}
+
+100% {
+transform: scale(0.95);
+box-shadow: 0 0 0 0 rgba(52, 172, 224, 0);
+}
+}
+
+
 // ::ng-deep .mat-horizontal-stepper-header{
 //   pointer-events: none !important;
 // }
+

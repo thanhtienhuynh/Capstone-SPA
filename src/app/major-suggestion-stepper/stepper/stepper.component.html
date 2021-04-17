@@ -7,6 +7,9 @@
         (ngSubmit)="onScoreSubmit()"
       >
         <ng-template matStepLabel>Nhập điểm</ng-template>
+        <!-- <div style="height: 400px;" class="wrap">
+          <button type="submit" class="blob blue">Thi thử</button>
+        </div> -->
         <h1 style="text-align: center; margin: 20px 0px 20px 0px">Nhập điểm trung bình học bạ hoặc điểm thi THPT Quốc gia</h1>
         <div class="center-horizontal" style="margin: 50px 0 50px -100px;">
           <label style="margin-right: 26px;">Chọn loại điểm: </label>
@@ -154,13 +157,29 @@
   <mat-step  #stepThree >
     <ng-template matStepLabel>Danh sách trường</ng-template>
     <div class="center">
-      <div style="font-size: 1.4em; font-weight: 700; margin-bottom: 20px;" class="center-horizontal">Danh sách các trường có ngành:  {{suggestedMajorName}}</div>
-      <div *ngIf="universitiesBaseOnTrainingProgram" fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
+      <div style="margin-bottom: 19px;" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+        <div fxFlex="0 1 calc(50%)">
+          <div style="font-size: 1.3em; font-weight: 300; padding-right: 32px;" class="center-vertical">Danh sách các trường có ngành: {{suggestedMajorName}}</div>
+        </div>
+        <div fxFlex="0 1 calc(50%)" style="border-left: solid;" class="center-horizontal">
+          <div style="font-size: 1.2em; font-weight: 300; padding-left: 32px; padding-right: 10px; width: 78%;" class="center-vertical">
+            Hệ thống sẽ giúp bạn xếp hạng và đánh giá năng lực thông qua việc thi thử
+          </div>
+          <div class="wrap center-vertical" style="width: 22%;">
+            <button type="submit" (click)="loadTests()" class="blob blue">Thi thử</button>
+          </div>
+        </div>
+       
+      </div>
+      <!-- Bắt đầu flex-->
+      <div *ngIf="universitiesBaseOnTrainingProgram" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
         <div *ngFor="let trainingProgram of universitiesBaseOnTrainingProgram" fxFlex="0 1 calc(100%)" fxFlex.lt-sm="100%">
-          <div  fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
-            <div fxFlex="0 1 calc(100%)" style="font-size: 1.3em; font-weight: 600; margin-bottom: 20px;" class="center-horizontal">Chương trình {{trainingProgram.name}}:</div>
-            <div *ngFor="let university of trainingProgram.universities" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)"
+          <!-- Bắt đầu flex-->
+          <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
+            <div fxFlex="0 1 calc(100%)" style="margin-bottom: -10px; font-size: 1.3em; font-weight: 600;" class="center-horizontal">Chương trình {{trainingProgram.name}}:</div>
+            <div *ngFor="let university of trainingProgram.universities" fxFlex="0 1 calc(50%)" fxFlex.lt-md="0 1 calc(50%)"
                 fxFlex.lt-sm="100%">
+                <!-- Bắt đầu flex-->
                 <div style="height: 250px; background-color: red;"  fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
                   <div style="background-color: rgb(231, 238, 240); height: 22%;" fxFlex="0 1 calc(100%)">
                     <div style="font-size: 1.1em; font-weight: bold; height: 100%; padding: 10px; text-align: center;" class="center-all">{{ university.name }}</div>
@@ -191,7 +210,8 @@
                             <mat-grid-tile [colspan]="1" [rowspan]="1">
                               <!-- <div style="height: 70%; width: 100%; background-color: seagreen;"></div> -->
                               <button (click)="openDetailDialog(university)" style="margin: 0 10% 15px 0" mat-flat-button color="primary">Chi tiết</button>
-                              <button (click)="loadTests(university.id)" style="margin-bottom: 15px;" mat-flat-button color="accent">Quan tâm</button>
+                              <button *ngIf="!university.isCared" (click)="onCaringClick(university.id, trainingProgram.id)" style="margin-bottom: 15px;" mat-flat-button color="accent">Quan tâm</button>
+                              <button *ngIf="university.isCared" (click)="onUncaringClick(university.id, trainingProgram.id, university.name)" style="margin-bottom: 15px; background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ quan tâm</button>
                             </mat-grid-tile>
                            
                           </mat-grid-list>
