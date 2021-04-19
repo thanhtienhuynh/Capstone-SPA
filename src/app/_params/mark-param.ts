@@ -2,9 +2,9 @@ import { Mark } from "../_models/mark";
 
 export class MarkParam {
   marks: Mark[];
-  isSuggest: boolean;
-  constructor(marks: Mark[], isSuggest: boolean) {
+  transcriptTypeId: number;
+  constructor(marks: Mark[], transcriptTypeId: number) {
     this.marks = marks;
-    this.isSuggest = isSuggest;
+    this.transcriptTypeId = transcriptTypeId;
   }
 }
