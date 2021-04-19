@@ -143,7 +143,8 @@ export class StepperEffects {
           stepperState.testSubmissionReponse.mark,
           stepperState.testSubmissionReponse.numberOfRightAnswers,
           stepperState.selectedMajorId,
-          stepperState.selectedUniversityId
+          stepperState.selectedUniversityId,
+          stepperState.selectedTrainingProgramId
         )
       );
     }),
