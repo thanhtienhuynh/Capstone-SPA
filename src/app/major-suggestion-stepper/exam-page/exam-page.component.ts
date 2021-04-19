@@ -53,7 +53,7 @@ export class ExamPageComponent implements OnInit, OnDestroy {
           if (this.testSubmissionReponse) {
             this.isScored = true;
           }
-          this.isSaved = stepperState.isSaved;
+          this.isSaved = stepperState.isSubmissionSaved;
           if (this.isSaved) {
             this.openDialog();
           }

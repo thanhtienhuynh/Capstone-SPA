@@ -14,6 +14,7 @@ export interface University {
   nearestYearEntryMark: number;
   numberOfStudents: number;
   numberOfCaring: number;
+  isCared: boolean;
 }
 
 export interface UniversityBaseOnTrainingProgram {
