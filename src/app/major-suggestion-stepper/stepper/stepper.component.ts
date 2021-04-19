@@ -18,6 +18,11 @@ import * as StepperActions from '../stepper/store/stepper.actions';
 import { ClassifiedTests } from 'src/app/_models/classified-tests';
 import { Test } from 'src/app/_models/test';
 import { BIOLOGY_SUBJECT_NAME, CHEMISTRY_SUBJECT_NAME, ENGLISH_SUBJECT_NAME, GEOGRAPHY_SUBJECT_NAME, HISTORY_SUBJECT_NAME, HUMANITY_SUBJECT_NAME, LITERARY_SUBJECT_NAME, MATH_SUBJECT_NAME, PHYSICS_SUBJECT_NAME } from 'src/app/_common/constants';
+import { MatDialog } from '@angular/material/dialog';
+import { DetailUniversityDialogComponent } from './detail-university-dialog/detail-university-dialog.component';
+import { ConfirmDialogComponent } from 'src/app/_sharings/components/confirm-dialog/confirm-dialog.component';
+import { User } from 'src/app/_models/user';
+import { LoginDialogComponent } from 'src/app/_sharings/components/login-dialog/login-dialog.component';
 
 @Component({
   selector: 'app-stepper',
@@ -49,11 +54,13 @@ export class StepperComponent implements OnInit, OnDestroy {
   isUniversityLoaded: boolean = false;
 
   subjectName = "";
+  user: User;
 
   constructor(
     private _formBuilder: FormBuilder,
     private store: Store<fromApp.AppState>,
     public _generalService: GenernalHelperService,
+    public dialog: MatDialog
   ) {
     this.secondFormGroup = this._formBuilder.group({});
     this.secondFormGroup.addControl(
@@ -111,6 +118,10 @@ export class StepperComponent implements OnInit, OnDestroy {
       .subscribe(
         (authState) => {
           this.isAuthLoading = authState.isLoading;
+          this.user = authState.user;
+          if (this.user && this.universitiesBaseOnTrainingProgram && this.universitiesBaseOnTrainingProgram.length > 0) {
+            this.store.dispatch(new StepperActions.ReloadUniversities());
+          }
         },
         (error) => {
         }
@@ -143,8 +154,8 @@ export class StepperComponent implements OnInit, OnDestroy {
     this.store.dispatch(new StepperActions.LoadUniversities({subjectGroupId: suggestedGroupId, majorId: majorId, totalMark: totalMark}));
   }
 
-  loadTests(universitiId: number) {
-    this.store.dispatch(new StepperActions.LoadTests(universitiId));
+  loadTests() {
+    this.store.dispatch(new StepperActions.LoadTests());
     if (!this.isLoading) {
       this.myStepper.selectedIndex = 1;
     }
@@ -174,6 +185,46 @@ export class StepperComponent implements OnInit, OnDestroy {
   onTestSelected(id: number) {
     this.store.dispatch(new StepperActions.RefreshTest());
     this.store.dispatch(new StepperActions.LoadTest(id));
+  }
+
+  openDetailDialog(university: University): void {
+    const dialogRef = this.dialog.open(DetailUniversityDialogComponent, {
+      width: '800px',
+      height: '400px',
+      disableClose: false,
+      data: {
+        university: university
+      }
+    });
+  }
+
+  onCaringClick(universityId: number, trainingProgramId: number) {
+    if (this.user == null){
+      this.dialog.open(
+        LoginDialogComponent, {
+          width: '350px',
+          height: '150px',
+          disableClose: false,
+        }
+      )
+    } else {
+      this.store.dispatch(new StepperActions.CaringAction({trainingProgramId: trainingProgramId, universityId: universityId}));
+    }
+  }
+
+  onUncaringClick(universityId: number, trainingProgramId: number, universityName: number) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      height: '140px',
+      disableClose: false,
+      data: "Bỏ quan tâm " + universityName + "?"
+    });
+    dialogRef.afterClosed()
+    .subscribe((response) => {
+      if (response === 1) {
+        this.store.dispatch(new StepperActions.UncaringAction({trainingProgramId: trainingProgramId, universityId: universityId}));
+      }
+    });
   }
 
   marksValidator() {

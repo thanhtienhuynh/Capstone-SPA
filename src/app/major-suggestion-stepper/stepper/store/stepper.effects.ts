@@ -23,6 +23,8 @@ import { ClassifiedTests } from 'src/app/_models/classified-tests';
 import { BaseResponse } from 'src/app/_models/base-response';
 import { SaveTestSubmissionParam, TestSubmissionParam } from 'src/app/_params/question-param';
 import { environment } from 'src/environments/environment';
+import { AddUserMajorDetailParam, RemoveUserMajorDetailParam } from 'src/app/_params/user-major-detail-param';
+import { categories } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Injectable()
 export class StepperEffects {
@@ -50,7 +52,7 @@ export class StepperEffects {
     switchMap(([actionData, stepperState]) => {
       return this.http.post<SuggestedSubjectsGroup[]>(
         environment.apiUrl + 'api/v1/subject-group/top-subject-group',
-        new MarkParam(stepperState.marks, true)
+        new MarkParam(stepperState.marks, 1)
       );
     }),
     map((suggestedGroup) => {
@@ -60,7 +62,7 @@ export class StepperEffects {
 
   @Effect()
   loadUniversities = this.actions$.pipe(
-    ofType(StepperActions.LOAD_UNIVERSIIES),
+    ofType(StepperActions.LOAD_UNIVERSIIES, StepperActions.RELOAD_UNIVERSIIES),
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState] : [StepperActions.LoadUniversities, {selectedGroupId: number, selectedMajorId: number, totalMark: number}]) => {
       let queryParams = new HttpParams();
@@ -86,7 +88,6 @@ export class StepperEffects {
     switchMap(([actionData, stepperState]) => {
       let queryParams = new HttpParams();
       queryParams = queryParams.append('SubjectGroupId', stepperState.selectedGroupId.toString());
-      queryParams = queryParams.append('UniversityId', stepperState.selectedUniversityId.toString());
       return this.http.get<ClassifiedTests[]>(
         environment.apiUrl + 'api/v1/test/recommendation',
         {
@@ -149,5 +150,58 @@ export class StepperEffects {
     map((response) => {
       return new StepperActions.SaveTestSubmissionSuccess(response.isSuccess);
     })
+  );
+
+  @Effect()
+  caringAction = this.actions$.pipe(
+    ofType(StepperActions.CARING_ACTION),
+    withLatestFrom(this.store.select('stepper')),
+    switchMap(([actionData, stepperState]) => {
+      return this.http.post<any>(
+        environment.apiUrl + 'api/v1/user-major-detail',
+        new AddUserMajorDetailParam(
+          stepperState.selectedUniversityId,
+          stepperState.selectedTrainingProgramId,
+          stepperState.selectedMajorId,
+          new MarkParam(stepperState.marks, 1)
+        )
+      ).pipe(
+        map((response) => {
+          return new StepperActions.LoadUniversities(
+            {totalMark: stepperState.totalMark, subjectGroupId: stepperState.selectedGroupId, majorId: stepperState.selectedMajorId}
+          );
+        }),
+        catchError((error) => {
+          console.log(error);
+          return of(new StepperActions.CaringActionUnsuccess(error));
+        })
+      );
+    }),
+  );
+
+  @Effect()
+  uncaringAction = this.actions$.pipe(
+    ofType(StepperActions.UNCARING_ACTION),
+    withLatestFrom(this.store.select('stepper')),
+    switchMap(([actionData, stepperState]) => {
+      return this.http.post<any>(
+        environment.apiUrl + 'api/v1/user-major-detail/deletion',
+        new RemoveUserMajorDetailParam(
+          stepperState.selectedUniversityId,
+          stepperState.selectedTrainingProgramId,
+          stepperState.selectedMajorId
+        )
+      ).pipe(
+        map((response) => {
+          return new StepperActions.LoadUniversities(
+            {totalMark: stepperState.totalMark, subjectGroupId: stepperState.selectedGroupId, majorId: stepperState.selectedMajorId}
+          );
+        }),
+        catchError((error) => {
+          console.log(error);
+          return of(new StepperActions.UncaringActionUnsuccess(error));
+        })
+      );
+    }),
   );
 }

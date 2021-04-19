@@ -34,8 +34,27 @@ mat-form-field {
 }
 
 .major-scroll {
-  overflow-y: scroll;
-  // height: 400px;
+	float: left;
+	// background: #F5F5F5;
+	overflow-y: scroll;
+}
+
+#style-7::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	// background-color: #F5F5F5;
+	border-radius: 10px;
+}
+
+#style-7::-webkit-scrollbar
+{
+	width: 6px;
+}
+
+#style-7::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+  background-color:  rgb(73,125,189);
 }
 
 .test-exam-scroll {
@@ -97,6 +116,62 @@ mat-form-field {
   margin-left: 26px;
 }
 
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-vertical {
+  display: flex;
+  align-items: center;
+}
+
+//Button thi thử
+
+.blob {
+  background-color: #1c87c9;
+  -webkit-border-radius: 60px;
+  border-radius: 60px;
+  border: none;
+  color: #eeeeee;
+  cursor: pointer;
+  display: inline-block;
+  font-family: sans-serif;
+  font-size: 20px;
+  padding: 10px 20px;;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 1);
+  transform: scale(1);
+  animation: pulse-black 2s infinite;
+}
+
+.blob.blue {
+background: rgba(52, 172, 224, 1);
+box-shadow: 0 0 0 0 rgba(52, 172, 224, 1);
+animation: pulse-blue 2s infinite;
+}
+
+@keyframes pulse-blue {
+0% {
+transform: scale(0.95);
+box-shadow: 0 0 0 0 rgba(52, 172, 224, 0.7);
+}
+
+70% {
+transform: scale(1);
+box-shadow: 0 0 0 10px rgba(52, 172, 224, 0);
+}
+
+100% {
+transform: scale(0.95);
+box-shadow: 0 0 0 0 rgba(52, 172, 224, 0);
+}
+}
+
+
 // ::ng-deep .mat-horizontal-stepper-header{
 //   pointer-events: none !important;
 // }
+
