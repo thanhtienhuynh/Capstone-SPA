@@ -52,7 +52,7 @@ export class StepperEffects {
     switchMap(([actionData, stepperState]) => {
       return this.http.post<SuggestedSubjectsGroup[]>(
         environment.apiUrl + 'api/v1/subject-group/top-subject-group',
-        new MarkParam(stepperState.marks, 1)
+        new MarkParam(stepperState.marks, 2)
       );
     }),
     map((suggestedGroup) => {
@@ -64,11 +64,12 @@ export class StepperEffects {
   loadUniversities = this.actions$.pipe(
     ofType(StepperActions.LOAD_UNIVERSIIES, StepperActions.RELOAD_UNIVERSIIES),
     withLatestFrom(this.store.select('stepper')),
-    switchMap(([actionData, stepperState] : [StepperActions.LoadUniversities, {selectedGroupId: number, selectedMajorId: number, totalMark: number}]) => {
+    switchMap(([actionData, stepperState]) => {
       let queryParams = new HttpParams();
       queryParams = queryParams.append('SubjectGroupId', stepperState.selectedGroupId.toString());
       queryParams = queryParams.append('MajorId', stepperState.selectedMajorId.toString());
       queryParams = queryParams.append('TotalMark', stepperState.totalMark.toString());
+      queryParams = queryParams.append('TranscriptTypeId', '2');
       return this.http.get<UniversityBaseOnTrainingProgram[]>(
         environment.apiUrl + 'api/v1/university/suggestion',
         {
@@ -164,7 +165,9 @@ export class StepperEffects {
           stepperState.selectedUniversityId,
           stepperState.selectedTrainingProgramId,
           stepperState.selectedMajorId,
-          new MarkParam(stepperState.marks, 1)
+          stepperState.selectedGroupId,
+          new MarkParam(stepperState.marks, 2),
+          stepperState.totalMark
         )
       ).pipe(
         map((response) => {
