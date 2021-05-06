@@ -94,9 +94,9 @@ export class CreateMajorModalComponent implements OnInit {
   }
 
   setData(): void {
-    this.subjectGroupResult.subscribe((data) => {  
-      console.log(this.data);    
+    this.subjectGroupResult.subscribe((data) => {          
       if (this.data != undefined) {
+        console.log(this.data);
         this.modalTitle = "Sửa Thông Tin Ngành của " + `${this.universityName}`;
         const tmp = {
           id: this.data.id,
@@ -116,11 +116,11 @@ export class CreateMajorModalComponent implements OnInit {
           for (let i = 0; i < this.data.subjectGroups.length; i++) {
             const subJectGroup = this.data.subjectGroups[i];            
             const field = this._fb.group({
-              'subjectGroup': [data.find((e) => e.id === subJectGroup.id)],
+              'subjectGroup': [data.find((e) => e.id === subJectGroup.id), Validators.required],
               'entryMarkId1': [`${subJectGroup.entryMarks[0]?.id}`],
-              'entryMark1': [`${subJectGroup.entryMarks[0].mark}`,],
+              'entryMark1': [`${subJectGroup.entryMarks[0].mark}`, Validators.required],
               'entryMarkId2': [`${subJectGroup.entryMarks[1]?.id}`],
-              'entryMark2': [`${subJectGroup.entryMarks[1].mark}`,],
+              'entryMark2': [`${subJectGroup.entryMarks[1].mark}`, Validators.required],
             });
             field['isUpdate'] = true;
             this.listField.push(field);
@@ -128,14 +128,15 @@ export class CreateMajorModalComponent implements OnInit {
           this.listFieldTmp = this.listField.slice();
         } else {
           const field = this._fb.group({
-            'subjectGroup': [undefined],
+            'subjectGroup': [undefined, Validators.required],
             'entryMarkId1': [-1],
-            'entryMark1': [0],
+            'entryMark1': ['', Validators.required],
             'entryMarkId2': [-1],
-            'entryMark2': [0],
+            'entryMark2': ['', Validators.required],
           });
           this.listField.push(field);
-        }
+          console.log(this.listField);           
+        }        
       } else {
         this.modalTitle = "Thêm Ngành của " + `${this.universityName}`;
         this.addField();
@@ -231,6 +232,7 @@ export class CreateMajorModalComponent implements OnInit {
       "NewTrainingProgramId": this.majorForm.get('trainingProgram').value?.id,
       "subjectGroups": subjectGroups
     }    
+    console.log(newValue);
     this._majorService.updateMajor(newValue).pipe(
       tap((rs) => {        
         this.callBack(rs.majors);
@@ -253,13 +255,12 @@ export class CreateMajorModalComponent implements OnInit {
       'entryMark2': ['', Validators.required]
       
     });
-    this.listField.push(group);
-    console.log(this.listField);
+    this.listField.push(group);    
     this.checkValidateListField();    
   }
 
   checkValidateListField(): boolean {
-    const list = this.listField.map((e) => e.invalid);
+    const list = this.listField.map((e) => e.invalid);    
     if (list.includes(true)) {
       return true;
     } 
@@ -274,9 +275,9 @@ export class CreateMajorModalComponent implements OnInit {
     const list = this.listField.filter((e) => !e['isUpdate']).map((e) => e.value);        
     this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(      
       map((rs) => this.data ? rs.filter((sb) => (sb.id !== this.data.subjectGroups.find((e) => e.id === sb.id)?.id)) : rs),
-      tap(rs => console.log('before', rs)),
+      // tap(rs => console.log('before', rs)),
       map((rs) => rs.filter((e) => !list.some((_) => _.subjectGroup?.id === e.id)) ),
-      tap(rs => console.log('after', rs)),
+      // tap(rs => console.log('after', rs)),
     )
   }
 
