@@ -13,7 +13,8 @@ export const environment = {
     appId: "1:1039354207577:web:aa6c8dd47b91a492670048",
     measurementId: "G-4HT7GTTN56"
   },
-  apiUrl: 'https://mohs.azurewebsites.net/',
+  // apiUrl: 'https://mohs.azurewebsites.net/',
+  apiUrl: 'https://localhost:44344/'
 };
 
 /*
