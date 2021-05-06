@@ -87,7 +87,7 @@ mat-form-field {
 .group-top2-name {
   color: #CEF0D4;
   font-family: 'Rouge Script', cursive;
-  font-size: 3.5em; 
+  font-size: 3.1em; 
   font-weight: normal;  
   text-align: center; 
   text-shadow: 1px 1px 2px #082b34; 
@@ -122,9 +122,20 @@ mat-form-field {
   align-items: center;
 }
 
+.top-vertical {
+  display: flex;
+  align-items: flex-start;
+}
+
 .center-vertical {
   display: flex;
   align-items: center;
+}
+
+.university-field {
+  width: 100%;
+  height: 100%;
+  padding-left: 20px;
 }
 
 //Button thi thử

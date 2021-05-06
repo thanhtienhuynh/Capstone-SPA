@@ -31,6 +31,8 @@ export const UNCARING_ACTION = '[Stepper] Uncaring Action';
 export const UNCARING_ACTION_SUCCESS = '[Stepper] Uncaring Action Success';
 export const UNCARING_ACTION_UNSUCCESS = '[Stepper] Uncaring Action Unuccess';
 export const RESET_STATE = '[Stepper] Reset State';
+export const HAS_ERRORS = '[Stepper] Has Errors';
+export const CONFIRM_ERRORS = '[Stepper] Confirm Errors';
 
 export class LoadSubjects implements Action {
   readonly type = LOAD_SUBJECTS;
@@ -43,7 +45,7 @@ export class SetSubjects implements Action {
 
 export class SetMarks implements Action {
   readonly type = SET_MARKS;
-  constructor(public payload: Mark[]) {}
+  constructor(public payload: {marks: Mark[], transcriptTypeId: number}) {}
 }
 
 export class SetSuggestedSubjectsGroup implements Action {
@@ -117,11 +119,6 @@ export class CaringActionSuccess implements Action {
   readonly type = CARING_ACTION_SUCCESS;
 }
 
-export class CaringActionUnsuccess implements Action {
-  readonly type = CARING_ACTION_UNSUCCESS;
-  constructor(public payload: string) {}
-}
-
 export class UncaringAction implements Action {
   readonly type = UNCARING_ACTION;
   constructor(public payload: {trainingProgramId: number, universityId: number}) {}
@@ -131,11 +128,14 @@ export class UncaringActionSuccess implements Action {
   readonly type = UNCARING_ACTION_SUCCESS;
 }
 
-export class UncaringActionUnsuccess implements Action {
-  readonly type = UNCARING_ACTION_UNSUCCESS;
-  constructor(public payload: string) {}
+export class HasErrors implements Action {
+  readonly type = HAS_ERRORS;
+  constructor(public payload: string[]) {}
 }
 
+export class ConfirmErrors implements Action {
+  readonly type = CONFIRM_ERRORS;
+}
 
 export class ResetState implements Action {
   readonly type = RESET_STATE;
@@ -144,4 +144,5 @@ export class ResetState implements Action {
 export type StepperActions = ResetState | ScoringTest | SetTestMark | LoadTest | SetTest | LoadSubjects |
             SetSubjects | SetMarks | SetSuggestedSubjectsGroup | LoadUniversities | ReloadUniversities | SetUniversities |
             LoadTests | SetTests | SaveTestSubmission | SaveTestSubmissionSuccess | RefreshTest | CaringAction |
-            CaringActionSuccess | CaringActionUnsuccess | UncaringAction | UncaringActionSuccess | UncaringActionUnsuccess;
+            CaringActionSuccess | UncaringAction | UncaringActionSuccess |
+            HasErrors | ConfirmErrors;

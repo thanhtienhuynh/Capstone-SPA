@@ -36,9 +36,8 @@ import { MaterialModule } from './_sharings/shared.module';
 import { UserEffects } from './user/store/user.effects';
 import { SafeUrlPipe } from './_helper/safe-url-pipe';
 import { SubmitDialogComponent } from './major-suggestion-stepper/exam-page/submit-dialog/submit-dialog.component';
-import { ToArrayPipe } from './_helper/to-array-pipe';
-import { RouterModule } from '@angular/router';
 import { DetailUniversityDialogComponent } from './major-suggestion-stepper/stepper/detail-university-dialog/detail-university-dialog.component';
+import { HomeEffects } from './home/store/home.effects';
 
 
 registerLocaleData(vi);
@@ -50,13 +49,12 @@ registerLocaleData(vi);
     ResultDialogComponent,
     TestCardComponent,
     HomeComponent,
-    SafeHtmlPipe,
     SafeUrlPipe,
+    // SafeHtmlPipe,
     ShortenPipe,
     ProgressSpinnerComponent,
     SubmitDialogComponent,
-    DetailUniversityDialogComponent
-    // HeaderComponent    
+    DetailUniversityDialogComponent    
    ],
   imports: [
     BrowserModule,
@@ -64,7 +62,7 @@ registerLocaleData(vi);
     BrowserAnimationsModule,        
     FlexLayoutModule,           
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([StepperEffects, AuthEffects, UserEffects]),
+    EffectsModule.forRoot([StepperEffects, AuthEffects, UserEffects, HomeEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     
     AppRoutingModule,
@@ -76,7 +74,6 @@ registerLocaleData(vi);
     ReactiveFormsModule,
     CommonModule,  
     MaterialModule,
-    // RouterModule 
   ],  
   providers: [AuthService, { provide: NZ_I18N, useValue: vi_VN },
     {
