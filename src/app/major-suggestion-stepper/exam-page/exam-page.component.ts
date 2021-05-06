@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ResultDialogComponent } from './result-dialog/result-dialog.component';
 import { CountdownComponent, CountdownEvent } from 'ngx-countdown';
 import { SubmitDialogComponent } from './submit-dialog/submit-dialog.component';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-exam-page',
   templateUrl: './exam-page.component.html',
@@ -34,6 +35,7 @@ export class ExamPageComponent implements OnInit, OnDestroy {
 
   selectedIndex: any;
   selectedTestId: number;
+  errors: string[];
   isSaved: boolean = false;
 
   constructor(private store: Store<fromApp.AppState>,  private _formBuilder: FormBuilder, 
@@ -70,6 +72,13 @@ export class ExamPageComponent implements OnInit, OnDestroy {
             this.isSaving = false;
             this.isSaved = false;
             this.isScored  = false;
+          }
+          this.errors = stepperState.errors;
+          if (this.errors) {
+            Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
+            .then(() => {
+              this.store.dispatch(new StepperActions.ConfirmErrors());
+            });
           }
         },
         (error) => {

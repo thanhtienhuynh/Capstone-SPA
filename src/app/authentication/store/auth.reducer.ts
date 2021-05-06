@@ -6,13 +6,15 @@ export interface State {
   firebaseToken: string;
   user: User;
   token: string;
+  errors: string[];
 }
 
 const initialState: State = {
   isLoading: false,
   firebaseToken: null,
   user: null,
-  token: null
+  token: null,
+  errors: null
 };
 
 export function authReducer(
@@ -31,25 +33,36 @@ export function authReducer(
         firebaseToken: action.payload
       };
     case AuthActions.LOGIN_SERVER:
-        return {
-          ...state,
-          firebaseToken: action.payload,
+      return {
+        ...state,
+        firebaseToken: action.payload,
         isLoading: true,
-        };
+      };
     case AuthActions.SET_USER:
-        return {
-          ...state,
-          isLoading: false,
-          user: action.payload.user,
-          token: action.payload.token
-        };
+      return {
+        ...state,
+        isLoading: false,
+        user: action.payload.user,
+        token: action.payload.token
+      };
     case AuthActions.LOGOUT:
-        return {
-          ...state,
-          firebaseToken: null,
-          user: null,
-          token: null
-        };
+      return {
+        ...state,
+        firebaseToken: null,
+        user: null,
+        token: null
+      };
+    case AuthActions.HAS_ERRORS:
+      return {
+        ...state,
+        errors: action.payload,
+        isLoading: false
+      };
+    case AuthActions.CONFIRM_ERRORS:
+      return {
+        ...state,
+        errors: null,
+      };
     default:
       return state;
   }

@@ -21,9 +21,15 @@
             border-radius: 15px; width: 100%; font-weight: 500; height: 70%;" class="center-vertical">
             <mat-icon style="font-size: 100vi; margin-right: 4px;" aria-hidden="false" >assignment</mat-icon>Kết quả ghi nhận</div>
           </mat-list-item>
-          <mat-list-item>
+          <mat-list-item routerLink="./caring-majors" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
             <div class="center-vertical  menu-item">
-              <mat-icon class="center-vertical" style="font-size: 10px;" aria-hidden="false">fiber_manual_record</mat-icon>Kết quả ngành học
+              <mat-icon class="center-vertical" style="font-size: 10px;" aria-hidden="false">fiber_manual_record</mat-icon>Ngành học quan tâm
+            </div>
+          </mat-list-item>
+          <mat-divider style="width: 80%; margin-left: 10%;"></mat-divider>
+          <mat-list-item routerLink="./caring-universities" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <div class="center-vertical  menu-item">
+              <mat-icon class="center-vertical" style="font-size: 10px;" aria-hidden="false">fiber_manual_record</mat-icon>Trường đại học quan tâm
             </div>
           </mat-list-item>
           <mat-divider style="width: 80%; margin-left: 10%;"></mat-divider>
@@ -40,4 +46,3 @@
     </div>
   </div>
 </div>
-<!-- <router-outlet></router-outlet> -->

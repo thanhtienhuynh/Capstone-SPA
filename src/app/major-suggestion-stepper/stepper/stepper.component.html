@@ -13,9 +13,9 @@
         <h1 style="text-align: center; margin: 20px 0px 20px 0px">Nhập điểm trung bình học bạ hoặc điểm thi THPT Quốc gia</h1>
         <div class="center-horizontal" style="margin: 50px 0 50px -100px;">
           <label style="margin-right: 26px;">Chọn loại điểm: </label>
-          <mat-radio-group [(ngModel)]="typeScore" formControlName="scoreType">
-            <mat-radio-button [checked]="'true'" [value]="1">Điểm học bạ</mat-radio-button>
-            <mat-radio-button [value]="2">Điểm THPT QG</mat-radio-button>
+          <mat-radio-group [(ngModel)]="typeScore" formControlName="transcriptTypeId">
+            <mat-radio-button [checked]="'true'" [value]="2">Điểm học bạ</mat-radio-button>
+            <mat-radio-button [value]="1">Điểm THPT QG</mat-radio-button>
           </mat-radio-group>
         </div>
         <div>

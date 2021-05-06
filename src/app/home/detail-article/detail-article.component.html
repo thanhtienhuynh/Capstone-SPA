@@ -1,0 +1,10 @@
+<div *ngIf="detailAricle" class="main-frame">
+  <h1 class="title center-all">{{detailAricle.title}}</h1>
+  <div class="postedDate"><strong>Ngày đăng:</strong> {{detailAricle.postedDate}}</div>
+  <div class="source"><strong>Nguồn:</strong><a href=" {{detailAricle.publishedPage}}"> {{detailAricle.publishedPage}}</a></div>
+  <div><strong>Nội dung:</strong></div>
+  <div class="content-frame">
+    <div class="content" [innerHtml]="detailAricle.content"></div>
+  </div>
+  <div class="root-page"><i>Xem bài viết gốc tại <a href="{{detailAricle.rootUrl}}" target="_blank">đây</a></i></div>
+</div>

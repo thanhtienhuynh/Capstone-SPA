@@ -7,13 +7,15 @@ export interface State {
   testSubmissions: UserTestSubmission[];
   detailTestSubmission: UserDetailTestSubmission;
   selectedTestSubmissionId: number;
+  errors: string[];
 }
 
 const initialState: State = {
   isLoading: false,
   testSubmissions: null,
   detailTestSubmission: null,
-  selectedTestSubmissionId: null
+  selectedTestSubmissionId: null,
+  errors: null,
 };
 
 export function userReducer(
@@ -43,6 +45,17 @@ export function userReducer(
         ...state,
         isLoading: false,
         detailTestSubmission: action.payload
+      };
+    case UserActions.HAS_ERRORS:
+      return {
+        ...state,
+        errors: action.payload,
+        isLoading: false
+      };
+    case UserActions.CONFIRM_ERRORS:
+      return {
+        ...state,
+        errors: null,
       };
    
     default:

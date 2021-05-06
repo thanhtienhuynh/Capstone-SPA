@@ -9,6 +9,8 @@ import { TestSubmissionsComponent } from "./test-submissions/test-submissions.co
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { TestReviewComponent } from "./test-submissions/test-review/test-review.component";
+import { CaringMajorsComponent } from "./caring-majors/caring-majors.component";
+import { CaringUniversitiesComponent } from "./caring-universities/caring-universities.component";
 
 @NgModule({
   declarations: [
@@ -16,7 +18,8 @@ import { TestReviewComponent } from "./test-submissions/test-review/test-review.
     InformationComponent,
     TestSubmissionsComponent,
     TestReviewComponent,
-    // AnswerComponent
+    CaringMajorsComponent,
+    CaringUniversitiesComponent
   ],
   imports: [
     RouterModule,

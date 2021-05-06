@@ -18,6 +18,7 @@ export interface State {
   tests: ClassifiedTests[];
   test: Test;
   totalMark: number;
+  transcriptTypeId: number;
   selectedGroupId: number;
   selectedMajorId: number;
   selectedUniversityId: number;
@@ -27,7 +28,7 @@ export interface State {
   testSubmissionReponse: TestSubmission;
   isSubmissionSaved: boolean;
   isMarkSaved: boolean;
-  errorMessage: string;
+  errors: string[];
 }
 
 const initialState: State = {
@@ -39,6 +40,7 @@ const initialState: State = {
   tests: [],
   test: null,
   totalMark: null,
+  transcriptTypeId: null,
   selectedGroupId: null,
   selectedMajorId: null,
   selectedUniversityId: null,
@@ -48,7 +50,7 @@ const initialState: State = {
   testSubmissionReponse: null,
   isSubmissionSaved: false,
   isMarkSaved: false,
-  errorMessage: null
+  errors: null
 };
 
 export function stepReducer(
@@ -75,7 +77,8 @@ export function stepReducer(
         tests: [],
         test: null,
         isLoading: true,
-        marks: [...action.payload],
+        marks: [...action.payload.marks],
+        transcriptTypeId: action.payload.transcriptTypeId
       };
     case StepperActions.SET_SUGGESTED_SUBJECTS_GROUP:
       return {
@@ -130,7 +133,7 @@ export function stepReducer(
         selectedTestId: null,
         testSubmissionParam: null,
         testSubmissionReponse: null,
-        isSaved: false,
+        isSubmissionSaved: false,
         isLoading: false,
       };
     case StepperActions.SCORING_TEST:
@@ -153,7 +156,7 @@ export function stepReducer(
     case StepperActions.SAVE_TEST_SUBMISSION_SUCCESS:
       return {
         ...state,
-        isSaved: action.payload,
+        isSubmissionSaved: action.payload,
         isLoading: false,
       };
     case StepperActions.CARING_ACTION:
@@ -168,12 +171,6 @@ export function stepReducer(
         ...state,
         isLoading: false
       };
-    case StepperActions.CARING_ACTION_UNSUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        errorMessage: action.payload
-      };
     case StepperActions.UNCARING_ACTION:
       return {
         ...state,
@@ -186,11 +183,16 @@ export function stepReducer(
         ...state,
         isLoading: false
       };
-    case StepperActions.UNCARING_ACTION_UNSUCCESS:
+    case StepperActions.HAS_ERRORS:
       return {
         ...state,
-        isLoading: false,
-        errorMessage: action.payload
+        errors: action.payload,
+        isLoading: false
+      };
+    case StepperActions.CONFIRM_ERRORS:
+      return {
+        ...state,
+        errors: null,
       };
     case StepperActions.RESET_STATE:
       return {

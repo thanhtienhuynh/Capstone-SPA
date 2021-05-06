@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import * as StepperActions from './stepper.actions';
 import {
@@ -15,16 +15,15 @@ import { Injectable } from '@angular/core';
 import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group';
 import * as fromApp from '../../../_store/app.reducer';
 import { Store } from '@ngrx/store';
-import { University, UniversityBaseOnTrainingProgram } from 'src/app/_models/university';
+import { UniversityBaseOnTrainingProgram } from 'src/app/_models/university';
 import { Test } from 'src/app/_models/test';
 import { MarkParam } from 'src/app/_params/mark-param';
 import { TestSubmission } from 'src/app/_models/test-submission';
 import { ClassifiedTests } from 'src/app/_models/classified-tests';
-import { BaseResponse } from 'src/app/_models/base-response';
-import { SaveTestSubmissionParam, TestSubmissionParam } from 'src/app/_params/question-param';
+import { SaveTestSubmissionParam } from 'src/app/_params/question-param';
 import { environment } from 'src/environments/environment';
 import { AddUserMajorDetailParam, RemoveUserMajorDetailParam } from 'src/app/_params/user-major-detail-param';
-import { categories } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { Response } from 'src/app/_models/response';
 
 @Injectable()
 export class StepperEffects {
@@ -38,11 +37,20 @@ export class StepperEffects {
   loadSubjects = this.actions$.pipe(
     ofType(StepperActions.LOAD_SUBJECTS),
     switchMap(() => {
-      return this.http.get<Subject[]>(environment.apiUrl + 'api/v1/subject');
+      return this.http.get<Response<Subject[]>>(environment.apiUrl + 'api/v1/subject')
+      .pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new StepperActions.SetSubjects(response.data);
+          }
+          return new StepperActions.HasErrors(response.errors);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          return of(new StepperActions.HasErrors([error.message]));
+        })
+      );
     }),
-    map((subjects) => {
-      return new StepperActions.SetSubjects(subjects);
-    })
+    
   );
 
   @Effect()
@@ -50,13 +58,20 @@ export class StepperEffects {
     ofType(StepperActions.SET_MARKS),
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
-      return this.http.post<SuggestedSubjectsGroup[]>(
+      return this.http.post<Response<SuggestedSubjectsGroup[]>>(
         environment.apiUrl + 'api/v1/subject-group/top-subject-group',
-        new MarkParam(stepperState.marks, 2)
+        new MarkParam(stepperState.marks, stepperState.transcriptTypeId)
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new StepperActions.SetSuggestedSubjectsGroup(response.data);
+          }
+          return new StepperActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new StepperActions.HasErrors([error.message]));
+        })
       );
-    }),
-    map((suggestedGroup) => {
-      return new StepperActions.SetSuggestedSubjectsGroup(suggestedGroup);
     })
   );
 
@@ -70,15 +85,22 @@ export class StepperEffects {
       queryParams = queryParams.append('MajorId', stepperState.selectedMajorId.toString());
       queryParams = queryParams.append('TotalMark', stepperState.totalMark.toString());
       queryParams = queryParams.append('TranscriptTypeId', '2');
-      return this.http.get<UniversityBaseOnTrainingProgram[]>(
+      return this.http.get<Response<UniversityBaseOnTrainingProgram[]>>(
         environment.apiUrl + 'api/v1/university/suggestion',
         {
           params: queryParams
         }
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new StepperActions.SetUniversities(response.data);
+          }
+          return new StepperActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new StepperActions.HasErrors([error.message]));
+        })
       );
-    }),
-    map((universitiesBaseOnTrainingProgram) => {
-      return new StepperActions.SetUniversities(universitiesBaseOnTrainingProgram);
     })
   );
 
@@ -89,29 +111,43 @@ export class StepperEffects {
     switchMap(([actionData, stepperState]) => {
       let queryParams = new HttpParams();
       queryParams = queryParams.append('SubjectGroupId', stepperState.selectedGroupId.toString());
-      return this.http.get<ClassifiedTests[]>(
+      return this.http.get<Response<ClassifiedTests[]>>(
         environment.apiUrl + 'api/v1/test/recommendation',
         {
           params: queryParams
         }
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new StepperActions.SetTests(response.data);
+          }
+          return new StepperActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new StepperActions.HasErrors([error.message]));
+        })
       );
-    }),
-    map((tests) => {
-      return new StepperActions.SetTests(tests);
     })
   );
 
   @Effect()
-  loadTest = this.actions$.pipe(
+  loadSelectedTest = this.actions$.pipe(
     ofType(StepperActions.LOAD_TEST),
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
-      return this.http.get<Test>(
+      return this.http.get<Response<Test>>(
         environment.apiUrl + 'api/v1/test/' + stepperState.selectedTestId.toString()
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new StepperActions.SetTest(response.data);
+          }
+          return new StepperActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new StepperActions.HasErrors([error.message]));
+        })
       );
-    }),
-    map((test) => {
-      return new StepperActions.SetTest(test);
     })
   );
 
@@ -120,12 +156,19 @@ export class StepperEffects {
     ofType(StepperActions.SCORING_TEST),
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
-      return this.http.post<TestSubmission>(
+      return this.http.post<Response<TestSubmission>>(
         environment.apiUrl + 'api/v1/test-submission', stepperState.testSubmissionParam
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new StepperActions.SetTestMark(response.data);
+          }
+          return new StepperActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new StepperActions.HasErrors([error.message]));
+        })
       );
-    }),
-    map((testSubmissionReponse) => {
-      return new StepperActions.SetTestMark(testSubmissionReponse);
     })
   );
 
@@ -135,22 +178,26 @@ export class StepperEffects {
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
       let testParam = stepperState.testSubmissionParam;
-      return this.http.post<BaseResponse>(
+      return this.http.post<Response<any>>(
         environment.apiUrl + 'api/v1/test-submission/saving',
         new SaveTestSubmissionParam(
           testParam.testId,
           testParam.spentTime,
           testParam.questions,
           stepperState.testSubmissionReponse.mark,
-          stepperState.testSubmissionReponse.numberOfRightAnswers,
-          stepperState.selectedMajorId,
-          stepperState.selectedUniversityId,
-          stepperState.selectedTrainingProgramId
+          stepperState.testSubmissionReponse.numberOfRightAnswers
         )
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new StepperActions.SaveTestSubmissionSuccess(response.succeeded);
+          }
+          return new StepperActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new StepperActions.HasErrors([error.message]));
+        })
       );
-    }),
-    map((response) => {
-      return new StepperActions.SaveTestSubmissionSuccess(response.isSuccess);
     })
   );
 
@@ -159,25 +206,27 @@ export class StepperEffects {
     ofType(StepperActions.CARING_ACTION),
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
-      return this.http.post<any>(
+      return this.http.post<Response<any>>(
         environment.apiUrl + 'api/v1/user-major-detail',
         new AddUserMajorDetailParam(
           stepperState.selectedUniversityId,
           stepperState.selectedTrainingProgramId,
           stepperState.selectedMajorId,
           stepperState.selectedGroupId,
-          new MarkParam(stepperState.marks, 2),
+          new MarkParam(stepperState.marks, stepperState.transcriptTypeId),
           stepperState.totalMark
         )
       ).pipe(
         map((response) => {
-          return new StepperActions.LoadUniversities(
-            {totalMark: stepperState.totalMark, subjectGroupId: stepperState.selectedGroupId, majorId: stepperState.selectedMajorId}
-          );
+          if (response.succeeded) {
+            return new StepperActions.LoadUniversities(
+              {totalMark: stepperState.totalMark, subjectGroupId: stepperState.selectedGroupId, majorId: stepperState.selectedMajorId}
+            );
+          }
+          return new StepperActions.HasErrors(response.errors);
         }),
         catchError((error) => {
-          console.log(error);
-          return of(new StepperActions.CaringActionUnsuccess(error));
+          return of(new StepperActions.HasErrors([error.message]));
         })
       );
     }),
@@ -188,7 +237,7 @@ export class StepperEffects {
     ofType(StepperActions.UNCARING_ACTION),
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
-      return this.http.post<any>(
+      return this.http.post<Response<any>>(
         environment.apiUrl + 'api/v1/user-major-detail/deletion',
         new RemoveUserMajorDetailParam(
           stepperState.selectedUniversityId,
@@ -197,13 +246,15 @@ export class StepperEffects {
         )
       ).pipe(
         map((response) => {
-          return new StepperActions.LoadUniversities(
-            {totalMark: stepperState.totalMark, subjectGroupId: stepperState.selectedGroupId, majorId: stepperState.selectedMajorId}
-          );
+          if (response.succeeded) {
+            return new StepperActions.LoadUniversities(
+              {totalMark: stepperState.totalMark, subjectGroupId: stepperState.selectedGroupId, majorId: stepperState.selectedMajorId}
+            );
+          }
+          return new StepperActions.HasErrors(response.errors);
         }),
         catchError((error) => {
-          console.log(error);
-          return of(new StepperActions.UncaringActionUnsuccess(error));
+          return of(new StepperActions.HasErrors([error.message]));
         })
       );
     }),
