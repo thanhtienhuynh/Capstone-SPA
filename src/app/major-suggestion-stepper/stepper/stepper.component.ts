@@ -23,6 +23,7 @@ import { DetailUniversityDialogComponent } from './detail-university-dialog/deta
 import { ConfirmDialogComponent } from 'src/app/_sharings/components/confirm-dialog/confirm-dialog.component';
 import { User } from 'src/app/_models/user';
 import { LoginDialogComponent } from 'src/app/_sharings/components/login-dialog/login-dialog.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-stepper',
@@ -31,7 +32,7 @@ import { LoginDialogComponent } from 'src/app/_sharings/components/login-dialog/
 })
 export class StepperComponent implements OnInit, OnDestroy {
   @ViewChild('stepper') private myStepper: MatStepper;
-  typeScore = 1;
+  typeScore: number = 1;
 
   secondFormGroup: FormGroup = null;
   thirdFormGroup: FormGroup;
@@ -49,7 +50,8 @@ export class StepperComponent implements OnInit, OnDestroy {
   tests: ClassifiedTests[];
   test: Test;
   selectedTestId: number;
-  suggestedMajorName: string = "Test";
+  suggestedMajorName: string;
+  errors: string[];
 
   isUniversityLoaded: boolean = false;
 
@@ -64,7 +66,7 @@ export class StepperComponent implements OnInit, OnDestroy {
   ) {
     this.secondFormGroup = this._formBuilder.group({});
     this.secondFormGroup.addControl(
-      'scoreType', new FormControl(1)
+      'transcriptTypeId', new FormControl(1)
     );
   }
 
@@ -108,6 +110,14 @@ export class StepperComponent implements OnInit, OnDestroy {
               this.marksValidator();
             });
           }
+
+          this.errors = stepperState.errors;
+          if (this.errors) {
+            Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
+            .then(() => {
+              this.store.dispatch(new StepperActions.ConfirmErrors());
+            });
+          }
          
         },
         (error) => {
@@ -133,10 +143,11 @@ export class StepperComponent implements OnInit, OnDestroy {
     this.marksValidator();
     if (this.secondFormGroup.valid) {
       this.marks = [];
+      console.log(this.secondFormGroup);
       for(let subject of this.subjects) {
         this.marks.push({subjectId: subject.id, mark: this.secondFormGroup.value[subject.id] ? this.secondFormGroup.value[subject.id] : 0});
       }
-      this.store.dispatch(new StepperActions.SetMarks(this.marks));
+      this.store.dispatch(new StepperActions.SetMarks({marks: this.marks, transcriptTypeId: this.typeScore}));
       if (!this.isLoading) {
         this.myStepper.selectedIndex = 1;
       }
@@ -237,7 +248,7 @@ export class StepperComponent implements OnInit, OnDestroy {
     const history = this.secondFormGroup.controls[this.subjects.find(s => s.name === HISTORY_SUBJECT_NAME).id];
     const humanity = this.secondFormGroup.controls[this.subjects.find(s => s.name === HUMANITY_SUBJECT_NAME).id];
     const literaty = this.secondFormGroup.controls[this.subjects.find(s => s.name === LITERARY_SUBJECT_NAME).id];
-    const scoreType = this.secondFormGroup.controls['scoreType'];
+    const scoreType = this.secondFormGroup.controls['transcriptTypeId'];
     if (scoreType.value === 1) {
       if (math.value < 5 || physics.value < 5 || chemistry.value < 5 || englis.value < 5 || biology.value < 5 || 
         geography.value < 5 || history.value < 5 || humanity.value < 5 || literaty.value < 5) {

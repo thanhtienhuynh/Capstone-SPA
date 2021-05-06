@@ -23,6 +23,7 @@ import { AuthenticationComponent } from '../authentication/authentication.compon
 import { RouterModule } from '@angular/router';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
+import { SafeHtmlPipe } from '../_helper/safe-html-pipe';
 
 const materialModules = [
   MatNativeDateModule,
@@ -49,9 +50,10 @@ const materialModules = [
   declarations: [
     AnswerComponent,
     ToArrayPipe,
+    SafeHtmlPipe,
     AuthenticationComponent,
     ConfirmDialogComponent,
-    LoginDialogComponent
+    LoginDialogComponent,
   ],
   imports: [
     ...materialModules,
@@ -61,9 +63,10 @@ const materialModules = [
     ...materialModules,
     AnswerComponent,
     ToArrayPipe,
+    SafeHtmlPipe,
     AuthenticationComponent,
     ConfirmDialogComponent,
-    LoginDialogComponent
+    LoginDialogComponent,
   ],
 })
 export class MaterialModule {

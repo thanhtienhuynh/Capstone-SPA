@@ -15,6 +15,7 @@ export interface University {
   numberOfStudents: number;
   numberOfCaring: number;
   isCared: boolean;
+  rank: number;
 }
 
 export interface UniversityBaseOnTrainingProgram {

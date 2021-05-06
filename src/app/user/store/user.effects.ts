@@ -2,7 +2,9 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
-import { map, switchMap, withLatestFrom } from "rxjs/operators";
+import { of } from "rxjs";
+import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
+import { Response } from "src/app/_models/response";
 import { UserDetailTestSubmission, UserTestSubmission } from "src/app/_models/user-test-submission";
 import { environment } from "src/environments/environment";
 import * as fromApp from '../../_store/app.reducer';
@@ -20,12 +22,19 @@ export class UserEffects {
   loadUserSubmissions = this.actions$.pipe(
     ofType(UserActions.LOAD_SUBMISSIONS),
     switchMap(() => {
-      return this.http.get<UserTestSubmission[]>(
+      return this.http.get<Response<UserTestSubmission[]>>(
         environment.apiUrl + 'api/v1/test-submission'
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new UserActions.SetSubmissions(response.data);
+          }
+          return new UserActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new UserActions.HasErrors([error.message]));
+        })
       );
-    }),
-    map((response) => {
-      return new UserActions.SetSubmissions(response);
     })
   );
 
@@ -34,12 +43,19 @@ export class UserEffects {
     ofType(UserActions.LOAD_DETAIL_SUBMISSION),
     withLatestFrom(this.store.select('user')),
     switchMap(([actionData, stepperState]) => {
-      return this.http.get<UserDetailTestSubmission>(
+      return this.http.get<Response<UserDetailTestSubmission>>(
         environment.apiUrl + 'api/v1/test-submission/' + stepperState.selectedTestSubmissionId.toString()
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new UserActions.SetDetailSubmission(response.data);
+          }
+          return new UserActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new UserActions.HasErrors([error.message]));
+        })
       );
-    }),
-    map((response) => {
-      return new UserActions.SetDetailSubmission(response);
     })
   );
 }

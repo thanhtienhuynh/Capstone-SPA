@@ -62,7 +62,7 @@
             <div *ngFor="let option of question.options; let j = index">
               <div  class="center-vertical">
                 <mat-radio-button  value="{{ j }}" (click)="getOrderOfQuestion(i)">
-                  <p [innerHtml]="option.optionContent | safeHtml"></p>
+                  <div [innerHtml]="option.optionContent | safeHtml"></div>
                 </mat-radio-button>
               </div>
             </div>

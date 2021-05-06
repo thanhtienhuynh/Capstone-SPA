@@ -1,0 +1,39 @@
+<div class="item-news" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+  <div class="thumnail" fxFlex="0 1 calc(50% - 16px)" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <img style="width: 100%; height: 100%;" src="https://images.giaoducthoidai.vn/thumb/220-142/public/dienns/2021-03-16/de-an-tuyen-sinh.jpg" alt="">
+  </div>
+  <div class="info-section" fxFlex="0 1 calc(50%)" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
+    <h3 class="title" >So sánh học phí nhóm ngành Công nghệ thông tin</h3>
+    <p class="description">Học phí các ngành thuộc nhóm Công nghệ thông tin của Đại học Bách khoa Hà Nội 
+    dao động 22-60 triệu đồng một năm, tùy chương trình.</p>
+  </div>
+</div>
+<div *ngIf="collapseArticlesPageResponse" class="item-news-list">
+  <div *ngFor="let article of collapseArticlesPageResponse.data" style="margin-bottom: 10px;">
+    <div gdAreas="title title thumnail | discription discription thumnail | postedDate source thumnail" gdGap="10px" gdRows="auto auto"
+gdAreas.lt-md="title | thumnail | discription" gdRows.lt-md="auto auto auto">
+      <h3 class="title" gdArea="title" routerLink="./{{article.id}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        {{article.title}}
+      </h3>
+
+      <div gdArea="discription">
+        <p>{{article.shortDescription}}</p>
+      </div>
+      <p gdArea="postedDate" class="sub-dis">Ngày đăng: {{article.postedDate}}</p>
+      <p gdArea="source" class="sub-dis">Nguồn: <a href="{{article.publishedPage}}">{{article.publishedPage}}</a></p>
+      <div gdArea="thumnail">
+        <img style="width: 100%; height: 100%;" src="{{article.postImageUrl || '../../assets/img/news.png'}}" alt="">
+      </div>
+    </div>
+    <mat-divider class="item-divider"></mat-divider>
+  </div>
+</div>
+<div *ngIf="collapseArticlesPageResponse" class="page-button-section center-all">
+  <div *ngIf="firstButtonValue > 0" (click)="pageClick(firstButtonValue)" class="page-button center-all">{{firstButtonValue}}</div>
+  <div *ngIf="firstButtonValue > 0" class="center-all three-dot">...</div>
+  <div *ngIf="secondButtonValue > 0" (click)="pageClick(secondButtonValue)" [ngClass]="{'page-button-selected': secondButtonValue == collapseArticlesPageResponse.pageNumber}" class="page-button center-all">{{secondButtonValue}}</div>
+  <div *ngIf="thirdButtonValue > 0" (click)="pageClick(thirdButtonValue)" [ngClass]="{'page-button-selected': thirdButtonValue == collapseArticlesPageResponse.pageNumber}" class="page-button center-all ">{{thirdButtonValue}}</div>
+  <div *ngIf="fourthButtonValue > 0" (click)="pageClick(fourthButtonValue)" [ngClass]="{'page-button-selected': fourthButtonValue == collapseArticlesPageResponse.pageNumber}" class="page-button center-all">{{fourthButtonValue}}</div>
+  <div *ngIf="lastButtonValue > 0" class="center-all three-dot">...</div>
+  <div *ngIf="lastButtonValue > 0" (click)="pageClick(lastButtonValue)" class="page-button center-all">{{lastButtonValue}}</div>
+</div>

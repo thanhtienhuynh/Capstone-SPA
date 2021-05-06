@@ -5,6 +5,8 @@ export const LOAD_SUBMISSIONS = '[User] Load Submissions';
 export const SET_SUBMISSIONS = '[User] Set Submissions';
 export const LOAD_DETAIL_SUBMISSION = '[User] Load Detail Submission';
 export const SET_DETAIL_SUBMISSION = '[User] Set Question Submission';
+export const HAS_ERRORS = '[User] Has Errors';
+export const CONFIRM_ERRORS = '[User] Confirm Errors';
 
 export class LoadSubmissions implements Action {
   readonly type = LOAD_SUBMISSIONS;
@@ -25,4 +27,13 @@ export class SetDetailSubmission implements Action {
   constructor(public payload: UserDetailTestSubmission) {}
 }
 
-export type UserActions = LoadSubmissions | SetSubmissions | LoadDetailSubmission | SetDetailSubmission;
+export class HasErrors implements Action {
+  readonly type = HAS_ERRORS;
+  constructor(public payload: string[]) {}
+}
+
+export class ConfirmErrors implements Action {
+  readonly type = CONFIRM_ERRORS;
+}
+
+export type UserActions = LoadSubmissions | SetSubmissions | LoadDetailSubmission | SetDetailSubmission | HasErrors | ConfirmErrors;
