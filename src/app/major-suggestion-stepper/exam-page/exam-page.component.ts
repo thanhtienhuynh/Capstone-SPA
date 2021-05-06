@@ -53,10 +53,9 @@ export class ExamPageComponent implements OnInit, OnDestroy {
           if (this.testSubmissionReponse) {
             this.isScored = true;
           }
-          this.isSaved = stepperState.isSaved;
+          this.isSaved = stepperState.isSubmissionSaved;
           if (this.isSaved) {
             this.openDialog();
-            console.log('run 1 ne');
           }
           this.test = stepperState.test;
           if (this.test) {
@@ -68,14 +67,12 @@ export class ExamPageComponent implements OnInit, OnDestroy {
             }
           }
            else {
-            console.log('vao ne');
             this.isSaving = false;
             this.isSaved = false;
             this.isScored  = false;
           }
         },
         (error) => {
-          console.log(error);
         }
     );
 
@@ -91,7 +88,6 @@ export class ExamPageComponent implements OnInit, OnDestroy {
           }
         },
         (error) => {
-          console.log(error);
         }
     );
 
@@ -162,7 +158,6 @@ export class ExamPageComponent implements OnInit, OnDestroy {
     } else {
       this.isSaving = true;
       this.openDialog();
-      console.log('Run 2 ne');
     }
   }
 

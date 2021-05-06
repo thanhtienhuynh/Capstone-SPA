@@ -12,12 +12,17 @@ import { GenernalHelperService } from 'src/app/_services/genernal-helper.service
 import { Mark } from 'src/app/_models/mark';
 import { Subject } from 'src/app/_models/subject';
 import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group';
-import { University } from 'src/app/_models/university';
+import { University, UniversityBaseOnTrainingProgram } from 'src/app/_models/university';
 import * as fromApp from '../../_store/app.reducer';
 import * as StepperActions from '../stepper/store/stepper.actions';
 import { ClassifiedTests } from 'src/app/_models/classified-tests';
 import { Test } from 'src/app/_models/test';
 import { BIOLOGY_SUBJECT_NAME, CHEMISTRY_SUBJECT_NAME, ENGLISH_SUBJECT_NAME, GEOGRAPHY_SUBJECT_NAME, HISTORY_SUBJECT_NAME, HUMANITY_SUBJECT_NAME, LITERARY_SUBJECT_NAME, MATH_SUBJECT_NAME, PHYSICS_SUBJECT_NAME } from 'src/app/_common/constants';
+import { MatDialog } from '@angular/material/dialog';
+import { DetailUniversityDialogComponent } from './detail-university-dialog/detail-university-dialog.component';
+import { ConfirmDialogComponent } from 'src/app/_sharings/components/confirm-dialog/confirm-dialog.component';
+import { User } from 'src/app/_models/user';
+import { LoginDialogComponent } from 'src/app/_sharings/components/login-dialog/login-dialog.component';
 
 @Component({
   selector: 'app-stepper',
@@ -40,7 +45,7 @@ export class StepperComponent implements OnInit, OnDestroy {
   subjects: Subject[] = [];
   marks: Mark[];
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
-  universities: University[];
+  universitiesBaseOnTrainingProgram: UniversityBaseOnTrainingProgram[];
   tests: ClassifiedTests[];
   test: Test;
   selectedTestId: number;
@@ -49,11 +54,13 @@ export class StepperComponent implements OnInit, OnDestroy {
   isUniversityLoaded: boolean = false;
 
   subjectName = "";
+  user: User;
 
   constructor(
     private _formBuilder: FormBuilder,
     private store: Store<fromApp.AppState>,
     public _generalService: GenernalHelperService,
+    public dialog: MatDialog
   ) {
     this.secondFormGroup = this._formBuilder.group({});
     this.secondFormGroup.addControl(
@@ -62,7 +69,6 @@ export class StepperComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log("Init");
     this.inputFormControl = this._formBuilder.group({});
     this.thirdFormGroup = this._formBuilder.group({});
     this.store.dispatch(new StepperActions.ResetState());
@@ -78,8 +84,8 @@ export class StepperComponent implements OnInit, OnDestroy {
           if ( stepperState.suggestedSubjectsGroup &&  stepperState.suggestedSubjectsGroup.length > 0) {
             this.myStepper.selectedIndex = 1;
           }
-          this.universities = stepperState.universities;    
-          if (stepperState.universities && stepperState.universities.length > 0) {
+          this.universitiesBaseOnTrainingProgram = stepperState.universitiesBaseOnTrainingProgram;    
+          if (stepperState.universitiesBaseOnTrainingProgram && stepperState.universitiesBaseOnTrainingProgram.length > 0) {
             this.myStepper.selectedIndex = 2;
           }      
           this.tests = stepperState.tests;
@@ -105,7 +111,6 @@ export class StepperComponent implements OnInit, OnDestroy {
          
         },
         (error) => {
-          console.log(error);
         }
       );
     this.authSubscription = this.store
@@ -113,9 +118,12 @@ export class StepperComponent implements OnInit, OnDestroy {
       .subscribe(
         (authState) => {
           this.isAuthLoading = authState.isLoading;
+          this.user = authState.user;
+          if (this.user && this.universitiesBaseOnTrainingProgram && this.universitiesBaseOnTrainingProgram.length > 0) {
+            this.store.dispatch(new StepperActions.ReloadUniversities());
+          }
         },
         (error) => {
-          console.log(error);
         }
       );
      
@@ -143,13 +151,11 @@ export class StepperComponent implements OnInit, OnDestroy {
 
   getUniversity(suggestedGroupId: number, majorId: number, totalMark: number, majorName: string) {
     this.suggestedMajorName = majorName;
-    console.log(majorName);
-    console.log(this.suggestedMajorName);
     this.store.dispatch(new StepperActions.LoadUniversities({subjectGroupId: suggestedGroupId, majorId: majorId, totalMark: totalMark}));
   }
 
-  loadTests(universitiId: number) {
-    this.store.dispatch(new StepperActions.LoadTests(universitiId));
+  loadTests() {
+    this.store.dispatch(new StepperActions.LoadTests());
     if (!this.isLoading) {
       this.myStepper.selectedIndex = 1;
     }
@@ -172,13 +178,53 @@ export class StepperComponent implements OnInit, OnDestroy {
     return this.subjectName;
   }
 
-  getUniversityName(id: number): string {
-    return this.universities.find(u => u.id === id).name;
+  getUniversityName(trainingProgramId: number, uniId): string {
+    return this.universitiesBaseOnTrainingProgram.find(t => t.id === trainingProgramId).universities.find(u => u.id === uniId).name;
   }
 
   onTestSelected(id: number) {
     this.store.dispatch(new StepperActions.RefreshTest());
     this.store.dispatch(new StepperActions.LoadTest(id));
+  }
+
+  openDetailDialog(university: University): void {
+    const dialogRef = this.dialog.open(DetailUniversityDialogComponent, {
+      width: '800px',
+      height: '400px',
+      disableClose: false,
+      data: {
+        university: university
+      }
+    });
+  }
+
+  onCaringClick(universityId: number, trainingProgramId: number) {
+    if (this.user == null){
+      this.dialog.open(
+        LoginDialogComponent, {
+          width: '350px',
+          height: '150px',
+          disableClose: false,
+        }
+      )
+    } else {
+      this.store.dispatch(new StepperActions.CaringAction({trainingProgramId: trainingProgramId, universityId: universityId}));
+    }
+  }
+
+  onUncaringClick(universityId: number, trainingProgramId: number, universityName: number) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      height: '140px',
+      disableClose: false,
+      data: "Bỏ quan tâm " + universityName + "?"
+    });
+    dialogRef.afterClosed()
+    .subscribe((response) => {
+      if (response === 1) {
+        this.store.dispatch(new StepperActions.UncaringAction({trainingProgramId: trainingProgramId, universityId: universityId}));
+      }
+    });
   }
 
   marksValidator() {
@@ -235,7 +281,6 @@ export class StepperComponent implements OnInit, OnDestroy {
             (physics.value && physics.value >= 1 && chemistry.value && chemistry.value >= 1 && biology.value && biology.value >= 1)
             || (history.value && history.value >= 1 && geography.value && geography.value >= 1 && humanity.value && humanity.value >= 1)))
       ) {
-        console.log('rune ne');
         this.secondFormGroup.setErrors({mustEnoughSubjects: 'Điểm các môn trong tổ hợp môn phải lớn hơn hoặc bằng 1 thì mới đủ điều kiện xét tuyển!'});
       } else if (
       (!(physics.value && physics.value >= 1 && chemistry.value && chemistry.value >= 1 && biology.value && biology.value >= 1)

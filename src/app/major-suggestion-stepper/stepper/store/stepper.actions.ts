@@ -4,7 +4,7 @@ import { Mark } from "src/app/_models/mark";
 import { SuggestedSubjectsGroup } from "src/app/_models/suggested-subjects-group";
 import { Test } from "src/app/_models/test";
 import { TestSubmission } from "src/app/_models/test-submission";
-import { University } from "src/app/_models/university";
+import { University, UniversityBaseOnTrainingProgram } from "src/app/_models/university";
 import { TestSubmissionParam } from "src/app/_params/question-param";
 import { Subject } from "../../../_models/subject";
 
@@ -14,6 +14,7 @@ export const SET_MARKS = '[Stepper] Set Marks';
 export const SET_SUGGESTED_SUBJECTS_GROUP = '[Stepper] Set Suggested Subjects Group';
 export const SET_UNIVERSIIES = '[Stepper] Set Universities';
 export const LOAD_UNIVERSIIES = '[Stepper] Load Universities';
+export const RELOAD_UNIVERSIIES = '[Stepper] Reload Universities';
 export const SET_TESTS = '[Stepper] Set Tests';
 export const LOAD_TESTS = '[Stepper] Load Tests';
 export const LOAD_TEST = '[Stepper] Load Test';
@@ -23,6 +24,12 @@ export const SCORING_TEST = '[Stepper] Scoring Test';
 export const SET_TEST_MARK = '[Stepper] Set Test Mark';
 export const SAVE_TEST_SUBMISSION = '[Stepper] Save Test Submission';
 export const SAVE_TEST_SUBMISSION_SUCCESS = '[Stepper] Save Test Submission Success';
+export const CARING_ACTION = '[Stepper] Caring Action';
+export const CARING_ACTION_SUCCESS = '[Stepper] Caring Action Success';
+export const CARING_ACTION_UNSUCCESS = '[Stepper] Caring Action Unsuccess';
+export const UNCARING_ACTION = '[Stepper] Uncaring Action';
+export const UNCARING_ACTION_SUCCESS = '[Stepper] Uncaring Action Success';
+export const UNCARING_ACTION_UNSUCCESS = '[Stepper] Uncaring Action Unuccess';
 export const RESET_STATE = '[Stepper] Reset State';
 
 export class LoadSubjects implements Action {
@@ -49,9 +56,13 @@ export class LoadUniversities implements Action {
   constructor(public payload: {subjectGroupId: number, majorId: number, totalMark: number}) {}
 }
 
+export class ReloadUniversities implements Action {
+  readonly type = RELOAD_UNIVERSIIES;
+}
+
 export class SetUniversities implements Action {
   readonly type = SET_UNIVERSIIES;
-  constructor(public payload: University[]) {}
+  constructor(public payload: UniversityBaseOnTrainingProgram[]) {}
 }
 
 export class SetTests implements Action {
@@ -61,7 +72,6 @@ export class SetTests implements Action {
 
 export class LoadTests implements Action {
   readonly type = LOAD_TESTS;
-  constructor(public payload: number) {}
 }
 
 
@@ -98,10 +108,40 @@ export class SaveTestSubmissionSuccess implements Action {
   constructor(public payload: boolean) {}
 }
 
+export class CaringAction implements Action {
+  readonly type = CARING_ACTION;
+  constructor(public payload: {trainingProgramId: number, universityId: number}) {}
+}
+
+export class CaringActionSuccess implements Action {
+  readonly type = CARING_ACTION_SUCCESS;
+}
+
+export class CaringActionUnsuccess implements Action {
+  readonly type = CARING_ACTION_UNSUCCESS;
+  constructor(public payload: string) {}
+}
+
+export class UncaringAction implements Action {
+  readonly type = UNCARING_ACTION;
+  constructor(public payload: {trainingProgramId: number, universityId: number}) {}
+}
+
+export class UncaringActionSuccess implements Action {
+  readonly type = UNCARING_ACTION_SUCCESS;
+}
+
+export class UncaringActionUnsuccess implements Action {
+  readonly type = UNCARING_ACTION_UNSUCCESS;
+  constructor(public payload: string) {}
+}
+
+
 export class ResetState implements Action {
   readonly type = RESET_STATE;
 }
 
 export type StepperActions = ResetState | ScoringTest | SetTestMark | LoadTest | SetTest | LoadSubjects |
-            SetSubjects | SetMarks | SetSuggestedSubjectsGroup | LoadUniversities | SetUniversities |
-            LoadTests | SetTests | SaveTestSubmission | SaveTestSubmissionSuccess | RefreshTest;
+            SetSubjects | SetMarks | SetSuggestedSubjectsGroup | LoadUniversities | ReloadUniversities | SetUniversities |
+            LoadTests | SetTests | SaveTestSubmission | SaveTestSubmissionSuccess | RefreshTest | CaringAction |
+            CaringActionSuccess | CaringActionUnsuccess | UncaringAction | UncaringActionSuccess | UncaringActionUnsuccess;

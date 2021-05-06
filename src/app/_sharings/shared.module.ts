@@ -21,6 +21,8 @@ import { AnswerComponent } from '../major-suggestion-stepper/exam-page/answer/an
 import { ToArrayPipe } from '../_helper/to-array-pipe';
 import { AuthenticationComponent } from '../authentication/authentication.component';
 import { RouterModule } from '@angular/router';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
 
 const materialModules = [
   MatNativeDateModule,
@@ -40,8 +42,7 @@ const materialModules = [
   MatListModule,
   MatMenuModule,
   MatIconModule,
-  RouterModule 
-
+  RouterModule
 ];
 
 @NgModule({
@@ -49,6 +50,8 @@ const materialModules = [
     AnswerComponent,
     ToArrayPipe,
     AuthenticationComponent,
+    ConfirmDialogComponent,
+    LoginDialogComponent
   ],
   imports: [
     ...materialModules,
@@ -59,6 +62,8 @@ const materialModules = [
     AnswerComponent,
     ToArrayPipe,
     AuthenticationComponent,
+    ConfirmDialogComponent,
+    LoginDialogComponent
   ],
 })
 export class MaterialModule {

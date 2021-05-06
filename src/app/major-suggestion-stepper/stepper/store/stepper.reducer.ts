@@ -1,9 +1,10 @@
+import { act } from '@ngrx/effects';
 import { ClassifiedTests } from 'src/app/_models/classified-tests';
 import { Mark } from 'src/app/_models/mark';
 import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group';
 import { Test } from 'src/app/_models/test';
 import { TestSubmission } from 'src/app/_models/test-submission';
-import { University } from 'src/app/_models/university';
+import { University, UniversityBaseOnTrainingProgram } from 'src/app/_models/university';
 import { TestSubmissionParam } from 'src/app/_params/question-param';
 import { Subject } from '../../../_models/subject';
 import * as StepperActions from './stepper.actions';
@@ -13,17 +14,20 @@ export interface State {
   marks: Mark[];
   isLoading: boolean;
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
-  universities: University[];
+  universitiesBaseOnTrainingProgram: UniversityBaseOnTrainingProgram[];
   tests: ClassifiedTests[];
   test: Test;
   totalMark: number;
   selectedGroupId: number;
   selectedMajorId: number;
   selectedUniversityId: number;
+  selectedTrainingProgramId: number;
   selectedTestId: number;
   testSubmissionParam: TestSubmissionParam;
   testSubmissionReponse: TestSubmission;
-  isSaved: boolean;
+  isSubmissionSaved: boolean;
+  isMarkSaved: boolean;
+  errorMessage: string;
 }
 
 const initialState: State = {
@@ -31,17 +35,20 @@ const initialState: State = {
   isLoading: false,
   marks: [],
   suggestedSubjectsGroup: [],
-  universities: [],
+  universitiesBaseOnTrainingProgram: [],
   tests: [],
   test: null,
   totalMark: null,
   selectedGroupId: null,
   selectedMajorId: null,
   selectedUniversityId: null,
+  selectedTrainingProgramId: null,
   selectedTestId: null,
   testSubmissionParam: null,
   testSubmissionReponse: null,
-  isSaved: false
+  isSubmissionSaved: false,
+  isMarkSaved: false,
+  errorMessage: null
 };
 
 export function stepReducer(
@@ -64,7 +71,7 @@ export function stepReducer(
       return {
         ...state,
         suggestedSubjectsGroup: null,
-        universities: [],
+        universitiesBaseOnTrainingProgram: [],
         tests: [],
         test: null,
         isLoading: true,
@@ -87,7 +94,7 @@ export function stepReducer(
     case StepperActions.SET_UNIVERSIIES:
       return {
         ...state,
-        universities: action.payload,
+        universitiesBaseOnTrainingProgram: action.payload,
         isLoading: false,
         tests: [],
         test: null,
@@ -95,7 +102,6 @@ export function stepReducer(
     case StepperActions.LOAD_TESTS:
       return {
         ...state,
-        selectedUniversityId: action.payload,
         isLoading: true,
         test: null,
       };
@@ -149,6 +155,42 @@ export function stepReducer(
         ...state,
         isSaved: action.payload,
         isLoading: false,
+      };
+    case StepperActions.CARING_ACTION:
+      return {
+        ...state,
+        isLoading: true,
+        selectedUniversityId: action.payload.universityId,
+        selectedTrainingProgramId: action.payload.trainingProgramId
+      };
+    case StepperActions.CARING_ACTION_SUCCESS:
+      return {
+        ...state,
+        isLoading: false
+      };
+    case StepperActions.CARING_ACTION_UNSUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        errorMessage: action.payload
+      };
+    case StepperActions.UNCARING_ACTION:
+      return {
+        ...state,
+        isLoading: true,
+        selectedUniversityId: action.payload.universityId,
+        selectedTrainingProgramId: action.payload.trainingProgramId
+      };
+    case StepperActions.UNCARING_ACTION_SUCCESS:
+      return {
+        ...state,
+        isLoading: false
+      };
+    case StepperActions.UNCARING_ACTION_UNSUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        errorMessage: action.payload
       };
     case StepperActions.RESET_STATE:
       return {

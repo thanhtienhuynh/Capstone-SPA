@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../../_store/app.reducer';
 import * as AuthActions from './auth.actions';
@@ -13,6 +13,7 @@ import * as Consts from '../../_common/constants';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from '../auth.service'; 
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable()
@@ -29,7 +30,7 @@ export class AuthEffects {
   helper = new JwtHelperService();
 
   @Effect()
-  loadSubjects = this.actions$.pipe(
+  loginGoogle = this.actions$.pipe(
     ofType(AuthActions.LOGIN_GOOGLE),
     switchMap(() => {
       var googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -41,7 +42,6 @@ export class AuthEffects {
       return firebaseUser.user.getIdToken();
     }),
     map((token: string) => {
-      console.log(token);
       return new AuthActions.LoginServer(token);
     })
   );
@@ -52,7 +52,7 @@ export class AuthEffects {
     withLatestFrom(this.store.select('auth')),
     switchMap(([actionData, authState]) => {
       return this.http.post<LoginResponse>(
-        'https://localhost:44344/api/v1/user/auth/google',
+        environment.apiUrl + 'api/v1/user/auth/google',
         { uidToken: authState.firebaseToken }
       );
     }),

@@ -18,8 +18,10 @@ export class SaveTestSubmissionParam {
   numberOfRightAnswers: number;
   majorId: number;
   universityId: number;
+  trainingProgramId: number;
 
-  constructor(testId: number, spentTime: number, questions: QuestionParam[], mark: number, numberOfRightAnswers: number,  majorId: number, universityId: number) {
+  constructor(testId: number, spentTime: number, questions: QuestionParam[], mark: number,
+              numberOfRightAnswers: number,  majorId: number, universityId: number, trainingProgramId: number) {
     this.testId = testId;
     this.spentTime = spentTime;
     this.questions = questions;
@@ -27,6 +29,7 @@ export class SaveTestSubmissionParam {
     this.numberOfRightAnswers = numberOfRightAnswers;
     this.majorId = majorId;
     this.universityId = universityId;
+    this.trainingProgramId = trainingProgramId;
   }
 }
 

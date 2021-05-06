@@ -18,9 +18,6 @@ export class AppComponent {
   }
 
   ngAfterViewInit() {
-    // console.log(this.title);
-    // this.p.appendChild(this.doc);
-    // this.p.nativeElement.insertAdjacentHTML('beforeend', this.title);
   }
   constructor(
     private store: Store<fromApp.AppState>

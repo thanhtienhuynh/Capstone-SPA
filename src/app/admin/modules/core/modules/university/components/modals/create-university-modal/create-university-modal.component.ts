@@ -33,8 +33,7 @@ export class CreateUniversityModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initCreateUniversityForm();
-    console.log(this.callBack);    
+    this.initCreateUniversityForm(); 
   }
 
   initCreateUniversityForm(): void {
@@ -100,7 +99,6 @@ export class CreateUniversityModalComponent implements OnInit {
           Swal.fire('Thành Công', 'Thêm mới trường đại học thành công', 'success');          
         }),
         catchError((err) => {
-          console.log(err.message);
           Swal.fire('Lỗi', 'Thêm mới trường đại học thất bại', 'error');
           return of(undefined);          
         })
@@ -112,7 +110,6 @@ export class CreateUniversityModalComponent implements OnInit {
 
 
   uploadLogo(evt): void {
-    console.log(evt);
     const files: File[] = evt.target.files;
     if (files.length > 1) {
       Swal.fire('Lỗi', 'Chọn 1 cái thối', 'error');

@@ -23,7 +23,12 @@ export function authReducer(
     case AuthActions.LOGIN_GOOGLE:
       return {
         ...state,
-        isLoading: true,
+        isLoading: true
+      };
+    case AuthActions.LOGIN_SERVER:
+      return {
+        ...state,
+        firebaseToken: action.payload
       };
     case AuthActions.LOGIN_SERVER:
         return {

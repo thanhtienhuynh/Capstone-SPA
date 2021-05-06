@@ -16,6 +16,7 @@ export interface UserTestSubmission {
 export interface UserDetailTestSubmission {
   id: number;
   testId: number;
+  testName: string;
   submissionDate: Date;
   spentTime: number;
   numberOfRightAnswers: number;

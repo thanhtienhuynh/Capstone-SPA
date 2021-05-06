@@ -173,8 +173,7 @@ export class CreateMajorModalComponent implements OnInit {
       "majorCode": this.majorForm.get('code').value,
       "trainingProgramId": this.majorForm.get('trainingProgram').value?.id,
       "subjectGroups": subjectGroups
-    };
-    console.log(newValue);    
+    };  
     this._majorService.createMajor(newValue).pipe(
       tap((rs) => {
         this.callBack(rs.majors);
@@ -192,7 +191,6 @@ export class CreateMajorModalComponent implements OnInit {
     const subjectGroups: SubjectGroupRM[] = [];
     const tmp = this.listField.map(e => e.value);
     const tmpSubmit = this.listFieldTmp.map(e => e.value);
-    console.log(tmpSubmit);
     for (let i = 0; i < tmpSubmit.length; i++) {
       if (tmp.find((e) => e.subjectGroup?.id === tmpSubmit[i].subjectGroup?.id)) {
         tmpSubmit[i] = tmp.find((e) => e.subjectGroup?.id === tmpSubmit[i].subjectGroup?.id)
@@ -296,10 +294,8 @@ export class CreateMajorModalComponent implements OnInit {
       if (result.isConfirmed) {                               
         this.listField.splice(index, 1);
         const list = this.listField.filter((e) => !e['isUpdate']);  
-        console.log(list); 
         if (field !== null) {           
           this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(                                          
-            tap(rs => console.log(rs))
           )
         }
       }
@@ -332,7 +328,6 @@ export class CreateMajorModalComponent implements OnInit {
       'name': this.majorSystemForm.get('majorSystemName').value,
       'code': this.majorSystemForm.get('majorSystemCode').value
     }
-    console.log(newValue);
     this._majorService.addNewMajorSystem(newValue).pipe(
       tap((res) => {                 
         this.hidePopover();

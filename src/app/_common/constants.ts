@@ -17,3 +17,5 @@ export const GEOGRAPHY_SUBJECT_NAME = "Địa lý";
 export const HISTORY_SUBJECT_NAME = "Lịch sử";
 export const HUMANITY_SUBJECT_NAME = "Giáo dục công dân";
 export const LITERARY_SUBJECT_NAME = "Ngữ văn";
+export const DIALOG_CONFIRM_OPTION = 1;
+export const DIALOG_CANCEL_OPTION = 0;

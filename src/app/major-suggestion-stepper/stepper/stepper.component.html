@@ -7,6 +7,9 @@
         (ngSubmit)="onScoreSubmit()"
       >
         <ng-template matStepLabel>Nhập điểm</ng-template>
+        <!-- <div style="height: 400px;" class="wrap">
+          <button type="submit" class="blob blue">Thi thử</button>
+        </div> -->
         <h1 style="text-align: center; margin: 20px 0px 20px 0px">Nhập điểm trung bình học bạ hoặc điểm thi THPT Quốc gia</h1>
         <div class="center-horizontal" style="margin: 50px 0 50px -100px;">
           <label style="margin-right: 26px;">Chọn loại điểm: </label>
@@ -58,8 +61,9 @@
     <ng-template matStepLabel>Kết quả</ng-template>
     <div class="center" >
       <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start" style="width: 100%; height: 580px;">
-        <div fxFlex="0 1 calc(32% -32px )" >
-          <div  *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[1]" style="padding-top: 50px; ">
+        <!-- Top 2 -->
+        <div fxFlex="0 1 calc(32% -32px )">
+          <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[1]" style="padding-top: 50px; ">
             <div style="height: 450px; padding: 10px; background-color: rgb(28, 121, 158); border-radius: 30px;" >  
               <div style="height: 100%; background-color: azure; border-radius: 30px;">
                 <div style="height: 15%; background-color: rgb(125, 210, 231); border-radius: 30px 30px 0px 0px;">
@@ -75,8 +79,11 @@
                   </div>
                 </div>
                 <div style="height: 55%; background-color: rgb(125, 210, 231); border-radius: 0px 0px 30px 30px;">
-                  <div style="height: 100%; padding: 12px;">
-                    <button *ngFor="let major of suggestedSubjectsGroup[1].suggestedMajors" style="width: 100%;" mat-button (click)="getUniversity(suggestedSubjectsGroup[1].id, major.id, suggestedSubjectsGroup[1].totalMark, major.name)">{{major.name}}</button>
+                  <div style="height: 91%; padding: 12px;" class="major-scroll" id="style-7">
+                    <button *ngFor="let major of suggestedSubjectsGroup[1].suggestedMajors" style="width: 100%;" mat-button 
+                      (click)="getUniversity(suggestedSubjectsGroup[1].id, major.id, suggestedSubjectsGroup[1].totalMark, major.name)">
+                      {{major.name | shorten:22}} - {{major.highestEntryMark}}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -100,8 +107,11 @@
                   </div>
                 </div>
                 <div style="height: 55%; background-color: rgb(125, 210, 231); border-radius: 0px 0px 30px 30px;">
-                  <div style="height: 100%; padding: 12px;">
-                  <button *ngFor="let major of suggestedSubjectsGroup[0].suggestedMajors" style="width: 100%;" mat-button (click)="getUniversity(suggestedSubjectsGroup[0].id, major.id, suggestedSubjectsGroup[0].totalMark, major.name)">{{major.name | shorten:35}}</button>
+                  <div style="height: 91%; padding: 12px;" class="major-scroll"  id="style-7">
+                    <button *ngFor="let major of suggestedSubjectsGroup[0].suggestedMajors" style="width: 100%;" mat-button 
+                      (click)="getUniversity(suggestedSubjectsGroup[0].id, major.id, suggestedSubjectsGroup[0].totalMark, major.name)">
+                      {{major.name | shorten:30}} - {{major.highestEntryMark}}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -125,8 +135,11 @@
                   </div>
                 </div>
                 <div style="height: 55%; background-color: rgb(125, 210, 231); border-radius: 0px 0px 30px 30px;">
-                  <div style="height: 100%; padding: 12px;">
-                  <button *ngFor="let major of suggestedSubjectsGroup[2].suggestedMajors" style="width: 100%;" mat-button (click)="getUniversity(suggestedSubjectsGroup[2].id, major.id, suggestedSubjectsGroup[2].totalMark, major.name)">{{major.name  | shorten:30}}</button>
+                  <div style="height: 91%; padding: 12px; border-radius: 0px 0px 30px 30px;"  class="major-scroll"  id="style-7" >
+                    <button *ngFor="let major of suggestedSubjectsGroup[2].suggestedMajors" style="width: 100%;" mat-button 
+                      (click)="getUniversity(suggestedSubjectsGroup[2].id, major.id, suggestedSubjectsGroup[2].totalMark, major.name)">
+                      {{major.name  | shorten:22}} - {{major.highestEntryMark}}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -144,35 +157,103 @@
   <mat-step  #stepThree >
     <ng-template matStepLabel>Danh sách trường</ng-template>
     <div class="center">
-      <div style="font-size: 1.4em; font-weight: 700; margin-bottom: 20px;" class="center-horizontal">Danh sách các trường có ngành:  {{suggestedMajorName}}</div>
-      <mat-grid-list [cols]="2" rowHeight="320px" [gutterSize]="'20px'">
-        <mat-grid-tile *ngFor="let university of universities" [colspan]="1" [rowspan]="1" style=" border-radius: 3%; ">
-          <div style="height: 100%; width: 100%;">
-            <mat-grid-list [cols]="2" rowHeight="80px">
-              <mat-grid-tile [colspan]="2" [rowspan]="1" style="background-color: lightblue;">
-                <div style="font-size: 1.5em; font-weight: bold; text-align: center;">{{ university.name }}</div>
-              </mat-grid-tile>
-              <mat-grid-tile [colspan]="1" [rowspan]="3">
-                <img width="100%" height="100%" src="{{ university.logoUrl }}" alt="">
-              </mat-grid-tile>
-              <mat-grid-tile [colspan]="1" [rowspan]="2" style="background-color: rgb(192, 238, 238);">
-               <div style="width: 100%; height: 100%; padding: 5px;">
-                <!-- <div>Sđt: {{university.phone}}</div> -->
-                <div><strong>Học phí:</strong> Từ {{university.tuitionFrom | number:'1.0':'en-US'}},000 đến {{university.tuitionTo | number:'1.0':'en-US'}},000/{{ university.tuitionType == 0 ? "Kì" : "Năm"}}</div>
-                <div><strong>Web:</strong> <a [href]="university.webUrl | safeUrl">{{university.webUrl}}</a></div>
-                <div><strong>Chỉ tiêu năm 2020:</strong> {{university.numberOfStudents <= 0 ? 'Chưa có' : university.numberOfStudents}}</div>
-                <div><strong>Số người quan tâm:</strong> {{university.numberOfCaring <= 0 ? '0' : university.numberOfCaring}}</div>
-                <div><strong>Điểm chuẩn:</strong> {{university.nearestYearEntryMark}}</div>
-              </div>
-              </mat-grid-tile>
-              <mat-grid-tile [colspan]="1" [rowspan]="1" style="background-color: lightblue;">
-                <button mat-raised-button color="accent" (click)="loadTests(university.id)">Thi thử</button>
-              </mat-grid-tile>
-            </mat-grid-list>
+      <div style="margin-bottom: 19px;" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+        <div fxFlex="0 1 calc(50%)">
+          <div style="font-size: 1.3em; font-weight: 300; padding-right: 32px;" class="center-vertical">Danh sách các trường có ngành: {{suggestedMajorName}}</div>
+        </div>
+        <div fxFlex="0 1 calc(50%)" style="border-left: solid;" class="center-horizontal">
+          <div style="font-size: 1.2em; font-weight: 300; padding-left: 32px; padding-right: 10px; width: 78%;" class="center-vertical">
+            Hệ thống sẽ giúp bạn xếp hạng và đánh giá năng lực thông qua việc thi thử
+          </div>
+          <div class="wrap center-vertical" style="width: 22%;">
+            <button type="submit" (click)="loadTests()" class="blob blue">Thi thử</button>
+          </div>
+        </div>
+       
+      </div>
+      <!-- Bắt đầu flex-->
+      <div *ngIf="universitiesBaseOnTrainingProgram" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+        <div *ngFor="let trainingProgram of universitiesBaseOnTrainingProgram" fxFlex="0 1 calc(100%)" fxFlex.lt-sm="100%">
+          <!-- Bắt đầu flex-->
+          <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
+            <div fxFlex="0 1 calc(100%)" style="margin-bottom: -10px; font-size: 1.3em; font-weight: 600;" class="center-horizontal">Chương trình {{trainingProgram.name}}:</div>
+            <div *ngFor="let university of trainingProgram.universities" fxFlex="0 1 calc(50%)" fxFlex.lt-md="0 1 calc(50%)"
+                fxFlex.lt-sm="100%">
+                <!-- Bắt đầu flex-->
+                <div style="height: 250px; background-color: red;"  fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+                  <div style="background-color: rgb(231, 238, 240); height: 22%;" fxFlex="0 1 calc(100%)">
+                    <div style="font-size: 1.1em; font-weight: bold; height: 100%; padding: 10px; text-align: center;" class="center-all">{{ university.name }}</div>
+                  </div>
+                  <div style="background-color: rgb(231, 238, 240); height: 78%; position: relative;" fxFlex="0 1 calc(100%)">
+                    <mat-grid-list [cols]="2" rowHeight="100%">
+                      <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <img width="100%" height="100%" src="{{ university.logoUrl }}" alt="">
+                      </mat-grid-tile>
+                      <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <div style="width: 100%; height: 100%;">
+                          <mat-grid-list [cols]="1" rowHeight="25%">
+                            <mat-grid-tile [colspan]="1" [rowspan]="1">
+                              <div style="width: 100%; height: 100%; padding-left: 20px;" class="center-vertical">
+                                <strong>Điểm chuẩn:&nbsp;</strong> {{university.nearestYearEntryMark}}
+                              </div>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="1" [rowspan]="1">
+                              <div style="width: 100%; height: 100%; padding-left: 20px;" class="center-vertical">
+                                <strong>Chỉ tiêu năm 2020:&nbsp;</strong> {{university.numberOfStudents <= 0 ? 'Chưa có' : university.numberOfStudents}}
+                              </div>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="1" [rowspan]="1">
+                              <div style="width: 100%; height: 100%; padding-left: 20px;" class="center-vertical">
+                                <strong>Số người quan tâm:&nbsp;</strong> {{university.numberOfCaring <= 0 ? '0' : university.numberOfCaring}}
+                              </div>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="1" [rowspan]="1">
+                              <!-- <div style="height: 70%; width: 100%; background-color: seagreen;"></div> -->
+                              <button (click)="openDetailDialog(university)" style="margin: 0 10% 15px 0" mat-flat-button color="primary">Chi tiết</button>
+                              <button *ngIf="!university.isCared" (click)="onCaringClick(university.id, trainingProgram.id)" style="margin-bottom: 15px;" mat-flat-button color="accent">Quan tâm</button>
+                              <button *ngIf="university.isCared" (click)="onUncaringClick(university.id, trainingProgram.id, university.name)" style="margin-bottom: 15px; background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ quan tâm</button>
+                            </mat-grid-tile>
+                           
+                          </mat-grid-list>
+                        </div>
+                      </mat-grid-tile>
+                    </mat-grid-list>
+                  </div>
+                </div>
+            </div>
+          </div>
+          
+          <!-- <mat-grid-list [cols]="2" rowHeight="320px" [gutterSize]="'20px'">
+            <mat-grid-tile *ngFor="let university of trainingProgram.universities" [colspan]="1" [rowspan]="1" style=" border-radius: 3%; ">
+              <div style="height: 100%; width: 100%;">
+                <mat-grid-list [cols]="2" rowHeight="80px">
+                  <mat-grid-tile [colspan]="2" [rowspan]="1" style="background-color: lightblue;">
+                    <div style="font-size: 1.5em; font-weight: bold; text-align: center;">{{ university.name }}</div>
+                  </mat-grid-tile>
+                  <mat-grid-tile [colspan]="1" [rowspan]="3">
+                    <img width="100%" height="100%" src="{{ university.logoUrl }}" alt="">
+                  </mat-grid-tile>
+                  <mat-grid-tile [colspan]="1" [rowspan]="2" style="background-color: rgb(192, 238, 238);">
+                  <div style="width: 100%; height: 100%; padding: 5px;">
+                    <div>Sđt: {{university.phone}}</div>
+                    <div><strong>Học phí:</strong> Từ {{university.tuitionFrom | number:'1.0':'en-US'}},000 đến {{university.tuitionTo | number:'1.0':'en-US'}},000/{{ university.tuitionType == 0 ? "Kì" : "Năm"}}</div>
+                    <div><strong>Web:</strong> <a [href]="university.webUrl | safeUrl">{{university.webUrl}}</a></div>
+                    <div><strong>Chỉ tiêu năm 2020:</strong> {{university.numberOfStudents <= 0 ? 'Chưa có' : university.numberOfStudents}}</div>
+                    <div><strong>Số người quan tâm:</strong> {{university.numberOfCaring <= 0 ? '0' : university.numberOfCaring}}</div>
+                    <div><strong>Điểm chuẩn:</strong> {{university.nearestYearEntryMark}}</div>
+                  </div>
+                  </mat-grid-tile>
+                  <mat-grid-tile [colspan]="1" [rowspan]="1" style="background-color: lightblue;">
+                    <button mat-raised-button color="accent" (click)="loadTests(university.id)">Thi thử</button>
+                  </mat-grid-tile>
+                </mat-grid-list>
           </div>
           
         </mat-grid-tile>
-      </mat-grid-list>
+      </mat-grid-list> -->
+        </div>
+      </div>
+
       <div style="margin-top: 25px;">
         <button mat-raised-button matStepperPrevious color="warn">Trở lại</button>
       </div>
