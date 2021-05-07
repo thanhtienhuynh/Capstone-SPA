@@ -7,8 +7,13 @@
             <div class="row">
               <div class="col-xl-7 col-lg-12">
                 <div class="row">
-                  <div class="col-xl-3 col-lg-3 pr-0">
-                    <nz-avatar nzShape="square" [nzSrc]="university != undefined ?  university.logoUrl : ''" [nzSize]="161"></nz-avatar>
+                  <div class="col-xl-3 col-lg-3 pl-0 justify-content-center align-items-center position-relative">                    
+                    <img style='height: 100%; width: 100%; object-fit: fill' [src]="logo != undefined ?  logo : ''" alt="">                    
+                    <input #logoUpload type="file" style="display: none;" (change)="uploadLogo($event)">
+                    <button (click)="logoUpload.click()" style="top: 47px; left: 47px;" class="position-absolute" nbButton size="small">
+                      <nb-icon icon="upload-outline"></nb-icon>          
+                    </button>
+                    <!-- <nz-avatar nzShape="square" [nzSrc]="university != undefined ?  university.logoUrl : ''" [nzSize]="161"></nz-avatar> -->
                   </div>
                   <div class="col-xl-9 col-lg-9 pl-0">
                     <div class="mt-2">
