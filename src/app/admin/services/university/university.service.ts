@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { UniversityRM } from '../../view-models';
+import { Response } from "src/app/_models/response";
 
 
 @Injectable({
@@ -19,11 +20,11 @@ export class UniversityService {
   }
 
   getAllUniversity(): Observable<any>{
-    return this._http.get(this.baseUrl + 'api/v1/university');
+    return this._http.get<any>(this.baseUrl + 'api/v1/university');
   }
 
   getUniversityById(id: string): Observable<any>{
-    return this._http.get(this.baseUrl + 'api/v1/university/detail/' + `${id}`);
+    return this._http.get<any>(this.baseUrl + 'api/v1/university/detail/' + `${id}`);
   }
 
   updateUniversity(body: any): Observable<any>{

@@ -1,4 +1,5 @@
 import { Routes, RouterModule } from '@angular/router';
+import { UniversityMainComponent } from '../university/pages';
 import { ArticleDetailComponent, ArticleMainComponent } from './pages';
 
 const routes: Routes = [

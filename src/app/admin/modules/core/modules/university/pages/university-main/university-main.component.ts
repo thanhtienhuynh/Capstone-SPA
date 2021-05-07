@@ -50,7 +50,7 @@ export class UniversityMainComponent implements OnInit {
 
   getAllUniversity(): void {
     this._universityService.getAllUniversity().pipe(
-      tap((rs) => {                                   
+      tap((rs) => {                                           
         this.listOfUniversity = rs.map((e, i) => ({
           ...e,
           phones: e.phone.split('-'),

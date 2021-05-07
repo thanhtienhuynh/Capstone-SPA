@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Article } from 'src/app/admin/view-models';
+import { tap } from 'rxjs/operators';
+import { ArticleService } from 'src/app/admin/services/article';
+import { ArticleVM } from 'src/app/admin/view-models';
 
 @Component({
   selector: 'app-article-main',
@@ -8,65 +10,46 @@ import { Article } from 'src/app/admin/view-models';
 })
 export class ArticleMainComponent implements OnInit {
   
-  listOfArticle: Article[] = [
-    {
-      title: 'ant design part',
-      description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-      imageUrl: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
-      date: '',
-      originalUrl: 'https://www.24h.com.vn/bong-da/psg-thua-man-city-mang-tieng-cay-cu-bo-bong-da-nguoi-dang-phai-an-4-the-do-c48a1249291.html',
-      content: 'We supply a series of design principles, practical patterns and high quality design resources ' +
-      '(Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
-    },
-    {
-      title: 'ant design part',
-      description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-      imageUrl: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
-      date: '',
-      originalUrl: 'https://www.24h.com.vn/bong-da/psg-thua-man-city-mang-tieng-cay-cu-bo-bong-da-nguoi-dang-phai-an-4-the-do-c48a1249291.html',
-      content: 'We supply a series of design principles, practical patterns and high quality design resources ' +
-      '(Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
-    },
-    {
-      title: 'ant design part',
-      description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-      imageUrl: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
-      date: '',
-      originalUrl: 'https://www.24h.com.vn/bong-da/psg-thua-man-city-mang-tieng-cay-cu-bo-bong-da-nguoi-dang-phai-an-4-the-do-c48a1249291.html',
-      content: 'We supply a series of design principles, practical patterns and high quality design resources ' +
-      '(Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
-    },
-    {
-      title: 'ant design part',
-      description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-      imageUrl: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
-      date: '',
-      originalUrl: 'https://www.24h.com.vn/bong-da/psg-thua-man-city-mang-tieng-cay-cu-bo-bong-da-nguoi-dang-phai-an-4-the-do-c48a1249291.html',
-      content: 'We supply a series of design principles, practical patterns and high quality design resources ' +
-      '(Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
-    },
-    {
-      title: 'ant design part',
-      description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-      imageUrl: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
-      date: '',
-      originalUrl: 'https://www.24h.com.vn/bong-da/psg-thua-man-city-mang-tieng-cay-cu-bo-bong-da-nguoi-dang-phai-an-4-the-do-c48a1249291.html',
-      content: 'We supply a series of design principles, practical patterns and high quality design resources ' +
-      '(Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
-    },
-    {
-      title: 'ant design part',
-      description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-      imageUrl: 'https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png',
-      date: '',
-      originalUrl: 'https://www.24h.com.vn/bong-da/psg-thua-man-city-mang-tieng-cay-cu-bo-bong-da-nguoi-dang-phai-an-4-the-do-c48a1249291.html',
-      content: 'We supply a series of design principles, practical patterns and high quality design resources ' +
-      '(Sketch and Axure), to help people create their product prototypes beautifully and efficiently.'
-    }
+  isLoading: boolean = true;
+  totalRecords: number = 0;
+  pageNumber: number = 1;
+  pageSize: number = 5;
+  listOfArticle: ArticleVM[] = [    
   ];
-  constructor() { }
+  constructor(
+    private _articleService: ArticleService
+  ) { }
 
   ngOnInit() {
+    this.getListOfArticle(this.pageNumber, this.pageSize);
+  }
+
+  getListOfArticle(pageNumber: number, pageSize: number): void {
+    this._articleService.getListOfArticle(pageNumber, pageSize).pipe(
+      tap((rs) => {
+        if (rs.succeeded === true) {
+          this.isLoading = false;
+          this.listOfArticle = rs.data;                    
+          this.totalRecords = rs.totalRecords;          
+        } else {
+          this.isLoading = true;
+        }
+      })
+    ).subscribe();
+  }
+
+  onPageSizeChange(data: any){
+    console.log(data);
+    this.isLoading = true;    
+    this.pageSize = data;
+    this.getListOfArticle(this.pageNumber, this.pageSize);
+  }
+
+  onPageIndexChange(data: any){
+    console.log(data);
+    this.isLoading = true;    
+    this.pageNumber = data;
+    this.getListOfArticle(this.pageNumber, this.pageSize);
   }
 
 }

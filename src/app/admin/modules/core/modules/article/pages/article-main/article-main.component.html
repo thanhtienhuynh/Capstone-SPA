@@ -1,5 +1,5 @@
 <div class="article-main">  
-  <div class="container-fluid">
+  <!-- <div class="container-fluid">
     <button [routerLink]="['details/' + 1]">test</button>
     <div nz-row>
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
@@ -8,8 +8,7 @@
             <div style="width: 100%;">
               <nz-list nzItemLayout="vertical">
                 <nz-list-item *ngFor="let item of listOfArticle">
-                  <nz-list-item-meta>
-                    <nz-list-item-meta-avatar [nzSrc]="item.avatar"> </nz-list-item-meta-avatar>
+                  <nz-list-item-meta>                    
                     <nz-list-item-meta-title>
                       <a href="{{ item.href }}">{{ item.title }}</a>
                     </nz-list-item-meta-title>
@@ -19,9 +18,12 @@
                   </nz-list-item-meta>
                   {{ item.content }}
                   <ul nz-list-item-actions>
-                    <nz-list-item-action><i nz-icon nzType="star-o" style="margin-right: 8px;"></i> 156</nz-list-item-action>
-                    <nz-list-item-action><i nz-icon nzType="star-o" style="margin-right: 8px;"></i> 156</nz-list-item-action>
-                    <nz-list-item-action><i nz-icon nzType="star-o" style="margin-right: 8px;"></i> 2</nz-list-item-action>
+                    <nz-list-item-action>
+                      <nz-tag nzColor="warning">
+                        <i nz-icon nzType="sync" nzSpin></i>
+                        <span>Chờ duyệt</span>
+                      </nz-tag>
+                    </nz-list-item-action>                    
                   </ul>
                   <nz-list-item-extra>
                     <img width="272" alt="logo" [src]="item.imageUrl" />
@@ -32,6 +34,55 @@
           </nb-card-body>
         </nb-card>
       </div>
+    </div>
+  </div> -->
+  <div class="container">    
+    <nz-card *ngIf="isLoading; else articleData">
+      <nz-skeleton [nzLoading]="isLoading" ></nz-skeleton>
+    </nz-card>  
+    <ng-template #articleData>
+      <nz-card  *ngFor="let item of listOfArticle" style="margin-bottom: 10px;">      
+        <div class="row">
+          <div class="col-lg-4 col-md-4">
+            <img style='height: 100%; width: 100%; object-fit: contain' [src]="item.postImageUrl" alt="">
+          </div>
+          <div class="col-lg-8 col-md-4">     
+            <a [routerLink]="['details/' + item.id]" routerLinkActive="router-link-active" class="mb-10" style="text-decoration: none;">
+              <h4 class="article-title">{{item.title}}</h4>
+            </a>                   
+            <div style="margin-bottom: 10px;">
+              <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center">
+                  <i nz-icon nzType="link" nzTheme="outline"></i>
+                  <div style="margin-left: 5px;">
+                    <a [href]="item.publishedPage"><span>Link bài gốc</span></a>                    
+                  </div>
+                </div>
+                <div class="text-gray">
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <span>{{item.postedDate}}</span>
+                </div>
+              </div>
+            </div>
+            <p class="mb-20 text-gray">
+              <span>{{item.shortDescription}}</span>
+            </p>
+            <div class="text-right">              
+              <nz-tag nzColor="warning">
+                <i nz-icon nzType="sync" nzSpin></i>
+                <span>Chờ duyệt bài</span>
+              </nz-tag>
+              <button nz-button nzType="dashed">
+                <span class="ng-star-inserted">Chi tiết</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nz-card>
+    </ng-template>  
+    
+    <div class="text-center" style="margin-top: 30px;">
+      <nz-pagination [nzPageSizeOptions]="[5, 10]" [nzPageIndex]="1" [nzTotal]="totalRecords" nzShowSizeChanger [nzPageSize]="5" (nzPageSizeChange)="onPageSizeChange($event)" (nzPageIndexChange)="onPageIndexChange($event)"></nz-pagination>
     </div>
   </div>
 </div>

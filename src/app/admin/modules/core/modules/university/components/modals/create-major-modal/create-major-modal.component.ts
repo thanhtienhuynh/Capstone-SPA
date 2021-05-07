@@ -72,7 +72,9 @@ export class CreateMajorModalComponent implements OnInit {
 
   getAllMajor(): void {
     this.majorResult = this._majorService.getAllMajor().pipe(      
-      map((rs) => rs.filter((mj) => (mj.id !== this.majors.find((e) => e.id === mj.id)?.id))) // chuyen gia tri rs thanh 1 gia tri khac dang. Observeble. đúng chưa?
+      // map((rs) => rs.filter((mj) => (mj.id !== this.majors.find((e) => e.id === mj.id)?.id)))
+      map((rs) => rs) 
+      // chuyen gia tri rs thanh 1 gia tri khac dang. Observeble. đúng chưa?
     );        
   }
 
