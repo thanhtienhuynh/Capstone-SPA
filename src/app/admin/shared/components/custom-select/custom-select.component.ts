@@ -54,7 +54,7 @@ export class CustomSelectComponent implements OnInit, OnChanges {
     this.filter(this.searchControl.value);        
   }
   filter(value: string) {
-    this.dataFilters = this.data ? this.data.filter((item) => (item[this.label] as string).includes(value)) : [];    
+    this.dataFilters = this.data ? this.data.filter((item) => (item[this.label] as string)?.toLowerCase().includes(value?.toLowerCase())) : [];    
   }
   selecteItem(item: unknown) {      
     if (this.control) {
