@@ -24,6 +24,9 @@ import { RouterModule } from '@angular/router';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
 import { SafeHtmlPipe } from '../_helper/safe-html-pipe';
+import { ProgressSpinnerComponent } from './components/progress-spinner/progress-spinner.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+
 
 const materialModules = [
   MatNativeDateModule,
@@ -43,7 +46,8 @@ const materialModules = [
   MatListModule,
   MatMenuModule,
   MatIconModule,
-  RouterModule
+  RouterModule,
+  MatExpansionModule
 ];
 
 @NgModule({
@@ -54,6 +58,7 @@ const materialModules = [
     AuthenticationComponent,
     ConfirmDialogComponent,
     LoginDialogComponent,
+    ProgressSpinnerComponent
   ],
   imports: [
     ...materialModules,
@@ -67,6 +72,7 @@ const materialModules = [
     AuthenticationComponent,
     ConfirmDialogComponent,
     LoginDialogComponent,
+    ProgressSpinnerComponent
   ],
 })
 export class MaterialModule {

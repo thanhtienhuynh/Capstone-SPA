@@ -234,35 +234,6 @@
                 </div>
             </div>
           </div>
-          
-          <!-- <mat-grid-list [cols]="2" rowHeight="320px" [gutterSize]="'20px'">
-            <mat-grid-tile *ngFor="let university of trainingProgram.universities" [colspan]="1" [rowspan]="1" style=" border-radius: 3%; ">
-              <div style="height: 100%; width: 100%;">
-                <mat-grid-list [cols]="2" rowHeight="80px">
-                  <mat-grid-tile [colspan]="2" [rowspan]="1" style="background-color: lightblue;">
-                    <div style="font-size: 1.5em; font-weight: bold; text-align: center;">{{ university.name }}</div>
-                  </mat-grid-tile>
-                  <mat-grid-tile [colspan]="1" [rowspan]="3">
-                    <img width="100%" height="100%" src="{{ university.logoUrl }}" alt="">
-                  </mat-grid-tile>
-                  <mat-grid-tile [colspan]="1" [rowspan]="2" style="background-color: rgb(192, 238, 238);">
-                  <div style="width: 100%; height: 100%; padding: 5px;">
-                    <div>Sđt: {{university.phone}}</div>
-                    <div><strong>Học phí:</strong> Từ {{university.tuitionFrom | number:'1.0':'en-US'}},000 đến {{university.tuitionTo | number:'1.0':'en-US'}},000/{{ university.tuitionType == 0 ? "Kì" : "Năm"}}</div>
-                    <div><strong>Web:</strong> <a [href]="university.webUrl | safeUrl">{{university.webUrl}}</a></div>
-                    <div><strong>Chỉ tiêu năm 2020:</strong> {{university.numberOfStudents <= 0 ? 'Chưa có' : university.numberOfStudents}}</div>
-                    <div><strong>Số người quan tâm:</strong> {{university.numberOfCaring <= 0 ? '0' : university.numberOfCaring}}</div>
-                    <div><strong>Điểm chuẩn:</strong> {{university.nearestYearEntryMark}}</div>
-                  </div>
-                  </mat-grid-tile>
-                  <mat-grid-tile [colspan]="1" [rowspan]="1" style="background-color: lightblue;">
-                    <button mat-raised-button color="accent" (click)="loadTests(university.id)">Thi thử</button>
-                  </mat-grid-tile>
-                </mat-grid-list>
-          </div>
-          
-        </mat-grid-tile>
-      </mat-grid-list> -->
         </div>
       </div>
 

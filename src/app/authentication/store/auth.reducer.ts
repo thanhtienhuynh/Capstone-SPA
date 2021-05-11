@@ -30,11 +30,6 @@ export function authReducer(
     case AuthActions.LOGIN_SERVER:
       return {
         ...state,
-        firebaseToken: action.payload
-      };
-    case AuthActions.LOGIN_SERVER:
-      return {
-        ...state,
         firebaseToken: action.payload,
         isLoading: true,
       };

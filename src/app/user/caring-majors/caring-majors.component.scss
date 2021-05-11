@@ -1,0 +1,76 @@
+.uni-scroll {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: auto;
+  max-height: 440px;
+  min-height: 216px;
+}
+
+.devider {
+  margin-bottom: 5px;
+}
+
+.button-frame {
+  margin-top: 10px;
+}
+
+.detail-button {
+  margin-right: 20%;
+}
+
+.uncaring-button {
+  background-color: rgba(58, 57, 57, 0.05);
+}
+
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.test-frame {
+  border-radius: 14px;
+  box-shadow: 0 0 6px 3px #cac8c8;
+}
+
+.content {
+  padding: 20px 20px 0px 5px;
+}
+
+
+.major-title {
+  font-weight: 500;
+  color: #4f73eb;
+}
+
+.name-bar {
+  width: auto;
+  height: 40px;
+  background: #ebebeb;
+  clip-path: polygon(0% 0, 91% 0, 100% 50%, 91% 100%, 0 100%);
+  color: #2f4cab;
+  font-size: 1.1em;
+  padding: 5px 20px 5px 10px;
+}
+
+.information-value {
+  font-weight: 600;
+}
+
+#style-7::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	// background-color: #F5F5F5;
+	border-radius: 10px;
+}
+
+#style-7::-webkit-scrollbar
+{
+	width: 6px;
+}
+
+#style-7::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+  background-color:  rgb(73,125,189);
+}

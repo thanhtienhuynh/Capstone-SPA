@@ -15,6 +15,7 @@ export const environment = {
     measurementId: "G-4V3YLW14CB"
   },
   apiUrl: 'https://localhost:44344/',
+  // apiUrl: 'https://mohsdev.azurewebsites.net/',
   // apiUrl: 'https://mohs.azurewebsites.net/',
 };
 

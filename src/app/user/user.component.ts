@@ -15,13 +15,8 @@ export class UserComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   ngOnInit() {
-    
   }
-
-  onSubmissionsClick() {
-    this.store.dispatch(new UserActions.LoadSubmissions());
-  }
-
+  
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
