@@ -17,6 +17,7 @@ import Swal from 'sweetalert2';
 })
 export class CreateUniversityModalComponent implements OnInit {  
 
+  // @Input() callBack: (item: UniversityRM & {stt?:number, phones?: string[]}) => void;
   @Input() callBack: (item: UniversityRM & {stt?:number, phones?: string[]}) => void;
   @Input() index: any;
   logo: string | ArrayBuffer;
@@ -79,21 +80,21 @@ export class CreateUniversityModalComponent implements OnInit {
       this._uniService.createUniversity(newUni).pipe(
         tap((rs) => { 
           const newValue = {
-            id: rs.id,
-            address: rs.address,
-            code: rs.code,
-            description: rs.description,
-            logoUrl: rs.logoUrl,
-            name: rs.name,
-            phone: rs.phone,
-            rating: rs.rating,
-            status: rs.status,
-            tuitionFrom: rs.tuitionFrom,
-            tuitionTo: rs.tuitionTo,
-            tuitionType: rs.tuitionType,
-            webUrl: rs.webUrl,
+            id: rs.data.id,
+            address: rs.data.address,
+            code: rs.data.code,
+            description: rs.data.description,
+            logoUrl: rs.data.logoUrl,
+            name: rs.data.name,
+            phone: rs.data.phone,
+            rating: rs.data.rating,
+            status: rs.data.status,
+            tuitionFrom: rs.data.tuitionFrom,
+            tuitionTo: rs.data.tuitionTo,
+            tuitionType: rs.data.tuitionType,
+            webUrl: rs.data.webUrl,
             stt: 0,   
-            phones: rs.phone.split('-')         
+            phones: rs.data.phone.split('-')         
           }                  
           this.callBack(newValue);
           Swal.fire('Thành Công', 'Thêm mới trường đại học thành công', 'success');          
@@ -108,7 +109,7 @@ export class CreateUniversityModalComponent implements OnInit {
   }  
   
 
-
+  image: File;
   uploadLogo(evt): void {
     const files: File[] = evt.target.files;
     if (files.length > 1) {
@@ -120,15 +121,16 @@ export class CreateUniversityModalComponent implements OnInit {
         if (file.size < 1024*1204*2) {
           const reader = new FileReader();
           reader.onloadend = () => {
-            this.logo = reader.result
+            this.logo = reader.result            
           };
           reader.readAsDataURL(file);
+          this.image = files[0];
         } else {
           Swal.fire('Oversize', 'Vui lòng chọn ảnh có kích thước từ 2MB trở xuống', 'error');
         }
       } else {
         Swal.fire('Lỗi', 'Vui lòng chỉ chọn file ảnh (.png, .jpeg, .jpg)', 'error');
       }
-    }
+    }    
   }
 }

@@ -17,6 +17,7 @@ export const environment = {
   apiUrl: 'https://localhost:44344/',
   // apiUrl: 'https://mohsdev.azurewebsites.net/',
   // apiUrl: 'https://mohs.azurewebsites.net/',
+  // apiUrl: 'http://13.212.10.23:63000/',
 };
 
 /*

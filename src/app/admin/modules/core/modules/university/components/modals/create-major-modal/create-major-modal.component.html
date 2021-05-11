@@ -66,7 +66,7 @@
       <label for="">Điểm chuẩn năm 2019<span style="color: red;">*</span></label>
       <nb-form-field>
         <nb-icon nbPrefix icon="edit-2-outline"></nb-icon>
-        <input [class.isUpdate]="field['isUpdate']"  [formControl]="field.get('entryMark1')" mask="separator.2" style="text-align: right;" thousandSeparator="," type="text" placeholder="Nhập điểm" fullWidth nbInput
+        <input [class.isUpdate]="field['isUpdate']"  [formControl]="field.get('entryMark1')"  style="text-align: right;" thousandSeparator="," type="text" placeholder="Nhập điểm" fullWidth nbInput
       [status]="field.get('entryMark1').invalid && (field.get('entryMark1').touched || field.get('entryMark1').dirty) ? 'danger' : 'info'"/> 
       </nb-form-field>             
     </div>
@@ -74,7 +74,7 @@
       <label for="">Điểm chuẩn năm 2020<span style="color: red;">*</span></label> 
       <nb-form-field>
         <nb-icon nbPrefix icon="edit-2-outline"></nb-icon>
-        <input [formControl]="field.get('entryMark2')" type="text" style="text-align: right;" mask="separator.2" thousandSeparator="," placeholder="Nhập điểm" fullWidth nbInput
+        <input [formControl]="field.get('entryMark2')" type="text" style="text-align: right;" thousandSeparator="," placeholder="Nhập điểm" fullWidth nbInput
         [status]="field.get('entryMark2').invalid && (field.get('entryMark2').touched || field.get('entryMark2').dirty) ? 'danger' : 'info'"  
         /> 
       </nb-form-field>             
