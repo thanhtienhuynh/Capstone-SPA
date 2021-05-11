@@ -12,6 +12,10 @@ const routes: Routes = [
         path: 'university',
         loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.UniversityModule),
       },
+      {
+        path: 'article',
+        loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.ArticleModule),
+      },
     ]
   },
 ];

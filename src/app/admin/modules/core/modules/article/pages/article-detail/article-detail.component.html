@@ -1,0 +1,92 @@
+<div class="article-detail">  
+  <div class="container-fluid">
+    <div nz-row>
+      <div nz-col [nzXs]="18" [nzSm]="18" [nzMd]="18" [nzLg]="18" [nzXl]="18" [nzXXl]="18" class="mb-2">        
+        <nb-card style="margin: 0; width: 99%; position: relative">
+          <nb-card-body style="width: 100%">
+            <div style="width: 100%;">              
+              <div style="padding: 1rem;">   
+                <div *ngIf="article === null; else articleContent">
+                  <nz-skeleton [nzActive]="true"></nz-skeleton>
+                </div>     
+                <ng-template #articleContent>
+                  <h3 [innerHtml]="article.title"></h3>
+                  <div style="margin-bottom: 15px;">
+                    <div class="d-flex align-items-center">
+                      <div class="d-flex align-items-center">
+                        <i nz-icon nzType="link" nzTheme="outline"></i>
+                        <div style="margin-left: 5px;">
+                          <a [href]="article.rootUrl"><span>Link bài gốc</span></a>                    
+                        </div>
+                      </div>
+                      <div class="text-gray">
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <span>{{article.postedDate | date: 'HH:mm dd/MM/yyyy'}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div [innerHtml]="article.content"></div>
+                </ng-template>                                        
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+
+      <div [class]="'action'" nz-col [nzXs]="6" [nzSm]="6" [nzMd]="6" [nzLg]="6" [nzXl]="6" [nzXXl]="6" class="mb-2">                
+        <nb-card style="margin: 0 0 20px 0; width: 100%; position: relative;">
+          <nb-card-body style="width: 100%">
+            <div style="width: 100%; max-height: 50rem">
+              <div>                
+                <div class="col-lg-12">
+                  <label for="">Hiển thị từ ngày</label>
+                  <nz-date-picker
+                    [formControl]="dateForm.get('publicFromDate')"
+                    [nzSize]="'large'"
+                    nzShowTime
+                    nzFormat="yyyy-MM-dd HH:mm:ss"
+                    ngModel
+                    (ngModelChange)="onChangeFromDate($event)"
+                    (nzOnOk)="onOkFromDate($event)"
+                  ></nz-date-picker>
+                </div>
+                <div class="col-lg-12">
+                  <label for="">Hiên thị đến ngày</label>
+                  <nz-date-picker
+                    [formControl]="dateForm.get('publicToDate')"
+                    [nzSize]="'large'"
+                    nzShowTime
+                    nzFormat="yyyy-MM-dd HH:mm:ss"
+                    ngModel
+                    (ngModelChange)="onChangeToDate($event)"
+                    (nzOnOk)="onOkToDate($event)"
+                  ></nz-date-picker>
+                </div>
+                <div class="col-lg-12" style="margin-bottom: 20px;">
+                  <label for="">Các trường đại học liên quan</label>
+                  <nz-select
+                    [nzSize]="'large'"
+                    [nzMaxTagCount]="3"
+                    [nzMaxTagPlaceholder]="tagPlaceHolder"
+                    nzMode="multiple"
+                    nzPlaceHolder="Chọn danh sách trường đại học"
+                    [(ngModel)]="listOfSelectedUniversity"
+                  >
+                    <nz-option *ngFor="let item of listOfDisplayUniversity" [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                  </nz-select>
+                  <ng-template #tagPlaceHolder let-selectedList> và {{ selectedList.length }} đại học khác </ng-template>
+                </div>         
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+        <div class="action-button">
+          <button [disabled]="article.status === 1" (click)="confirmArticle('accept')" nz-button nzType="primary" style="width: 100%;" nzSize="large" >Đăng bài</button>
+        </div>            
+        <div class="action-button">
+          <button [disabled]="article.status === 2" (click)="confirmArticle('reject')" nz-button nzType="danger" style="width: 100%;" nzSize="large">Không đăng bài</button>
+        </div>       
+      </div>
+    </div>    
+  </div>
+</div>

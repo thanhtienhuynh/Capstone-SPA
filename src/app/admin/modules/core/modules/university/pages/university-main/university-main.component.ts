@@ -50,14 +50,19 @@ export class UniversityMainComponent implements OnInit {
 
   getAllUniversity(): void {
     this._universityService.getAllUniversity().pipe(
-      tap((rs) => {                                   
-        this.listOfUniversity = rs.map((e, i) => ({
-          ...e,
-          phones: e.phone.split('-'),
-          stt: i + 1        
-        }));              
-        this.listOfDisplayUniversity = [...this.listOfUniversity];        
-        this.total = this.listOfUniversity.length;             
+      tap((rs) => {  
+        // console.log(rs);          
+        if (rs.succeeded === true) {
+          this.listOfUniversity = rs.data.map((e, i) => ({
+            ...e,
+            phones: e.phone.split('-'),
+            stt: i + 1        
+          }));              
+          this.listOfDisplayUniversity = [...this.listOfUniversity];        
+          this.total = this.listOfUniversity.length;  
+        } else {
+          console.log('fail');
+        }                                                    
       }),
       catchError((err) => {
         return of(undefined);
@@ -71,7 +76,8 @@ export class UniversityMainComponent implements OnInit {
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,  
-      nzComponentParams: {callBack: (item) => {          
+      nzComponentParams: {
+        callBack: (item) => {          
         this.listOfUniversity.push(item);        
         this.listOfUniversity.splice(0, 0, item);
         // this.listOfDisplayUniversity = [...this.listOfUniversity];
@@ -79,7 +85,8 @@ export class UniversityMainComponent implements OnInit {
           ...e,
           stt: e.stt + 1                   
         }));
-      }, index: this.listOfUniversity.length}    
+        }
+      , index: this.listOfUniversity.length}    
     });
   }  
 
