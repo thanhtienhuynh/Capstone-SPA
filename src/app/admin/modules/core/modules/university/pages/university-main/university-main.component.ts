@@ -50,7 +50,8 @@ export class UniversityMainComponent implements OnInit {
 
   getAllUniversity(): void {
     this._universityService.getAllUniversity().pipe(
-      tap((rs) => {    
+      tap((rs) => {  
+        // console.log(rs);          
         if (rs.succeeded === true) {
           this.listOfUniversity = rs.data.map((e, i) => ({
             ...e,
@@ -59,7 +60,9 @@ export class UniversityMainComponent implements OnInit {
           }));              
           this.listOfDisplayUniversity = [...this.listOfUniversity];        
           this.total = this.listOfUniversity.length;  
-        }                                                          
+        } else {
+          console.log('fail');
+        }                                                    
       }),
       catchError((err) => {
         return of(undefined);

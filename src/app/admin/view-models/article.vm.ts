@@ -11,5 +11,8 @@ export interface ArticleVM {
     shortDescription?: string,  
     rootUrl?: string,   
     content?: any,
-    totalRecords?: number;           
+    totalRecords?: number,
+    universityArticles?: any[]  ,
+    status?: number       ,
+    universityIds?: number[]
 }

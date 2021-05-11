@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { ArticleService } from 'src/app/admin/services/article';
 import { ArticleVM } from 'src/app/admin/view-models';
@@ -10,6 +11,7 @@ import { ArticleVM } from 'src/app/admin/view-models';
 })
 export class ArticleMainComponent implements OnInit {
   
+  gen: any[] = [1, 2, 3, 4, 5];
   isLoading: boolean = true;
   totalRecords: number = 0;
   pageNumber: number = 1;
@@ -17,13 +19,15 @@ export class ArticleMainComponent implements OnInit {
   listOfArticle: ArticleVM[] = [    
   ];
   constructor(
-    private _articleService: ArticleService
+    private _articleService: ArticleService,
+    protected readonly router: Router,
   ) { }
 
   ngOnInit() {
     this.getListOfArticle(this.pageNumber, this.pageSize);
   }
 
+  
   getListOfArticle(pageNumber: number, pageSize: number): void {
     this._articleService.getListOfArticle(pageNumber, pageSize).pipe(
       tap((rs) => {
@@ -52,4 +56,7 @@ export class ArticleMainComponent implements OnInit {
     this.getListOfArticle(this.pageNumber, this.pageSize);
   }
 
+  onRedirect(): void {
+    this.router.navigate['admin/core/article/censor']
+  }
 }

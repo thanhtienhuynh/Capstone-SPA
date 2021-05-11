@@ -5,7 +5,7 @@ import { AuthGuard } from './_helper/auth.guard';
 const appRoutes: Routes = [
   { path: '', redirectTo: 'customer', pathMatch: 'full' },
   { path: 'customer', loadChildren: () => import('./customer/customer.module').then((m) => m.CustomerModule)},
-  { path: 'admin', canActivate: [AuthGuard] ,loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule)}  
+  { path: 'admin',loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule)}  
 ];
 
 @NgModule({

@@ -1,7 +1,10 @@
 <div class="article-detail">  
   <div class="container-fluid">
-    <div nz-row>
-      <div nz-col [nzXs]="18" [nzSm]="18" [nzMd]="18" [nzLg]="18" [nzXl]="18" [nzXXl]="18" class="mb-2">        
+    <div nz-row *ngIf="unCensorshipList !== undefined; else loading">
+      <div nz-col [nzXs]="18" [nzSm]="18" [nzMd]="18" [nzLg]="18" [nzXl]="18" [nzXXl]="18" class="mb-2">
+        <div class="action-button-page">
+          <button (click)="preElement()" [disabled]="currentIndex === 0" nz-button nzType="primary" style="width: 140px; background-color: transparent;" nzType="dashed" >Bài trước</button>
+        </div>  
         <nb-card style="margin: 0; width: 99%; position: relative">
           <nb-card-body style="width: 100%">
             <div style="width: 100%;">              
@@ -33,7 +36,15 @@
         </nb-card>
       </div>
 
-      <div [class]="'action'" nz-col [nzXs]="6" [nzSm]="6" [nzMd]="6" [nzLg]="6" [nzXl]="6" [nzXXl]="6" class="mb-2">                
+      <div [class]="'action'" nz-col [nzXs]="6" [nzSm]="6" [nzMd]="6" [nzLg]="6" [nzXl]="6" [nzXXl]="6" class="mb-2">
+        <div style="display: flex; justify-content: space-between;">
+          <div class="action-button-page">
+            <button (click)="preElement()" [disabled]="currentIndex === 0" nz-button nzType="primary" style="width: 140px; background-color: transparent;" nzType="dashed" >Bài trước</button>
+          </div>  
+          <div class="action-button-page">
+            <button (click)="nextElement()" nz-button nzType="primary" style="width: 120px;">Bài tiếp theo</button>
+          </div> 
+        </div>        
         <nb-card style="margin: 0 0 20px 0; width: 100%; position: relative;">
           <nb-card-body style="width: 100%">
             <div style="width: 100%; max-height: 50rem">
@@ -84,9 +95,12 @@
           <button [disabled]="article.status === 1" (click)="confirmArticle('accept')" nz-button nzType="primary" style="width: 100%;" nzSize="large" >Đăng bài</button>
         </div>            
         <div class="action-button">
-          <button [disabled]="article.status === 2" (click)="confirmArticle('reject')" nz-button nzType="danger" style="width: 100%;" nzSize="large">Không đăng bài</button>
+          <button [disabled]="article.status === 2" nz-button nzType="danger" (click)="confirmArticle('reject')" style="width: 100%;" nzSize="large">Không đăng bài</button>
         </div>       
-      </div>
+      </div>      
     </div>    
   </div>
 </div>
+<ng-template #loading>
+  <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+</ng-template>

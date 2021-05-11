@@ -36,9 +36,29 @@
       </div>
     </div>
   </div> -->
-  <div class="container">    
+  <div class="container">  
+    <!-- <nz-card>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="col-lg-3 col-md-3 col-sm-3">
+          <label for="">Trạng thái</label>
+          <nz-select style="width: 100%;">
+            <nz-option nzValue="0" nzLabel="CHỜ DUYỆT"></nz-option>
+            <nz-option nzValue="1" nzLabel="ĐÃ DUYỆT"></nz-option>
+            <nz-option nzValue="2" nzLabel="BỊ CẤM"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3">
+          <label for="">Các trường đại học liên quan</label>
+        </div>
+      </div>
+    </nz-card>  -->
+    <a nz-button nzType="text" [routerLink]="['censor']">Duyệt bài hàng loạt</a>     
     <nz-card *ngIf="isLoading; else articleData">
-      <nz-skeleton [nzLoading]="isLoading" ></nz-skeleton>
+      <nz-skeleton [nzLoading]="isLoading" ></nz-skeleton>      
+      <nz-skeleton [nzLoading]="isLoading" ></nz-skeleton> 
+      <nz-skeleton [nzLoading]="isLoading" ></nz-skeleton> 
+      <nz-skeleton [nzLoading]="isLoading" ></nz-skeleton> 
+      <nz-skeleton [nzLoading]="isLoading" ></nz-skeleton> 
     </nz-card>  
     <ng-template #articleData>
       <nz-card  *ngFor="let item of listOfArticle" style="margin-bottom: 10px;">      
@@ -48,33 +68,38 @@
           </div>
           <div class="col-lg-8 col-md-4">     
             <a [routerLink]="['details/' + item.id]" routerLinkActive="router-link-active" class="mb-10" style="text-decoration: none;">
-              <h4 class="article-title">{{item.title}}</h4>
+              <h4 class="article-title" [innerHtml]="item.title"></h4>
             </a>                   
             <div style="margin-bottom: 10px;">
               <div class="d-flex align-items-center">
                 <div class="d-flex align-items-center">
                   <i nz-icon nzType="link" nzTheme="outline"></i>
                   <div style="margin-left: 5px;">
-                    <a [href]="item.publishedPage"><span>Link bài gốc</span></a>                    
+                    <a [href]="item.publishedPage"><span>Nguồn bài viết</span></a>                    
                   </div>
                 </div>
                 <div class="text-gray">
                   <nz-divider nzType="vertical"></nz-divider>
-                  <span>{{item.postedDate}}</span>
+                  <span>{{item.postedDate | date: 'full'}}</span>
                 </div>
               </div>
             </div>
-            <p class="mb-20 text-gray">
+            <p class="mb-20 text-gray" style="min-height: 60px;">
               <span>{{item.shortDescription}}</span>
             </p>
-            <div class="text-right">              
-              <nz-tag nzColor="warning">
-                <i nz-icon nzType="sync" nzSpin></i>
-                <span>Chờ duyệt bài</span>
-              </nz-tag>
-              <button nz-button nzType="dashed">
-                <span class="ng-star-inserted">Chi tiết</span>
-              </button>
+            <div class="text-right d-flex justify-content-end">
+                <nz-tag *ngIf="item.status === 0" nzColor="warning" style="width: 122px; line-height: 28px; display: flex; align-items: center; ">
+                  <i nz-icon nzType="sync" nzSpin style="font-size: 14px;"></i>
+                  <span style="font-size: 14px;">CHỜ DUYỆT</span>
+                </nz-tag>  
+                <nz-tag *ngIf="item.status === 1" nzColor="success" style="width: 110px; line-height: 28px; display: flex; align-items: center; ">
+                  <i nz-icon nzType="check-circle" style="font-size: 14px;"></i>
+                  <span style="font-size: 14px;">ĐÃ DUYỆT</span>
+                </nz-tag>      
+                <nz-tag *ngIf="item.status === 2" nzColor="error" style="width: 90px; line-height: 28px; display: flex; align-items: center; ">
+                  <i nz-icon nzType="close-circle" style="font-size: 14px;"></i>
+                  <span style="font-size: 14px;">BỊ CẤM</span>
+                </nz-tag>                                            
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StepperComponent } from './major-suggestion-stepper/stepper/stepper.component';
@@ -16,10 +16,7 @@ import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-pag
 import { ResultDialogComponent } from './major-suggestion-stepper/exam-page/result-dialog/result-dialog.component';
 import { CountdownModule } from 'ngx-countdown';
 import { TestCardComponent } from './major-suggestion-stepper/exam-page/test-card/test-card.component';
-import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
-import { SafeHtmlPipe } from './_helper/safe-html-pipe';
-import { AuthenticationComponent } from './authentication/authentication.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
@@ -75,7 +72,7 @@ registerLocaleData(vi);
     CommonModule,  
     MaterialModule,
   ],  
-  providers: [AuthService, { provide: NZ_I18N, useValue: vi_VN },
+  providers: [AuthService, { provide: NZ_I18N, useValue: vi_VN },    
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
