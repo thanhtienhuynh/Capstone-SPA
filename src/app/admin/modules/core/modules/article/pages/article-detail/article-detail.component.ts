@@ -88,8 +88,7 @@ export class ArticleDetailComponent implements OnInit {
 
   getListOfUniversity(): void {
     this._universityService.getAllUniversity().pipe(
-      tap((rs) => {
-        console.log(rs);
+      tap((rs) => {        
         this.listOfUniversity = rs.data
         this.listOfDisplayUniversity = rs.data
       })

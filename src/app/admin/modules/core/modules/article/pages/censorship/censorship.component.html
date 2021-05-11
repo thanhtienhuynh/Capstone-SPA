@@ -92,10 +92,10 @@
           </nb-card-body>
         </nb-card>
         <div class="action-button">
-          <button [disabled]="article.status === 1" (click)="confirmArticle('accept')" nz-button nzType="primary" style="width: 100%;" nzSize="large" >Đăng bài</button>
+          <button [disabled]="article.status === 1" (click)="confirmArticle('accept')" nz-button nzType="primary" style="width: 100%;" nzSize="large" >DUYỆT BÀI VIẾT</button>
         </div>            
         <div class="action-button">
-          <button [disabled]="article.status === 2" nz-button nzType="danger" (click)="confirmArticle('reject')" style="width: 100%;" nzSize="large">Không đăng bài</button>
+          <button [disabled]="article.status === 2" nz-button nzType="danger" (click)="confirmArticle('reject')" style="width: 100%;" nzSize="large">CHẶN BÀI VIẾT</button>
         </div>       
       </div>      
     </div>    
