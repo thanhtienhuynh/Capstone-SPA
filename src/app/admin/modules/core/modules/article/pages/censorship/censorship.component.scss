@@ -50,12 +50,12 @@
 
   .action {
     position: fixed;
-    right: 1.5rem;
+    right: 2rem;
   }
   
-  @media (max-width: 1500px) {
+  @media (max-width: 1700px) {
     .action {
       position: fixed;
-      right: 0.5rem;
+      right: 1.5rem;
     }
   }
