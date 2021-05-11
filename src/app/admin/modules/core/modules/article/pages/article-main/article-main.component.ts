@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
+import { UniversityService } from 'src/app/admin/services';
 import { ArticleService } from 'src/app/admin/services/article';
 import { ArticleVM } from 'src/app/admin/view-models';
+import { University } from 'src/app/_models/university';
 
 @Component({
   selector: 'app-article-main',
@@ -18,13 +20,22 @@ export class ArticleMainComponent implements OnInit {
   pageSize: number = 5;
   listOfArticle: ArticleVM[] = [    
   ];
+
+  listOfUniversity: University[];
+  listOfDisplayUniversity: University[] = [];  
+  listOfSelectedUniversity = [];
+
+  publicFromDate: Date | Date[];
+  publicToDate: Date | Date[];
   constructor(
     private _articleService: ArticleService,
     protected readonly router: Router,
+    private _universityService: UniversityService,
   ) { }
 
   ngOnInit() {
     this.getListOfArticle(this.pageNumber, this.pageSize);
+    this.getListOfUniversity();
   }
 
   
@@ -42,6 +53,14 @@ export class ArticleMainComponent implements OnInit {
     ).subscribe();
   }
 
+  getListOfUniversity(): void {
+    this._universityService.getAllUniversity().pipe(
+      tap((rs) => {        
+        this.listOfUniversity = rs.data
+        this.listOfDisplayUniversity = rs.data
+      })
+    ).subscribe();    
+  }
   onPageSizeChange(data: any){
     console.log(data);
     this.isLoading = true;    
