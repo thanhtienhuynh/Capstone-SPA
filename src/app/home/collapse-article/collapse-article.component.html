@@ -37,3 +37,6 @@ gdAreas.lt-md="title | thumnail | discription" gdRows.lt-md="auto auto auto">
   <div *ngIf="lastButtonValue > 0" class="center-all three-dot">...</div>
   <div *ngIf="lastButtonValue > 0" (click)="pageClick(lastButtonValue)" class="page-button center-all">{{lastButtonValue}}</div>
 </div>
+
+<app-progress-spinner *ngIf="isLoading"></app-progress-spinner>
+

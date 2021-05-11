@@ -7,6 +7,7 @@ import { CommonModule } from "@angular/common";
 import { HomeRoutingModule } from "./home-routing.module";
 import { DetailArticleComponent } from "./detail-article/detail-article.component";
 import { CollapseArticleComponent } from "./collapse-article/collapse-article.component";
+import { SharedModule } from "../admin/shared/shared.module";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CollapseArticleComponent } from "./collapse-article/collapse-article.co
     ReactiveFormsModule,
     MaterialModule,
     FlexLayoutModule,
-    CommonModule
+    CommonModule,
+    SharedModule
   ]
 })
 export class HomeModule {}

@@ -143,7 +143,6 @@ export class StepperComponent implements OnInit, OnDestroy {
     this.marksValidator();
     if (this.secondFormGroup.valid) {
       this.marks = [];
-      console.log(this.secondFormGroup);
       for(let subject of this.subjects) {
         this.marks.push({subjectId: subject.id, mark: this.secondFormGroup.value[subject.id] ? this.secondFormGroup.value[subject.id] : 0});
       }

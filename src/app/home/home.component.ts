@@ -1,12 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { CollapseArticle } from '../_models/collapse-article';
-import { PagedResponse } from '../_models/paged-response';
-import { PageParam } from '../_params/page-param';
 import * as fromApp from '../_store/app.reducer';
-import * as HomeActions from './store/home.actions';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +11,7 @@ import Swal from 'sweetalert2';
 export class HomeComponent implements OnInit, OnDestroy {
   
   subscription: Subscription;
-  isLoading: boolean;
+  isLoading: boolean = false;
   authSubscription: Subscription;
   isAuthLoading: boolean;
   constructor(private store: Store<fromApp.AppState>) { 

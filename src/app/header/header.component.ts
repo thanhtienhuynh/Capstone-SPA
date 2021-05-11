@@ -25,20 +25,9 @@ export class HeaderComponent implements OnInit {
         this.user = authState.user;
       }
     });
-    // this.angularAuth.authState.subscribe((firebaseUser: firebase.User) => {
-    //   if (firebaseUser) {
-    //    firebaseUser.getIdToken().then((token) => {
-    //       console.log(token);
-    //     });
-    //   }
-    // });
   }
 
   onGoogleLoginClick() {
-    // var googleProvider = new firebase.auth.GoogleAuthProvider();
-    // googleProvider.addScope('email');
-    // googleProvider.addScope('profile');
-    // return this.angularAuth.signInWithPopup(googleProvider);
     this.store.dispatch(new AuthActions.LoginGoogle());
   }
 
