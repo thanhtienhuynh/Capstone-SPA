@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { isThisSecond } from 'date-fns';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationPlacement, NzNotificationService } from 'ng-zorro-antd/notification';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { UniversityService } from 'src/app/admin/services';
+import { MajorService, UniversityService } from 'src/app/admin/services';
 import { ArticleService } from 'src/app/admin/services/article';
-import { ArticleVM } from 'src/app/admin/view-models';
+import { ArticleVM, MajorRM } from 'src/app/admin/view-models';
 import { University } from 'src/app/_models/university';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-censorship',
@@ -18,12 +20,13 @@ import { University } from 'src/app/_models/university';
 export class CensorshipComponent implements OnInit {
 
   constructor(
-    private _fb: FormBuilder,
-    private activatedRoute: ActivatedRoute,
+    private _fb: FormBuilder,    
     protected readonly router: Router,
     private _articleService: ArticleService,
     private _universityService: UniversityService,
-    private notification: NzNotificationService
+    private _majorService: MajorService,
+    private notification: NzNotificationService,
+    private _modal: NzModalService
   ) {
     this.initDateForm();
    }
@@ -43,6 +46,11 @@ export class CensorshipComponent implements OnInit {
   //-----------------------
 
   //------------------------
+  listOfMajor: MajorRM[];
+  listOfDisplayMajor: MajorRM[]=[];
+  listOfSelectedMajor = [];  
+  //------------------------
+  //------------------------
   publicFromDate: Date | Date[];
   publicToDate: Date | Date[];
   dateForm: FormGroup;
@@ -50,16 +58,25 @@ export class CensorshipComponent implements OnInit {
   ngOnInit() {
     this.getUnApprovedArticleIdList();
     this.getListOfUniversity();
+    this.getListOfMajor();
   }
 
   getListOfUniversity(): void {
     this._universityService.getAllUniversity().pipe(
-      tap((rs) => {
-        console.log(rs);
-        this.listOfUniversity = rs.data
-        this.listOfDisplayUniversity = rs.data
+      tap((rs) => {        
+        this.listOfUniversity = rs.data;
+        this.listOfDisplayUniversity = rs.data;
       })
     ).subscribe();    
+  }
+
+  getListOfMajor(): void {
+    this._majorService.getAllMajor().pipe(
+      tap((rs) => {        
+        this.listOfMajor = rs.data;
+        this.listOfDisplayMajor = rs.data;
+      })
+    ).subscribe();
   }
 
   confirmArticle(status?: string): void {
@@ -68,29 +85,58 @@ export class CensorshipComponent implements OnInit {
       'publicFromDate': this.publicFromDate,
       'publicToDate': this.publicToDate,
       'status': status === 'accept' ? 1 : 2,
-      'university': this.listOfSelectedUniversity
-    }
-    console.log(newValue);
-    this._articleService.confirmArticle(newValue).pipe(
-      tap((rs) => {
-        if (rs.succeeded === true) {
-          status === 'accept' ? this.createNotification('success', 'Đăng bài', 'Đăng bài viết thành công', 'bottomRight') : this.createNotification('success', 'Hủy đăng bài', 'Hủy đăng bài viết thành công', 'bottomRight')          
-          this.showElement(this.unCensorshipList, this.currentIndex);
-        } else {
-          this.createNotification('error', 'Duyệt Bài', rs.message, 'bottomRight');
-        }        
-      })
-    ).subscribe();    
+      'university': this.listOfSelectedUniversity,
+      'major': this.listOfSelectedMajor
+    }    
+    Swal.fire({
+      title: status === 'accept' ? 'DUYỆT BÀI' : 'CHẶN BÀI VIẾT',
+      text: status === 'accept' ? "Bài viết được duyệt sẽ được đăng lên trang tin của hệ thống." : "Bài viết bị chặn sẽ không còn được đăng lên trang tin của hệ thống.",
+      icon: 'warning',
+      showCancelButton: true,
+      showLoaderOnConfirm: true,            
+      confirmButtonColor: '#3085d6',
+      confirmButtonText: status === 'accept' ? 'Duyệt': 'Chặn',      
+      denyButtonColor: '#00d68f',      
+      cancelButtonColor: '#d33',      
+      cancelButtonText: 'Hủy'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._articleService.confirmArticle(newValue).pipe(
+          tap((rs) => {
+            if (rs.succeeded === true) {
+              status === 'accept' ? this.createNotification('success', 'DUYỆT BÀI VIẾT', 'Duyệt bài viết thành công', 'bottomRight') : this.createNotification('success', 'CHẶN BÀI VIẾT', 'Chặn bài viết thành công', 'bottomRight')          
+              this.showElement(this.unCensorshipList, this.currentIndex);
+            } else {
+              this.createNotification('error', 'Duyệt Bài', 'Duyệt bài viết thất bại', 'bottomRight');
+            }        
+          })
+        ).subscribe(); 
+      }
+      // if(result.isDenied){
+      //   this._articleService.confirmArticle(newValue).pipe(
+      //     tap((rs) => {
+      //       if (rs.succeeded === true) {
+      //         status === 'accept' ? this.createNotification('success', 'Duyệt bài', 'Duyệt bài viết thành công', 'bottomRight') : this.createNotification('success', 'Hủy đăng bài', 'Hủy đăng bài viết thành công', 'bottomRight')          
+      //         this.showElement(this.unCensorshipList, this.currentIndex);
+      //         this.nextElement();              
+      //       } else {
+      //         this.createNotification('error', 'Duyệt Bài', 'Duyệt bài viết thất bại', 'bottomRight');
+      //       }        
+      //     })
+      //   ).subscribe(); 
+      // }
+    })
+       
   }
 
+  
   setDataToDateForm(publicFromDate: Date, publicToDate: Date): void {
     this.dateForm.get('publicFromDate').setValue(publicFromDate);
     this.dateForm.get('publicToDate').setValue(publicToDate);
   }
   getArticleById(id: number): void {
     this._articleService.getArticleById(id).pipe(
-      tap((rs) => {
-        // console.log(rs);
+      tap((rs) => {        
         if (rs.succeeded === true) {   
           this.listOfSelectedUniversity = rs.data.universityIds;                  
           this.article = rs.data;  
@@ -124,8 +170,8 @@ export class CensorshipComponent implements OnInit {
     }
   }
 
-  nextElement(): void {      
-    this.currentIndex++;    
+  nextElement(): void {  
+    this.currentIndex = this.currentIndex < this.unCensorshipList.length - 1 ? this.currentIndex + 1 :   this.unCensorshipList.length - 1;            
     this.showElement(this.unCensorshipList, this.currentIndex);    
   }
 

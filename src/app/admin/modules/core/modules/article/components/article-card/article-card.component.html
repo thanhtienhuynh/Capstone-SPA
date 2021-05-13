@@ -1,0 +1,46 @@
+<ng-content></ng-content>
+<div class="article-wrap" >
+  <div class="article">
+    <nz-card *ngIf="article === undefined; else articleData">
+      <nz-skeleton nzLoading="true"></nz-skeleton>  
+    </nz-card>
+    <ng-template #articleData>
+      <div>
+        <nz-card class="article-card-content">
+          <div class="row">
+            <div class="col-lg-4" [style.background-size]="'cover'" [style.background-repeat]="'no-repeat'" [style.background-image]="'url(' + article.postImageUrl + ')'">              
+            </div>
+            <div class="col-lg-8">
+              <a
+                [routerLink]="['details/' + article.id]"
+                routerLinkActive="router-link-active"                
+                style="text-decoration: none"
+              >
+                <span class="article-title" [innerHtml]="article.title"></span>
+              </a>
+              <div style="margin-bottom: 5px">
+                <div class="d-flex align-items-center">
+                  <div class="d-flex align-items-center">
+                    <i style="font-size: 12px;" nz-icon nzType="link" nzTheme="outline"></i>
+                    <div style="margin-left: 5px">
+                      <a [href]="article.publishedPage"
+                        ><span class="publishedPage">Nguồn bài viết</span></a
+                      >
+                    </div>
+                  </div>
+                  <div class="text-gray">
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <span class="postedDate">{{ article.postedDate }}</span>
+                  </div>
+                </div>
+              </div>
+              <p class="mb-20 text-gray">
+                <span class="shortDescription">{{ article.shortDescription }}</span>
+              </p>          
+            </div>
+          </div>
+        </nz-card>
+      </div>
+    </ng-template>
+  </div>
+</div>

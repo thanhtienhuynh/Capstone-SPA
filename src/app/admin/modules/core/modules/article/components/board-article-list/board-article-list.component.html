@@ -1,0 +1,48 @@
+<div class="status-list">  
+  <div *ngIf="action === 'search'" class="px-3 pt-3 row">
+    <div class="col-lg-6 col-md-6">
+      <h5>{{ landTitle }}</h5>
+    </div>
+    <div class="col-lg-6 col-md-6">
+      <div style="display: flex; justify-content: space-around; align-items: center;">
+        <nb-form-field>
+          <nb-icon nbSuffix icon="search-outline" pack="eva"></nb-icon>
+          <input type="text" placeholder="Tìm kiếm theo tiêu đề bài viết" nbInput/>
+        </nb-form-field> 
+        <button [nzSize]="'large'" nz-button nz-dropdown [nzDropdownMenu]="menu4" nzTrigger="click">
+          Nâng Cao
+          <i nz-icon nzType="down"></i>
+        </button>
+        <nz-dropdown-menu #menu4="nzDropdownMenu">
+          <div nz-menu>
+            <nz-card>
+              <div style="display: flex; justify-content: flex-end; align-items: center;">                 
+                <button nz-button nzType="default" style="margin-right: 10px;">TẠO LẠI</button>        
+                <button nz-button nzType="primary">TÌM KIẾM</button> 
+              </div> 
+            </nz-card>
+          </div>
+        </nz-dropdown-menu>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="action === 'save'" class="px-3 pt-3 row">
+    <div class="col-lg-6 col-md-6">
+      <h5>{{ landTitle }}</h5>
+    </div>
+    <div class="col-lg-6 col-md-6">
+      <div style="display: flex; justify-content: flex-end; align-items: center;">
+        <button nz-button nzType="default" style="margin-right: 10px;">TẠO LẠI</button>        
+        <button nz-button nzType="primary">LƯU</button> 
+      </div>           
+    </div>
+  </div>
+  <nz-divider></nz-divider>
+  <div class="article-card-container" cdkDropList [cdkDropListData]="listOfArticle" (cdkDropListDropped)="drop($event)">
+    <div *ngFor="let item of listOfArticle">
+      <app-article-card [article]="item" [cdkDragData]="item" cdkDrag>        
+        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+      </app-article-card>
+    </div>
+  </div>
+</div>

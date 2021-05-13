@@ -1,41 +1,4 @@
-<div class="article-main">
-  <!-- <div class="container-fluid">
-    <button [routerLink]="['details/' + 1]">test</button>
-    <div nz-row>
-      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
-        <nb-card style="margin: auto; width: 99%; position: relative">
-          <nb-card-body style="width: 100%">
-            <div style="width: 100%;">
-              <nz-list nzItemLayout="vertical">
-                <nz-list-item *ngFor="let item of listOfArticle">
-                  <nz-list-item-meta>                    
-                    <nz-list-item-meta-title>
-                      <a href="{{ item.href }}">{{ item.title }}</a>
-                    </nz-list-item-meta-title>
-                    <nz-list-item-meta-description>
-                      {{ item.description }}
-                    </nz-list-item-meta-description>
-                  </nz-list-item-meta>
-                  {{ item.content }}
-                  <ul nz-list-item-actions>
-                    <nz-list-item-action>
-                      <nz-tag nzColor="warning">
-                        <i nz-icon nzType="sync" nzSpin></i>
-                        <span>Chờ duyệt</span>
-                      </nz-tag>
-                    </nz-list-item-action>                    
-                  </ul>
-                  <nz-list-item-extra>
-                    <img width="272" alt="logo" [src]="item.imageUrl" />
-                  </nz-list-item-extra>
-                </nz-list-item>
-              </nz-list>
-            </div>
-          </nb-card-body>
-        </nb-card>
-      </div>
-    </div>
-  </div> -->
+<!-- <div class="article-main">
   <div class="container">
     <nz-card>
       <div
@@ -108,87 +71,90 @@
       <nz-skeleton [nzLoading]="isLoading"></nz-skeleton>
     </nz-card>
     <ng-template #articleData>
-      <nz-card *ngFor="let item of listOfArticle" style="margin-bottom: 10px">
-        <div class="row">
-          <div class="col-lg-4 col-md-4">
-            <img
-              style="height: 100%; width: 100%; object-fit: contain"
-              [src]="item.postImageUrl"
-              alt=""
-            />
-          </div>
-          <div class="col-lg-8 col-md-4">
-            <a
-              [routerLink]="['details/' + item.id]"
-              routerLinkActive="router-link-active"
-              class="mb-10"
-              style="text-decoration: none"
-            >
-              <h4 class="article-title" [innerHtml]="item.title"></h4>
-            </a>
-            <div style="margin-bottom: 10px">
-              <div class="d-flex align-items-center">
+      <div cdkDropList (cdkDropListDropped)="drop($event)" >
+        <nz-card *ngFor="let item of listOfArticle" style="margin-bottom: 10px" cdkDrag >
+          <div class="row" *cdkDragPlaceholder>
+            <div class="col-lg-4 col-md-4">
+              <img
+                style="height: 100%; width: 100%; object-fit: contain"
+                [src]="item.postImageUrl"
+                alt=""
+              />
+            </div>
+            <div class="col-lg-8 col-md-4">
+              <a
+                [routerLink]="['details/' + item.id]"
+                routerLinkActive="router-link-active"
+                class="mb-10"
+                style="text-decoration: none"
+              >
+                <h4 class="article-title" [innerHtml]="item.title"></h4>
+              </a>
+              <div style="margin-bottom: 10px">
                 <div class="d-flex align-items-center">
-                  <i nz-icon nzType="link" nzTheme="outline"></i>
-                  <div style="margin-left: 5px">
-                    <a [href]="item.publishedPage"
-                      ><span>Nguồn bài viết</span></a
-                    >
+                  <div class="d-flex align-items-center">
+                    <i nz-icon nzType="link" nzTheme="outline"></i>
+                    <div style="margin-left: 5px">
+                      <a [href]="item.publishedPage"
+                        ><span>Nguồn bài viết</span></a
+                      >
+                    </div>
+                  </div>
+                  <div class="text-gray">
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <span>{{ item.postedDate | date: "full" }}</span>
                   </div>
                 </div>
-                <div class="text-gray">
-                  <nz-divider nzType="vertical"></nz-divider>
-                  <span>{{ item.postedDate | date: "full" }}</span>
-                </div>
+              </div>
+              <p class="mb-20 text-gray" style="min-height: 60px">
+                <span>{{ item.shortDescription }}</span>
+              </p>
+              <div class="text-right d-flex justify-content-end">
+                <nz-tag
+                  *ngIf="item.status === 0"
+                  nzColor="warning"
+                  style="
+                    width: 122px;
+                    line-height: 28px;
+                    display: flex;
+                    align-items: center;
+                  "
+                >
+                  <i nz-icon nzType="sync" nzSpin style="font-size: 14px"></i>
+                  <span style="font-size: 14px">CHỜ DUYỆT</span>
+                </nz-tag>
+                <nz-tag
+                  *ngIf="item.status === 1"
+                  nzColor="success"
+                  style="
+                    width: 110px;
+                    line-height: 28px;
+                    display: flex;
+                    align-items: center;
+                  "
+                >
+                  <i nz-icon nzType="check-circle" style="font-size: 14px"></i>
+                  <span style="font-size: 14px">ĐÃ DUYỆT</span>
+                </nz-tag>
+                <nz-tag
+                  *ngIf="item.status === 2"
+                  nzColor="error"
+                  style="
+                    width: 95px;
+                    line-height: 28px;
+                    display: flex;
+                    align-items: center;
+                  "
+                >
+                  <i nz-icon nzType="close-circle" style="font-size: 14px"></i>
+                  <span style="font-size: 14px">BỊ CHẶN</span>
+                </nz-tag>
               </div>
             </div>
-            <p class="mb-20 text-gray" style="min-height: 60px">
-              <span>{{ item.shortDescription }}</span>
-            </p>
-            <div class="text-right d-flex justify-content-end">
-              <nz-tag
-                *ngIf="item.status === 0"
-                nzColor="warning"
-                style="
-                  width: 122px;
-                  line-height: 28px;
-                  display: flex;
-                  align-items: center;
-                "
-              >
-                <i nz-icon nzType="sync" nzSpin style="font-size: 14px"></i>
-                <span style="font-size: 14px">CHỜ DUYỆT</span>
-              </nz-tag>
-              <nz-tag
-                *ngIf="item.status === 1"
-                nzColor="success"
-                style="
-                  width: 110px;
-                  line-height: 28px;
-                  display: flex;
-                  align-items: center;
-                "
-              >
-                <i nz-icon nzType="check-circle" style="font-size: 14px"></i>
-                <span style="font-size: 14px">ĐÃ DUYỆT</span>
-              </nz-tag>
-              <nz-tag
-                *ngIf="item.status === 2"
-                nzColor="error"
-                style="
-                  width: 95px;
-                  line-height: 28px;
-                  display: flex;
-                  align-items: center;
-                "
-              >
-                <i nz-icon nzType="close-circle" style="font-size: 14px"></i>
-                <span style="font-size: 14px">BỊ CHẶN</span>
-              </nz-tag>
-            </div>
           </div>
-        </div>
-      </nz-card>
+        </nz-card>
+      </div>
+      
     </ng-template>
 
     <div class="text-center" style="margin-top: 30px">
@@ -203,4 +169,160 @@
       ></nz-pagination>
     </div>
   </div>
+</div> -->
+
+<div class="article-main">
+  
+  <div class="container-fluid">   
+    <div>
+      <nz-card>
+        <div
+          style="
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+          "
+        >
+          <div class="col-lg-3 col-md-3 col-sm-3">
+            <label for="">Các trường đại học liên quan</label>
+            <nz-select
+              [nzSize]="'large'"
+              [nzMaxTagCount]="3"
+              [nzMaxTagPlaceholder]="tagPlaceHolder"
+              nzMode="multiple"
+              nzPlaceHolder="Chọn danh sách trường đại học"
+              [(ngModel)]="listOfSelectedUniversity"     
+              style="width: 100%;"       
+            >
+              <nz-option
+                *ngFor="let item of listOfDisplayUniversity"
+                [nzLabel]="item.name"
+                [nzValue]="item.id"
+              ></nz-option>
+            </nz-select>
+            <ng-template #tagPlaceHolder let-selectedList> và {{ selectedList.length }} trường đại học khác </ng-template>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2">
+            <label for="">Các ngành học liên quan</label>
+            <nz-select
+              [nzSize]="'large'"
+              [nzMaxTagCount]="3"
+              [nzMaxTagPlaceholder]="tagPlaceHolderMajor"
+              nzMode="multiple"
+              nzPlaceHolder="Chọn danh sách ngành học"
+              [(ngModel)]="listOfSelectedMajor"     
+              style="width: 100%;"       
+            >
+              <nz-option
+                *ngFor="let item of listOfDisplayMajor"
+                [nzLabel]="item.name"
+                [nzValue]="item.id"
+              ></nz-option>
+            </nz-select>
+            <ng-template #tagPlaceHolderMajor let-selectedList> và {{ selectedList.length }} ngành học khác </ng-template>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2">
+            <label for="">Hiên thị từ ngày</label>
+            <nz-date-picker            
+              [nzSize]="'large'"
+              nzShowTime
+              nzFormat="yyyy-MM-dd HH:mm:ss"
+              ngModel            
+            ></nz-date-picker>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2">
+            <label for="">Hiên thị đến ngày</label>
+            <nz-date-picker            
+              [nzSize]="'large'"
+              nzShowTime
+              nzFormat="yyyy-MM-dd HH:mm:ss"
+              ngModel            
+            ></nz-date-picker>
+          </div>
+          <div class="col-lg-2 col-md-2 col-sm-2">
+            <label for="">Trạng thái</label>
+            <nz-select style="width: 100%" [nzSize]="'large'">
+              <nz-option nzValue="0" nzLabel="CHỜ DUYỆT"></nz-option>
+              <nz-option nzValue="1" nzLabel="ĐÃ DUYỆT"></nz-option>
+              <nz-option nzValue="2" nzLabel="BỊ CẤM"></nz-option>
+            </nz-select>
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1" style="padding-top: 1.9rem;">   
+            <div class="d-flex justify-content-center">
+              <button (click)="searchByCondition()" nz-button nzType="primary" [nzSize]="'large'">Tìm Kiếm</button>                         
+            </div>                 
+          </div>
+        </div>
+      </nz-card>
+    </div>
+    <nb-card>
+      <nb-card-body>
+    
+        <nb-tabset (changeTab)="changeTab($event)" fullWidth>
+          <nb-tab tabTitle="top bài viết" tabIcon="layers-outline" responsive style="padding-left: 0; padding-right: 0;">
+            <div class="d-flex" cdkDropListGroup>
+              <div class="col-md-6 col-lg-6" style="padding-left: 0;">                   
+                <board-article-list [action]="'search'" [listOfArticle]="listOfArticle" [landTitle]="'BÀI VIẾT ĐANG ĐƯỢC ĐĂNG'"></board-article-list>
+              </div>
+              <div class="col-md-6 col-lg-6" style="padding-right: 0;">
+                <board-article-list [action]="'save'" [listOfArticle]="[]" [landTitle]="'TOP BÀI VIẾT ĐƯỢC ĐĂNG'"></board-article-list>                
+              </div>
+            </div>            
+          </nb-tab>
+          <nb-tab tabTitle="bài viết đã duyệt" tabIcon="checkmark-circle-outline" responsive>
+            <div class="row">
+              <div class="col-lg-11 mx-auto">
+                <div class="row">
+                  <div class="col-md-3" *ngFor="let item of listOfArticle" style="margin-bottom: 10px;">
+                    <ng-template #coverTemplate>
+                      <img alt="example" [src]="item.postImageUrl" style="object-fit: contain"/>
+                    </ng-template>
+                    <nz-card [nzCover]="coverTemplate">
+                      <div style="min-height: 150px;">
+                        <a
+                          [routerLink]="['details/' + item.id]"
+                          routerLinkActive="router-link-active"
+                          class="mb-10"
+                          style="text-decoration: none"
+                        >
+                          <span class="article-title" [innerHtml]="item.title"></span>
+                        </a>
+                      </div>
+                    </nz-card>
+                  </div>
+                </div>
+                <div class="text-center" style="margin-top: 30px">
+                  <nz-pagination
+                    [nzPageSizeOptions]="[5, 10]"
+                    [nzPageIndex]="1"
+                    [nzTotal]="totalRecords"
+                    nzShowSizeChanger
+                    [nzPageSize]="5"
+                    (nzPageSizeChange)="onPageSizeChange($event)"
+                    (nzPageIndexChange)="onPageIndexChange($event)"
+                  ></nz-pagination>
+                </div>
+              </div>
+            </div>
+          </nb-tab>          
+          <nb-tab tabTitle="chờ duyệt bài" tabIcon="close-circle-outline" responsive>
+            <div style="display: flex; align-items: center;">
+              <a nz-button nzType="text" [routerLink]="['censor']">Duyệt bài hàng loạt</a>
+            </div>             
+          </nb-tab>
+          <nb-tab tabTitle="bài viết bị chặn" tabIcon="close-circle-outline" responsive>
+            <p>List of <strong>transactions</strong>.</p>
+          </nb-tab>
+          <nb-tab tabTitle="kết quả tìm kiếm" tabIcon="search-outline" responsive>
+            <p>List of <strong>transactions</strong>.</p>
+          </nb-tab>
+        </nb-tabset>
+    
+      </nb-card-body>
+    </nb-card>
+  </div>
 </div>
+
+<!-- <div style="display: flex; align-items: center;">
+  <a nz-button nzType="text" [routerLink]="['censor']">Duyệt bài hàng loạt</a>
+</div>  -->

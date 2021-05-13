@@ -1,9 +1,10 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
-import { UniversityService } from 'src/app/admin/services';
+import { MajorService, UniversityService } from 'src/app/admin/services';
 import { ArticleService } from 'src/app/admin/services/article';
-import { ArticleVM } from 'src/app/admin/view-models';
+import { ArticleVM, MajorRM } from 'src/app/admin/view-models';
 import { University } from 'src/app/_models/university';
 
 @Component({
@@ -18,12 +19,21 @@ export class ArticleMainComponent implements OnInit {
   totalRecords: number = 0;
   pageNumber: number = 1;
   pageSize: number = 5;
+  //------------------------------
   listOfArticle: ArticleVM[] = [    
   ];
+
+  listOfArticleMockData: ArticleVM[] = [
+    
+  ]
 
   listOfUniversity: University[];
   listOfDisplayUniversity: University[] = [];  
   listOfSelectedUniversity = [];
+
+  listOfMajor: MajorRM[];
+  listOfDisplayMajor: MajorRM[]=[];
+  listOfSelectedMajor = [];
 
   publicFromDate: Date | Date[];
   publicToDate: Date | Date[];
@@ -31,11 +41,13 @@ export class ArticleMainComponent implements OnInit {
     private _articleService: ArticleService,
     protected readonly router: Router,
     private _universityService: UniversityService,
+    private _majorService: MajorService,
   ) { }
 
   ngOnInit() {
     this.getListOfArticle(this.pageNumber, this.pageSize);
     this.getListOfUniversity();
+    this.getListOfMajor();
   }
 
   
@@ -61,15 +73,23 @@ export class ArticleMainComponent implements OnInit {
       })
     ).subscribe();    
   }
-  onPageSizeChange(data: any){
-    console.log(data);
+
+  getListOfMajor(): void {
+    this._majorService.getAllMajor().pipe(
+      tap((rs) => {        
+        this.listOfMajor = rs.data;
+        this.listOfDisplayMajor = rs.data;
+      })
+    ).subscribe();
+  }
+
+  onPageSizeChange(data: any){    
     this.isLoading = true;    
     this.pageSize = data;
     this.getListOfArticle(this.pageNumber, this.pageSize);
   }
 
-  onPageIndexChange(data: any){
-    console.log(data);
+  onPageIndexChange(data: any){    
     this.isLoading = true;    
     this.pageNumber = data;
     this.getListOfArticle(this.pageNumber, this.pageSize);
@@ -77,5 +97,18 @@ export class ArticleMainComponent implements OnInit {
 
   onRedirect(): void {
     this.router.navigate['admin/core/article/censor']
+  }
+
+  drop(event: CdkDragDrop<any[]>): void {    
+    moveItemInArray(this.listOfArticle, event.previousIndex, event.currentIndex);
+  }
+
+  changeTab(event: any){    
+  }
+
+  res: boolean = false;
+
+  searchByCondition(){
+    this.res = true;
   }
 }

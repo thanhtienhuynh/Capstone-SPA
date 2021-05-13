@@ -1,5 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DragDropModule } from "@angular/cdk/drag-drop";
 import {
   AntModule,
   NebularModule,
@@ -18,6 +19,7 @@ const SHARE_MODULES = [
 export const ANGULAR_MODULES = [
   FormsModule,
   ReactiveFormsModule,
+  DragDropModule
   // CommonModule,  
 ];
 
