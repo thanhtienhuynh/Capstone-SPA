@@ -1,5 +1,5 @@
 export interface ArticleVM {
-    id?: string,
+    id?: string | number,
     title?: string,
     crawlerDate?: Date,
     importantLevel?: string,

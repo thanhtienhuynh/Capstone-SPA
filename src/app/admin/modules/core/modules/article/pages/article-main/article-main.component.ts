@@ -1,11 +1,13 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { NbTabComponent } from '@nebular/theme';
 import { tap } from 'rxjs/operators';
 import { MajorService, UniversityService } from 'src/app/admin/services';
 import { ArticleService } from 'src/app/admin/services/article';
-import { ArticleVM, MajorRM } from 'src/app/admin/view-models';
+import { ArticleVM, MajorRM, PageModel } from 'src/app/admin/view-models';
 import { University } from 'src/app/_models/university';
+import { ArticleGridListComponent, TopArticleComponent } from '../../components';
 
 @Component({
   selector: 'app-article-main',
@@ -13,19 +15,15 @@ import { University } from 'src/app/_models/university';
   styleUrls: ['./article-main.component.scss']
 })
 export class ArticleMainComponent implements OnInit {
-  
-  gen: any[] = [1, 2, 3, 4, 5];
-  isLoading: boolean = true;
-  totalRecords: number = 0;
-  pageNumber: number = 1;
-  pageSize: number = 5;
-  //------------------------------
-  listOfArticle: ArticleVM[] = [    
-  ];
 
-  listOfArticleMockData: ArticleVM[] = [
+  @ViewChild('topArticle') topArticle: TopArticleComponent;
     
-  ]
+  @ViewChild('gridOne') gridOne: ArticleGridListComponent;
+  @ViewChild('gridTwo') gridTwo: ArticleGridListComponent;
+  @ViewChild('gridThree') gridThree: ArticleGridListComponent;
+
+  listOfArticle: ArticleVM[]; 
+  totalArticleRecords: number;
 
   listOfUniversity: University[];
   listOfDisplayUniversity: University[] = [];  
@@ -37,6 +35,7 @@ export class ArticleMainComponent implements OnInit {
 
   publicFromDate: Date | Date[];
   publicToDate: Date | Date[];
+
   constructor(
     private _articleService: ArticleService,
     protected readonly router: Router,
@@ -44,22 +43,20 @@ export class ArticleMainComponent implements OnInit {
     private _majorService: MajorService,
   ) { }
 
-  ngOnInit() {
-    this.getListOfArticle(this.pageNumber, this.pageSize);
+  ngOnInit() {    
     this.getListOfUniversity();
     this.getListOfMajor();
   }
 
   
-  getListOfArticle(pageNumber: number, pageSize: number): void {
-    this._articleService.getListOfArticle(pageNumber, pageSize).pipe(
+  getListOfArticle(pageNumber: number, pageSize: number, status: number): void {
+    this._articleService.getListOfArticle(pageNumber, pageSize, status).pipe(
       tap((rs) => {
-        if (rs.succeeded === true) {
-          this.isLoading = false;
-          this.listOfArticle = rs.data;                    
-          this.totalRecords = rs.totalRecords;          
+        if (rs.succeeded === true) {  
+          this.totalArticleRecords = rs.totalRecords;                  
+          this.listOfArticle = rs.data;                                     
         } else {
-          this.isLoading = true;
+          
         }
       })
     ).subscribe();
@@ -81,34 +78,43 @@ export class ArticleMainComponent implements OnInit {
         this.listOfDisplayMajor = rs.data;
       })
     ).subscribe();
-  }
-
-  onPageSizeChange(data: any){    
-    this.isLoading = true;    
-    this.pageSize = data;
-    this.getListOfArticle(this.pageNumber, this.pageSize);
-  }
-
-  onPageIndexChange(data: any){    
-    this.isLoading = true;    
-    this.pageNumber = data;
-    this.getListOfArticle(this.pageNumber, this.pageSize);
-  }
+  }  
 
   onRedirect(): void {
     this.router.navigate['admin/core/article/censor']
   }
+  
 
-  drop(event: CdkDragDrop<any[]>): void {    
-    moveItemInArray(this.listOfArticle, event.previousIndex, event.currentIndex);
+  changeTab(event: NbTabComponent){  
+    if (event.tabTitle === "top bài viết") {
+      this.topArticle.ngOnInit();      
+    } 
+    if (event.tabTitle === "bài viết đã duyệt") {
+      this.listOfArticle = undefined;      
+      this.getListOfArticle(1, 8, 1);      
+      this.gridOne.resetPageModel();     
+      this.gridTwo.resetPageModel();
+      this.gridThree.resetPageModel();
+    } 
+    if (event.tabTitle === "chờ duyệt bài") {
+      this.listOfArticle = undefined;      
+      this.getListOfArticle(1, 8, 0);      
+      this.gridOne.resetPageModel();     
+      this.gridTwo.resetPageModel();
+      this.gridThree.resetPageModel();
+    }
+    if (event.tabTitle === "bài viết bị chặn") {
+      this.listOfArticle = undefined;      
+      this.getListOfArticle(1, 8, 2);      
+      this.gridOne.resetPageModel();     
+      this.gridTwo.resetPageModel();
+      this.gridThree.resetPageModel();
+    }
   }
 
-  changeTab(event: any){    
+  pagination(event: PageModel): void {    
+    this.listOfArticle = undefined;
+    this.getListOfArticle(event.pageNumber, event.pageSize, event.status);    
   }
-
-  res: boolean = false;
-
-  searchByCondition(){
-    this.res = true;
-  }
+    
 }

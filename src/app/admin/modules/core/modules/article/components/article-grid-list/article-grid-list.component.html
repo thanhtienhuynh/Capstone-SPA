@@ -1,0 +1,42 @@
+<div class="row" *ngIf="listOfArticle !== undefined; else loadingContent">
+  <div class="col-lg-11 mx-auto">
+    <div class="row">
+      <div class="col-md-3" *ngFor="let item of listOfArticle" style="margin-bottom: 10px;">
+        <ng-template #coverTemplate>
+          <img alt="example" [src]="item.postImageUrl" style="object-fit: contain"/>
+        </ng-template>
+        <nz-card [nzCover]="coverTemplate">
+          <div style="min-height: 150px;">
+            <a
+              [routerLink]="['details/' + item.id]"
+              routerLinkActive="router-link-active"
+              class="mb-10"
+              style="text-decoration: none"
+            >
+              <span class="article-title" [innerHtml]="item.title"></span>
+            </a>
+          </div>
+        </nz-card>
+      </div>
+    </div> 
+    <div class="text-center" style="margin-top: 30px">
+      <nz-pagination
+        #paginationTemp
+        [nzPageSizeOptions]="[4, 8, 12]"
+        [nzPageIndex]="initPageNumber"
+        [nzTotal]="totalRecods"
+        nzShowSizeChanger
+        [nzPageSize]="initPageSize"
+        (nzPageSizeChange)="onPageSizeChange($event)"
+        (nzPageIndexChange)="onPageIndexChange($event)"
+      ></nz-pagination>
+    </div>   
+  </div>  
+</div>
+
+
+<ng-template #loadingContent>
+  <div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 550px;">
+    <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+  </div>
+</ng-template>

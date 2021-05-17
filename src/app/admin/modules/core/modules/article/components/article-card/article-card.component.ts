@@ -9,7 +9,10 @@ import { ArticleVM } from 'src/app/admin/view-models';
 export class ArticleCardComponent implements OnInit, OnChanges {
 
   @Input() article: ArticleVM;
+  @Input() topNumber: number;
+
   isLoading: boolean = true;
+
   constructor() { }
   ngOnChanges(changes: SimpleChanges): void {
     

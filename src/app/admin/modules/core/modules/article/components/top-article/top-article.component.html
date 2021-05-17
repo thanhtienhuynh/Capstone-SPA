@@ -1,0 +1,8 @@
+<div class="row" cdkDropListGroup>
+  <div class="col-md-12 col-lg-6" style="padding-left: 0;">                      
+    <board-article-list (searchValueTitle)="onChangeTitleValue($event)" [callBack]="getPublishedArticle" [action]="'search'" [listOfArticle]="listOfPublishedArticle || []" [landTitle]="'BÀI VIẾT ĐANG ĐƯỢC ĐĂNG'"></board-article-list>
+  </div>
+  <div class="col-md-12 col-lg-6" style="padding-right: 0;">
+    <board-article-list [callBack]="getPublishedArticle" [action]="'save'" [listOfArticle]="listOfTopArticle || []" [landTitle]="'TOP BÀI VIẾT ĐƯỢC ĐĂNG'"></board-article-list>                
+  </div>
+</div> 
