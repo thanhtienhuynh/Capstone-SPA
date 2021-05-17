@@ -18,7 +18,7 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
   @Input() listOfArticle: ArticleVM[];
   @Input() landTitle: string;
   @Input() action: string;
-  @Input() totalRecord: number;
+  @Input() totalRecords: number;
   @Input() callBack: (pageNumber:number, pageSize:number, status:number) => void;
 
   // @ViewChildren(TopArticleComponent) topArticleComponent: TopArticleComponent;
@@ -33,11 +33,13 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
   ) { }
   
   ngOnChanges(changes: SimpleChanges): void {    
-    console.log(this.listOfArticle, this.action);
+    // console.log('onChange list',this.listOfArticle, this.action);
+    console.log('onChange total', this.totalRecords, this.action);
   }
 
   ngOnInit() {
-    
+    // console.log('onInit list', this.listOfArticle, this.action);
+    console.log('onInit total' , this.totalRecords, this.action);
   }
 
   updateTopArticle(data: number[]): void {
@@ -63,6 +65,8 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
       })
     ).subscribe()
   }
+
+
   drop(event: CdkDragDrop<any[]>) {     
     console.log(event);  
     let isMovingInsideTheSameList = event.previousContainer === event.container;

@@ -154,6 +154,7 @@ export class UniversityDetailComponent implements OnInit {
       "rating": this.updateUniForm.get('rating').value,
       "status": this.updateUniForm.get('status').value
     }  
+    // console.log(newValue);
     const formData = new FormData();     
     for (let key in newValue) {
       formData.append(key, newValue[key]);

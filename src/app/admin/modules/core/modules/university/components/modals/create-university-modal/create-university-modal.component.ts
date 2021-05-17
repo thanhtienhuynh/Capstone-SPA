@@ -77,6 +77,7 @@ export class CreateUniversityModalComponent implements OnInit {
         'Rating': this.createUniversityForm.get('rating').value,
         'Status': this.createUniversityForm.get('status').value
       }            
+      console.log(newUni);
       this._uniService.createUniversity(newUni).pipe(
         tap((rs) => { 
           const newValue = {
