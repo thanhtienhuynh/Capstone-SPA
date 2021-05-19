@@ -36,8 +36,8 @@ export class TopArticleComponent implements OnInit {
     this.listOfTopArticle = [];
   }
 
-  getPublishedArticle(pageSize: number, pageNumber: number, status: number): void {
-    this._articleService.getListOfArticle(pageSize, pageNumber, status).pipe(          
+  getPublishedArticle(pageNumber: number, pageSize: number, status: number): void {
+    this._articleService.getListOfArticle(pageNumber, pageSize, status).pipe(          
       // map(rs => rs.succeeded === true ? this.listOfPublishedArticle = rs.data?.filter(sj => sj.id !== this.listOfTopArticle.find(top => top.id === sj.id)?.id) : this.listOfPublishedArticle = [])
       // tap((rs) => {
       //   if (rs.succeeded === true) {
@@ -48,7 +48,7 @@ export class TopArticleComponent implements OnInit {
         if (rs.succeeded === true) {
           if (rs.data !== null) {
             this.totalRecords = rs.totalRecords;
-            this.listOfPublishedArticle = rs.data?.filter(sj => sj.id !== this.listOfTopArticle.find(top => top.id === sj.id)?.id);
+            this.listOfPublishedArticle = rs.data?.filter(sj => sj.id !== this.listOfTopArticle?.find(top => top.id === sj.id)?.id);
           } else {
             this.listOfPublishedArticle = [];
           }
@@ -63,7 +63,12 @@ export class TopArticleComponent implements OnInit {
     this._articleService.getListOfTopArticle(topRecord).pipe(
       tap((rs) => {
         if (rs.succeeded === true) {
-          this.listOfTopArticle = rs.data          
+          // this.listOfTopArticle = rs.data  
+          if (rs.data !== null) {
+            this.listOfTopArticle = rs.data 
+          } else {
+            this.listOfTopArticle = [];
+          }
         }
       })
     ).subscribe();
@@ -75,7 +80,7 @@ export class TopArticleComponent implements OnInit {
         if (rs.succeeded === true) {
           if (rs.data !== null) {
             this.totalRecords = rs.totalRecords;
-            this.listOfPublishedArticle = rs.data?.filter(sj => sj.id !== this.listOfTopArticle.find(top => top.id === sj.id)?.id);
+            this.listOfPublishedArticle = rs.data?.filter(sj => sj.id !== this.listOfTopArticle?.find(top => top.id === sj.id)?.id);
           } else {
             this.listOfPublishedArticle = [];
           }

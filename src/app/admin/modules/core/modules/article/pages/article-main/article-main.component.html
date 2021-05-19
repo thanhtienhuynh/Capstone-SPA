@@ -1,80 +1,6 @@
 <div class="article-main">  
   <div class="container-fluid">   
-    <div>
-      <nz-card>
-        <div class="row">
-          <div class="col-lg-2 col-md-12 col-sm-2">
-            <label for="">Các trường đại học liên quan</label>
-            <nz-select
-              [nzSize]="'large'"
-              [nzMaxTagCount]="1"
-              [nzMaxTagPlaceholder]="tagPlaceHolder"
-              nzMode="multiple"
-              nzPlaceHolder="Chọn danh sách trường đại học"
-              [(ngModel)]="listOfSelectedUniversity"     
-              style="width: 100%;"       
-            >
-              <nz-option
-                *ngFor="let item of listOfDisplayUniversity"
-                [nzLabel]="item.name"
-                [nzValue]="item.id"
-              ></nz-option>
-            </nz-select>
-            <ng-template #tagPlaceHolder let-selectedList> và {{ selectedList.length }} trường đại học khác </ng-template>
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-2">
-            <label for="">Các ngành học liên quan</label>
-            <nz-select
-              [nzSize]="'large'"
-              [nzMaxTagCount]="1"
-              
-              nzMode="multiple"
-              nzPlaceHolder="Chọn danh sách ngành học"
-              [(ngModel)]="listOfSelectedMajor"     
-              style="width: 100%;"       
-            >
-              <nz-option
-                *ngFor="let item of listOfDisplayMajor"
-                [nzLabel]="item.name"
-                [nzValue]="item.id"
-              ></nz-option>
-            </nz-select>
-            <ng-template #tagPlaceHolderMajor let-selectedList> và {{ selectedList.length }} ngành học khác </ng-template>
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-2">
-            <label for="">Hiên thị từ ngày</label>
-            <nz-date-picker            
-              [nzSize]="'large'"
-              nzShowTime
-              nzFormat="yyyy-MM-dd HH:mm:ss"
-              ngModel            
-            ></nz-date-picker>
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-2">
-            <label for="">Hiên thị đến ngày</label>
-            <nz-date-picker            
-              [nzSize]="'large'"
-              nzShowTime
-              nzFormat="yyyy-MM-dd HH:mm:ss"
-              ngModel            
-            ></nz-date-picker>
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-2">
-            <label for="">Trạng thái</label>
-            <nz-select style="width: 100%" [nzSize]="'large'">
-              <nz-option nzValue="0" nzLabel="CHỜ DUYỆT"></nz-option>
-              <nz-option nzValue="1" nzLabel="ĐÃ DUYỆT"></nz-option>
-              <nz-option nzValue="2" nzLabel="BỊ CẤM"></nz-option>
-            </nz-select>
-          </div>
-          <div class="col-lg-1 col-md-1 col-sm-1" style="padding-top: 1.9rem;">   
-            <div class="d-flex justify-content-center">
-              <button nz-button nzType="primary" [nzSize]="'large'">Tìm Kiếm</button>                         
-            </div>                 
-          </div>
-        </div>
-      </nz-card>
-    </div>
+    <app-search-by-condition></app-search-by-condition>
     <nb-card>
       <nb-card-body>
         <nb-tabset (changeTab)="changeTab($event)" fullWidth>
@@ -84,7 +10,10 @@
           <nb-tab tabTitle="bài viết đã duyệt" tabIcon="checkmark-circle-outline" responsive>
             <app-article-grid-list #gridOne [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="1" (paging)="pagination($event)"></app-article-grid-list>
           </nb-tab>          
-          <nb-tab tabTitle="chờ duyệt bài" tabIcon="close-circle-outline" responsive>
+          <nb-tab tabTitle="bài viết chờ duyệt" tabIcon="close-circle-outline" responsive>
+            <div style="display: flex; align-items: center;">
+              <a nz-button nzType="text" [routerLink]="['censor']">Duyệt bài hàng loạt</a>
+            </div> 
             <app-article-grid-list #gridTwo [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="0" (paging)="pagination($event)"></app-article-grid-list>            
           </nb-tab>
           <nb-tab tabTitle="bài viết bị chặn" tabIcon="close-circle-outline" responsive>

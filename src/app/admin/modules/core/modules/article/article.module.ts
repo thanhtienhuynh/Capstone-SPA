@@ -3,13 +3,14 @@ import { ArticleRoutes } from './article.routing';
 import { SharedModule } from 'src/app/admin/shared/shared.module';
 import { ArticleDetailComponent, ArticleMainComponent } from './pages';
 import { CensorshipComponent } from './pages/censorship/censorship.component';
-import { ArticleCardComponent, ArticleGridListComponent, BoardArticleListComponent, TopArticleComponent } from './components';
+import { ArticleCardComponent, ArticleGridListComponent, BoardArticleListComponent, SearchByConditionComponent, TopArticleComponent } from './components';
 
 const COMPONENTS = [
   ArticleCardComponent,
   BoardArticleListComponent,
   ArticleGridListComponent,
-  TopArticleComponent
+  TopArticleComponent,
+  SearchByConditionComponent
 ];
 
 const PAGES = [

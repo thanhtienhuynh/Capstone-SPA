@@ -20,16 +20,15 @@ import Swal from 'sweetalert2';
 export class CensorshipComponent implements OnInit {
 
   constructor(
-    private _fb: FormBuilder,    
+    private _fb: FormBuilder,
     protected readonly router: Router,
     private _articleService: ArticleService,
     private _universityService: UniversityService,
     private _majorService: MajorService,
     private notification: NzNotificationService,
-    private _modal: NzModalService
   ) {
     this.initDateForm();
-   }
+  }
 
   article: ArticleVM = {
     content: '<nz-skeleton [nzActive]="true"></nz-skeleton>'
@@ -41,14 +40,14 @@ export class CensorshipComponent implements OnInit {
   currentIndex: number = 0;
   //----------------------
   listOfUniversity: University[];
-  listOfDisplayUniversity: University[] = [];  
+  listOfDisplayUniversity: University[] = [];
   listOfSelectedUniversity = [];
   //-----------------------
 
   //------------------------
   listOfMajor: MajorRM[];
-  listOfDisplayMajor: MajorRM[]=[];
-  listOfSelectedMajor = [];  
+  listOfDisplayMajor: MajorRM[] = [];
+  listOfSelectedMajor = [];
   //------------------------
   //------------------------
   publicFromDate: Date | Date[];
@@ -63,16 +62,16 @@ export class CensorshipComponent implements OnInit {
 
   getListOfUniversity(): void {
     this._universityService.getAllUniversity().pipe(
-      tap((rs) => {        
+      tap((rs) => {
         this.listOfUniversity = rs.data;
         this.listOfDisplayUniversity = rs.data;
       })
-    ).subscribe();    
+    ).subscribe();
   }
 
   getListOfMajor(): void {
     this._majorService.getAllMajor().pipe(
-      tap((rs) => {        
+      tap((rs) => {
         this.listOfMajor = rs.data;
         this.listOfDisplayMajor = rs.data;
       })
@@ -80,77 +79,185 @@ export class CensorshipComponent implements OnInit {
   }
 
   confirmArticle(status?: string): void {
-    const newValue = {
-      'id': this.articleId,
-      'publicFromDate': this.publicFromDate,
-      'publicToDate': this.publicToDate,
-      'status': status === 'accept' ? 1 : 2,
-      'university': this.listOfSelectedUniversity,
-      'major': this.listOfSelectedMajor
-    }    
-    Swal.fire({
-      title: status === 'accept' ? 'DUYỆT BÀI' : 'CHẶN BÀI VIẾT',
-      text: status === 'accept' ? "Bài viết được duyệt sẽ được đăng lên trang tin của hệ thống." : "Bài viết bị chặn sẽ không còn được đăng lên trang tin của hệ thống.",
-      icon: 'warning',
-      showCancelButton: true,
-      showLoaderOnConfirm: true,            
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: status === 'accept' ? 'Duyệt': 'Chặn',      
-      denyButtonColor: '#00d68f',      
-      cancelButtonColor: '#d33',      
-      cancelButtonText: 'Hủy'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this._articleService.confirmArticle(newValue).pipe(
-          tap((rs) => {
-            if (rs.succeeded === true) {
-              status === 'accept' ? this.createNotification('success', 'DUYỆT BÀI VIẾT', 'Duyệt bài viết thành công', 'bottomRight') : this.createNotification('success', 'CHẶN BÀI VIẾT', 'Chặn bài viết thành công', 'bottomRight')          
-              this.showElement(this.unCensorshipList, this.currentIndex);
-            } else {
-              this.createNotification('error', 'Duyệt Bài', 'Duyệt bài viết thất bại', 'bottomRight');
-            }        
-          })
-        ).subscribe(); 
-      }
-      // if(result.isDenied){
-      //   this._articleService.confirmArticle(newValue).pipe(
-      //     tap((rs) => {
-      //       if (rs.succeeded === true) {
-      //         status === 'accept' ? this.createNotification('success', 'Duyệt bài', 'Duyệt bài viết thành công', 'bottomRight') : this.createNotification('success', 'Hủy đăng bài', 'Hủy đăng bài viết thành công', 'bottomRight')          
-      //         this.showElement(this.unCensorshipList, this.currentIndex);
-      //         this.nextElement();              
-      //       } else {
-      //         this.createNotification('error', 'Duyệt Bài', 'Duyệt bài viết thất bại', 'bottomRight');
-      //       }        
-      //     })
-      //   ).subscribe(); 
-      // }
-    })
-       
+    var newValue = {};
+    switch (status) {
+      case 'accept':
+        console.log('accept');
+        newValue = {
+          'id': this.articleId,
+          'publicFromDate': null,
+          'publicToDate': null,
+          'status': 1,
+          'university': this.listOfSelectedUniversity,
+          'major': this.listOfSelectedMajor
+        }
+        Swal.fire({
+          title: 'DUYỆT BÀI',
+          text: "Bài viết được duyệt sẽ được chuyển đến danh sách chờ đăng bài viết lên trang tin",
+          icon: 'question',
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'XÁC NHẬN',
+          denyButtonColor: '#00d68f',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'HỦY'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log(newValue);
+            this._articleService.confirmArticle(newValue).pipe(
+              tap((rs) => {
+                console.log(rs);
+                if (rs.succeeded === true) {
+                  this.createNotification('success', 'DUYỆT BÀI VIẾT', 'Duyệt bài viết thành công', 'bottomRight');
+                  this.showElement(this.unCensorshipList, this.currentIndex);
+                } else {
+                  this.createNotification('error', 'Duyệt Bài', 'Duyệt bài viết thất bại', 'bottomRight');
+                }
+              }),
+              catchError(err => {
+                console.log(err);
+                return of(err);
+              })
+            ).subscribe();
+          }
+        })
+        break;
+      case 'deny':
+        newValue = {
+          'id': this.articleId,
+          'publicFromDate': null,
+          'publicToDate': null,
+          'status': 0,
+          'university': [],
+          'major': []
+        }
+        Swal.fire({
+          title: 'HỦY DUYỆT BÀI',
+          text: "Bài viết được duyệt sẽ được chuyển đến danh sách chờ duyệt bài.",
+          icon: 'warning',
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'XÁC NHẬN',
+          denyButtonColor: '#00d68f',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'HỦY'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log(newValue);
+            this._articleService.confirmArticle(newValue).pipe(
+              tap((rs) => {
+                if (rs.succeeded === true) {
+                  this.createNotification('success', 'HỦY DUYỆT BÀI VIẾT', 'Hủy duyệt bài viết thành công', 'bottomRight');
+                  this.showElement(this.unCensorshipList, this.currentIndex);
+                } else {
+                  this.createNotification('error', 'HỦY DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
+                }
+              })
+            ).subscribe();
+          }
+        })
+        break;
+      case 'reject':
+        newValue = {
+          'id': this.articleId,
+          'publicFromDate': null,
+          'publicToDate': null,
+          'status': 2,
+          'university': [],
+          'major': []
+        }
+        Swal.fire({
+          title: 'CHẶN BÀI VIẾT',
+          text: "Bài viết sẽ được chuyển tiếp vào danh sách các bài viết bị chặn.",
+          icon: 'warning',
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'XÁC NHẬN',
+          denyButtonColor: '#00d68f',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'HỦY'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this._articleService.confirmArticle(newValue).pipe(
+              tap((rs) => {
+                if (rs.succeeded === true) {
+                  this.createNotification('success', 'HỦY DUYỆT BÀI VIẾT', 'Hủy duyệt bài viết thành công', 'bottomRight');
+                  this.showElement(this.unCensorshipList, this.currentIndex);
+                } else {
+                  this.createNotification('error', 'HỦY DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
+                }
+              })
+            ).subscribe();
+          }
+        })
+        break;
+      case 'unReject':
+        newValue = {
+          'id': this.articleId,
+          'publicFromDate': null,
+          'publicToDate': null,
+          'status': 0,
+          'university': [],
+          'major': []
+        }
+        Swal.fire({
+          title: 'GỠ CHẶN BÀI VIẾT',
+          text: "Bài viết sẽ được chuyển tiếp vào danh sách các bài viết chờ duyệt.",
+          icon: 'warning',
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'XÁC NHẬN',
+          denyButtonColor: '#00d68f',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'HỦY'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this._articleService.confirmArticle(newValue).pipe(
+              tap((rs) => {
+                if (rs.succeeded === true) {
+                  this.createNotification('success', 'GỠ CHẶN BÀI VIẾT', 'Gỡ chặn bài viết thành công', 'bottomRight');
+                  this.showElement(this.unCensorshipList, this.currentIndex);
+                } else {
+                  this.createNotification('error', 'GỠ CHẶN BÀI BÀI VIẾT', 'Thất bại', 'bottomRight');
+                }
+              })
+            ).subscribe();
+          }
+        })
+        break;
+      default:
+        break;
+    }
   }
 
-  
+
   setDataToDateForm(publicFromDate: Date, publicToDate: Date): void {
     this.dateForm.get('publicFromDate').setValue(publicFromDate);
     this.dateForm.get('publicToDate').setValue(publicToDate);
   }
+
   getArticleById(id: number): void {
     this._articleService.getArticleById(id).pipe(
-      tap((rs) => {        
-        if (rs.succeeded === true) {   
-          this.listOfSelectedUniversity = rs.data.universityIds;                  
-          this.article = rs.data;  
+      tap((rs) => {
+        if (rs.succeeded === true) {
+          console.log(rs.data);
+          this.listOfSelectedUniversity = rs.data.universityIds;
+          this.article = rs.data;
           this.articleId = rs.data.id;
           this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
         } else {
           this.article = null;
-        }     
+        }
       }),
       catchError((err) => {
         this.article = null;
         return of(undefined);
       })
-    ).subscribe(); 
+    ).subscribe();
   }
 
   getUnApprovedArticleIdList(): void {
@@ -164,20 +271,20 @@ export class CensorshipComponent implements OnInit {
     ).subscribe();
   }
 
-  showElement(array:number[], index: number){
+  showElement(array: number[], index: number) {
     if (array[index] != undefined) {
       this.getArticleById(array[index]);
     }
   }
 
-  nextElement(): void {  
-    this.currentIndex = this.currentIndex < this.unCensorshipList.length - 1 ? this.currentIndex + 1 :   this.unCensorshipList.length - 1;            
-    this.showElement(this.unCensorshipList, this.currentIndex);    
+  nextElement(): void {
+    this.currentIndex = this.currentIndex < this.unCensorshipList.length - 1 ? this.currentIndex + 1 : this.unCensorshipList.length - 1;
+    this.showElement(this.unCensorshipList, this.currentIndex);
   }
 
   preElement(): void {
     this.currentIndex === 0 ? this.currentIndex : this.currentIndex--;
-    this.showElement(this.unCensorshipList, this.currentIndex);    
+    this.showElement(this.unCensorshipList, this.currentIndex);
   }
   initDateForm(): void {
     this.dateForm = this._fb.group({
@@ -187,26 +294,26 @@ export class CensorshipComponent implements OnInit {
   }
   //Date
   onChangeFromDate(result: Date): void {
-    this.publicFromDate = result;    
+    this.publicFromDate = result;
   }
 
   onOkFromDate(result: Date | Date[] | null): void {
-    this.publicFromDate = result;    
+    this.publicFromDate = result;
   }
 
   onCalendarChangeFromDate(result: Array<Date | null>): void {
-    
+
   }
 
   onChangeToDate(result: Date): void {
-    this.publicToDate = result;    
+    this.publicToDate = result;
   }
 
   onOkToDate(result: Date | Date[] | null): void {
-    this.publicToDate = result;    
+    this.publicToDate = result;
   }
 
-  onCalendarChangeToDate(result: Array<Date | null>): void {    
+  onCalendarChangeToDate(result: Array<Date | null>): void {
   }
 
   getListOfSelectedUniversity(): void {

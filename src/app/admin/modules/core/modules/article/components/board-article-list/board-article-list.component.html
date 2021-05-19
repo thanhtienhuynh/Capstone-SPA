@@ -1,9 +1,9 @@
 <div class="status-list">  
   <div *ngIf="action === 'search'" class="px-3 pt-3 row">
-    <div class="col-lg-6 col-md-6">
+    <div class="col-lg-6 col-md-12">
       <h5>{{ landTitle }}</h5>
     </div>
-    <div class="col-lg-6 col-md-6" fixed>
+    <div class="col-lg-6 col-md-12" fixed>
       <div class="row">
         <div class="col-md-8 col-lg-8 pr-0">
           <nb-form-field>
@@ -13,6 +13,7 @@
         </div>
         <div class="col-md-4 col-lg-4">
           <button nbButton size="small" status="info" (click)="searchValueTitle.emit(searchByTitle.value)">TÌM KIẾM</button> 
+          <!-- <button nz-button nzType="primary" (click)="searchValueTitle.emit(searchByTitle.value)">TÌM KIẾM</button> -->
         </div>                        
       </div>      
     </div>
@@ -23,13 +24,16 @@
     </div>
     <div class="col-lg-6 col-md-6">
       <div style="display: flex; justify-content: flex-end; align-items: center;">
-        <button nz-button nzType="default" style="margin-right: 10px;">TẠO LẠI</button>                
+        <button nz-button (click)="resetTopArticle()" nzType="default" style="margin-right: 10px;">TẠO LẠI</button>                
       </div>           
     </div>
   </div>
   <nz-divider></nz-divider>
   <div class="article-card-container" cdkDropList [cdkDropListData]="listOfArticle" (cdkDropListDropped)="drop($event)">
-    <div *ngIf="listOfArticle?.length === 0" style="display: flex; align-items: center; justify-content: center;">Không có kết quả tương ứng</div>    
+    <div *ngIf="listOfArticle?.length === 0" style="display: flex; align-items: center; justify-content: center;">
+      <span *ngIf="action === 'search'">Không có kết quả tương ứng</span>
+      <span *ngIf="action === 'save'">Chưa có bài viết nào được thiết lập lên TOP</span>
+    </div>    
     <div *ngFor="let item of listOfArticle; let i = index">
       <app-article-card [topNumber]="action === 'save' ? i : undefined" [article]="item" [cdkDragData]="item" cdkDrag>        
         <div class="example-custom-placeholder" *cdkDragPlaceholder></div>

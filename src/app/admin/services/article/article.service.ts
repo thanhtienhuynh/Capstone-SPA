@@ -41,6 +41,11 @@ export class ArticleService {
     return this._http.get<PagedResponse<ArticleVM[]>>(this.baseUrl + 'api/v1/article/admin-all', { params});
   }
 
+  searchByCondition(pageNumber: number, pageSize: number, status: number, title: string): Observable<PagedResponse<ArticleVM[]>>{
+    let params = new HttpParams().append('PageSize', `${pageSize}`).append('PageNumber', `${pageNumber}`).append('Status', `${status}`).append('Search', `${title}`);
+    return this._http.get<PagedResponse<ArticleVM[]>>(this.baseUrl + 'api/v1/article/admin-all', { params});
+  }
+
   getListOfTopArticle(topRecord?: number): Observable<PagedResponse<ArticleVM[]>>{
     return this._http.get<PagedResponse<ArticleVM[]>>(this.baseUrl + 'api/v1/article/admin-top');
   }
