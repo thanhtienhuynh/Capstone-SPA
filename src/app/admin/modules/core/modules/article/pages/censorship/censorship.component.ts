@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { isThisSecond } from 'date-fns';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { Router } from '@angular/router';
 import { NzNotificationPlacement, NzNotificationService } from 'ng-zorro-antd/notification';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -81,8 +79,7 @@ export class CensorshipComponent implements OnInit {
   confirmArticle(status?: string): void {
     var newValue = {};
     switch (status) {
-      case 'accept':
-        console.log('accept');
+      case 'accept':        
         newValue = {
           'id': this.articleId,
           'publicFromDate': null,
@@ -110,7 +107,8 @@ export class CensorshipComponent implements OnInit {
                 console.log(rs);
                 if (rs.succeeded === true) {
                   this.createNotification('success', 'DUYỆT BÀI VIẾT', 'Duyệt bài viết thành công', 'bottomRight');
-                  this.showElement(this.unCensorshipList, this.currentIndex);
+                  // this.showElement(this.unCensorshipList, this.currentIndex);                  
+                  this.nextElement();
                 } else {
                   this.createNotification('error', 'Duyệt Bài', 'Duyệt bài viết thất bại', 'bottomRight');
                 }
@@ -221,6 +219,7 @@ export class CensorshipComponent implements OnInit {
                 if (rs.succeeded === true) {
                   this.createNotification('success', 'GỠ CHẶN BÀI VIẾT', 'Gỡ chặn bài viết thành công', 'bottomRight');
                   this.showElement(this.unCensorshipList, this.currentIndex);
+                  // this.nextElement();
                 } else {
                   this.createNotification('error', 'GỠ CHẶN BÀI BÀI VIẾT', 'Thất bại', 'bottomRight');
                 }
@@ -246,6 +245,7 @@ export class CensorshipComponent implements OnInit {
         if (rs.succeeded === true) {
           console.log(rs.data);
           this.listOfSelectedUniversity = rs.data.universityIds;
+          this.listOfSelectedMajor = rs.data.majorIds;
           this.article = rs.data;
           this.articleId = rs.data.id;
           this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
@@ -279,6 +279,7 @@ export class CensorshipComponent implements OnInit {
 
   nextElement(): void {
     this.currentIndex = this.currentIndex < this.unCensorshipList.length - 1 ? this.currentIndex + 1 : this.unCensorshipList.length - 1;
+    console.log('current index', this.currentIndex);
     this.showElement(this.unCensorshipList, this.currentIndex);
   }
 

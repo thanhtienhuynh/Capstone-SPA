@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ArticleRoutes } from './article.routing';
 import { SharedModule } from 'src/app/admin/shared/shared.module';
-import { ArticleDetailComponent, ArticleMainComponent } from './pages';
-import { CensorshipComponent } from './pages/censorship/censorship.component';
+import { ArticleDetailComponent, ArticleMainComponent, PublishedComponent, CensorshipComponent } from './pages';
 import { ArticleCardComponent, ArticleGridListComponent, BoardArticleListComponent, SearchByConditionComponent, TopArticleComponent } from './components';
 
 const COMPONENTS = [
@@ -10,7 +9,8 @@ const COMPONENTS = [
   BoardArticleListComponent,
   ArticleGridListComponent,
   TopArticleComponent,
-  SearchByConditionComponent
+  SearchByConditionComponent,
+  PublishedComponent
 ];
 
 const PAGES = [

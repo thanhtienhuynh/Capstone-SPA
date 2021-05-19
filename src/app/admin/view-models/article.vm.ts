@@ -14,5 +14,6 @@ export interface ArticleVM {
     totalRecords?: number,
     universityArticles?: any[]  ,
     status?: number       ,
-    universityIds?: number[]
+    universityIds?: number[],
+    majorIds?: number[]
 }

@@ -43,8 +43,30 @@ export class ArticleMainComponent implements OnInit {
     ).subscribe();
   }   
 
+  getListOfArticleByTitle(pageNumber: number, pageSize: number, status: number, title: string): void {
+    this._articleService.searchByTitle(pageNumber, pageSize, status, title).pipe(
+      tap((rs) => {
+        if (rs.succeeded === true) {  
+          this.totalArticleRecords = rs.totalRecords;                  
+          this.listOfArticle = rs.data;                                     
+        } else {
+          
+        }
+      })
+    ).subscribe();
+  } 
+
   onRedirect(): void {
     this.router.navigate['admin/core/article/censor']
+  }
+
+  searchByTitle(event: any): void {
+    console.log(event);
+    if (event.title === "") {
+      this.getListOfArticle(1, 8, event.status); 
+    } else {
+      this.getListOfArticleByTitle(1, 8, event.status, event.title);
+    }    
   }
   
 

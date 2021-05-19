@@ -92,6 +92,7 @@ export class TopArticleComponent implements OnInit {
   }
 
   onChangeTitleValue(event: string): void {
+    console.log(event);
     this.searchTitleValue = event;
     this.listZero?.resetPageModel();
     this.searchByTitle(1, 10, 3, event);

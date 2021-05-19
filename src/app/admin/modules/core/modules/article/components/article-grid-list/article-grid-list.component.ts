@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { NzPaginationComponent } from 'ng-zorro-antd/pagination';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ArticleService } from 'src/app/admin/services/article';
 import { ArticleVM, PageModel } from 'src/app/admin/view-models';
 
 @Component({
@@ -13,12 +13,14 @@ export class ArticleGridListComponent implements OnInit, OnChanges, AfterViewIni
   @Input() status: number;
   @Input() totalRecods: number = 0;
   @Output() paging = new EventEmitter();
-  
+  @Output() searchValueTitle: EventEmitter<string> = new EventEmitter<string>();
 
   initPageSize: number = 8;
   initPageNumber: number = 1;
 
-  constructor() { }
+  constructor(
+    private _articleService: ArticleService,
+  ) { }
 
   ngAfterViewInit(): void {
     // this.paginationTemp.nzPageIndex = 1;  
@@ -31,6 +33,10 @@ export class ArticleGridListComponent implements OnInit, OnChanges, AfterViewIni
   ngOnInit() {    
     
   }
+
+  // searchByTitle(status?: number): void {
+  //   this._articleService.searchByTitle(1, 10, status, )
+  // }
 
   onPageSizeChange(event: number): void {
     this.initPageSize = event;

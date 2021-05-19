@@ -49,6 +49,7 @@
                 <div class="col-lg-6">
                   <label for="">Hiển thị từ ngày</label>
                   <nz-date-picker
+                    [nzDisabled]="article.status === 2"
                     [formControl]="dateForm.get('publicFromDate')"
                     [nzSize]="'large'"
                     nzShowTime
@@ -61,6 +62,7 @@
                 <div class="col-lg-6">
                   <label for="">Hiên thị đến ngày</label>
                   <nz-date-picker
+                    [nzDisabled]="article.status === 2"
                     [formControl]="dateForm.get('publicToDate')"
                     [nzSize]="'large'"
                     nzShowTime
@@ -75,6 +77,7 @@
                 <div class="col-lg-12" style="margin-bottom: 20px;">
                   <label for="">Các trường đại học liên quan</label>
                   <nz-select
+                    [nzDisabled]="article.status === 2 || article.status === 1"
                     [nzSize]="'large'"
                     [nzMaxTagCount]="3"
                     [nzMaxTagPlaceholder]="tagPlaceHolderUni"
@@ -89,6 +92,7 @@
                 <div class="col-lg-12" style="margin-bottom: 20px;">
                   <label for="">Các ngành học liên quan</label>
                   <nz-select
+                    [nzDisabled]="article.status === 2 || article.status === 1"
                     [nzSize]="'large'"
                     [nzMaxTagCount]="3"
                     [nzMaxTagPlaceholder]="tagPlaceHolderMajor"
@@ -107,31 +111,34 @@
         </nb-card>
         <div *ngIf="article.status === 1" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">           
           <div class="action-button col-lg-6 pr-0 pl-0">            
-            <button fullWidth nbButton outline status="info" (click)="confirmArticle('published', 1)">ĐĂNG BÀI</button>
+            <button [disabled]="dateForm.invalid" fullWidth nbButton outline status="info" (click)="confirmArticle('published')">ĐĂNG BÀI</button>
           </div>           
           <div class="action-button col-lg-6" style="padding-right: 0px;">            
-            <button fullWidth nbButton outline status="danger" (click)="confirmArticle('cancel', 1)">HỦY DUYỆT</button>
-          </div>          
+            <button fullWidth nbButton outline status="success" (click)="confirmArticle('deny')">HỦY DUYỆT</button>
+          </div>
+          <div class="action-button col-lg-12" style="padding-right: 0px; padding-left: 0;">            
+            <button fullWidth nbButton outline status="danger" (click)="confirmArticle('reject')">CHẶN BÀI VIẾT</button>
+          </div>     
         </div>   
         <div *ngIf="article.status === 0" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
           <div class="action-button col-lg-6" style="padding-left: 0px;">
-            <button fullWidth nbButton  status="success" (click)="confirmArticle('accept', 0)">DUYỆT BÀI</button>
+            <button fullWidth nbButton  status="success" outline (click)="confirmArticle('accept')">DUYỆT BÀI</button>
           </div>                     
           <div class="action-button col-lg-6" style="padding-right: 0px;">            
-            <button fullWidth  nbButton outline status="danger" (click)="confirmArticle('reject', 0)">REJECT</button>
+            <button fullWidth  nbButton outline status="danger" (click)="confirmArticle('reject')">CHẶN BÀI VIẾT</button>
           </div>          
         </div>   
         <div *ngIf="article.status === 2" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
           <div class="action-button col-lg-12" style="padding-left: 0px;">
-            <button fullWidth nbButton  status="success" (click)="confirmArticle('unblock', 2)">GỠ CHẶN</button>
+            <button fullWidth nbButton  status="danger" outline (click)="confirmArticle('unReject')">GỠ CHẶN</button>
           </div>                                        
         </div>
         <div *ngIf="article.status === 3" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
           <div class="action-button col-lg-6" style="padding-left: 0px;">
-            <button fullWidth nbButton  status="success" (click)="confirmArticle('unPublished', 3)">HỦY ĐĂNG</button>
+            <button  fullWidth nbButton  status="info" outline (click)="confirmArticle('unPublished')">HỦY ĐĂNG</button>
           </div>  
           <div class="action-button col-lg-6" style="padding-left: 0px;">
-            <button fullWidth nbButton outline  status="danger" (click)="confirmArticle('reject', 3)">CHẶN BÀI</button>
+            <button fullWidth nbButton outline  status="danger" (click)="confirmArticle('reject')">CHẶN BÀI</button>
           </div>                                       
         </div>
       </div>
