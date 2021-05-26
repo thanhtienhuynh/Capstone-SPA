@@ -50,8 +50,8 @@ export class ArticleService {
     return this._http.get<PagedResponse<ArticleVM[]>>(this.baseUrl + 'api/v1/article/admin-top');
   }
 
-  updateTopArticle(body: any): Observable<Response<ArticleVM>> {
-    return this._http.put<Response<ArticleVM>>(this.baseUrl + 'api/v1/article/top', body);
+  updateTopArticle(body: any): Observable<Response<ArticleVM[]>> {
+    return this._http.put<Response<ArticleVM[]>>(this.baseUrl + 'api/v1/article/top', body);
   }
   getArticleById(id: string | number): Observable<Response<ArticleVM>>{
     return this._http.get<PagedResponse<ArticleVM>>(this.baseUrl + 'api/v1/article/admin-detail/' + + `${id}`);
@@ -59,6 +59,10 @@ export class ArticleService {
 
   getUnApprovedArticleIdList(): Observable<Response<number[]>>{
     return this._http.get<Response<number[]>>(this.baseUrl + 'api/v1/article/admin-unapproved-articles');
+  }
+
+  getApprovedArticleList(): Observable<Response<number[]>>{
+    return this._http.get<Response<number[]>>(this.baseUrl + 'api/v1/article/approved-article-ids');
   }
   confirmArticle(body: any): Observable<Response<any>>{
     return this._http.put<Response<any>>(this.baseUrl + 'api/v1/article', body);

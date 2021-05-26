@@ -1,5 +1,4 @@
-<ng-content></ng-content>
-<div class="article-wrap" >
+<div class="article-wrap" (click)="openContentModal(article?.id)" >
   <div class="article">
     <nz-card *ngIf="article === undefined; else articleData">
       <nz-skeleton nzLoading="true"></nz-skeleton>  
@@ -35,7 +34,8 @@
                 </div>
               </div>
               <p class="mb-20 text-gray">
-                <span class="shortDescription">{{ article.shortDescription }}</span>
+                <!-- <span class="shortDescription">{{ (article.shortDescription.length>150)? (article.shortDescription | slice:0:150)+'..':(article.shortDescription) }}</span> -->
+                <span class="shortDescription">{{article.shortDescription | sliceWord:30}}</span>
               </p>
               <div *ngIf="topNumber !== undefined" style="display: flex; justify-content: flex-end; align-items: center;">
                 <nz-tag nzColor="success" style="width: 100px; height: 30px; display: flex; justify-content: center; align-items: center;">
@@ -49,3 +49,5 @@
     </ng-template>
   </div>
 </div>
+
+

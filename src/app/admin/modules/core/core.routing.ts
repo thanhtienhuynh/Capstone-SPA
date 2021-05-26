@@ -4,7 +4,7 @@ import { LayoutComponent } from './pages';
 const routes: Routes = [
   {
     path: '', component: LayoutComponent, children: [     
-      {path: '', redirectTo: 'university'},
+      {path: '', redirectTo: 'article'},
       {
         path: 'dashboard', loadChildren: () => import('src/app/admin/modules/core/modules').then(m => m.DashboardModule),
       }, 

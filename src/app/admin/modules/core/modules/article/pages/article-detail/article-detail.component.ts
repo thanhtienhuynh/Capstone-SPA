@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationPlacement, NzNotificationService } from 'ng-zorro-antd/notification';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { MajorService, UniversityService } from 'src/app/admin/services';
 import { ArticleService } from 'src/app/admin/services/article';
 import { ArticleVM, MajorRM } from 'src/app/admin/view-models';
-import { PagedResponse } from 'src/app/_models/paged-response';
 import { University } from 'src/app/_models/university';
 import Swal from 'sweetalert2';
 
@@ -17,6 +16,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./article-detail.component.scss']
 })
 export class ArticleDetailComponent implements OnInit {
+
+  @Input() key: string | number;
 
   constructor(
     private _fb: FormBuilder,
@@ -53,6 +54,7 @@ export class ArticleDetailComponent implements OnInit {
   dateForm: FormGroup;
 
   ngOnInit() {
+    // this.getArticleById(this.key);
     this.getArticleById();
     this.getListOfUniversity();
     this.getListOfMajor();
@@ -97,6 +99,49 @@ export class ArticleDetailComponent implements OnInit {
     });
   }
 
+
+  // getArticleById(key?: string | number): void {
+  //   if (key) {
+  //     this._articleService.getArticleById(key).pipe(
+  //       tap((rs) => {
+  //         if (rs.succeeded === true) {
+  //           console.log(rs.data);
+  //           this.listOfSelectedUniversity = rs.data.universityIds;
+  //           this.listOfSelectedMajor = rs.data.majorIds;
+  //           this.article = rs.data;
+  //           this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
+  //         } else {
+  //           this.article = null;
+  //         }
+  //       }),
+  //       catchError((err) => {
+  //         this.article = null;
+  //         return of(undefined);
+  //       })
+  //     ).subscribe();
+  //     return;
+  //   };
+  //   this.activatedRoute.params.subscribe((param) => {
+  //     this.articleId = param.id;
+  //     this._articleService.getArticleById(param.id).pipe(
+  //       tap((rs) => {
+  //         if (rs.succeeded === true) {
+  //           console.log(rs.data);
+  //           this.listOfSelectedUniversity = rs.data.universityIds;
+  //           this.listOfSelectedMajor = rs.data.majorIds;
+  //           this.article = rs.data;
+  //           this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
+  //         } else {
+  //           this.article = null;
+  //         }
+  //       }),
+  //       catchError((err) => {
+  //         this.article = null;
+  //         return of(undefined);
+  //       })
+  //     ).subscribe();
+  //   });
+  // }
   getListOfUniversity(): void {
     this._universityService.getAllUniversity().pipe(
       tap((rs) => {
@@ -170,7 +215,7 @@ export class ArticleDetailComponent implements OnInit {
           'major': []
         }
         Swal.fire({
-          title: 'HỦY DUYỆT BÀI',
+          title: 'BỎ DUYỆT BÀI',
           text: "Bài viết được duyệt sẽ được chuyển đến danh sách chờ duyệt bài.",
           icon: 'warning',
           showCancelButton: true,
@@ -186,10 +231,10 @@ export class ArticleDetailComponent implements OnInit {
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
                 if (rs.succeeded === true) {
-                  this.createNotification('success', 'HỦY DUYỆT BÀI VIẾT', 'Hủy duyệt bài viết thành công', 'bottomRight');
+                  this.createNotification('success', 'BỎ DUYỆT BÀI VIẾT', 'BỎ DUYỆT bài viết thành công', 'bottomRight');
                   this.getArticleById();
                 } else {
-                  this.createNotification('error', 'HỦY DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
+                  this.createNotification('error', 'BỎ DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
                 }
               })
             ).subscribe();

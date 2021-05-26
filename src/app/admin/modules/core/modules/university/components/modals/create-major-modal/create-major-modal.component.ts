@@ -24,7 +24,7 @@ export class CreateMajorModalComponent implements OnInit {
   @Input() majors: (MajorRM & { stt?: number })[];
   @Input() universityId: any;
   @Input() universityName: string;
-  // @Input() callBack: (majors: MajorRM[]) => void;
+  // @Input() callBack: (majors: MajorRM[]) => void;  
   @Input() callBack: () => void;
   @ViewChild(CustomSelectComponent) customSelectComponent: CustomSelectComponent
 

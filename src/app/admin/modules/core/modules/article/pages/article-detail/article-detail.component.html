@@ -10,22 +10,22 @@
                   <nz-skeleton [nzActive]="true"></nz-skeleton>
                 </div>     
                 <ng-template #articleContent>
-                  <h3 [innerHtml]="article.title"></h3>
+                  <h3 [innerHtml]="article?.title"></h3>
                   <div style="margin-bottom: 15px;">
                     <div class="d-flex align-items-center">
                       <div class="d-flex align-items-center">
                         <i nz-icon nzType="link" nzTheme="outline"></i>
                         <div style="margin-left: 5px;">
-                          <a [href]="article.rootUrl"><span>Link bài gốc</span></a>                    
+                          <a [href]="article?.rootUrl"><span>Link bài gốc</span></a>                    
                         </div>
                       </div>
                       <div class="text-gray">
                         <nz-divider nzType="vertical"></nz-divider>
-                        <span>{{article.postedDate | date: 'HH:mm dd/MM/yyyy'}}</span>
+                        <span>{{article?.postedDate | date: 'HH:mm dd/MM/yyyy'}}</span>
                       </div>
                     </div>
                   </div>
-                  <div [innerHtml]="article.content"></div>
+                  <div [innerHtml]="article?.content"></div>
                 </ng-template>                                        
               </div>
             </div>
@@ -39,17 +39,17 @@
             <div style="width: 100%; max-height: 50rem">  
               <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
                 <label for="" class="mb-0 mr-5">Trạng thái bài viết : </label>
-                <label *ngIf="article.status === 1" style="color: rgb(87, 165, 90);" class="mb-0">ĐÃ DUYỆT</label>
-                <label *ngIf="article.status === 0" style="color: rgb(233, 127, 51);" class="mb-0">CHỜ DUYỆT</label>
-                <label *ngIf="article.status === 2" style="color: rgb(205, 19, 23);" class="mb-0">BỊ CHẶN</label>
-                <label *ngIf="article.status === 3" style="color: #0052cc;" class="mb-0">ĐÃ ĐƯỢC ĐĂNG</label>
+                <label *ngIf="article?.status === 1" style="color: rgb(87, 165, 90);" class="mb-0">ĐÃ DUYỆT</label>
+                <label *ngIf="article?.status === 0" style="color: rgb(233, 127, 51);" class="mb-0">CHỜ DUYỆT</label>
+                <label *ngIf="article?.status === 2" style="color: rgb(205, 19, 23);" class="mb-0">BỊ CHẶN</label>
+                <label *ngIf="article?.status === 3" style="color: #0052cc;" class="mb-0">ĐÃ ĐƯỢC ĐĂNG</label>
               </div>
               <nz-divider></nz-divider> 
-              <div *ngIf="article.status !== 0" style="display: flex; justify-content: center;">                
+              <div *ngIf="article?.status !== 0" style="display: flex; justify-content: center;">                
                 <div class="col-lg-6">
                   <label for="">Hiển thị từ ngày</label>
                   <nz-date-picker
-                    [nzDisabled]="article.status === 2"
+                    [nzDisabled]="article?.status === 2 || article?.status === 3"
                     [formControl]="dateForm.get('publicFromDate')"
                     [nzSize]="'large'"
                     nzShowTime
@@ -62,7 +62,7 @@
                 <div class="col-lg-6">
                   <label for="">Hiên thị đến ngày</label>
                   <nz-date-picker
-                    [nzDisabled]="article.status === 2"
+                    [nzDisabled]="article?.status === 2 || article?.status === 3"
                     [formControl]="dateForm.get('publicToDate')"
                     [nzSize]="'large'"
                     nzShowTime
@@ -77,7 +77,7 @@
                 <div class="col-lg-12" style="margin-bottom: 20px;">
                   <label for="">Các trường đại học liên quan</label>
                   <nz-select
-                    [nzDisabled]="article.status === 2 || article.status === 1"
+                    [nzDisabled]="article?.status === 2 || article?.status === 1 || article?.status === 3"
                     [nzSize]="'large'"
                     [nzMaxTagCount]="3"
                     [nzMaxTagPlaceholder]="tagPlaceHolderUni"
@@ -92,7 +92,7 @@
                 <div class="col-lg-12" style="margin-bottom: 20px;">
                   <label for="">Các ngành học liên quan</label>
                   <nz-select
-                    [nzDisabled]="article.status === 2 || article.status === 1"
+                    [nzDisabled]="article?.status === 2 || article?.status === 1 || article?.status === 3"
                     [nzSize]="'large'"
                     [nzMaxTagCount]="3"
                     [nzMaxTagPlaceholder]="tagPlaceHolderMajor"
@@ -109,18 +109,18 @@
             </div>
           </nb-card-body>
         </nb-card>
-        <div *ngIf="article.status === 1" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">           
+        <div *ngIf="article?.status === 1" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">           
           <div class="action-button col-lg-6 pr-0 pl-0">            
             <button [disabled]="dateForm.invalid" fullWidth nbButton outline status="info" (click)="confirmArticle('published')">ĐĂNG BÀI</button>
           </div>           
           <div class="action-button col-lg-6" style="padding-right: 0px;">            
-            <button fullWidth nbButton outline status="success" (click)="confirmArticle('deny')">HỦY DUYỆT</button>
+            <button fullWidth nbButton outline status="success" (click)="confirmArticle('deny')">BỎ DUYỆT</button>
           </div>
           <div class="action-button col-lg-12" style="padding-right: 0px; padding-left: 0;">            
             <button fullWidth nbButton outline status="danger" (click)="confirmArticle('reject')">CHẶN BÀI VIẾT</button>
           </div>     
         </div>   
-        <div *ngIf="article.status === 0" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+        <div *ngIf="article?.status === 0" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
           <div class="action-button col-lg-6" style="padding-left: 0px;">
             <button fullWidth nbButton  status="success" outline (click)="confirmArticle('accept')">DUYỆT BÀI</button>
           </div>                     
@@ -128,12 +128,12 @@
             <button fullWidth  nbButton outline status="danger" (click)="confirmArticle('reject')">CHẶN BÀI VIẾT</button>
           </div>          
         </div>   
-        <div *ngIf="article.status === 2" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+        <div *ngIf="article?.status === 2" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
           <div class="action-button col-lg-12" style="padding-left: 0px;">
             <button fullWidth nbButton  status="danger" outline (click)="confirmArticle('unReject')">GỠ CHẶN</button>
           </div>                                        
         </div>
-        <div *ngIf="article.status === 3" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+        <div *ngIf="article?.status === 3" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
           <div class="action-button col-lg-6" style="padding-left: 0px;">
             <button  fullWidth nbButton  status="info" outline (click)="confirmArticle('unPublished')">HỦY ĐĂNG</button>
           </div>  

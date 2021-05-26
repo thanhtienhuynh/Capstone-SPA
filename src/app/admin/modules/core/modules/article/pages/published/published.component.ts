@@ -33,6 +33,7 @@ export class PublishedComponent implements OnInit {
   };
 
   unCensorshipList: number[];
+  unPublishedList: number[];
 
   articleId: string | number;
   currentIndex: number = 0;
@@ -53,7 +54,7 @@ export class PublishedComponent implements OnInit {
   dateForm: FormGroup;
 
   ngOnInit() {
-    this.getUnApprovedArticleIdList();
+    this.getUnPublishedList();
     this.getListOfUniversity();
     this.getListOfMajor();
   }
@@ -79,6 +80,46 @@ export class PublishedComponent implements OnInit {
   confirmArticle(status?: string): void {
     var newValue = {};
     switch (status) {
+      case 'published':
+        newValue = {
+          'id': this.articleId,
+          'publicFromDate': this.dateForm.get('publicFromDate').value,
+          'publicToDate': this.dateForm.get('publicToDate').value,
+          'status': 3,
+          'university': this.listOfSelectedUniversity,
+          'major': this.listOfSelectedMajor
+        }
+        Swal.fire({
+          title: 'ĐĂNG BÀI',
+          text: "Bài viết sẽ được đăng lên trang tin của hệ thống.",
+          icon: 'question',
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'XÁC NHẬN',
+          denyButtonColor: '#00d68f',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'HỦY'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log(newValue);
+            this._articleService.confirmArticle(newValue).pipe(
+              tap((rs) => {
+                console.log(rs);
+                if (rs.succeeded === true) {
+                  this.createNotification('success', 'ĐĂNG BÀI', 'Đăng bài viết thành công', 'bottomRight');
+                  this.nextElement();
+                } else {
+                  this.createNotification('error', 'ĐĂNG BÀI', 'Đăng bài viết thất bại', 'bottomRight');
+                }
+              }),
+              catchError(err => {
+                return of(err);
+              })
+            ).subscribe();
+          }
+        })
+        break;
       case 'accept':        
         newValue = {
           'id': this.articleId,
@@ -131,7 +172,7 @@ export class PublishedComponent implements OnInit {
           'major': []
         }
         Swal.fire({
-          title: 'HỦY DUYỆT BÀI',
+          title: 'BỎ DUYỆT BÀI',
           text: "Bài viết được duyệt sẽ được chuyển đến danh sách chờ duyệt bài.",
           icon: 'warning',
           showCancelButton: true,
@@ -147,10 +188,10 @@ export class PublishedComponent implements OnInit {
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
                 if (rs.succeeded === true) {
-                  this.createNotification('success', 'HỦY DUYỆT BÀI VIẾT', 'Hủy duyệt bài viết thành công', 'bottomRight');
+                  this.createNotification('success', 'BỎ DUYỆT BÀI VIẾT', 'BỎ DUYỆT bài viết thành công', 'bottomRight');
                   this.showElement(this.unCensorshipList, this.currentIndex);
                 } else {
-                  this.createNotification('error', 'HỦY DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
+                  this.createNotification('error', 'BỎ DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
                 }
               })
             ).subscribe();
@@ -182,10 +223,10 @@ export class PublishedComponent implements OnInit {
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
                 if (rs.succeeded === true) {
-                  this.createNotification('success', 'HỦY DUYỆT BÀI VIẾT', 'Hủy duyệt bài viết thành công', 'bottomRight');
-                  this.showElement(this.unCensorshipList, this.currentIndex);
+                  this.createNotification('success', 'BỎ DUYỆT BÀI VIẾT', 'BỎ DUYỆT bài viết thành công', 'bottomRight');
+                  this.showElement(this.unPublishedList, this.currentIndex);
                 } else {
-                  this.createNotification('error', 'HỦY DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
+                  this.createNotification('error', 'BỎ DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
                 }
               })
             ).subscribe();
@@ -218,7 +259,7 @@ export class PublishedComponent implements OnInit {
               tap((rs) => {
                 if (rs.succeeded === true) {
                   this.createNotification('success', 'GỠ CHẶN BÀI VIẾT', 'Gỡ chặn bài viết thành công', 'bottomRight');
-                  this.showElement(this.unCensorshipList, this.currentIndex);
+                  this.showElement(this.unPublishedList, this.currentIndex);
                   // this.nextElement();
                 } else {
                   this.createNotification('error', 'GỠ CHẶN BÀI BÀI VIẾT', 'Thất bại', 'bottomRight');
@@ -228,7 +269,47 @@ export class PublishedComponent implements OnInit {
           }
         })
         break;
-      default:
+        case 'unPublished':
+          newValue = {
+            'id': this.articleId,
+            'publicFromDate': null,
+            'publicToDate': null,
+            'status': 1,
+            'university': this.listOfSelectedUniversity,
+            'major': this.listOfSelectedMajor
+          };
+          Swal.fire({
+            title: 'HỦY ĐĂNG BÀI',
+            text: "Bài viết sẽ được chuyển tiếp về danh sách đã được duyệt.",
+            icon: 'warning',
+            showCancelButton: true,
+            showLoaderOnConfirm: true,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'XÁC NHẬN',
+            denyButtonColor: '#00d68f',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'HỦY'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              console.log(newValue);
+              this._articleService.confirmArticle(newValue).pipe(
+                tap((rs) => {
+                  console.log(rs);
+                  if (rs.succeeded === true) {
+                    this.createNotification('success', 'ĐĂNG BÀI', 'Đăng bài viết thành công', 'bottomRight');
+                    this.showElement(this.unPublishedList, this.currentIndex);
+                  } else {
+                    this.createNotification('error', 'ĐĂNG BÀI', 'Đăng bài viết thất bại', 'bottomRight');
+                  }
+                }),
+                catchError(err => {
+                  return of(err);
+                })
+              ).subscribe();
+            }
+          });
+          break;
+        default:
         break;
     }
   }
@@ -260,12 +341,12 @@ export class PublishedComponent implements OnInit {
     ).subscribe();
   }
 
-  getUnApprovedArticleIdList(): void {
-    this._articleService.getUnApprovedArticleIdList().pipe(
+  getUnPublishedList(): void {
+    this._articleService.getApprovedArticleList().pipe(
       tap((rs) => {
         if (rs.succeeded === true) {
-          this.unCensorshipList = rs.data
-          this.showElement(this.unCensorshipList, 0);
+          this.unPublishedList = rs.data
+          this.showElement(this.unPublishedList, 0);
         }
       })
     ).subscribe();
@@ -278,14 +359,14 @@ export class PublishedComponent implements OnInit {
   }
 
   nextElement(): void {
-    this.currentIndex = this.currentIndex < this.unCensorshipList.length - 1 ? this.currentIndex + 1 : this.unCensorshipList.length - 1;
+    this.currentIndex = this.currentIndex < this.unPublishedList.length - 1 ? this.currentIndex + 1 : this.unPublishedList.length - 1;
     console.log('current index', this.currentIndex);
-    this.showElement(this.unCensorshipList, this.currentIndex);
+    this.showElement(this.unPublishedList, this.currentIndex);
   }
 
   preElement(): void {
     this.currentIndex === 0 ? this.currentIndex : this.currentIndex--;
-    this.showElement(this.unCensorshipList, this.currentIndex);
+    this.showElement(this.unPublishedList, this.currentIndex);
   }
   initDateForm(): void {
     this.dateForm = this._fb.group({

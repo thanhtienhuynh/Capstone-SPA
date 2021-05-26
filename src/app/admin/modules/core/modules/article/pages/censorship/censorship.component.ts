@@ -131,7 +131,7 @@ export class CensorshipComponent implements OnInit {
           'major': []
         }
         Swal.fire({
-          title: 'HỦY DUYỆT BÀI',
+          title: 'BỎ DUYỆT BÀI',
           text: "Bài viết được duyệt sẽ được chuyển đến danh sách chờ duyệt bài.",
           icon: 'warning',
           showCancelButton: true,
@@ -147,10 +147,10 @@ export class CensorshipComponent implements OnInit {
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
                 if (rs.succeeded === true) {
-                  this.createNotification('success', 'HỦY DUYỆT BÀI VIẾT', 'Hủy duyệt bài viết thành công', 'bottomRight');
+                  this.createNotification('success', 'BỎ DUYỆT BÀI VIẾT', 'BỎ DUYỆT bài viết thành công', 'bottomRight');
                   this.showElement(this.unCensorshipList, this.currentIndex);
                 } else {
-                  this.createNotification('error', 'HỦY DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
+                  this.createNotification('error', 'BỎ DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
                 }
               })
             ).subscribe();
@@ -182,10 +182,10 @@ export class CensorshipComponent implements OnInit {
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
                 if (rs.succeeded === true) {
-                  this.createNotification('success', 'HỦY DUYỆT BÀI VIẾT', 'Hủy duyệt bài viết thành công', 'bottomRight');
+                  this.createNotification('success', 'BỎ DUYỆT BÀI VIẾT', 'BỎ DUYỆT bài viết thành công', 'bottomRight');
                   this.showElement(this.unCensorshipList, this.currentIndex);
                 } else {
-                  this.createNotification('error', 'HỦY DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
+                  this.createNotification('error', 'BỎ DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
                 }
               })
             ).subscribe();

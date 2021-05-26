@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { ArticleService } from 'src/app/admin/services/article';
 import { ArticleVM, PageModel } from 'src/app/admin/view-models';
+import { ArticleContentModalComponent } from '../modals/article-content-modal/article-content-modal.component';
 
 @Component({
   selector: 'app-article-grid-list',
@@ -20,6 +22,7 @@ export class ArticleGridListComponent implements OnInit, OnChanges, AfterViewIni
 
   constructor(
     private _articleService: ArticleService,
+    private _modalService: NzModalService,
   ) { }
 
   ngAfterViewInit(): void {
@@ -33,6 +36,8 @@ export class ArticleGridListComponent implements OnInit, OnChanges, AfterViewIni
   ngOnInit() {    
     
   }
+
+  
 
   // searchByTitle(status?: number): void {
   //   this._articleService.searchByTitle(1, 10, status, )
@@ -66,5 +71,15 @@ export class ArticleGridListComponent implements OnInit, OnChanges, AfterViewIni
       }
       this.paging.emit(newValue);
     }
+  }
+
+  openContentModal(articleId: number | string): void {
+    this._modalService.create({
+      nzContent: ArticleContentModalComponent,
+      nzClosable: false,
+      nzFooter: null,
+      nzWidth: 1024,   
+      nzComponentParams: {articleId: articleId},      
+    })
   }
 }

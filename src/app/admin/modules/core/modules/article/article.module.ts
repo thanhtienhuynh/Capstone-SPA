@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { ArticleRoutes } from './article.routing';
 import { SharedModule } from 'src/app/admin/shared/shared.module';
 import { ArticleDetailComponent, ArticleMainComponent, PublishedComponent, CensorshipComponent } from './pages';
-import { ArticleCardComponent, ArticleGridListComponent, BoardArticleListComponent, SearchByConditionComponent, TopArticleComponent } from './components';
+import { ArticleCardComponent, ArticleContentModalComponent, ArticleGridListComponent, BoardArticleListComponent, SearchByConditionComponent, TopArticleComponent } from './components';
+import { SliceWordPipe } from 'src/app/admin/shared/pipe/slice-word.pipe';
 
 const COMPONENTS = [
   ArticleCardComponent,
@@ -10,7 +11,8 @@ const COMPONENTS = [
   ArticleGridListComponent,
   TopArticleComponent,
   SearchByConditionComponent,
-  PublishedComponent
+  PublishedComponent,
+  ArticleContentModalComponent
 ];
 
 const PAGES = [
@@ -19,11 +21,14 @@ const PAGES = [
   CensorshipComponent
 ];
 
+const PIPE = [
+  SliceWordPipe
+]
 @NgModule({
   imports: [
     SharedModule.forChild(),
     ArticleRoutes
   ],
-  declarations: [...PAGES, ...COMPONENTS]
+  declarations: [...PAGES, ...COMPONENTS, ...PIPE]
 })
 export class ArticleModule { }
