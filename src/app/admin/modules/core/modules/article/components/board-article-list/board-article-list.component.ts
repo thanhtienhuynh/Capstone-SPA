@@ -24,7 +24,8 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
   @Output() search = new EventEmitter<BoardData>();
 
 
-  constructor() { }
+  constructor(    
+  ) { }  
 
   ngOnChanges(changes: SimpleChanges): void {
     // console.log('Danh sách đã được lọc', this.listOfArticle, this.laneId);

@@ -1,51 +1,72 @@
 import { Component, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { BehaviorSubject, of } from 'rxjs';
+import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { UniversityService } from 'src/app/admin/services';
 import { UniversityRM } from 'src/app/admin/view-models';
-import Swal from 'sweetalert2';
 
 
 
-import { CreateUniversityModalComponent } from '../../components';
+import { CreateUniversityModalComponent, UniversityDetailModalComponent } from '../../components';
 
 
 @Component({
   selector: 'app-university-main',
   templateUrl: './university-main.component.html',
-  styleUrls: ['./university-main.component.scss']
+  styleUrls: ['./university-main.component.scss'],  
 })
 export class UniversityMainComponent implements OnInit {
     
-  loading: true;
+  loading: true;  
+  visible = false;
 
-  total = 1;
-  pageSize = 5;
+  total = 100;
+  pageSize = 10;
   pageIndex = 1;
   listOfUniversity: (UniversityRM & {stt?:number})[] = [];
   listOfDisplayUniversity:  (UniversityRM & {stt?:number})[] = [];
   //------------------SEARCH SORT FILTER------------------------
-  searchValueName: string = '';
+  filterStatus = [
+    { text: 'Đang Hoạt Động', value: 1 },
+    { text: 'Không Hoạt Động', value: 0 }
+  ];
 
-  listOfStatusFilter: any[] = [
-    {text: 'Hoạt Động', value: 1},
-    {text: 'Không Hoạt Động', value: 0},
-  ]
-  
-  listOfTuitionType: any[] = [
-    {text: 'Theo Năm', value: 0},
-    {text: 'Theo Kì', value: 1},
-  ]
-  //-----------------------------------------------------
+  filterTuition = [
+    { text: 'Theo Kì', value: 1 },
+    { text: 'Theo Năm', value: 0 }
+  ];
+  searchValueName: string = '';  
   constructor(
     private _modalService: NzModalService,
     protected _universityService: UniversityService
   ) { }
 
   ngOnInit() {    
-    this.getAllUniversity();    
+    // this.getAllUniversity(); 
+    this.getListOfUniversity(1, 10, '', null);   
+  }
+
+  getListOfUniversity(pageNumber: number, pageSize: number, name: string, status:number): void {
+    this._universityService.getListOfUniversity(pageNumber, pageSize, name, status).pipe(
+      tap((rs) => {
+        if (rs.succeeded === true) {     
+          console.log(rs);     
+          this.listOfUniversity = rs.data.map((e, i) => ({
+            ...e,
+            phones: e.phone.split('-'),
+            stt: i + 1        
+          }));              
+          this.listOfDisplayUniversity = [...this.listOfUniversity];        
+          this.total = rs.totalRecords;  
+        } else {
+          console.log('fail');
+        }
+      }),
+      catchError((err) => {
+        return of(undefined);
+      })
+    ).subscribe();
   }
 
   getAllUniversity(): void {
@@ -92,9 +113,42 @@ export class UniversityMainComponent implements OnInit {
 
   
   
-  searchByName(searchValue: string): void {         
-    this.listOfDisplayUniversity = this.listOfUniversity.filter((item: UniversityRM & {stt?:number, phones?:string[]}) => item?.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1);
-  }
+  // searchByName(searchValue: string): void {         
+  //   this.listOfDisplayUniversity = this.listOfUniversity.filter((item: UniversityRM & {stt?:number, phones?:string[]}) => item?.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1);
+  // }
   filterStatusFn = (status: number, item: UniversityRM) => item.status === status;
   filterTuitionTypeFn = (tuitionType: number, item: UniversityRM) => item.tuitionType === tuitionType;
+
+  onQueryParamsChange(params: NzTableQueryParams): void {
+    if (params.filter.length > 0) {
+      const status = params.filter.filter(rs => rs.key === 'status')[0].value;
+      const tuition = params.filter.filter(rs => rs.key === 'tuition')[0].value;      
+    }
+    this.pageIndex = params.pageIndex;
+    this.pageSize = params.pageSize;
+    // this.getListOfUniversity(params.pageIndex, params.pageSize, this.searchValueName);
+    console.log(params);
+  }
+
+  openDetailUniversityModal(uniId: number): void {
+    this._modalService.create({
+      nzContent: UniversityDetailModalComponent,
+      nzClosable: false,      
+      nzFooter: null,
+      nzWidth: 1024,
+      nzComponentParams: { universityId: uniId },
+    })
+  }
+
+  searchByName(): void {
+    // this.getListOfUniversity(1, this.pageSize, this.searchValueName);
+    console.log(this.searchValueName);
+  }
+
+  resetSearchName(): void {
+    this.searchValueName = '';    
+    this.searchByName();
+    this.pageIndex = 1;
+    this.pageSize = 10;
+  }
 }

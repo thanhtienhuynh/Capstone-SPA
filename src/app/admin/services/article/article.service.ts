@@ -30,6 +30,7 @@ export class ArticleService {
   //   return this.http.get<{ results: RandomUser[] }>(`${this.randomUserUrl}`, { params });
   // }
   baseUrl = environment.apiUrl;
+  
 
   getListOfArticle(pageNumber: number, pageSize: number, status: number): Observable<PagedResponse<ArticleVM[]>>{
     let params = new HttpParams().append('PageSize', `${pageSize}`).append('PageNumber', `${pageNumber}`).append('Status', `${status}`);

@@ -1,0 +1,144 @@
+nb-select {
+  ::ng-deep {
+    button {
+      min-width: 4rem !important;
+    }
+  }
+}
+.university-detail {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  overflow: auto;
+  position: relative;
+  // max-height: 50rem;
+}
+
+.flex-container-custom {
+  display: flex;
+  flex-direction: column;
+}
+
+.td-border-children {
+  border-bottom: 1px solid #f0f0f0;
+  // min-height: 4rem;
+  height: 9rem;
+  // max-width: 10rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.td-border-children:last-child {
+  border-bottom: none;
+}
+
+.td-border-children-one {
+  border-bottom: 1px solid #f0f0f0;
+  // height: 6rem;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.td-border-children-one:last-child {
+  border-bottom: none;
+}
+
+.td-border-children-two {
+  border-bottom: 1px solid #f0f0f0;  
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.td-border-children-two:last-child {
+  border-bottom: none;
+}
+
+nz-table th {
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  // background-color: #87ceeb;
+  background-color: #f0f0f0;
+  // background-color: rgb(59, 175, 218);
+  text-align: center;
+  font-size: 12px;
+}
+
+//------ Search box -----
+.search-box {
+  padding: 8px;
+}
+
+.search-box input {
+  width: 188px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.search-box button {
+  width: 90px;
+}
+
+.search-button {
+  margin-right: 8px;
+}
+
+//-------------- MAJOR HEADER ------------------
+.major-header {
+ display: flex;
+ justify-content: flex-start;
+ align-items: center;
+}
+
+.major-header .major-header-title h5{
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  margin: 0 15px 0 0;
+  color: #ff3d71;
+}
+
+.major-header .year {
+  width: 8rem;
+}
+
+@media (min-width: 1453px) {
+  nz-table #mark {
+    width: 10%;
+  }
+  nz-table #stt {
+    width: 1%;
+  }
+  nz-table #group {
+    width: 8%;
+  }
+  nz-table #code {
+    width: 7%;
+  }
+  nz-table #quantity{
+    width: 8%;
+  }
+  nz-table #action {
+    width: 7%;
+  }
+  nz-table #main-addmission {
+    width: 10%;
+  }
+  nz-table #name {
+    width: 27%;
+  }
+}
+

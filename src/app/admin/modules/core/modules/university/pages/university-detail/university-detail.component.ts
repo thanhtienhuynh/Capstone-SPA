@@ -46,7 +46,7 @@ export class UniversityDetailComponent implements OnInit {
   }
 
   ngOnInit() {    
-    this.getUniversityById();      
+    // this.getUniversityById();      
   }
   ngDoCheck(){
         

@@ -1,9 +1,12 @@
 import { Routes, RouterModule } from '@angular/router';
-import { UniversityDetailComponent, UniversityMainComponent } from './pages';
+import { UniDetailComponent, UniversityDetailComponent, UniversityMainComponent } from './pages';
 
 const routes: Routes = [
-  { path: '', component: UniversityMainComponent},
-  { path: 'details/:id', component: UniversityDetailComponent},  
+  {
+    path: '', component: UniversityMainComponent
+  },
+  // { path: '', component: UniDetailComponent },
+  { path: 'details/:id', component: UniDetailComponent },
 ];
 
 export const UniversityRoutes = RouterModule.forChild(routes);

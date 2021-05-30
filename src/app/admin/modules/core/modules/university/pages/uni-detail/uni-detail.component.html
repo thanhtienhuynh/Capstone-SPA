@@ -1,0 +1,135 @@
+
+<div class="university-detail">
+  <div class="container-fluid">
+      <div nz-row>
+        <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">            
+            <nb-card style="width: 100%;">                
+                <nb-card-body style="width: 100%;">
+                    <div class="major-header">
+                        <div class="major-header-title">
+                            <h5>BẢNG THÔNG TIN NGÀNH HỌC CỦA TRƯỜNG ĐẠI HỌC Y DƯỢC NĂM</h5>
+                        </div>
+                        <div class="year">
+                            <nb-select [size]="'small'" fullWidth [selected]="9" (selectedChange)="getMajorBySeason($event)">        
+                                <nb-option [value]="1">2017 - 2018</nb-option>
+                                <nb-option [value]="2">2018 - 2019</nb-option>   
+                                <nb-option [value]="9">2019 - 2020</nb-option>     
+                            </nb-select>
+                        </div>
+                    </div>
+                    <nz-divider></nz-divider>
+                    <nz-table 
+                    #majorTable 
+                    nzBordered 
+                    [nzData]="listOfDisplayMajors" 
+                    [nzFrontPagination]="false"
+                    >
+                    <thead>
+                        <tr>
+                            <th id="stt">STT</th>
+                            <th id="action">TÁC VỤ</th>
+                            <th id="name">TÊN NGÀNH
+                                <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
+                                    <i nz-icon nzType="search"></i>
+                                  </nz-filter-trigger>
+                            </th>
+                            <th id="code">CODE</th>
+                            <th id="main-addmission">CHỈ TIÊU TỔNG</th>
+                            <th>CHỈ TIÊU PHỤ</th>
+                            <th id="quantity">SỐ LƯỢNG</th>
+                            <th id="group">KHỐI</th>
+                            <th id="mark">ĐIỂM CHUẨN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let major of majorTable.data; let i = index">
+                            <tr [style.backgroundColor]="i % 2 == 1 ? '#f7f7f7' : '#fff'">
+                                <td>{{i + 1}}</td>
+                                <td>
+                                    <div style="justify-content: center; align-items: center; display: flex;">...</div>
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">  
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies">
+                                            <span >{{major.majorName}} - {{majorDetailUni.trainingProgramName}} </span>                     
+                                        </div>                                                                              
+                                    </div>
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies">
+                                            <span >{{majorDetailUni.majorDetailCode}}</span>                    
+                                        </div>                                        
+                                    </div>                                
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies">
+                                            <span >{{majorDetailUni.admissionQuantity}}</span>                    
+                                        </div>                                        
+                                    </div> 
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies">
+                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions">
+                                                <div style="width: 100%; display: flex; justify-content: center; align-items: center; flex-direction: row;">
+                                                    <span> {{majorDetailSubAdmission.admissionMethodName}} </span> - <span>{{majorDetailSubAdmission.genderId === 1 ? 'Nam' : 'Nữ'}}</span> - <span>{{majorDetailSubAdmission.provinceName}}</span>
+                                                </div>                                                
+                                            </div>                    
+                                        </div>                                        
+                                    </div> 
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies">
+                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions">
+                                                <span>{{majorDetailSubAdmission.quantity}}</span>
+                                            </div>                    
+                                        </div>                                        
+                                    </div> 
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies">
+                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions">
+                                                <div class="td-border-children-two" *ngFor="let majorDetailEntryMark of majorDetailSubAdmission.majorDetailEntryMarks">
+                                                    <span>{{majorDetailEntryMark.subjectGroupCode}}</span>
+                                                </div>
+                                            </div>                    
+                                        </div>                                        
+                                    </div> 
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies">
+                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions">
+                                                <div class="td-border-children-two" *ngFor="let majorDetailEntryMark of majorDetailSubAdmission.majorDetailEntryMarks">
+                                                    <span>{{majorDetailEntryMark.mark}}</span>
+                                                </div>
+                                            </div>                    
+                                        </div>                                        
+                                    </div> 
+                                </td>
+                            </tr>
+                        </ng-container>                        
+                    </tbody>                    
+                    </nz-table>
+                </nb-card-body>
+            </nb-card>
+        </div>
+      </div>
+  </div>
+</div>
+
+<nz-dropdown-menu #searchMenu="nzDropdownMenu">
+    <div class="ant-table-filter-dropdown">
+      <div class="search-box">
+        <input type="text" nz-input placeholder="Tìm Trường" [(ngModel)]="searchValueName" />
+        <button nz-button nzSize="small" nzType="primary" class="search-button" (click)="searchByName()"> 
+          TÌM KIẾM
+        </button>
+        <button nz-button nzSize="small" (click)="resetSearchName()">TẠO LẠI</button>
+      </div>
+    </div>
+  </nz-dropdown-menu>
