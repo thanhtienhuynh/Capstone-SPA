@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "custom-chip-select.component.scss"
+    ],
+    "names": [],
+    "file": "custom-chip-select.component.css"
+}

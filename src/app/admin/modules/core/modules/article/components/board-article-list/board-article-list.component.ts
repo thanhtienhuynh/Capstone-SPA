@@ -1,6 +1,5 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
-import { ArticleService } from 'src/app/admin/services/article';
 import { ArticleVM, BoardData, PageModel } from 'src/app/admin/view-models';
 import Swal from 'sweetalert2';
 

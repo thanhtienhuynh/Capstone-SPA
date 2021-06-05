@@ -1,0 +1,21 @@
+.header {
+  background-color: #c4ecf3;
+  font-weight: 500;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 60px;
+}
+
+.login {
+  position: absolute;
+  right: 15px;
+  padding: 10px;
+}
+
+.home {
+  position: relative;
+  float: left;
+  padding: 10px;
+}
+/*# sourceMappingURL=header.component.css.map */

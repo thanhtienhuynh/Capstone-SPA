@@ -1,0 +1,15 @@
+.md-dialog-container {
+  background-color: #000;
+  width: 250px;
+  height: 250px;
+}
+
+.center-horizontal {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+/*# sourceMappingURL=submit-dialog.component.css.map */

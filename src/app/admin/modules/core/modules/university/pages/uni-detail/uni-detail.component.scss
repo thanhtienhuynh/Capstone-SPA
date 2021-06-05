@@ -5,6 +5,20 @@ nb-select {
     }
   }
 }
+
+::ng-deep {
+  .row {
+    margin-left: 0;
+  }
+}
+
+label {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 500;  
+  margin: 0;
+}
 .university-detail {
   width: 100%;
   height: 100%;
@@ -13,16 +27,25 @@ nb-select {
   position: relative;
   // max-height: 50rem;
 }
+.university-detail .page-header {
+  margin-left: -1rem;
+  margin-right: -1rem;
+  margin-top: -1rem;
+  margin-bottom: 25px;
+  background-color: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 1rem 3rem;
+}
 
 .flex-container-custom {
   display: flex;
-  flex-direction: column;
+  flex-direction: column;      
 }
 
 .td-border-children {
   border-bottom: 1px solid #f0f0f0;
-  // min-height: 4rem;
-  height: 9rem;
+  // min-height: 9rem;
+  // height: 9rem;  
   // max-width: 10rem;
   text-align: center;
   display: flex;
@@ -34,10 +57,10 @@ nb-select {
   border-bottom: none;
 }
 
-.td-border-children-one {
-  border-bottom: 1px solid #f0f0f0;
-  // height: 6rem;
-  height: 100%;
+.td-border-children .td-border-children-one {
+  border-bottom: 1px solid #f0f0f0;  
+  // height: 100%;
+  // height: calc(2rem * 2rem);  
   width: 100%;
   text-align: center;
   display: flex;
@@ -45,13 +68,13 @@ nb-select {
   align-items: center;
   flex-direction: column;
 }
-.td-border-children-one:last-child {
+.td-border-children .td-border-children-one:last-child {
   border-bottom: none;
 }
 
-.td-border-children-two {
+.td-border-children .td-border-children-one .td-border-children-two {
   border-bottom: 1px solid #f0f0f0;  
-  height: 100%;
+  // height: 100%;  
   width: 100%;
   text-align: center;
   display: flex;
@@ -59,7 +82,7 @@ nb-select {
   align-items: center;
   flex-direction: column;
 }
-.td-border-children-two:last-child {
+.td-border-children .td-border-children-one .td-border-children-two:last-child {
   border-bottom: none;
 }
 
@@ -70,9 +93,10 @@ nz-table th {
   font-weight: 600;
   // background-color: #87ceeb;
   background-color: #f0f0f0;
+  // background-color: #e4e9f2;
   // background-color: rgb(59, 175, 218);
   text-align: center;
-  font-size: 12px;
+  font-size: 12px;//
 }
 
 //------ Search box -----
@@ -97,11 +121,17 @@ nz-table th {
 //-------------- MAJOR HEADER ------------------
 .major-header {
  display: flex;
- justify-content: flex-start;
+ justify-content: space-between;
  align-items: center;
 }
 
-.major-header .major-header-title h5{
+.none-action {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.major-header-title h5{
   font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
     "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
     Helvetica, Arial, sans-serif;
@@ -109,24 +139,36 @@ nz-table th {
   font-size: 15px;
   margin: 0 15px 0 0;
   color: #ff3d71;
+  text-transform: uppercase;
 }
 
-.major-header .year {
+.year {
   width: 8rem;
 }
 
-@media (min-width: 1453px) {
+nz-table {
+  ::ng-deep {
+    .ant-pagination-item, .ant-pagination-total-text, .ant-pagination-item-ellipsis {
+      line-height: 30px;
+    }
+    a {
+      text-decoration: none;
+    }
+  }
+}
+
+@media (min-width: 1472px) {
   nz-table #mark {
-    width: 10%;
+    width: 9%;
   }
   nz-table #stt {
     width: 1%;
   }
   nz-table #group {
-    width: 8%;
+    width: 6%;
   }
   nz-table #code {
-    width: 7%;
+    width: 10%;
   }
   nz-table #quantity{
     width: 8%;
@@ -134,11 +176,49 @@ nz-table th {
   nz-table #action {
     width: 7%;
   }
+  nz-table #programe {
+    width: 10%;
+  }
   nz-table #main-addmission {
     width: 10%;
   }
   nz-table #name {
-    width: 27%;
+    width: 19%;
   }
 }
 
+//TABLE 
+.sticky-table-header {
+  // background-color: #fff;
+  border: none;
+  border-radius: 0;
+  // border-top: 1px solid #eee;
+  // border-bottom: 1px solid #eee;
+  position: absolute;
+  top: 90px;
+  // visibility: visible;
+  // visibility: hidden;
+  z-index: 990;
+  overflow: hidden;
+  min-width: 100%;
+  padding-right: 70px;
+}
+
+.sticky-table-header.fixed-solution {
+  min-width: 0;
+  position: fixed;
+}
+
+.icon-edit {
+  width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+  border: 2px solid #f2f2f2;
+  background-color: #f2f2f2;
+  cursor: pointer;  
+    &:hover {
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }  
+}
+
+.add-major {
+  float: right;
+}

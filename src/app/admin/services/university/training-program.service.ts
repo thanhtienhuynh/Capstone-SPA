@@ -14,5 +14,5 @@ export class TrainingProgramService {
 
   getAllTrainingProgram(): Observable<Response<any>> {
     return this._http.get<Response<any>>(this.baseUrl + 'api/v1/trainingprogram');
-  }
+  }  
 }

@@ -1,0 +1,19 @@
+.logo {
+  padding-left: 24px;
+  height: 55px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.logo h5 {
+  color: #3366ff;
+  font-size: 25px;
+}
+/*# sourceMappingURL=mohs-logo.component.css.map */

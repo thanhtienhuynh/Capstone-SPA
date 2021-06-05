@@ -101,11 +101,9 @@ export class PublishedComponent implements OnInit {
           cancelButtonColor: '#d33',
           cancelButtonText: 'HỦY'
         }).then((result) => {
-          if (result.isConfirmed) {
-            console.log(newValue);
+          if (result.isConfirmed) {            
             this._articleService.confirmArticle(newValue).pipe(
-              tap((rs) => {
-                console.log(rs);
+              tap((rs) => {                
                 if (rs.succeeded === true) {
                   this.createNotification('success', 'ĐĂNG BÀI', 'Đăng bài viết thành công', 'bottomRight');
                   this.nextElement();

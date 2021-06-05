@@ -1,4 +1,4 @@
-<!-- <div class="university-detail"> 
+<div class="university-detail"> 
   <div class="container-fluid" >
     <div nz-row>
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
@@ -167,7 +167,7 @@
                         </div>                                                                       
                       </li>
                     </ul>
-                    <div class="d-flex justify-content-end">                                                
+                    <div style="margin-right: 20px; margin-top: 10px;">                                                
                       <button [disabled]="updateUniForm?.invalid" size="small" (click)="updateUni()" nbButton status="info">
                         <nb-icon icon="save-outline"></nb-icon>
                         Lưu
@@ -353,7 +353,7 @@
   </div>
 </div>
 
-<ng-template #totalTemplate>Hiện có {{ total }} ngành học tại {{university.name}}</ng-template> -->
+<ng-template #totalTemplate>Hiện có {{ total }} ngành học tại {{university.name}}</ng-template>
 <div class="university-detail">
   
 </div>
