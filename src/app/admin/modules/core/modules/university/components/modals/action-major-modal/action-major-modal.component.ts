@@ -36,8 +36,16 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
   listOfDisplayMajorResult: Observable<Response<any>> = new BehaviorSubject<Response<any>>({} as Response<any>);
   subjectGroupResult: Observable<Response<any>> = new BehaviorSubject<Response<any>>({} as Response<any>);
   trainingProgramResult: Observable<Response<any>> = new BehaviorSubject<Response<any>>({} as Response<any>);
+
+
   provinceResult: Observable<Province[]> = new BehaviorSubject<Province[]>({} as Province[]);
+  
+  
   listOfDisplaySubjectGroup: Observable<Response<any>> = new BehaviorSubject<Response<any>>({} as Response<any>);
+
+
+
+
 
   constructor(
     private _fb: FormBuilder,
@@ -102,7 +110,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
       });
       const genderId = rs.genderId === 3 ? null : rs.genderId;
       const admissionMethodId = rs.admissionMethodId === 3 ? null : rs.admissionMethodId;
-      const subAdmissionsTmp = { ...rs, 'provinceId': rs.provinceId.id, 'subjectGroups': subjectGroups, 'genderId': genderId, 'admissionMethodId': admissionMethodId }
+      const subAdmissionsTmp = { ...rs, 'provinceId': rs.provinceId.id !== 1000 ? rs.provinceId.id : null, 'subjectGroups': subjectGroups, 'genderId': genderId, 'admissionMethodId': admissionMethodId }
       return subAdmissionsTmp;
       }
     );    
@@ -254,7 +262,9 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     console.log(item);
     this.getMajorSubjectGroup(item.id);
     this.majorForm.get('majorCode').setValue(item?.code);
-    const a = this.listOfMajor.find(rs => rs.majorId === item.id) !== undefined ? this.listOfMajor.find(rs => rs.majorId === item.id).majorDetailUnies.map(rs => rs.trainingProgramId) : [];
+    console.log(this.listOfMajor);
+    const a = this.listOfMajor?.find(rs => rs.majorId === item.id) !== undefined ? this.listOfMajor.find(rs => rs.majorId === item.id).majorDetailUnies.map(rs => rs.trainingProgramId) : [];
+    console.log(a);
     this.getListOfTrainingProgram(a as number[]);
   };
 
@@ -262,6 +272,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
   getProvince(): void {
     this._addmissionMethodService.getProvince().pipe(
       tap(rs => {
+        console.log(rs)
         this.listOfProvince = [...rs.data];
         if (this.listOfProvince !== undefined) {          
           if (this.data !== undefined) {
@@ -271,11 +282,11 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
         }        
       })
     ).subscribe();
+
     this.provinceResult = this._addmissionMethodService.getProvince().pipe(
-      map(rs => {
-        const tmp = rs.data as Province[]
+      map(rs => {        
         const all = {id: 1000, name: 'TẤT CẢ', regionId: 1} as Province
-        const province = tmp
+        const province = [...rs.data, all]
         return province
       })
     )
