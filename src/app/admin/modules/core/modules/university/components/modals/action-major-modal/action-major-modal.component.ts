@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { isThisSecond } from 'date-fns';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { BehaviorSubject, Observable, of } from 'rxjs';
@@ -8,6 +7,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { AdmissionMethodService, MajorService, SubjectGroupService, TrainingProgramService, UniversityService } from 'src/app/admin/services';
 import { MajorDetailUniversity, MajorSubjectGroup, MajorUniversity, Province } from 'src/app/admin/view-models';
 import { Response } from 'src/app/_models/response';
+import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -39,11 +39,14 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
 
 
   provinceResult: Observable<Province[]> = new BehaviorSubject<Province[]>({} as Province[]);
-  
-  
+
+
   listOfDisplaySubjectGroup: Observable<Response<any>> = new BehaviorSubject<Response<any>>({} as Response<any>);
 
-
+  tmpUpdatingUniSubAdmissionParams: any[] = [];
+  get handleUpdatingUniSubAdmissionParams(): any[] {
+    return this.tmpUpdatingUniSubAdmissionParams;
+  };
 
 
 
@@ -66,13 +69,13 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.getListOfMajor();
-    this.getListOfTrainingProgram([]);    
-    this.getProvince();   
+    this.getListOfTrainingProgram([]);
+    this.getProvince();
     console.log(this.data);
     if (this.data === undefined) {
       this.modalTitle = 'THÊM NGÀNH CỦA ' + `${this.universityName.toUpperCase()}`;
-    } 
-       
+    }
+
   }
 
   initMajorForm(): void {
@@ -84,9 +87,9 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
       'seasonId': [9, Validators.required],
       'subAdmissions': this._fb.array([
         this._fb.group({
-          'genderId': [1, Validators.required],
+          'genderId': [1000, Validators.required],
           'admissionMethodId': [1, Validators.required],
-          'provinceId': [undefined, Validators.required],
+          'provinceId': [this.nation, Validators.required],
           'quantity': [0, Validators.required],
           'subjectGroups': this._fb.array([
             // this._fb.group({
@@ -108,18 +111,18 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
         const tmpsubjectGroups = { ...rss, 'majorSubjectGroupId': rss.majorSubjectGroupId.id }
         return tmpsubjectGroups;
       });
-      const genderId = rs.genderId === 3 ? null : rs.genderId;
+      const genderId = rs.genderId === 1000 ? null : rs.genderId;
       const admissionMethodId = rs.admissionMethodId === 3 ? null : rs.admissionMethodId;
       const subAdmissionsTmp = { ...rs, 'provinceId': rs.provinceId.id !== 1000 ? rs.provinceId.id : null, 'subjectGroups': subjectGroups, 'genderId': genderId, 'admissionMethodId': admissionMethodId }
       return subAdmissionsTmp;
-      }
-    );    
+    }
+    );
     const newValue = { ...this.majorForm.value, 'majorId': majorId, 'trainingProgramId': trainingProgramId, 'subAdmissions': subAdmissions, 'universityId': parseInt(this.universityId) }
     console.log(newValue)
     this._universityService.majorAddition(newValue).pipe(
-      tap(rs => {        
+      tap(rs => {
         if (rs.succeeded === true) {
-          Swal.fire({position: 'center', icon: 'success', title: 'Thành Công', showConfirmButton: false,timer: 1500});
+          Swal.fire({ position: 'center', icon: 'success', title: 'Thành Công', showConfirmButton: false, timer: 1500 });
           this.closeModal();
         }
       })
@@ -135,28 +138,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     // }                
   }
 
-  updateMajor(): void {
-    const tmpUpdatingUniSubAdmissionParams = this.updatingUniSubAdmissionParams.controls.map(rs => rs.value);
-    const subAddmission = tmpUpdatingUniSubAdmissionParams.map(rs => {     
-      const tmpMajorDetailEntryMarkParams = rs.majorDetailEntryMarkParams.map(rss => {
-        const tmp = {...rss, 'majorSubjectGroupId': rss.majorSubjectGroupId.id}
-        return tmp;
-      })
-      const tmp = {...rs, 'provinceId': rs.provinceId.id, 'majorDetailEntryMarkParams': tmpMajorDetailEntryMarkParams}
-      return tmp;
-    });    
-    const newValue = {...this.updateMajorForm.value, updatingUniSubAdmissionParams: subAddmission};
-    console.log(newValue);
-    this._universityService.majorUpdation(newValue).pipe(
-      tap(rs => {
-        console.log(rs)
-      }),
-      catchError(err => {
-        console.log(err);
-        return of(undefined);        
-      })
-    ).subscribe();
-  }
+
 
   get getSubAddmissions(): FormArray {
     return this.majorForm.get('subAdmissions') as FormArray
@@ -175,9 +157,9 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
   addSubAddmissions(): void {
     this.getSubAddmissions.push(
       this._fb.group({
-        'genderId': [1, Validators.required],
+        'genderId': [1000, Validators.required],
         'admissionMethodId': [1, Validators.required],
-        'provinceId': [undefined, Validators.required],
+        'provinceId': [this.nation, Validators.required],
         'quantity': [0, Validators.required],
         'subjectGroups': this._fb.array([
           this._fb.group({
@@ -187,6 +169,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
         ])
       }));
   };
+
   addSubjectGroup(submissionIndex: number, data?: any, flag?: number): void {
     const subAddmission = this.getSubAddmissions.controls[submissionIndex];
     const subjectGroup = subAddmission.get('subjectGroups') as FormArray;
@@ -217,13 +200,13 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
 
   listOfMajorSubjectGroup: MajorSubjectGroup[];
   getMajorSubjectGroup(majorId: number): void {
-    if (this.data !== undefined) {      
+    if (this.data !== undefined) {
       this._universityService.majorSubjectGroup(majorId).pipe(
-        tap(rs => {          
-          this.listOfMajorSubjectGroup = rs.data 
+        tap(rs => {
+          this.listOfMajorSubjectGroup = rs.data
           if (this.listOfMajorSubjectGroup !== undefined) {
             this.setData(this.data.majorDetailUnies[0])
-          }       
+          }
         })
       ).subscribe();
       this.subjectGroupResult = this._universityService.majorSubjectGroup(majorId).pipe();
@@ -231,9 +214,9 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
         map(rs => rs.data)
       )
       return;
-    }    
+    }
     this._universityService.majorSubjectGroup(majorId).pipe(
-      tap(rs => {        
+      tap(rs => {
         while (this.getSubAddmissions.controls.length !== 1) {
           this.getSubAddmissions.removeAt(1);
         }
@@ -262,7 +245,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     console.log(item);
     this.getMajorSubjectGroup(item.id);
     this.majorForm.get('majorCode').setValue(item?.code);
-    console.log(this.listOfMajor);
+    console.log(this.listOfMajor, 'list major');
     const a = this.listOfMajor?.find(rs => rs.majorId === item.id) !== undefined ? this.listOfMajor.find(rs => rs.majorId === item.id).majorDetailUnies.map(rs => rs.trainingProgramId) : [];
     console.log(a);
     this.getListOfTrainingProgram(a as number[]);
@@ -274,20 +257,20 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
       tap(rs => {
         console.log(rs)
         this.listOfProvince = [...rs.data];
-        if (this.listOfProvince !== undefined) {          
+        if (this.listOfProvince !== undefined) {
           if (this.data !== undefined) {
-            this.modalTitle = 'SỬA THÔNG TIN NGÀNH ' + `${this.data.majorName.toUpperCase()}` + ` CỦA ` + `${this.universityName.toUpperCase()}`;  
-            this.getMajorSubjectGroup(this.data.majorId as number)    
+            this.modalTitle = 'SỬA THÔNG TIN NGÀNH ' + `${this.data.majorName.toUpperCase()}` + ` CỦA ` + `${this.universityName.toUpperCase()}`;
+            this.getMajorSubjectGroup(this.data.majorId as number)
           }
-        }        
+        }
       })
     ).subscribe();
 
     this.provinceResult = this._addmissionMethodService.getProvince().pipe(
-      map(rs => {        
-        const all = {id: 1000, name: 'TẤT CẢ', regionId: 1} as Province
+      map(rs => {
+        const all = this.nation as Province
         const province = [...rs.data, all]
-        return province
+        return [this.nation].concat(rs.data);
       })
     )
   }
@@ -330,112 +313,157 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     console.log(id);
   }
 
-  addSubAddmissionsParams(): void {
-    this.updatingUniSubAdmissionParams.push(
-      this._fb.group({
-          'subAdmissionId': [0],
-          'quantity': [0],
-          'genderId': [null],
-          'admissionMethodId': [null],
-          'provinceId': [null],
-          'majorDetailEntryMarkParams': this._fb.array([
-            this._fb.group({
-              'entryMarkId': [0],
-              'mark': [0],
-              'majorSubjectGroupId': [0],
-              'status': [0]
-            })
-          ])
-        })
-    )
-    this.getSubAddmissions.push(
-      this._fb.group({
-        'genderId': [1, Validators.required],
-        'admissionMethodId': [1, Validators.required],
-        'provinceId': [undefined, Validators.required],
-        'quantity': [0, Validators.required],
-        'subjectGroups': this._fb.array([
-          this._fb.group({
-            "majorSubjectGroupId": [undefined, Validators.required],
-            "entryMarkPerGroup": [0, Validators.required]
-          })
-        ])
-      }));
-  };
+  nation = environment.nation;
+
   initUpdateFormMajor(): void {
     this.updateMajorForm = this._fb.group({
       'majorDetailId': [0],
       'majorCode': [''],
-      'totalAdmissionQuantity': [0],
+      'totalAdmissionQuantity': [0, Validators.required],
       'status': [1],
-      'updatingUniSubAdmissionParams': this._fb.array([
-        // this._fb.group({
-        //   'subAdmissionId': [0],
-        //   'quantity': [0],
-        //   'genderId': [null],
-        //   'admissionMethodId': [0],
-        //   'provinceId': [null],
-        //   'majorDetailEntryMarkParams': this._fb.array([
-        //     this._fb.group({
-        //       'entryMarkId': [0],
-        //       'mark': [0],
-        //       'majorSubjectGroupId': [0],
-        //       'status': [0]
-        //     })
-        //   ])
-        // })
-      ])
+      'updatingUniSubAdmissionParams': this._fb.array([])
     })
   }
 
-  // addSubjectGroup(submissionIndex: number, data?: any, flag?: number): void {
-  //   const subAddmission = this.getSubAddmissions.controls[submissionIndex];
-  //   const subjectGroup = subAddmission.get('subjectGroups') as FormArray;
-  //   subjectGroup.push(
-  //     this._fb.group({
-  //       "majorSubjectGroupId": [data, Validators.required],
-  //       "entryMarkPerGroup": [0, Validators.required]
-  //     })
-  //   );
-  // }
   setData(data: MajorDetailUniversity): void {
     this.updateMajorForm.get('majorDetailId').setValue(data.id);
     this.updateMajorForm.get('majorCode').setValue(data.majorDetailCode);
     this.updateMajorForm.get('totalAdmissionQuantity').setValue(data.admissionQuantity);
-    while (this.updatingUniSubAdmissionParams.length !== 0) {
-      this.updatingUniSubAdmissionParams.removeAt(0);
-    }
-    data.majorDetailSubAdmissions.forEach(e => {
-      const majorDetailEntryMarkParams = this._fb.array([]);
-      e.majorDetailEntryMarks.forEach(el => {
-        const formGroupEntryMark = this._fb.group({
-          'entryMarkId': [el.id],
-          'mark': [el.mark],
-          'majorSubjectGroupId': [this.listOfMajorSubjectGroup.find(rs => rs.id === el.majorSubjectGoupId)],
-          'status': [1]
-        })
-        majorDetailEntryMarkParams.push(formGroupEntryMark)
+    this.removeFormArray(this.updatingUniSubAdmissionParams);
+    this.tmpUpdatingUniSubAdmissionParams = [];
+    this.tmpSubjectGroup = [];
+    this.handleTmpSubjectGroup
+    if (data.majorDetailSubAdmissions !== null) {
+      data.majorDetailSubAdmissions.forEach(e => {
+        const majorDetailEntryMarkParams = this._fb.array([]);
+        if (e.majorDetailEntryMarks !== null) {
+          e.majorDetailEntryMarks.forEach(el => {
+            const formGroupEntryMark = this._fb.group({
+              'entryMarkId': [el.id],
+              'mark': [el.mark, Validators.required],
+              'majorSubjectGroupId': [this.listOfMajorSubjectGroup.find(rs => rs.id === el.majorSubjectGoupId), Validators.required],
+              'status': [1]
+            });
+            formGroupEntryMark['isUpdate'] = true;            
+            majorDetailEntryMarkParams.push(formGroupEntryMark)
+          });
+        };        
+        const field = this._fb.group({
+          'subAdmissionId': [e.id],
+          'status': [1],
+          'quantity': [e.quantity, Validators.required],
+          'genderId': [e.genderId === null ? 1000 : e.genderId],
+          'admissionMethodId': [e.admissionMethodId],
+          'provinceId': [e.provinceId === null ? this.nation : this.listOfProvince.find(rs => rs.id === e.provinceId), Validators.required],
+          'majorDetailEntryMarkParams': majorDetailEntryMarkParams
+        });
+        field['isUpdate'] = true;
+        console.log(field);
+        this.updatingUniSubAdmissionParams.push(field);
       });
-      const field = this._fb.group({
-        'subAdmissionId': [e.id],
+    }
+  };
+
+  addSubAddmissionsParams(): void {
+    this.updatingUniSubAdmissionParams.push(
+      this._fb.group({
+        'subAdmissionId': [0],
+        'quantity': [0, Validators.required],
+        'genderId': [1000],
+        'admissionMethodId': [1],
+        'provinceId': [this.nation, Validators.required],
         'status': [1],
-        'quantity': [e.quantity],
-        'genderId': [e.genderId],
-        'admissionMethodId': [e.admissionMethodId],
-        'provinceId': [this.listOfProvince.find(rs => rs.id === e.provinceId)],
-        'majorDetailEntryMarkParams': majorDetailEntryMarkParams
-      });   
-      // console.log(this.listOfProvince.find(rs => rs.id === e.provinceId));
-         
-      this.updatingUniSubAdmissionParams.push(field);
-      // this.updatingUniSubAdmissionParams.get('provinceId').setValue(this.listOfProvince.find(rs => rs.id === e.provinceId))
-      
-    });
-    console.log(this.updateMajorForm.value)   ; 
-    // const a = this.updatingUniSubAdmissionParams[0] as FormGroup;
-    // a.get('provinceId').setValue({id: 6, name: "Bạc Liêu", regionId: 3} as Province)
+        'majorDetailEntryMarkParams': this._fb.array([
+          this._fb.group({
+            'entryMarkId': [0],
+            'mark': [0, Validators.required],
+            'majorSubjectGroupId': [undefined, Validators.required],
+            'status': [1]
+          })
+        ])
+      })
+    )
+  };  
+
+  removeSubAddmissionsParams(index: number) {
+    if (!this.updatingUniSubAdmissionParams.controls[index]['isUpdate']) {
+      this.updatingUniSubAdmissionParams.removeAt(index);
+      return;
+    } if (!this.updatingUniSubAdmissionParams.controls[index].value) {
+      return;
+    }
+    const subAddmissionValue = this.updatingUniSubAdmissionParams.controls[index].value;
+    const tmpSubAdmission = { ...subAddmissionValue, 'status': 0, }
+    this.handleUpdatingUniSubAdmissionParams.push(tmpSubAdmission);
+    console.log(this.handleUpdatingUniSubAdmissionParams);
+    this.updatingUniSubAdmissionParams.removeAt(index);
   }
 
+  addSubjectGroupUpdating(submissionIndex: number, data?: any, flag?: number): void {
+    console.log('alsdkjglksd');
+    const subAddmission = this.updatingUniSubAdmissionParams.controls[submissionIndex];
+    const subjectGroup = subAddmission.get('majorDetailEntryMarkParams') as FormArray;
+    const field = this._fb.group({
+      'entryMarkId': [null],
+      'mark': [0],
+      'majorSubjectGroupId': [data, Validators.required],
+      'status': [1],
+    });
+    subjectGroup.push(field);
+  }
+
+
+  tmpSubjectGroup: any[] = [];
+  get handleTmpSubjectGroup(): any[] {
+    return this.tmpSubjectGroup;
+  }
+  removeSubjectGroupUpdating(submissionIndex: number, subjectGroupIndex: number) {
+    const subAddmission = this.updatingUniSubAdmissionParams.controls[submissionIndex];
+    const subjectGroup = subAddmission.get('majorDetailEntryMarkParams') as FormArray;
+    if (!subjectGroup.controls[subjectGroupIndex]['isUpdate']) {
+      subjectGroup.removeAt(subjectGroupIndex);
+      return;
+    }
+    if (!subjectGroup.controls[subjectGroupIndex].value) {
+      return;
+    }
+    if (!this.updatingUniSubAdmissionParams.controls[submissionIndex]) {
+      return;
+    }
+    const subjectGroupValue = { ...subjectGroup.controls[subjectGroupIndex].value, 'majorSubjectGroupId': subjectGroup.controls[subjectGroupIndex].value.majorSubjectGroupId.id, 'status': 0 };
+    subjectGroupValue['subAdmissionId'] = this.updatingUniSubAdmissionParams.controls[submissionIndex].value.subAdmissionId
+
+    this.handleTmpSubjectGroup.push(subjectGroupValue);
+    subjectGroup.removeAt(subjectGroupIndex);
+  }
+
+  updateMajor(): void {
+    const tmpUpdatingUniSubAdmissionParams = this.updatingUniSubAdmissionParams.controls.map(rs => rs.value).concat(this.handleUpdatingUniSubAdmissionParams);
+    const subAddmission = tmpUpdatingUniSubAdmissionParams.map(rs => {
+      const sjGroups = this.handleTmpSubjectGroup !== [] ? this.handleTmpSubjectGroup.filter(_ => _.subAdmissionId === rs.subAdmissionId).map(__ => {
+        const eachSjGroup = { 'entryMarkId': __.entryMarkId, 'mark': __.mark, 'majorSubjectGroupId': __.majorSubjectGroupId, 'status': __.status }
+        return eachSjGroup;
+      }) : [];
+      const tmpMajorDetailEntryMarkParams = rs.majorDetailEntryMarkParams.map(rss => {
+        const tmp = { ...rss, 'majorSubjectGroupId': rss.majorSubjectGroupId.id }
+        return tmp;
+      }).concat(sjGroups)
+      const tmp = { ...rs, 'genderId': rs.genderId !== 1000 ? rs.genderId : null, 'provinceId': rs.provinceId.id !== 1000 ? rs.provinceId.id : null, 'majorDetailEntryMarkParams': tmpMajorDetailEntryMarkParams }
+      return tmp;
+    });
+    const newValue = { ...this.updateMajorForm.value, updatingUniSubAdmissionParams: subAddmission };
+    console.log(newValue);
+    this._universityService.majorUpdation(newValue).pipe(
+      tap(rs => {
+        console.log(rs)
+        this.closeModal();
+      }),
+      catchError(err => {
+        console.log(err);
+        return of(undefined);
+      })
+    ).subscribe();
+  }
 
   closeModal(): void {
     this._modalRef.close();

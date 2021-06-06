@@ -293,7 +293,7 @@ export class UniDetailComponent implements OnInit {
       // nzContent: CreateMajorModalComponent,
       nzClosable: true,      
       nzFooter: null,
-      nzWidth: 800,
+      nzWidth: 800,         
       nzComponentParams: {data: data, universityId: this.uniId, universityName: this.university.name,    
         listOfMajor: this.listOfMajors, 
         callBack: (abc: number) => { this.getMajorsOfUiversity(1, 10, this.uniId, abc, '') }, //Cách này (cái này chạy và load lại trang đc)
