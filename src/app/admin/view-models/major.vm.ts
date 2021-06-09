@@ -25,6 +25,8 @@ export interface MajorDetailUniversity {
     trainingProgramName?: string,
     majorDetailCode?: string,
     admissionQuantity?:number,
+    seasonId?: number,
+    seasonName?: string,
     majorDetailSubAdmissions?: MajorDetailSubAdmission[]
 }
 

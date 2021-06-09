@@ -20,7 +20,8 @@ export const environment = {
   // apiUrl: 'https://mohs.azurewebsites.net/',
   apiUrl: 'https://mohsdev.azurewebsites.net/',
   // apiUrl: 'http://13.212.10.23:63000/',
-  nation: {id: 1000, name: 'TOÀN QUỐC', regionId: 1} as Province
+  nation: {id: 1000, name: 'TOÀN QUỐC', regionId: 1} as Province,
+  initSeasonId: 7
 };
 
 /*

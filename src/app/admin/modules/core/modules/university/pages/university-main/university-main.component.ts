@@ -136,15 +136,15 @@ export class UniversityMainComponent implements OnInit {
     this.getListOfUniversity(params.pageIndex, params.pageSize, this.searchValueName, status);           
   }
 
-  openDetailUniversityModal(uniId: number): void {
-    this._modalService.create({
-      nzContent: UniversityDetailModalComponent,
-      nzClosable: false,      
-      nzFooter: null,
-      nzWidth: 1024,
-      nzComponentParams: { universityId: uniId },
-    })
-  }
+  // openDetailUniversityModal(uniId: number): void {
+  //   this._modalService.create({
+  //     nzContent: UniversityDetailModalComponent,
+  //     nzClosable: false,      
+  //     nzFooter: null,
+  //     nzWidth: 1024,
+  //     nzComponentParams: { universityId: uniId },
+  //   })
+  // }
 
   searchByName(): void {
     this.getListOfUniversity(1, this.pageSize, this.searchValueName, '');

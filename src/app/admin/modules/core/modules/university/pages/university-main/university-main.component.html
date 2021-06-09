@@ -1,5 +1,5 @@
 <div class="university-main">
-  <!-- <div class="page-header">
+  <div class="page-header">
     <div class="row align-items-md-center">
       <div class="col-md-6">
         <div class="row">
@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
   <div class="container-fluid">
     <div nz-row>
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
@@ -42,7 +42,7 @@
                   </tr>
                 </thead>
                 <tbody>                  
-                  <tr *ngFor="let university of basicTable.data; let i = index" [style.backgroundColor]="i % 2 == 1 ? '#f6f6f6' : '#fff'" (click)="openDetailUniversityModal(university.id)">
+                  <tr *ngFor="let university of basicTable.data; let i = index" [style.backgroundColor]="i % 2 == 1 ? '#f6f6f6' : '#fff'">
                     <ng-template #missaddress>
                       <div style="width: 100%;">
                         <!-- <a [routerLink]="['details/' + university.id]" routerLinkActive="router-link-active" >

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -6,9 +6,11 @@ import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { of, Subscription } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { UniversityService } from 'src/app/admin/services';
-import { MajorUniversity, UniversityRM } from 'src/app/admin/view-models';
+import { MajorUniversity, Season, UniversityRM } from 'src/app/admin/view-models';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
 import { ActionMajorModalComponent, CreateMajorModalComponent } from '../../components';
+import Swal from 'sweetalert2';
+import { quillConfiguration } from 'src/app/admin/config';
 @Component({
   selector: 'app-uni-detail',
   templateUrl: './uni-detail.component.html',
@@ -18,144 +20,33 @@ export class UniDetailComponent implements OnInit {
 
   isVisibleHeader = 0;
   mediaSub: Subscription;
+  editorOptions = quillConfiguration;
 
-  seasonSelected = 9;
+  seasonSelected;
+  listOfSeason: Season[] = [];
 
   uniId: string;
   visible = false;
   searchValueName: string = '';
+  logo: string | ArrayBuffer;
+  image: File;
   total = 100;
   pageSize = 10;
   pageIndex = 1;
 
   updateUniForm: FormGroup;
 
-  university: UniversityRM = {
-    logoUrl: 'https://cdn.24h.com.vn/upload/2-2021/images/2021-05-31/Gan-30-nghin-can-bo-y-te-sinh-vien-Y-Duoc-da-co-mat-tai-tam-dich-Bac-Giang-nhan-luc-1622450472-177-width640height480.jpg'
-  }
+  university: UniversityRM = {}
 
-  listOfMajors: any;
-  listOfDisplayMajors: any = [
-    // {
-    //   majorName: 'Quản Trị Khách Sạn',
-    //   majorDetailUnies: [
-    //     {
-    //       trainingProgramName: 'Đại trà',
-    //       majorDetailCode: "7810201",
-    //       admissionQuantity: 298,
-    //       majorDetailSubAdmissions: [
-    //         {
-    //           quantity: 298,
-    //           admissionMethodId: 1, 
-    //           admissionMethodName: "THPT QG",
-    //           genderId: 1,
-    //           provinceId: null,
-    //           provinceName: null,
-    //           majorDetailEntryMarks : [
-    //             {id: 97, mark: 16, majorSubjectGoupId: 308, subjectGroupId: 1, subjectGroupCode: "A00"}, 
-    //             {id: 105, mark: 20, majorSubjectGoupId: 312, subjectGroupId: 53, subjectGroupCode: "D01"},   
-    //             {id: 105, mark: 20, majorSubjectGoupId: 312, subjectGroupId: 53, subjectGroupCode: "D01"},  
-    //             {id: 105, mark: 20, majorSubjectGoupId: 312, subjectGroupId: 53, subjectGroupCode: "D01"},  
-    //             {id: 105, mark: 20, majorSubjectGoupId: 312, subjectGroupId: 53, subjectGroupCode: "D01"},  
-    //             {id: 105, mark: 20, majorSubjectGoupId: 312, subjectGroupId: 53, subjectGroupCode: "D01"},               
-    //           ]
-    //         },
-    //         {
-    //           quantity: 300,
-    //           admissionMethodId: 1, 
-    //           admissionMethodName: null,
-    //           genderId: 0,
-    //           provinceName: 'Hà Nội',
-    //           majorDetailEntryMarks : [
-    //             {id: 97, mark: 18, majorSubjectGoupId: 308, subjectGroupId: 1, subjectGroupCode: "A00"},
-    //             {id: 101, mark: 16, majorSubjectGoupId: 310, subjectGroupId: 27, subjectGroupCode: "C00"},
-    //             {id: 105, mark: 20, majorSubjectGoupId: 312, subjectGroupId: 53, subjectGroupCode: "D01"},                                    
-    //           ]
-    //         }            
-    //       ]
-    //     },
-    //     {
-    //       trainingProgramName: 'Chất lượng cao tiếng anh',
-    //       majorDetailCode: "7810208",
-    //       admissionQuantity: 200,
-    //       majorDetailSubAdmissions: [
-    //         {
-    //           quantity: 190,
-    //           admissionMethodId: 1, 
-    //           admissionMethodName: "THPT QG",
-    //           genderId: 0,
-    //           provinceName: 'Hà Nội',
-    //           majorDetailEntryMarks : [
-    //             {id: 97, mark: 16, majorSubjectGoupId: 308, subjectGroupId: 1, subjectGroupCode: "A00"},
-    //             {id: 101, mark: 30, majorSubjectGoupId: 310, subjectGroupId: 27, subjectGroupCode: "C00"},
-    //             {id: 105, mark: 16, majorSubjectGoupId: 312, subjectGroupId: 53, subjectGroupCode: "D01"}
-    //           ]
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // },
-    // {
-    //   majorName: 'Công nghệ thông tin',
-    //   majorDetailUnies: [
-    //     {
-    //       trainingProgramName: 'Đại trà',
-    //       majorDetailCode: "7810201",
-    //       admissionQuantity: 298,
-    //       majorDetailSubAdmissions: [
-    //         {
-    //           quantity: 298,
-    //           admissionMethodId: 1, 
-    //           admissionMethodName: "THPT QG",
-    //           genderId: 1,
-    //           provinceName: 'Hà Nội',
-    //           majorDetailEntryMarks : [
-    //             {id: 97, mark: 16, majorSubjectGoupId: 308, subjectGroupId: 1, subjectGroupCode: "A00"},
-    //             {id: 101, mark: 16, majorSubjectGoupId: 310, subjectGroupId: 27, subjectGroupCode: "C00"},
-    //             {id: 105, mark: 16, majorSubjectGoupId: 312, subjectGroupId: 53, subjectGroupCode: "D01"}
-    //           ]
-    //         },
-    //         {
-    //           quantity: 300,
-    //           admissionMethodId: 1, 
-    //           admissionMethodName: "THPT QG",
-    //           genderId: null,
-    //           provinceName: 'Hà Nội',
-    //           majorDetailEntryMarks : [
-    //             {id: 97, mark: 16, majorSubjectGoupId: 308, subjectGroupId: 1, subjectGroupCode: "A00"},
-    //             {id: 101, mark: 16, majorSubjectGoupId: 310, subjectGroupId: 27, subjectGroupCode: "C00"},
-    //             {id: 105, mark: 16, majorSubjectGoupId: 312, subjectGroupId: 53, subjectGroupCode: "D01"}
-    //           ]
-    //         }            
-    //       ]
-    //     },
-    //     {
-    //       trainingProgramName: 'CLC',
-    //       majorDetailCode: "7810208",
-    //       admissionQuantity: 200,
-    //       majorDetailSubAdmissions: [
-    //         {
-    //           quantity: 190,
-    //           admissionMethodId: 1, 
-    //           admissionMethodName: "THPT QG",
-    //           genderId: 1,
-    //           provinceName: 'Hà Nội',
-    //           majorDetailEntryMarks : [
-    //             {id: 97, mark: 16, majorSubjectGoupId: 308, subjectGroupId: 1, subjectGroupCode: "A00"},
-    //             {id: 101, mark: 16, majorSubjectGoupId: 310, subjectGroupId: 27, subjectGroupCode: "C00"},
-    //             {id: 105, mark: 16, majorSubjectGoupId: 312, subjectGroupId: 53, subjectGroupCode: "D01"}
-    //           ]
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // },
+  listOfMajors: MajorUniversity[];
+  listOfDisplayMajors: MajorUniversity[] = [
+    
   ];
   
   constructor(
-    private _modalService: NzModalService,
-    private _activatedRoute: ActivatedRoute,
+    private _modalService: NzModalService,    
     private _universityService: UniversityService,
+    private _activatedRoute: ActivatedRoute,
     private _fb: FormBuilder,
     public _mediaObserver: MediaObserver    
   ) {
@@ -163,9 +54,9 @@ export class UniDetailComponent implements OnInit {
   }
 
   ngOnInit() {
-    window.addEventListener('scroll', this.scroll, true);
-    this.getUniversityId();
-    this.getUniversityById();    
+    window.addEventListener('scroll', this.scroll, true);    
+    this.getUniversityById();  
+    this.getListOfSeason();
   }
 
   scroll = (event): void => {
@@ -176,6 +67,25 @@ export class UniDetailComponent implements OnInit {
     }
   }
 
+  getListOfSeason(): void {
+    this._universityService.getListOfSeason().pipe(
+      tap(rs => {
+        if (rs.succeeded === true) {
+          this.listOfSeason = [...rs.data];
+          this.seasonSelected = rs.data[0].id;          
+          this._activatedRoute.params.subscribe((param) => {    
+            this.getMajorsOfUiversity(1, 10, param?.id, this.seasonSelected, '');          
+          });          
+        } else {
+
+        }
+      }),
+      catchError(err => {
+        return of(undefined);
+      })
+    ).subscribe();
+  }
+
   initUpdateUniForm(): void {
     this.updateUniForm = this._fb.group({
       'name': ['', Validators.required],
@@ -183,31 +93,27 @@ export class UniDetailComponent implements OnInit {
       'address': ['', Validators.required],
       'phone': ['', Validators.required],
       'webUrl': ['', Validators.required],
-      'tuitionType': [''],
-      'tuitionFrom': [''],
-      'tuitionTo': [''],
+      'tuitionType': ['', Validators.required],
+      'tuitionFrom': ['', Validators.required],
+      'tuitionTo': ['', Validators.required],
       'description': ['', Validators.required],
       'rating': [1],
       'status': [0],
     });
   }
-  
-
-  getUniversityId(): void {
-    this._activatedRoute.params.subscribe((param) => {
-      this.uniId = param.id;
-      this.getMajorsOfUiversity(1, 10, param.id, 9, '');
-    });
-  }
+    
 
   getUniversityById(): void {
     this._activatedRoute.params.subscribe((param) => {
+      this.uniId = param.id;
       this._universityService.getUniversityById(param.id).pipe(
-        tap((rs) => {
-          // console.log(rs);
-          this.uniId = param.id;
-          this.university = rs.data;
-          this.setDataToForm(this.university);
+        tap((rs) => {                    
+          if (rs.succeeded === true) {
+            this.university = rs.data;
+            this.setDataToForm(this.university);
+          } else {
+
+          }          
         }),
         catchError((err) => {
           return of(undefined);
@@ -234,25 +140,23 @@ export class UniDetailComponent implements OnInit {
     if (!event) {
       return;
     }    
+    this.seasonSelected = event;
     this.getMajorsOfUiversity(1, 10, this.uniId, event, '');
   }
   
 
-  getMajorsOfUiversity(pageNumber: number, pageSize: number, uniId: string, seasonId: number, majorName: string): void {        
+  getMajorsOfUiversity(pageNumber: number, pageSize: number, uniId: string, seasonId: number, majorName: string): void {   
+    console.log('uniId', uniId, 'seasonId', seasonId);     
     this._universityService.getMajorOfUniversity(pageNumber, pageSize, uniId, seasonId, majorName).pipe(
       tap((rs) => {        
-        if (rs.succeeded === true) {          
-          console.log(rs, 'Uni detail component');
-          if (rs.data !== null) {   
-            console.log('Hàm đã được thự thi');                     
+        if (rs.succeeded === true) {                    
+          if (rs.data !== null) {                                
             this.listOfMajors = rs.data;
             this.listOfDisplayMajors = [...rs.data];
-            this.total = rs.totalRecords;    
-            console.log(this.listOfDisplayMajors, this.total, 'trong if');                    
+            this.total = rs.totalRecords;                                 
           } else {
             this.listOfMajors = [];
-            this.listOfDisplayMajors = [];
-            console.log(this.listOfDisplayMajors, 'đang ở trong else');
+            this.listOfDisplayMajors = [];            
             this.total = rs.totalRecords;
           }
         } else {
@@ -265,9 +169,9 @@ export class UniDetailComponent implements OnInit {
     ).subscribe();
   }
 
-  searchByName(): void {
-    // this.getMajorsOfUiversity(1, this.pageSize, this.searchValueName);
-    this.getMajorsOfUiversity(1, 10, this.uniId, 9, this.searchValueName);    
+  searchByName(): void { 
+    console.log(this.seasonSelected);   
+    this.getMajorsOfUiversity(1, 10, this.uniId, this.seasonSelected, this.searchValueName);    
   }
 
   resetSearchName(): void {
@@ -280,33 +184,109 @@ export class UniDetailComponent implements OnInit {
   onQueryParamsChange(params: NzTableQueryParams): void {
     this.pageIndex = params.pageIndex;
     this.pageSize = params.pageSize;
-    this.getMajorsOfUiversity(params.pageIndex, params.pageSize, this.uniId, 9, this.searchValueName);    
+    if (this.uniId !== undefined && this.seasonSelected !== undefined) {      
+      this.getMajorsOfUiversity(params.pageIndex, params.pageSize, this.uniId, this.seasonSelected, this.searchValueName);   
+    }     
   }
-
-  tracking(index, majorDetailUni): number {    
-    return 2;
-  }  
-  //Modal
+    
+  changeSelectedSeason(seasonId: number): void {
+    console.log(seasonId, 'changeSelectedSeason');    
+    this.seasonSelected = seasonId  
+    this.getMajorBySeason(seasonId);  
+  }
   openCreateMajorModal(data: MajorUniversity | undefined): void {    
     const modal = this._modalService.create({
-      nzContent: ActionMajorModalComponent,
-      // nzContent: CreateMajorModalComponent,
-      nzClosable: true,      
+      nzContent: ActionMajorModalComponent,      
+      nzClosable: false,      
       nzFooter: null,
       nzWidth: 800,         
       nzComponentParams: {data: data, universityId: this.uniId, universityName: this.university.name,    
-        listOfMajor: this.listOfMajors, 
-        callBack: (abc: number) => { this.getMajorsOfUiversity(1, 10, this.uniId, abc, '') }, //Cách này (cái này chạy và load lại trang đc)
-        // callBack2: this.getMajorsOfUiversity , // Với cách này rồi qua bên ActionMajorModalComponent mới truyền param vào thì có khác nhau k anh? (còn thằng này thì e test vẫn chạy đc, nhưng méo load lại đc)        
+        listOfMajor: this.listOfMajors,         
+        changeSeasonId: (seasonId: number) => { this.changeSelectedSeason(seasonId) }
       },      
     });
     modal.afterClose.pipe(
-      tap((rs) => {
-        // this.seasonSelected = 1
-        // this.getMajorBySeason(this.seasonSelected)
-        
+      tap((rs) => {            
       })
     ).subscribe();
   }
 
+  
+  uploadLogo(evt): void {    
+    const files: File[] = evt.target.files;
+    console.log(files);
+    if (files.length > 1) {
+      Swal.fire('Lỗi', 'Chỉ được chọn 1 file', 'error');
+    } else {
+      const file = files[0];
+      const extensions: string[] = ['image/png', 'image/jpeg', 'image/jpg'];
+      if (extensions.includes(file.type)) {
+        if (file.size < 1024*1204*2) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            this.logo = reader.result                        
+          };
+          reader.readAsDataURL(file);  
+          this.image = files[0];                  
+        } else {
+          Swal.fire('Oversize', 'Vui lòng chọn ảnh có kích thước từ 2MB trở xuống', 'error');
+        }
+      } else {
+        Swal.fire('Lỗi', 'Vui lòng chỉ chọn file ảnh (.png, .jpeg, .jpg)', 'error');
+      }
+    }    
+  }
+
+  removeFile(): void {
+    this.logo = undefined;    
+    this.image = null;
+  }
+
+  updateUni(): void {
+    const newValue = {
+      "id": Number.parseInt(this.uniId),
+      "code": this.updateUniForm.get('code').value,
+      "name": this.updateUniForm.get('name').value,
+      "address": this.updateUniForm.get('address').value,
+      "file": this.image ? this.image : null,
+      "description": this.updateUniForm.get('description').value,
+      "phone": this.updateUniForm.get('phone').value,
+      "webUrl": this.updateUniForm.get('webUrl').value,
+      "tuitionType": Number.parseInt(this.updateUniForm.get('tuitionType').value),
+      "tuitionFrom": Number.parseInt(this.updateUniForm.get('tuitionFrom').value),
+      "tuitionTo": Number.parseInt(this.updateUniForm.get('tuitionTo').value),
+      "rating": this.updateUniForm.get('rating').value,
+      "status": this.updateUniForm.get('status').value
+    }  
+    console.log(newValue);
+    const formData = new FormData();     
+    for (let key in newValue) {
+      formData.append(key, newValue[key]);
+    }
+    Swal.fire({
+      title: 'Bạn có muốn lưu những thông tin đã thay đổi hay không?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: `Lưu`,
+      denyButtonText: `Không lưu`,
+      cancelButtonText: `Thoát`      
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this._universityService.updateUniversity(formData).pipe(
+          tap((rs) => {            
+            if (rs.succeeded === true) {
+              Swal.fire('Thành Công', 'Cập nhật thành công', 'success');              
+            } else {
+              Swal.fire('Thành Công', 'Cập nhật thất bại', 'success');    
+            }      
+          }),
+          catchError((err) => {                       
+            return of(undefined);
+          })
+        ).subscribe();
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+      }
+    })
+  }
 }

@@ -5,8 +5,18 @@
                 <nb-card style="width: 100%;">                
                     <nb-card-body style="width: 100%;">
                         <div class="row">
-                            <div class="col-lg-2" [style.background-size]="'cover'" [style.background-repeat]="'no-repeat'" [style.background-image]="'url(' + university.logoUrl + ')'" [style.border]="'1px solid #000'">
-                                <!-- <img [src]="university.logoUrl" alt="">                                 -->
+                            <div  class="col-lg-2" [style.background-size]="'cover'" [style.background-repeat]="'no-repeat'" [style.background-image]="logo === undefined ? 'url(' + university.logoUrl + ')' :'url(' + logo + ')' " [style.border]="'1px solid #000'">
+                              <input #logoUpload type="file" style="display: none;" (change)="uploadLogo($event)">
+                              <div *ngIf="logo === undefined">                                
+                                <button (click)="logoUpload.click()" style="bottom: 0; right: 0;" class="position-absolute" nbButton size="small">
+                                  <nb-icon icon="upload-outline"></nb-icon>          
+                                </button>
+                              </div> 
+                              <div *ngIf="logo !== undefined">                                
+                                <button (click)="removeFile()" style="bottom: 0; right: 0;" class="position-absolute" nbButton size="small">
+                                  <nb-icon icon="close-outline"></nb-icon>          
+                                </button>
+                              </div>                                                                                     
                             </div>
                             <div class="col-lg-5">
                                 <div class="mt-2">
@@ -84,8 +94,8 @@
                                       </div>
                                       <div class="col-lg-9 pr-0">                                                                                                                                                                              
                                         <nb-form-field>                              
-                                            <textarea [formControl]="updateUniForm.get('description')" nbInput fullWidth placeholder="Mô tả" fieldSize="large"></textarea>
-                                          </nb-form-field>
+                                            <textarea [formControl]="updateUniForm.get('description')" nbInput fullWidth placeholder="Mô tả" fieldSize="large" [innerHTML]="updateUniForm.get('description').value"></textarea>
+                                          </nb-form-field>                                          
                                       </div> 
                                     </div>
                                   </div>                      
@@ -169,7 +179,7 @@
                                     </div>
                                   </div>
                                   <div style="display: flex; justify-content: flex-end; margin-top: 10px; margin-right: 65px;">                                                
-                                    <button [disabled]="updateUniForm?.invalid" size="small" nbButton status="info">
+                                    <button [disabled]="updateUniForm?.invalid" size="small" nbButton status="info" (click)="updateUni()">
                                       <nb-icon icon="save-outline"></nb-icon>
                                       Lưu
                                     </button>
@@ -192,10 +202,8 @@
                             <h5>BẢNG THÔNG TIN NGÀNH HỌC CỦA TRƯỜNG {{university.name}}</h5>
                         </div>
                         <div class="year">
-                            <nb-select [size]="'small'" fullWidth [selected]="seasonSelected" (selectedChange)="getMajorBySeason($event)">        
-                                <nb-option [value]="1">2017 - 2018</nb-option>
-                                <nb-option [value]="2">2018 - 2019</nb-option>   
-                                <nb-option [value]="9">2019 - 2020</nb-option>     
+                            <nb-select [size]="'small'" fullWidth  [selected]="seasonSelected" (selectedChange)="getMajorBySeason($event)">                                        
+                                <nb-option *ngFor="let season of listOfSeason" [value]="season.id">{{season.name}}</nb-option>
                             </nb-select>
                           </div>
                         </div>
@@ -264,71 +272,76 @@
                                 <td>{{i + 1}}</td>                                
                                 <td>
                                     <div style="display: flex; justify-content: flex-start; align-items: center; min-height: 2rem;">  
-                                        <span>{{major.majorName}}</span>                                                                                                                        
+                                        <span>{{major.majorName?.toUpperCase()}}</span>                                                                                                                        
                                     </div>
                                 </td>
                                 <td style="padding: 0">
                                     <div class="flex-container-custom">  
                                         <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
-                                            <div *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="2 * majorDetailSubAdmission.majorDetailEntryMarks?.length" [style.position]="relative">                                                                                                                                                
+                                            <div *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3" [style.position]="relative">                                                                                                                                                
                                             </div>  
                                             <span style="position: absolute; word-break: break-word;
-                                            padding: 10px">{{majorDetailUni.trainingProgramName}}</span>                                                                 
+                                            padding: 10px">{{majorDetailUni.trainingProgramName?.toUpperCase()}}</span>      
+                                            <div class="td-border-children-two" *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem;"></div>                                                            
                                         </div>                                                                              
                                     </div>
                                 </td>
                                 <td style="padding: 0">
                                     <div class="flex-container-custom">
                                         <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
-                                            <div *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="2 * majorDetailSubAdmission.majorDetailEntryMarks?.length" [style.position]="relative">                                                                                                                                                
+                                            <div *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3" [style.position]="relative">                                                                                                                                                
                                             </div>  
                                             <span style="position: absolute; word-break: break-word;
                                             padding: 10px">{{majorDetailUni.majorDetailCode}}</span>
-                                            <!-- <span >{{majorDetailUni.majorDetailCode}}</span>                     -->
+                                            <div class="td-border-children-two" *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem;"></div> 
                                         </div>                                        
                                     </div>                                
                                 </td>
                                 <td style="padding: 0">
                                     <div class="flex-container-custom">
                                         <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies; let count = majorDetailUni ">                                                                                                        
-                                            <div *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="2 * majorDetailSubAdmission.majorDetailEntryMarks?.length" [style.position]="relative">                                                                                                                                                
+                                            <div *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3" [style.position]="relative">                                                                                                                                                
                                             </div>  
                                             <span style="position: absolute; word-break: break-word;
-                                            padding: 10px">{{majorDetailUni.admissionQuantity}}</span>                                       
+                                            padding: 10px">{{majorDetailUni.admissionQuantity}}</span>  
+                                            <div class="td-border-children-two" *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem;"></div>                                      
                                         </div>                                        
                                     </div> 
                                 </td>
                                 <td style="padding: 0">
                                     <div class="flex-container-custom">
                                         <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
-                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="2 * majorDetailSubAdmission.majorDetailEntryMarks?.length">
+                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3">
                                                 <div style="width: 100%; display: flex; justify-content: center; align-items: center; flex-direction: row;">
                                                     <!-- <span> {{majorDetailSubAdmission.admissionMethodName}} </span> - <span>{{majorDetailSubAdmission.genderId === 1 ? 'Nam' : 'Nữ'}}</span> - <span>{{majorDetailSubAdmission.provinceName}}</span> -->
                                                     <div *ngIf="majorDetailSubAdmission.genderId === null && majorDetailSubAdmission.provinceName === null && majorDetailSubAdmission.admissionMethodName === null">
                                                       <span>TẤT CẢ</span>
                                                     </div>
                                                     <div *ngIf="majorDetailSubAdmission.genderId !== null && majorDetailSubAdmission.provinceName !== null && majorDetailSubAdmission.admissionMethodName !== null">
-                                                      <span>{{majorDetailSubAdmission.admissionMethodName}}</span> - <span>{{majorDetailSubAdmission.genderId === 1 ? 'Nam' : 'Nữ'}}</span> - <span>{{majorDetailSubAdmission.provinceName}}</span>
+                                                      <span>{{majorDetailSubAdmission.admissionMethodName?.toUpperCase()}}</span> - <span>{{majorDetailSubAdmission.genderId === 1 ? 'NAM' : 'NỮ'}}</span> - <span>{{majorDetailSubAdmission.provinceName?.toUpperCase()}}</span>
                                                     </div>
                                                     <div *ngIf="majorDetailSubAdmission.genderId === null && majorDetailSubAdmission.provinceName === null">
-                                                      <span>{{majorDetailSubAdmission.admissionMethodName}}</span>
+                                                      <span>{{majorDetailSubAdmission.admissionMethodName?.toUpperCase()}}</span>
                                                     </div>
                                                     <div *ngIf="majorDetailSubAdmission.genderId === null && majorDetailSubAdmission.admissionMethodName === null">
-                                                      <span>{{majorDetailSubAdmission.provinceName}}</span>
+                                                      <span>{{majorDetailSubAdmission.provinceName?.toUpperCase()}}</span>
                                                     </div>
                                                     <div *ngIf="majorDetailSubAdmission.admissionMethodName === null && majorDetailSubAdmission.provinceName === null">
-                                                      <span>{{majorDetailSubAdmission.genderId === 1 ? 'Nam' : 'Nữ'}}</span>
+                                                      <span>{{majorDetailSubAdmission.genderId === 1 ? 'NAM' : 'NỮ'}}</span>
                                                     </div> 
                                                     <div *ngIf="(majorDetailSubAdmission.genderId !== null && majorDetailSubAdmission.provinceName !== null) && majorDetailSubAdmission.admissionMethodName === null">
-                                                      <span>{{majorDetailSubAdmission.genderId === 1 ? 'Nam' : 'Nữ'}}</span> - <span>{{majorDetailSubAdmission.provinceName}}</span>
+                                                      <span>{{majorDetailSubAdmission.genderId === 1 ? 'NAM' : 'NỮ'}}</span> - <span>{{majorDetailSubAdmission.provinceName?.toUpperCase()}}</span>
                                                     </div>  
                                                     <div *ngIf="(majorDetailSubAdmission.genderId !== null && majorDetailSubAdmission.admissionMethodName !== null) && majorDetailSubAdmission.provinceName === null">
-                                                      <span>{{majorDetailSubAdmission.admissionMethodName}}</span> - <span>{{majorDetailSubAdmission.genderId === 1 ? 'Nam' : 'Nữ'}}</span>
+                                                      <span>{{majorDetailSubAdmission.admissionMethodName?.toUpperCase()}}</span> - <span>{{majorDetailSubAdmission.genderId === 1 ? 'NAM' : 'NỮ'}}</span>
                                                     </div> 
                                                     <div *ngIf="(majorDetailSubAdmission.provinceName !== null && majorDetailSubAdmission.admissionMethodName !== null) && majorDetailSubAdmission.genderId === null">
-                                                      <span>{{majorDetailSubAdmission.admissionMethodName}}</span> - <span>{{majorDetailSubAdmission.provinceName}}</span>
+                                                      <span>{{majorDetailSubAdmission.admissionMethodName?.toUpperCase()}}</span> - <span>{{majorDetailSubAdmission.provinceName?.toUpperCase()}}</span>
                                                     </div>                                                                                                                                                       
                                                 </div>                                                
+                                            </div> 
+                                            <div *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem; display: flex; align-items: center;">
+                                              <span class="missInfomation" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>  
                                             </div>                    
                                         </div>                                        
                                     </div> 
@@ -336,10 +349,12 @@
                                 <td style="padding: 0">
                                     <div class="flex-container-custom">
                                         <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
-                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions; " [style.height.rem]="2 * majorDetailSubAdmission.majorDetailEntryMarks?.length">
-                                                <span>{{majorDetailSubAdmission.quantity}}</span>
-                                                <!-- <span>{{majorDetailSubAdmission.majorDetailEntryMarks.length}}</span> -->
-                                            </div>                    
+                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions; " [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3">
+                                                <span>{{majorDetailSubAdmission.quantity}}</span>                                                
+                                            </div>                                              
+                                            <div *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem; display: flex; align-items: center;">
+                                              <span class="missInfomation" nbTooltip="Thông tin về số lượng sinh viên được tuyển đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>  
+                                            </div>                   
                                         </div>                                        
                                     </div>                                     
                                 </td>
@@ -350,6 +365,12 @@
                                                 <div class="td-border-children-two" *ngFor="let majorDetailEntryMark of majorDetailSubAdmission.majorDetailEntryMarks" style="height: 2rem;">
                                                     <span>{{majorDetailEntryMark.subjectGroupCode}}</span>
                                                 </div>
+                                                <div class="td-border-children-two" *ngIf="majorDetailSubAdmission.majorDetailEntryMarks === null" style="height: 3rem;">    
+                                                  <span class="missInfomation" nbTooltip="Thông tin về khối đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>                                                 
+                                                </div> 
+                                            </div> 
+                                            <div *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem; display: flex; align-items: center">
+                                              <span class="missInfomation" nbTooltip="Thông tin về khối đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>    
                                             </div>                    
                                         </div>                                        
                                     </div>                                     
@@ -360,8 +381,14 @@
                                             <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions" >
                                                 <div class="td-border-children-two" *ngFor="let majorDetailEntryMark of majorDetailSubAdmission.majorDetailEntryMarks" style="height: 2rem;">
                                                     <span>{{majorDetailEntryMark.mark}}</span>
-                                                </div>
-                                            </div>                    
+                                                </div>  
+                                                <div class="td-border-children-two" *ngIf="majorDetailSubAdmission.majorDetailEntryMarks === null" style="height: 3rem;">     
+                                                  <span class="missInfomation" nbTooltip="Thông tin điểm chuẩn đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>                                             
+                                                </div>                                               
+                                            </div>  
+                                            <div *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem; display: flex; align-items: center">
+                                              <span class="missInfomation" nbTooltip="Thông tin điểm chuẩn đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>  
+                                            </div>                  
                                         </div>                                        
                                     </div>                                    
                                 </td>
@@ -386,7 +413,7 @@
 
 <ng-template #totalTemplate>
     <span>
-      Hiện có {{ total }} trường đại học
+      HIỆN CÓ {{ total }} NGÀNH HỌC
     </span>  
   </ng-template>
 <nz-dropdown-menu #searchMenu="nzDropdownMenu">

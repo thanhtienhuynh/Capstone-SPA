@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { MajorSubjectGroup, UniversityRM } from '../../view-models';
+import { MajorSubjectGroup, Season, UniversityRM } from '../../view-models';
 import { Response } from "src/app/_models/response";
 import { PagedResponse } from 'src/app/_models/paged-response';
 
@@ -21,7 +21,7 @@ export class UniversityService {
   }
 
   getAllUniversity(): Observable<PagedResponse<any>> {
-    return this._http.get<PagedResponse<any>>(this.baseUrl + 'api/v1/university');
+    return this._http.get<PagedResponse<any>>(this.baseUrl + 'api/v1/university/admin-non-paging');
   }
 
   getListOfUniversity(pageNumber: number, pageSize: number, name: string, status: string): Observable<PagedResponse<any>> {
@@ -42,6 +42,11 @@ export class UniversityService {
     return this._http.get<PagedResponse<any>>(this.baseUrl + 'api/v1/university/major-detail', { params });
   }
 
+  getMajorOfUniversityNonePaging(uniId: string, seasonId: string): Observable<PagedResponse<any>> {
+    let params = new HttpParams().append('UniversityId', `${uniId}`).append('SeasonId', `${seasonId}`);
+    return this._http.get<PagedResponse<any>>(this.baseUrl + 'api/v1/university/major-detail-non-paging', { params });
+  }
+
   majorAddition(body: any): Observable<Response<any>> {
     return this._http.post<Response<any>>(this.baseUrl + 'api/v1/university/major-addition', body);
   }
@@ -49,9 +54,14 @@ export class UniversityService {
   majorUpdation(body: any): Observable<Response<any>> {
     return this._http.put<Response<any>>(this.baseUrl + 'api/v1/university/major-updation', body);
   }
+
   majorSubjectGroup(majorId: number): Observable<Response<MajorSubjectGroup[]>> {
     let params = new HttpParams().append('MajorId', `${majorId}`);
     return this._http.get<Response<MajorSubjectGroup[]>>(this.baseUrl + 'api/v1/major-subject-group', { params });
   }
+
+  getListOfSeason(): Observable<Response<Season[]>> {
+    return this._http.get<PagedResponse<Season[]>>(this.baseUrl + 'api/v1/season');
+  }  
 }
 
