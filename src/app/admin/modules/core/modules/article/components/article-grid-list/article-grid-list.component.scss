@@ -48,3 +48,13 @@ nz-skeleton:last-child {
   margin-bottom: 0;
 }
 
+nz-pagination {
+  ::ng-deep {
+    .ant-pagination-item, .ant-pagination-total-text, .ant-pagination-item-ellipsis {
+      line-height: 30px;
+    }
+    a {
+      text-decoration: none;
+    }
+  }
+}

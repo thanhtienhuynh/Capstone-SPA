@@ -6,14 +6,14 @@ import { SharedModule } from 'src/app/admin/shared/shared.module';
 
 const COMPONENTS = [
   CreateUniversityModalComponent,
-  CreateMajorModalComponent,  
+  // CreateMajorModalComponent,  
   ActionMajorModalComponent
 ];
 
 const PAGES = [
   UniversityMainComponent,
-  UniversityDetailComponent,
-  UniversityDetailModalComponent,
+  // UniversityDetailComponent,
+  // UniversityDetailModalComponent,
   UniDetailComponent
 ]
 @NgModule({
