@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,KAAK,CAAC;EACF,YAAY,EAAE,IAAI;EAClB,MAAM,EAAE,IAAI;EACZ,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,MAAM;EACvB,WAAW,EAAE,MAAM;CACtB;;AAED,AAAA,KAAK,CAAC,EAAE,CAAC;EACL,KAAK,EAAE,OAAO;EACd,SAAS,EAAE,IAAI;CAClB",
-    "sources": [
-        "mohs-logo.component.scss"
-    ],
-    "names": [],
-    "file": "mohs-logo.component.css"
-}
