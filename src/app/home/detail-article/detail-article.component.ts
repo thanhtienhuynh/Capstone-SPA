@@ -3,6 +3,7 @@ import { Meta } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { DetailArticle } from 'src/app/_models/detail-article';
+import Swal from 'sweetalert2';
 import * as fromApp from '../../_store/app.reducer';
 import * as HomeActions from './../store/home.actions';
 
@@ -15,6 +16,7 @@ export class DetailArticleComponent implements OnInit {
   subscription: Subscription;
   detailAricle: DetailArticle;
   isLoading: boolean;
+  errors: string[];
 
   constructor(private store: Store<fromApp.AppState>, private meta: Meta) { }
 
@@ -25,8 +27,19 @@ export class DetailArticleComponent implements OnInit {
         (homeState) => {
           this.detailAricle = homeState.detailSelectedArticle;
           this.isLoading = homeState.isLoading;
+          this.errors = homeState.errors;
+          if (this.errors) {
+            Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
+            .then(() => {
+              this.store.dispatch(new HomeActions.ConfirmErrors());
+            });
+          }
         },
         (error) => {
+          Swal.fire({title: 'Lỗi', text: error.toString(), icon: 'error', allowOutsideClick: false})
+          .then(() => {
+
+          });
         }
       );
   }

@@ -66,4 +66,23 @@ export class HomeEffects {
       );
     }),
   );
+
+  @Effect()
+  loadTopArticle = this.actions$.pipe(
+    ofType(HomeActions.LOAD_TOP_ARTICLES),
+    switchMap((actionData) => {
+      return this.http.get<Response<CollapseArticle[]>>(environment.apiUrl + 'api/v1/article/admin-top'
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new HomeActions.SetTopArticles(response.data);
+          }
+          return new HomeActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new HomeActions.HasErrors([error.message]));
+        })
+      );
+    }),
+  );
 }

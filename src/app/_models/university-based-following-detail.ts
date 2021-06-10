@@ -1,4 +1,6 @@
-export interface UniversityBasedUserMajorDetail {
+import { Season } from "./university";
+
+export interface UniversityBasedFollowingDetail {
   id: number;
   code: string;
   name: string;
@@ -21,17 +23,15 @@ export interface TrainingProgramGroupByUniversityDataSet {
 }
 
 export interface MajorGroupByTrainingProgramDataSet {
+  followingDetailId: number;
   id: number;
   majorCode: string;
   code: string;
   name: string;
-  newestEntryMark: number;
-  numberOfStudent: number;
-  yearOfEntryMark: number;
+  seasonDataSet: Season;
   positionOfUser: number;
   totalUserCared: number;
   subjectGroupId: number;
   subjectGroupCode: string;
   rankingMark: number;
 }
-

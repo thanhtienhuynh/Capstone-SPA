@@ -1,17 +1,40 @@
-<div class="item-news" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
-  <div class="thumnail" fxFlex="0 1 calc(50% - 16px)" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-    <img style="width: 100%; height: 100%;" src="https://images.giaoducthoidai.vn/thumb/220-142/public/dienns/2021-03-16/de-an-tuyen-sinh.jpg" alt="">
-  </div>
-  <div class="info-section" fxFlex="0 1 calc(50%)" fxFlex.md="100%" fxFlex.sm="100%" fxFlex.xs="100%">
-    <h3 class="title" >So sánh học phí nhóm ngành Công nghệ thông tin</h3>
-    <p class="description">Học phí các ngành thuộc nhóm Công nghệ thông tin của Đại học Bách khoa Hà Nội 
-    dao động 22-60 triệu đồng một năm, tùy chương trình.</p>
-  </div>
-</div>
+<mat-carousel
+
+    timings="250ms ease-in"
+    [autoplay]="true"
+    interval="5000"
+    color="primary"
+    maxWidth="auto"
+    proportion="25"
+    slides="5"
+    [loop]="true"
+    [hideArrows]="true"
+    [hideIndicators]="false"
+    [useKeyboard]="true"
+    [useMouseWheel]="false"
+    orientation="ltr">
+    <mat-carousel-slide
+    style="height: 1000px;"
+      #matCarouselSlide
+      *ngFor="let article of topArticles; let i = index"
+      overlayColor="#00000040"
+      [hideOverlay]="false">
+      <div class="item-news" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+        <div class="thumnail" fxFlex="0 1 calc(50% - 16px)" fxFlex.lt-sm="100%">
+          <img style="width: 100%; height: 100%;" src="{{article.postImageUrl}}" alt="">
+        </div>
+        <div class="info-section" fxFlex="0 1 calc(50%)" >
+          <h3 class="title" routerLink="./{{article.id}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">{{article.title}}</h3>
+          <p class="description">{{article.shortDescription}}</p>
+        </div>
+      </div>
+  </mat-carousel-slide>
+</mat-carousel>
+
 <div *ngIf="collapseArticlesPageResponse" class="item-news-list">
   <div *ngFor="let article of collapseArticlesPageResponse.data" style="margin-bottom: 10px;">
-    <div gdAreas="title title thumnail | discription discription thumnail | postedDate source thumnail" gdGap="10px" gdRows="auto auto"
-gdAreas.lt-md="title | thumnail | discription" gdRows.lt-md="auto auto auto">
+    <div gdAreas="title title thumnail | discription discription thumnail | postedDate source thumnail" gdGap="10px" gdRows="auto auto auto"
+gdAreas.lt-md="title | thumnail | discription | source | postedDate" gdRows.lt-md="auto auto auto auto auto">
       <h3 class="title" gdArea="title" routerLink="./{{article.id}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
         {{article.title}}
       </h3>

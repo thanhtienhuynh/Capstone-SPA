@@ -1,6 +1,6 @@
 import { MarkParam } from "./mark-param";
 
-export class AddUserMajorDetailParam {
+export class AddFollowingDetailParam {
   universityId: number;
   trainingProgramId: number;
   majorId: number;
@@ -14,17 +14,5 @@ export class AddUserMajorDetailParam {
     this.subjectGroupParam = subjectGroupParam;
     this.totalMark = totalMark;
     this.subjectGroupId = subjectGroupId;
-  }
-}
-
-export class RemoveUserMajorDetailParam {
-  universityId: number;
-  trainingProgramId: number;
-  majorId: number;
-
-  constructor(universityId: number, trainingProgramId: number, majorId: number) {
-    this.universityId = universityId;
-    this.trainingProgramId = trainingProgramId;
-    this.majorId = majorId;
   }
 }

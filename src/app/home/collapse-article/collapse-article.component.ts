@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { CollapseArticle } from 'src/app/_models/collapse-article';
 import { PagedResponse } from 'src/app/_models/paged-response';
 import { PageParam } from 'src/app/_params/page-param';
+import Swal from 'sweetalert2';
 import * as fromApp from '../../_store/app.reducer';
 import * as HomeActions from './../store/home.actions';
 
@@ -15,7 +16,9 @@ import * as HomeActions from './../store/home.actions';
 export class CollapseArticleComponent implements OnInit {
   subscription: Subscription;
   collapseArticlesPageResponse: PagedResponse<CollapseArticle[]>;
+  topArticles: CollapseArticle[];
   isLoading: boolean;
+  errors: string[];
   constructor(private store: Store<fromApp.AppState>) { 
     
   }
@@ -28,15 +31,28 @@ export class CollapseArticleComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new HomeActions.LoadCollapseArticles(new PageParam()));
+    this.store.dispatch(new HomeActions.LoadTopArticles());
     this.subscription = this.store
       .select('home')
       .subscribe(
         (homeState) => {
           this.collapseArticlesPageResponse = homeState.collapseArticlesPageResponse;
+          this.topArticles = homeState.topCollapseArticles;
           this.isLoading = homeState.isLoading;
           this.generatePagingButton();
+          this.errors = homeState.errors;
+          if (this.errors) {
+            Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
+            .then(() => {
+              this.store.dispatch(new HomeActions.ConfirmErrors());
+            });
+          }
         },
         (error) => {
+          Swal.fire({title: 'Lỗi', text: error.toString(), icon: 'error', allowOutsideClick: false})
+          .then(() => {
+
+          });
         }
       );
   }

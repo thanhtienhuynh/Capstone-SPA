@@ -26,6 +26,8 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
 import { SafeHtmlPipe } from '../_helper/safe-html-pipe';
 import { ProgressSpinnerComponent } from './components/progress-spinner/progress-spinner.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTableModule } from '@angular/material/table';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 
 const materialModules = [
@@ -47,7 +49,9 @@ const materialModules = [
   MatMenuModule,
   MatIconModule,
   RouterModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatTableModule,
+  MatCarouselModule,
 ];
 
 @NgModule({
@@ -58,7 +62,7 @@ const materialModules = [
     AuthenticationComponent,
     ConfirmDialogComponent,
     LoginDialogComponent,
-    ProgressSpinnerComponent
+    ProgressSpinnerComponent,
   ],
   imports: [
     ...materialModules,

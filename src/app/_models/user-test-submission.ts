@@ -31,7 +31,7 @@ export interface QuestionSubmission {
   id: number;
   result: string;
   questionId: number;
-  questionContent: string;
+  content: string;
   numberOfOption: number;
   rightResult: string;
   type: number;

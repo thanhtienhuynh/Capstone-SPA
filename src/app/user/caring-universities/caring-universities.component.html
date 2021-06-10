@@ -2,15 +2,15 @@
   <div class="header-frame">
     <div class="center-all header-content">DANH SÁCH CÁC TRƯỜNG ĐẠI HỌC QUAN TÂM</div>
   </div>
-  <div *ngIf="universityBasedUserMajorDetails" class="body-frame">
+  <div *ngIf="universityBasedFollowingDetails" class="body-frame">
     <mat-accordion>
-      <div *ngFor="let universityBasedUserMajorDetail of universityBasedUserMajorDetails">
-        <div *ngFor="let trainingProgramGroupByUniversityDataSet of universityBasedUserMajorDetail.trainingProgramGroupByUniversityDataSets" class="expansion-frame">
+      <div *ngFor="let universityBasedFollowingDetail of universityBasedFollowingDetails">
+        <div *ngFor="let trainingProgramGroupByUniversityDataSet of universityBasedFollowingDetail.trainingProgramGroupByUniversityDataSets" class="expansion-frame">
           
             <mat-expansion-panel >
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  {{universityBasedUserMajorDetail.name}} - {{trainingProgramGroupByUniversityDataSet.name}}
+                  {{universityBasedFollowingDetail.name}} - {{trainingProgramGroupByUniversityDataSet.name}}
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <div class="uni-scroll content" id="style-7">
@@ -23,7 +23,7 @@
                       <div class="information-frame">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                           <div>Chỉ tiêu năm 2021:</div>
-                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.numberOfStudent}}</div>
+                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.seasonDataSet.numberOfStudents}}</div>
                         </div>
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -33,7 +33,7 @@
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                           <div>Điểm chuẩn năm 2021: </div>
-                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.newestEntryMark}}</div>
+                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.seasonDataSet.entryMark}}</div>
                         </div>
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">

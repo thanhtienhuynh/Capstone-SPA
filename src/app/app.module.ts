@@ -35,6 +35,8 @@ import { SafeUrlPipe } from './_helper/safe-url-pipe';
 import { SubmitDialogComponent } from './major-suggestion-stepper/exam-page/submit-dialog/submit-dialog.component';
 import { DetailUniversityDialogComponent } from './major-suggestion-stepper/stepper/detail-university-dialog/detail-university-dialog.component';
 import { HomeEffects } from './home/store/home.effects';
+import { FinishTestDialogComponent } from './major-suggestion-stepper/exam-page/finish-test-dialog/finish-test-dialog.component';
+
 
 
 registerLocaleData(vi);
@@ -44,12 +46,13 @@ registerLocaleData(vi);
     StepperComponent,
     ExamPageComponent,
     ResultDialogComponent,
+    FinishTestDialogComponent,
     TestCardComponent,
     HomeComponent,
     SafeUrlPipe,
     ShortenPipe,
     SubmitDialogComponent,
-    DetailUniversityDialogComponent    
+    DetailUniversityDialogComponent,
    ],
   imports: [
     BrowserModule,

@@ -27,3 +27,27 @@
   justify-content: center;
   align-items: center;
 }
+
+table {
+  // font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border-bottom: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.is-user {
+  color: rgb(97, 99, 230);
+}
+
+.information {
+  margin-top: 20px;
+}

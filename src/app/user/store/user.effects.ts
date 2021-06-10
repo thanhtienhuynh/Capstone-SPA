@@ -4,9 +4,11 @@ import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
-import { MajorBasedUserMajorDetail } from "src/app/_models/major-based-user-major-detail";
+import { MajorBasedFollowingDetail } from "src/app/_models/major-based-following-detail";
+import { RankingUserInformationGroupByTranscriptType } from "src/app/_models/ranking-user-information";
 import { Response } from "src/app/_models/response";
-import { UniversityBasedUserMajorDetail } from "src/app/_models/university-based-user-major-detail";
+import { TranscriptType } from "src/app/_models/transcript";
+import { UniversityBasedFollowingDetail } from "src/app/_models/university-based-following-detail";
 import { UserDetailTestSubmission, UserTestSubmission } from "src/app/_models/user-test-submission";
 import { environment } from "src/environments/environment";
 import * as fromApp from '../../_store/app.reducer';
@@ -62,16 +64,16 @@ export class UserEffects {
   );
 
   @Effect()
-  loadMajorBasedUserMajorDetails = this.actions$.pipe(
-    ofType(UserActions.LOAD_MAJOR_BASED_USER_MAJOR_DETAILS),
+  loadMajorBasedFollowingDetails = this.actions$.pipe(
+    ofType(UserActions.LOAD_MAJOR_BASED_FOLLOWING_DETAILS),
     withLatestFrom(this.store.select('user')),
     switchMap(([actionData, stepperState]) => {
-      return this.http.get<Response<MajorBasedUserMajorDetail[]>>(
-        environment.apiUrl + 'api/v1/user-major-detail/group-by-major'
+      return this.http.get<Response<MajorBasedFollowingDetail[]>>(
+        environment.apiUrl + 'api/v1/following-detail/group-by-major'
       ).pipe(
         map((response) => {
           if (response.succeeded) {
-            return new UserActions.SetMajorBasedUserMajorDetails(response.data);
+            return new UserActions.SetMajorBasedFollowingDetails(response.data);
           }
           return new UserActions.HasErrors(response.errors);
         }),
@@ -83,16 +85,60 @@ export class UserEffects {
   );
 
   @Effect()
-  loadUniversityBasedUserMajorDetails = this.actions$.pipe(
-    ofType(UserActions.LOAD_UNIVERSITY_BASED_USER_MAJOR_DETAILS),
+  loadUniversityBasedFollowingDetails = this.actions$.pipe(
+    ofType(UserActions.LOAD_UNIVERSITY_BASED_FOLLOWING_DETAILS),
     withLatestFrom(this.store.select('user')),
     switchMap(([actionData, stepperState]) => {
-      return this.http.get<Response<UniversityBasedUserMajorDetail[]>>(
-        environment.apiUrl + 'api/v1/user-major-detail/group-by-university'
+      return this.http.get<Response<UniversityBasedFollowingDetail[]>>(
+        environment.apiUrl + 'api/v1/following-detail/group-by-university'
       ).pipe(
         map((response) => {
           if (response.succeeded) {
-            return new UserActions.SetUniversityBasedUserMajorDetails(response.data);
+            return new UserActions.SetUniversityBasedFollowingDetails(response.data);
+          }
+          return new UserActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new UserActions.HasErrors([error.message]));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  loadUserRankingInformation = this.actions$.pipe(
+    ofType(UserActions.LOAD_RANKING_USER_INFORMATION),
+    withLatestFrom(this.store.select('user')),
+    switchMap(([actionData, stepperState]) => {
+      if (!stepperState.selectedFollowingDetail) {
+        return of ({ type: 'DUMMY' }); 
+      }
+      return this.http.get<Response<RankingUserInformationGroupByTranscriptType[]>>(
+        environment.apiUrl + 'api/v1/following-detail/users-group-by-major-detail/' + stepperState.selectedFollowingDetail.universityGroupByTrainingProgramDataSet.followingDetailId.toString()
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new UserActions.SetRankingUserInformation(response.data);
+          }
+          return new UserActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new UserActions.HasErrors([error.message]));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  loadTranscripts = this.actions$.pipe(
+    ofType(UserActions.LOAD_TRANSCRIPTS),
+    switchMap(() => {
+      return this.http.get<Response<TranscriptType[]>>(
+        environment.apiUrl + 'api/v1/transcript'
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new UserActions.SetTranscripts(response.data);
           }
           return new UserActions.HasErrors(response.errors);
         }),

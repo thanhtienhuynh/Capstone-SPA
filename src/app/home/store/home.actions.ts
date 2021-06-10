@@ -8,6 +8,8 @@ export const LOAD_COLLAPSE_ARTICLES = '[Home] Load Collapse Articles';
 export const SET_COLLAPSE_ARTICLES = '[Home] Set Collapse Articles';
 export const LOAD_DETAIL_ARTICLE = '[Home] Load Detail Article';
 export const SET_DETAIL_ARTICLE = '[Home] Set Detail Article';
+export const LOAD_TOP_ARTICLES = '[Home] Load Top Articles';
+export const SET_TOP_ARTICLES = '[Home] Set Top Articles';
 export const HAS_ERRORS = '[Home] Has Errors';
 export const CONFIRM_ERRORS = '[Home] Confirm Errors';
 
@@ -31,6 +33,15 @@ export class SetDetailArticle implements Action {
   constructor(public payload: DetailArticle) {};
 }
 
+export class LoadTopArticles implements Action {
+  readonly type = LOAD_TOP_ARTICLES;
+}
+
+export class SetTopArticles implements Action {
+  readonly type = SET_TOP_ARTICLES;
+  constructor(public payload: CollapseArticle[]) {};
+}
+
 export class HasErrors implements Action {
   readonly type = HAS_ERRORS;
   constructor(public payload: string[]) {}
@@ -40,4 +51,5 @@ export class ConfirmErrors implements Action {
   readonly type = CONFIRM_ERRORS;
 }
 
-export type HomeActions = LoadCollapseArticles | SetCollapseArticles | LoadDetailArticle | SetDetailArticle | HasErrors | ConfirmErrors;
+export type HomeActions = LoadCollapseArticles | SetCollapseArticles | LoadDetailArticle | SetDetailArticle | HasErrors | ConfirmErrors
+                        | LoadTopArticles | SetTopArticles;

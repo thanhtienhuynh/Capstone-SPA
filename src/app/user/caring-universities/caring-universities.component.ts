@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { UniversityBasedUserMajorDetail } from 'src/app/_models/university-based-user-major-detail';
+import { UniversityBasedFollowingDetail } from 'src/app/_models/university-based-following-detail';
 import Swal from 'sweetalert2';
 import * as fromApp from '../../_store/app.reducer';
 import * as UserActions from '../store/user.actions';
@@ -15,16 +15,16 @@ export class CaringUniversitiesComponent implements OnInit {
 
   constructor(private store: Store<fromApp.AppState>) { }
   subscription: Subscription;
-  universityBasedUserMajorDetails: UniversityBasedUserMajorDetail[];
+  universityBasedFollowingDetails: UniversityBasedFollowingDetail[];
   errors: string[];
 
   ngOnInit() {
-    this.store.dispatch(new UserActions.LoadUniversityBasedUserMajorDetails());
+    this.store.dispatch(new UserActions.LoadUniversityBasedFollowingDetails());
     this.subscription = this.store
       .select('user')
       .subscribe(
         (userState) => {
-          this.universityBasedUserMajorDetails = userState.universityBasedUserMajorDetails;
+          this.universityBasedFollowingDetails = userState.universityBasedFollowingDetails;
           this.errors = userState.errors;
           if (this.errors) {
             Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})

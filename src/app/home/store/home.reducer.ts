@@ -5,6 +5,7 @@ import * as HomeActions from '../store/home.actions';
 
 export interface State {
   collapseArticlesPageResponse: PagedResponse<CollapseArticle[]>;
+  topCollapseArticles: CollapseArticle[];
   isLoading: boolean;
   selectedArticleId: number;
   detailSelectedArticle: DetailArticle;
@@ -16,6 +17,7 @@ const initialState: State = {
   isLoading: false,
   selectedArticleId: null,
   detailSelectedArticle: null,
+  topCollapseArticles: [],
   errors: null
 };
 
@@ -45,6 +47,17 @@ export function homeReducer(
       return {
         ...state,
         detailSelectedArticle: action.payload,
+        isLoading: false
+      }  
+    case HomeActions.LOAD_TOP_ARTICLES:
+      return {
+        ...state,
+        isLoading: true
+      }  
+      case HomeActions.SET_TOP_ARTICLES:
+      return {
+        ...state,
+        topCollapseArticles: action.payload,
         isLoading: false
       }  
     case HomeActions.HAS_ERRORS:
