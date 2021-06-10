@@ -1,7 +1,7 @@
 <div class="article-detail">  
   <div class="container-fluid">
     <div nz-row>
-      <div nz-col [nzXs]="17" [nzSm]="17" [nzMd]="17" [nzLg]="17" [nzXl]="17" [nzXXl]="17" class="mb-2">        
+      <div nz-col [nzXs]="15" [nzSm]="15" [nzMd]="16" [nzLg]="16" [nzXl]="16" [nzXXl]="16" class="mb-2">        
         <nb-card style="margin: 0; width: 100%; position: relative">
           <nb-card-body style="width: 100%">
             <div style="width: 100%;">              
@@ -10,22 +10,22 @@
                   <nz-skeleton [nzActive]="true"></nz-skeleton>
                 </div>     
                 <ng-template #articleContent>
-                  <h3 [innerHtml]="article.title"></h3>
+                  <h3 [innerHtml]="article?.title"></h3>
                   <div style="margin-bottom: 15px;">
                     <div class="d-flex align-items-center">
                       <div class="d-flex align-items-center">
                         <i nz-icon nzType="link" nzTheme="outline"></i>
                         <div style="margin-left: 5px;">
-                          <a [href]="article.rootUrl"><span>Link bài gốc</span></a>                    
+                          <a [href]="article?.rootUrl"><span>Link bài gốc</span></a>                    
                         </div>
                       </div>
                       <div class="text-gray">
                         <nz-divider nzType="vertical"></nz-divider>
-                        <span>{{article.postedDate | date: 'HH:mm dd/MM/yyyy'}}</span>
+                        <span>{{article?.postedDate | date: 'HH:mm dd/MM/yyyy'}}</span>
                       </div>
                     </div>
                   </div>
-                  <div [innerHtml]="article.content"></div>
+                  <div [innerHtml]="article?.content"></div>
                 </ng-template>                                        
               </div>
             </div>
@@ -33,14 +33,23 @@
         </nb-card>
       </div>
 
-      <div [class]="'action'" nz-col [nzXs]="6" [nzSm]="6" [nzMd]="6" [nzLg]="6" [nzXl]="6" [nzXXl]="6" class="mb-2">                
+      <div [class]="'action'" nz-col [nzXs]="7" [nzSm]="7" [nzMd]="7" [nzLg]="7" [nzXl]="7" [nzXXl]="7" class="mb-2">                
         <nb-card style="margin: 0 0 20px 0; width: 100%; position: relative;">
           <nb-card-body style="width: 100%">
-            <div style="width: 100%; max-height: 50rem">
-              <div>                
-                <div class="col-lg-12">
+            <div style="width: 100%; max-height: 50rem">  
+              <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
+                <label for="" class="mb-0 mr-5">Trạng thái bài viết : </label>
+                <label *ngIf="article?.status === 1" style="color: rgb(87, 165, 90);" class="mb-0">ĐÃ DUYỆT</label>
+                <label *ngIf="article?.status === 0" style="color: rgb(233, 127, 51);" class="mb-0">CHỜ DUYỆT</label>
+                <label *ngIf="article?.status === 2" style="color: rgb(205, 19, 23);" class="mb-0">BỊ CHẶN</label>
+                <label *ngIf="article?.status === 3" style="color: #0052cc;" class="mb-0">ĐÃ ĐƯỢC ĐĂNG</label>
+              </div>
+              <nz-divider></nz-divider> 
+              <div *ngIf="article?.status !== 0" style="display: flex; justify-content: center;">                
+                <div class="col-lg-6">
                   <label for="">Hiển thị từ ngày</label>
                   <nz-date-picker
+                    [nzDisabled]="article?.status === 2 || article?.status === 3"
                     [formControl]="dateForm.get('publicFromDate')"
                     [nzSize]="'large'"
                     nzShowTime
@@ -50,9 +59,10 @@
                     (nzOnOk)="onOkFromDate($event)"
                   ></nz-date-picker>
                 </div>
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                   <label for="">Hiên thị đến ngày</label>
                   <nz-date-picker
+                    [nzDisabled]="article?.status === 2 || article?.status === 3"
                     [formControl]="dateForm.get('publicToDate')"
                     [nzSize]="'large'"
                     nzShowTime
@@ -61,31 +71,76 @@
                     (ngModelChange)="onChangeToDate($event)"
                     (nzOnOk)="onOkToDate($event)"
                   ></nz-date-picker>
-                </div>
+                </div>  
+              </div> 
+              <div style="display: flex; justify-content: center; flex-wrap: wrap;">
                 <div class="col-lg-12" style="margin-bottom: 20px;">
                   <label for="">Các trường đại học liên quan</label>
                   <nz-select
+                    [nzDisabled]="article?.status === 2 || article?.status === 1 || article?.status === 3"
                     [nzSize]="'large'"
                     [nzMaxTagCount]="3"
-                    [nzMaxTagPlaceholder]="tagPlaceHolder"
+                    [nzMaxTagPlaceholder]="tagPlaceHolderUni"
                     nzMode="multiple"
                     nzPlaceHolder="Chọn danh sách trường đại học"
                     [(ngModel)]="listOfSelectedUniversity"
                   >
                     <nz-option *ngFor="let item of listOfDisplayUniversity" [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
                   </nz-select>
-                  <ng-template #tagPlaceHolder let-selectedList> và {{ selectedList.length }} trường đại học khác </ng-template>
-                </div>         
-              </div>
+                  <ng-template #tagPlaceHolderUni let-selectedList> và {{ selectedList.length }}trường đại học khác </ng-template>
+                </div> 
+                <div class="col-lg-12" style="margin-bottom: 20px;">
+                  <label for="">Các ngành học liên quan</label>
+                  <nz-select
+                    [nzDisabled]="article?.status === 2 || article?.status === 1 || article?.status === 3"
+                    [nzSize]="'large'"
+                    [nzMaxTagCount]="3"
+                    [nzMaxTagPlaceholder]="tagPlaceHolderMajor"
+                    nzMode="multiple"
+                    nzPlaceHolder="Chọn danh sách các ngành"
+                    [(ngModel)]="listOfSelectedMajor"
+                  >
+                    <nz-option *ngFor="let item of listOfDisplayMajor" [nzLabel]="item.name" [nzValue]="item.id"></nz-option>
+                  </nz-select>
+                  <ng-template #tagPlaceHolderMajor let-selectedList> và {{ selectedList.length }} ngành học khác </ng-template>
+                </div>
+              </div>          
+                            
             </div>
           </nb-card-body>
         </nb-card>
-        <div class="action-button">
-          <button [disabled]="article.status === 1" (click)="confirmArticle('accept')" nz-button nzType="primary" style="width: 100%;" nzSize="large" >DUYỆT BÀI VIẾT</button>
-        </div>            
-        <div class="action-button">
-          <button [disabled]="article.status === 2" (click)="confirmArticle('reject')" nz-button nzType="danger" style="width: 100%;" nzSize="large">CHẶN BÀI VIẾT</button>
-        </div>       
+        <div *ngIf="article?.status === 1" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">           
+          <div class="action-button col-lg-6 pr-0 pl-0">            
+            <button [disabled]="dateForm.invalid" fullWidth nbButton outline status="info" (click)="confirmArticle('published')">ĐĂNG BÀI</button>
+          </div>           
+          <div class="action-button col-lg-6" style="padding-right: 0px;">            
+            <button fullWidth nbButton outline status="success" (click)="confirmArticle('deny')">BỎ DUYỆT</button>
+          </div>
+          <div class="action-button col-lg-12" style="padding-right: 0px; padding-left: 0;">            
+            <button fullWidth nbButton outline status="danger" (click)="confirmArticle('reject')">CHẶN BÀI VIẾT</button>
+          </div>     
+        </div>   
+        <div *ngIf="article?.status === 0" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+          <div class="action-button col-lg-6" style="padding-left: 0px;">
+            <button fullWidth nbButton  status="success" outline (click)="confirmArticle('accept')">DUYỆT BÀI</button>
+          </div>                     
+          <div class="action-button col-lg-6" style="padding-right: 0px;">            
+            <button fullWidth  nbButton outline status="danger" (click)="confirmArticle('reject')">CHẶN BÀI VIẾT</button>
+          </div>          
+        </div>   
+        <div *ngIf="article?.status === 2" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+          <div class="action-button col-lg-12" style="padding-left: 0px;">
+            <button fullWidth nbButton  status="danger" outline (click)="confirmArticle('unReject')">GỠ CHẶN</button>
+          </div>                                        
+        </div>
+        <div *ngIf="article?.status === 3" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+          <div class="action-button col-lg-6" style="padding-left: 0px;">
+            <button  fullWidth nbButton  status="info" outline (click)="confirmArticle('unPublished')">HỦY ĐĂNG</button>
+          </div>  
+          <div class="action-button col-lg-6" style="padding-left: 0px;">
+            <button fullWidth nbButton outline  status="danger" (click)="confirmArticle('reject')">CHẶN BÀI</button>
+          </div>                                       
+        </div>
       </div>
     </div>    
   </div>

@@ -1,0 +1,8 @@
+<div class="row" cdkDropListGroup>
+  <div class="col-md-12 col-lg-12 col-xl-6" style="padding-left: 0;">                      
+    <board-article-list (search)="searchByTitle($event)" (submitData)="submitData($event)" (callParent)="reloadLaneData($event)" [listOfArticle]="publishedArticles || []" [unFilterArticles]="unFilterArticles || []" [laneId]="'published'"  [laneTitle]="'BÀI VIẾT ĐANG ĐƯỢC ĐĂNG'"></board-article-list>
+  </div>
+  <div class="col-md-12 col-lg-12 col-xl-6" style="padding-right: 0;">
+    <board-article-list (submitData)="submitData($event)" (callParent)="reloadLaneData($event)" [listOfArticle]="topArticles || []" [laneId]="'top'" [laneTitle]="'TOP BÀI VIẾT ĐƯỢC ĐĂNG'"></board-article-list>                
+  </div>
+</div> 

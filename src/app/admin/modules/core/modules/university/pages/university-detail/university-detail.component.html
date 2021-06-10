@@ -1,4 +1,4 @@
-<div class="university-detail"> 
+<!-- <div class="university-detail"> 
   <div class="container-fluid" >
     <div nz-row>
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
@@ -12,8 +12,7 @@
                     <input #logoUpload type="file" style="display: none;" (change)="uploadLogo($event)">
                     <button (click)="logoUpload.click()" style="top: 47px; left: 47px;" class="position-absolute" nbButton size="small">
                       <nb-icon icon="upload-outline"></nb-icon>          
-                    </button>
-                    <!-- <nz-avatar nzShape="square" [nzSrc]="university != undefined ?  university.logoUrl : ''" [nzSize]="161"></nz-avatar> -->
+                    </button>                    
                   </div>
                   <div class="col-xl-9 col-lg-9 pl-0">
                     <div class="mt-2">
@@ -96,8 +95,7 @@
                     </div>
                   </div>
                 </div>                
-              </div>
-              <!-- <div class="col col-lg-3"></div> -->
+              </div>              
               <div class="col-xl-5 col-lg-12">
                 <div class="row">
                   <div class="d-md-block border-left col-xl-1 col-lg-3"></div>
@@ -169,7 +167,7 @@
                         </div>                                                                       
                       </li>
                     </ul>
-                    <div class="d-flex justify-content-end">                                                
+                    <div style="margin-right: 20px; margin-top: 10px;">                                                
                       <button [disabled]="updateUniForm?.invalid" size="small" (click)="updateUni()" nbButton status="info">
                         <nb-icon icon="save-outline"></nb-icon>
                         Lưu
@@ -237,10 +235,7 @@
                   <tr>
                     <th  rowspan="2" style="background-color: #87ceeb;">
                       <div style="width: 100%; text-align: center;">Tên Khối</div>
-                    </th>
-                    <!-- <th colspan="2" style="background-color: #87ceeb;">
-                      <div style="width: 100%; text-align: center;">Năm</div>
-                    </th> -->
+                    </th>                    
                     <th style="background-color: #87ceeb; height: 0.5rem;">
                       <div style="width: 100%; text-align: center;">Điểm chuẩn năm 2019</div>
                     </th>
@@ -359,4 +354,6 @@
 </div>
 
 <ng-template #totalTemplate>Hiện có {{ total }} ngành học tại {{university.name}}</ng-template>
-
+<div class="university-detail">
+  
+</div> -->

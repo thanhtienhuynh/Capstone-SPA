@@ -15,10 +15,10 @@ import Swal from 'sweetalert2';
   templateUrl: './create-university-modal.component.html',
   styleUrls: ['./create-university-modal.component.scss']
 })
-export class CreateUniversityModalComponent implements OnInit {  
+export class CreateUniversityModalComponent implements OnInit {
 
   // @Input() callBack: (item: UniversityRM & {stt?:number, phones?: string[]}) => void;
-  @Input() callBack: (item: UniversityRM & {stt?:number, phones?: string[]}) => void;
+  @Input() callBack: (item: UniversityRM & { stt?: number, phones?: string[] }) => void;
   @Input() index: any;
   logo: string | ArrayBuffer;
   createUniversityForm: FormGroup;
@@ -29,12 +29,12 @@ export class CreateUniversityModalComponent implements OnInit {
     private _fb: FormBuilder,
     private _modalRef: NzModalRef,
     private _uniService: UniversityService
-  ) { 
-    
+  ) {
+
   }
 
   ngOnInit() {
-    this.initCreateUniversityForm(); 
+    this.initCreateUniversityForm();
   }
 
   initCreateUniversityForm(): void {
@@ -47,7 +47,7 @@ export class CreateUniversityModalComponent implements OnInit {
       'tuitionType': [0],
       'tuitionFrom': ['', Validators.required],
       'tuitionTo': ['', Validators.required],
-      'description': [''],  
+      'description': [''],
       'rating': [5],
       'status': [0]
     })
@@ -56,19 +56,20 @@ export class CreateUniversityModalComponent implements OnInit {
   cancel(): void {
     this.closeModal();
   }
-  
+
   closeModal(): void {
     this._modalRef.close();
   }
 
-  submitForm(): void {    
-    if(this.createUniversityForm.valid){    
+  submitForm(): void {
+    if (this.createUniversityForm.valid) {
       const newUni = {
+        'File': this.image ? this.image : null,
         'Code': this.createUniversityForm.get('code').value,
         'Name': this.createUniversityForm.get('name').value,
         'Address': this.createUniversityForm.get('address').value,
         'LogoUrl': '',
-        'Description': this.createUniversityForm.get('description').value,
+        'Description': this.createUniversityForm.get('description').value !== "" ? this.createUniversityForm.get('description').value : null,
         'Phone': this.createUniversityForm.get('phone').value,
         'WebUrl': this.createUniversityForm.get('webUrl').value,
         'TuitionType': this.createUniversityForm.get('tuitionType').value,
@@ -76,38 +77,48 @@ export class CreateUniversityModalComponent implements OnInit {
         'TuitionTo': this.createUniversityForm.get('tuitionTo').value,
         'Rating': this.createUniversityForm.get('rating').value,
         'Status': this.createUniversityForm.get('status').value
-      }            
-      this._uniService.createUniversity(newUni).pipe(
-        tap((rs) => { 
-          const newValue = {
-            id: rs.data.id,
-            address: rs.data.address,
-            code: rs.data.code,
-            description: rs.data.description,
-            logoUrl: rs.data.logoUrl,
-            name: rs.data.name,
-            phone: rs.data.phone,
-            rating: rs.data.rating,
-            status: rs.data.status,
-            tuitionFrom: rs.data.tuitionFrom,
-            tuitionTo: rs.data.tuitionTo,
-            tuitionType: rs.data.tuitionType,
-            webUrl: rs.data.webUrl,
-            stt: 0,   
-            phones: rs.data.phone.split('-')         
-          }                  
-          this.callBack(newValue);
-          Swal.fire('Thành Công', 'Thêm mới trường đại học thành công', 'success');          
+      }
+      console.log(newUni);
+      const formData = new FormData();
+      for (let key in newUni) {
+        formData.append(key, newUni[key]);
+      }
+      this._uniService.createUniversity(formData).pipe(
+        tap((rs) => {
+          console.log(rs);
+          if (rs.succeeded === true) {
+            Swal.fire('Thành Công', 'Thêm mới trường đại học thành công', 'success');
+            this.closeModal();
+          } else {
+
+          }
+          // const newValue = {
+          //   id: rs.data.id,
+          //   address: rs.data.address,
+          //   code: rs.data.code,
+          //   description: rs.data.description,
+          //   logoUrl: rs.data.logoUrl,
+          //   name: rs.data.name,
+          //   phone: rs.data.phone,
+          //   rating: rs.data.rating,
+          //   status: rs.data.status,
+          //   tuitionFrom: rs.data.tuitionFrom,
+          //   tuitionTo: rs.data.tuitionTo,
+          //   tuitionType: rs.data.tuitionType,
+          //   webUrl: rs.data.webUrl,
+          //   stt: 0,   
+          //   phones: rs.data.phone.split('-')         
+          // }                  
+          // this.callBack(newValue);                   
         }),
         catchError((err) => {
           Swal.fire('Lỗi', 'Thêm mới trường đại học thất bại', 'error');
-          return of(undefined);          
+          return of(undefined);
         })
-      ).subscribe();
-      this.closeModal();
-    } 
-  }  
-  
+      ).subscribe();      
+    }
+  }
+
 
   image: File;
   uploadLogo(evt): void {
@@ -118,10 +129,10 @@ export class CreateUniversityModalComponent implements OnInit {
       const file = files[0];
       const extensions: string[] = ['image/png', 'image/jpeg', 'image/jpg'];
       if (extensions.includes(file.type)) {
-        if (file.size < 1024*1204*2) {
+        if (file.size < 1024 * 1204 * 2) {
           const reader = new FileReader();
           reader.onloadend = () => {
-            this.logo = reader.result            
+            this.logo = reader.result
           };
           reader.readAsDataURL(file);
           this.image = files[0];
@@ -131,6 +142,6 @@ export class CreateUniversityModalComponent implements OnInit {
       } else {
         Swal.fire('Lỗi', 'Vui lòng chỉ chọn file ảnh (.png, .jpeg, .jpg)', 'error');
       }
-    }    
+    }
   }
 }

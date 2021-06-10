@@ -1,12 +1,12 @@
-import { Component, Input, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { MajorService, SubjectGroupService, TrainingProgramService } from 'src/app/admin/services';
 import { CustomSelectComponent } from 'src/app/admin/shared/components';
-import { MajorRM, SubjectGroupRM } from 'src/app/admin/view-models';
+import { SubjectGroupRM } from 'src/app/admin/view-models';
 import {Response} from 'src/app/_models/response';
 import Swal from 'sweetalert2';
 import { __values } from 'tslib';
@@ -20,12 +20,12 @@ import { __values } from 'tslib';
 export class CreateMajorModalComponent implements OnInit {
 
   //Decorator
-  @Input() data: MajorRM | undefined;
-  @Input() majors: (MajorRM & { stt?: number })[];
+  @Input() data: any | undefined;
+  @Input() majors: (any & { stt?: number })[];
   @Input() universityId: any;
   @Input() universityName: string;
-  // @Input() callBack: (majors: MajorRM[]) => void;
-  @Input() callBack: () => void;
+  // @Input() callBack: (majors: MajorRM[]) => void;  
+  @Input() callBack: () => void;  
   @ViewChild(CustomSelectComponent) customSelectComponent: CustomSelectComponent
 
   //Title

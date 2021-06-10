@@ -1,32 +1,16 @@
-<nav class="admin-nav">
-  <a class="admin-logo" [nbTooltip]="'Thành Đoàn'" [nbTooltipPlacement]="'end'">
-    <img src="assets/192x192.png" />
-  </a>
-  <!-- <a
-    class="admin-menu-item"
-    [nbTooltip]="'Dashboard'"
-    [nbTooltipPlacement]="'end'"
-    (click)="useUpdate('dashboard')"
-  >
+<nav class="admin-nav">  
+  <div class="admin-menu-item" (click)="useUpdate('university')">
     <nb-icon [icon]="'home'" [pack]="'eva'"></nb-icon>
-    <b>Dashboard</b>
-  </a> -->
-  <a
-    class="admin-menu-item"
-    [nbTooltip]="'Trường'"
-    [nbTooltipPlacement]="'end'"
-    (click)="useUpdate('university')"
-  >
-    <nb-icon [icon]="'home'" [pack]="'eva'"></nb-icon>
-    <b>Trường</b>
-  </a>
-  <a
-    class="admin-menu-item"
-    [nbTooltip]="'Bải Viết'"
-    [nbTooltipPlacement]="'end'"
-    (click)="useUpdate('article')"
-  >
+    <a [nbTooltip]="'Trường'" [nbTooltipPlacement]="'end'" >  
+      <span>Trường Học</span>    
+    </a>
+  </div>  
+
+  <div class="admin-menu-item" (click)="useUpdate('article')">
     <nb-icon [icon]="'book-open-outline'" [pack]="'eva'"></nb-icon>
-    <b>Bài Viết</b>
-  </a>
+    <a [nbTooltip]="'Bải Viết'" [nbTooltipPlacement]="'end'" >    
+      <span>Bài Viết</span>    
+    </a>
+  </div> 
 </nav>
+

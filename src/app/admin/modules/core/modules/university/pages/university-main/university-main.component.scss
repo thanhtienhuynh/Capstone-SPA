@@ -1,45 +1,3 @@
-th {
-  font-size: 13px;
-  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
-    Helvetica, Arial, sans-serif;
-  font-weight: 600;
-}
-
-td {
-  font-size: 13px;
-  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
-    Helvetica, Arial, sans-serif;
-  text-align: justify;
-  width: 12.5%;
-}
-
-td span,
-p {
-  font-size: 0.9rem;
-  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
-    Helvetica, Arial, sans-serif;
-  text-align: justify;
-}
-
-.stt,
-.code,
-.action,
-.status {
-  width: 1%;
-}
-.name {
-  width: 16%;
-}
-.tuition {
-  width: 10%;
-}
-.phone {
-  width: 5%;
-}
-
 .university-main {
   width: 100%;
   height: 100%;
@@ -58,12 +16,104 @@ p {
   padding: 1rem 3rem;
 }
 
-.ant-modal-body {
-  padding: 0;
+.search-box {
+  padding: 8px;
 }
 
-@media (max-width: 789px) {
-  .page-header {
-    padding: 2rem 0 2rem 6rem;
+.search-box input {
+  width: 188px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.search-box button {
+  width: 90px;
+}
+
+.search-button {
+  margin-right: 8px;
+}
+
+#status {
+  font-size: 11px !important;
+}
+
+span {
+  font-size: 12px;
+}
+
+nz-table th {  
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  // background-color: #87ceeb; 
+  // background-color: #f1f1f1;
+  background-color: #e4e9f2;
+  text-align: center;
+  font-size: 12px;
+}
+
+nz-table {
+  ::ng-deep {
+    .ant-pagination-item, .ant-pagination-total-text, .ant-pagination-item-ellipsis {
+      line-height: 30px;
+    }
+    a {
+      text-decoration: none;
+    }
+  }
+}
+
+nz-table th:first-child {
+  width: 1%;
+}
+
+nz-table th:last-child {
+  width: 6%;
+}
+
+nz-table td {
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  word-wrap: break-word;    
+  font-size: 12px;
+  touch-action: manipulation;
+  cursor: -webkit-grab;
+  cursor: grab;  
+}
+
+nz-table tbody tr:hover {
+  // box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+
+@media (max-width: 1360px) {
+  nz-table th:last-child {
+    width: 9%;
+  }
+  #tuition {
+    width: 19%;
+  }
+}
+
+@media (min-width: 1360px) and (max-width: 1515px) {
+  nz-table th {
+    font-size: 12px;
+  }
+  nz-table th:first-child {
+    width: 1%;
+  }
+  nz-table th:last-child {
+    width: 8%;
+  }
+  #tuition {
+    width: 19%;
+  }
+}
+
+@media (min-width: 1516px) and (max-width: 1669px){
+  nz-table th:last-child {
+    width: 7%;
+  }
+  #tuition {
+    width: 17%;
   }
 }

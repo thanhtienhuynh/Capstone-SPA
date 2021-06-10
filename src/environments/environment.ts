@@ -2,6 +2,8 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { Province } from "src/app/admin/view-models";
+
 export const environment = {
   production: false,
   firebaseConfig: {
@@ -15,9 +17,10 @@ export const environment = {
     measurementId: "G-4V3YLW14CB"
   },
   apiUrl: 'https://localhost:44344/',
-  // apiUrl: 'https://mohsdev.azurewebsites.net/',
   // apiUrl: 'https://mohs.azurewebsites.net/',
-  // apiUrl: 'http://13.212.10.23:63000/',
+  // apiUrl: 'https://mohsdev.azurewebsites.net/',
+  nation: {id: 1000, name: 'TOÀN QUỐC', regionId: 1} as Province,
+  initSeasonId: 7
 };
 
 /*
