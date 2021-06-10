@@ -12,8 +12,6 @@ const routes: Routes = [
     children: [
       { path: '', component: CollapseArticleComponent},
       { path: ':id', component: DetailArticleComponent, resolve: {article: DetailArticleResolver} },
-      // { path: 'test-submissions/detail', component: TestReviewComponent },
-      // { path: 'information', component: InformationComponent },
     ]
   }
 ];

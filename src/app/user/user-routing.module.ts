@@ -5,6 +5,7 @@ import { CaringUniversitiesComponent } from "./caring-universities/caring-univer
 import { InformationComponent } from "./information/information.component";
 import { TestReviewComponent } from "./test-submissions/test-review/test-review.component";
 import { TestSubmissionsComponent } from "./test-submissions/test-submissions.component";
+import { UserMajorDetailComponent } from "./user-major-detail/user-major-detail.component";
 import { UserComponent } from "./user.component";
 
 const routes: Routes = [
@@ -17,7 +18,9 @@ const routes: Routes = [
       { path: 'test-submissions/detail', component: TestReviewComponent },
       { path: 'information', component: InformationComponent },
       { path: 'caring-majors', component: CaringMajorsComponent },
+      { path: 'caring-majors/detail', component: UserMajorDetailComponent },
       { path: 'caring-universities', component: CaringUniversitiesComponent },
+      { path: 'caring-universities/detail', component: UserMajorDetailComponent },
     ]
   }
 ];

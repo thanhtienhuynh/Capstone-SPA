@@ -1,31 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { UniversityBasedUserMajorDetail } from 'src/app/_models/university-based-user-major-detail';
+import { SelectedUserMajorDetail } from 'src/app/_models/selected-user-major-detail';
 import Swal from 'sweetalert2';
 import * as fromApp from '../../_store/app.reducer';
 import * as UserActions from '../store/user.actions';
 
 @Component({
-  selector: 'app-caring-universities',
-  templateUrl: './caring-universities.component.html',
-  styleUrls: ['./caring-universities.component.scss']
+  selector: 'app-user-major-detail',
+  templateUrl: './user-major-detail.component.html',
+  styleUrls: ['./user-major-detail.component.scss']
 })
-export class CaringUniversitiesComponent implements OnInit {
+export class UserMajorDetailComponent implements OnInit {
 
   constructor(private store: Store<fromApp.AppState>) { }
   subscription: Subscription;
-  universityBasedUserMajorDetails: UniversityBasedUserMajorDetail[];
+  selectedUserMajorDetail: SelectedUserMajorDetail;
   errors: string[];
+  isLoading: boolean;
 
   ngOnInit() {
-    this.store.dispatch(new UserActions.LoadUniversityBasedUserMajorDetails());
     this.subscription = this.store
       .select('user')
       .subscribe(
         (userState) => {
-          this.universityBasedUserMajorDetails = userState.universityBasedUserMajorDetails;
+          this.selectedUserMajorDetail = userState.selectedUserMajorDetail;
           this.errors = userState.errors;
+          this.isLoading = userState.isLoading;
           if (this.errors) {
             Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
             .then(() => {
@@ -37,12 +38,11 @@ export class CaringUniversitiesComponent implements OnInit {
         }
     );
   }
-  
+
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
-
 
 }

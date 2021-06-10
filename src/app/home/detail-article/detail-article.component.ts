@@ -14,6 +14,7 @@ import * as HomeActions from './../store/home.actions';
 export class DetailArticleComponent implements OnInit {
   subscription: Subscription;
   detailAricle: DetailArticle;
+  isLoading: boolean;
 
   constructor(private store: Store<fromApp.AppState>, private meta: Meta) { }
 
@@ -23,6 +24,7 @@ export class DetailArticleComponent implements OnInit {
       .subscribe(
         (homeState) => {
           this.detailAricle = homeState.detailSelectedArticle;
+          this.isLoading = homeState.isLoading;
         },
         (error) => {
         }

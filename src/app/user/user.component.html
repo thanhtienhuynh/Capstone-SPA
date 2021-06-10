@@ -33,7 +33,7 @@
             </div>
           </mat-list-item>
           <mat-divider style="width: 80%; margin-left: 10%;"></mat-divider>
-          <mat-list-item (click)="onSubmissionsClick()" routerLink="./test-submissions" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <mat-list-item routerLink="./test-submissions" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
             <div class="center-vertical menu-item">
               <mat-icon class="center-vertical " style="font-size: 10px;" aria-hidden="false">fiber_manual_record</mat-icon>Kết quả thi thử
             </div>
@@ -41,7 +41,7 @@
         </mat-list>
       </div>
     </div>  
-    <div fxFlex="0 1 calc(73%)" style="border: 2px solid rgb(111, 112, 114); border-radius: 15px;">
+    <div fxFlex="0 1 calc(73%)">
       <router-outlet></router-outlet>
     </div>
   </div>
