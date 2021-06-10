@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,WAAW,CAAC;EACV,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,MAAM;EACvB,WAAW,EAAE,MAAM;CACpB;;AAED,AAAA,gBAAgB,CAAC;EACf,OAAO,EAAE,IAAI;EACb,WAAW,EAAE,MAAM;CACpB;;AAED,AAAA,kBAAkB,CAAC;EACjB,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,MAAM;CACxB;;AAED,AAAA,mBAAmB,CAAC;EAClB,UAAU,EAAE,MAAM;EAClB,UAAU,EAAE,MAAM;EAClB,MAAM,EAAE,KAAK;CACd",
-    "sources": [
-        "test-review.component.scss"
-    ],
-    "names": [],
-    "file": "test-review.component.css"
-}
