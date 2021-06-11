@@ -303,6 +303,26 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
     return this.provinceOptions.find(p => p.id === provinceId)?.name;
   }
 
+  getSubjectNames(subjectGroup: SuggestedSubjectsGroup) {
+    let subjectNames = "";
+    if (subjectGroup.subjectDataSets && subjectGroup.subjectDataSets.length > 0) {
+      subjectGroup.subjectDataSets.forEach(element => {
+        if (subjectNames != "") {
+          subjectNames += ", ";
+        }
+        subjectNames += element.name;
+      });
+    }
+    if (subjectGroup.specialSubjectGroups && subjectGroup.specialSubjectGroups.length > 0) {
+      subjectGroup.specialSubjectGroups.forEach(element => {
+        if (subjectNames != "") {
+          subjectNames += ", ";
+        }
+        subjectNames += element.name;
+      });
+    }
+    return "Khối này gồm các môn: " + subjectNames;
+  }
   
   onScoreSubmit() {
     this.marksValidator();
