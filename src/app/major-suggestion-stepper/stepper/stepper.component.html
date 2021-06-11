@@ -271,7 +271,14 @@ gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto 
               <div class="first-line-uni-information"><strong>- Mã trường: </strong> {{university.code}}</div>
               <div><strong>- Địa chỉ: </strong> {{university.address}}</div>
               <div><strong>- Số điện thoại: </strong> {{university.phone}}</div>
-              <div><strong>- Học phí:</strong> Từ {{university.tuitionFrom | number:'1.0':'en-US'}},000 đến {{university.tuitionTo | number:'1.0':'en-US'}},000/{{ university.tuitionType == 0 ? "Kì" : "Năm"}}</div>
+              <div *ngIf="university.tuitionTo == university.tuitionFrom">
+                <strong>- Học phí:</strong> khoảng {{university.tuitionTo | number:'1.0':'en-US'}},000/{{university.tuitionType == 0 ? "kì" : "năm"}}
+              </div>
+              <div *ngIf="university.tuitionTo != university.tuitionFrom">
+                <strong>- Học phí:</strong>: từ {{university.tuitionFrom | number:'1.0':'en-US'}},000
+                đến {{university.tuitionTo | number:'1.0':'en-US'}},000/
+                {{ university.tuitionType == 0 ? "kì" : "năm"}}
+              </div>
             </div>
             <div gdArea="information">
               <div class="first-line-uni-information"><strong>- Mô tả: </strong> {{university.description}}</div>
