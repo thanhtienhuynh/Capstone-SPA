@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
-import { NavComponent, ContentComponent, IdentificationComponent } from './components';
+import { NavComponent, ContentComponent, IdentificationComponent, MohsLogoComponent, ResizerComponent, MoshBreadscrumbComponent } from './components';
 import { CoreRoutes } from './core.routing';
 import { LayoutComponent } from './pages';
 
 const COMPONENTS = [
   NavComponent,
   ContentComponent,
-  IdentificationComponent
+  IdentificationComponent,
+  MohsLogoComponent,
+  ResizerComponent,
+  MoshBreadscrumbComponent
 ];
 const PAGES = [
   LayoutComponent

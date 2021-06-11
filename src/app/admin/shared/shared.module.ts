@@ -1,5 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
+import { DragDropModule } from "@angular/cdk/drag-drop";
 import {
   AntModule,
   NebularModule,
@@ -9,6 +10,7 @@ import {
   CustomSelectComponent
 } from './components';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SliceWordPipe } from './pipe/slice-word.pipe';
 const SHARE_MODULES = [
   AntModule,
   NebularModule,
@@ -18,10 +20,14 @@ const SHARE_MODULES = [
 export const ANGULAR_MODULES = [
   FormsModule,
   ReactiveFormsModule,
+  DragDropModule
   // CommonModule,  
 ];
 
 const COMPONENTS = [CustomSelectComponent];
+const PIPE = [
+  SliceWordPipe
+]
 @NgModule({
   exports: [...SHARE_MODULES, ...ANGULAR_MODULES, ...COMPONENTS],
   declarations: [...COMPONENTS],
@@ -34,7 +40,7 @@ export class SharedModule {
   static forRoot(name: string = 'default'): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
-      providers: [        
+      providers: [
         ...NebularModule.forRoot().providers,
         ...NgxModule.forRoot().providers,
       ]
@@ -45,7 +51,7 @@ export class SharedModule {
       ngModule: SharedModule,
       providers: [
         ...NebularModule.forChild().providers,
-        ...NgxModule.forChild().providers,        
+        ...NgxModule.forChild().providers,
       ]
     };
   }

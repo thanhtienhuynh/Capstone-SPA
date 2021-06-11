@@ -1,0 +1,429 @@
+<div class="university-detail">  
+    <div class="container-fluid">
+        <div nz-row>
+            <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">            
+                <nb-card style="width: 100%;">                
+                    <nb-card-body style="width: 100%;">
+                        <div class="row">
+                            <div  class="col-lg-2" [style.background-size]="'cover'" [style.background-repeat]="'no-repeat'" [style.background-image]="logo === undefined ? 'url(' + university.logoUrl + ')' :'url(' + logo + ')' " [style.border]="'1px solid #000'">
+                              <input #logoUpload type="file" style="display: none;" (change)="uploadLogo($event)">
+                              <div *ngIf="logo === undefined">                                
+                                <button (click)="logoUpload.click()" style="bottom: 0; right: 0;" class="position-absolute" nbButton size="small">
+                                  <nb-icon icon="upload-outline"></nb-icon>          
+                                </button>
+                              </div> 
+                              <div *ngIf="logo !== undefined">                                
+                                <button (click)="removeFile()" style="bottom: 0; right: 0;" class="position-absolute" nbButton size="small">
+                                  <nb-icon icon="close-outline"></nb-icon>          
+                                </button>
+                              </div>                                                                                     
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="mt-2">
+                                    <div class="row">
+                                      <div style="width:90px; padding-left: 9px; display: flex; justify-content: start; text-align: center; align-items: center;">                                        
+                                          <label for="">Tên Trường:</label>                                        
+                                      </div>
+                                      <div class="col-lg-9 pr-0">                                                                                                                                                                              
+                                        <nb-form-field>  
+                                          <!-- <nb-icon status="info" nbPrefix icon="home-outline"></nb-icon>   -->
+                                          <input fieldSize="small"  text-hint-color [formControl]="updateUniForm.get('name')" type="text" placeholder=""  fullWidth nbInput 
+                                          [status]="updateUniForm.get('name').invalid && (updateUniForm.get('name').touched || updateUniForm.get('name').dirty) ? 'danger' : 'basic'"/>
+                                        </nb-form-field>
+                                      </div> 
+                                    </div>
+                                  </div> 
+                                  <div class="mt-2">
+                                    <div class="row">
+                                      <div style="width:90px; padding-left: 9px; display: flex; justify-content: start; text-align: center; align-items: center;">                                        
+                                          <label for="">Trạng Thái:</label>                                        
+                                      </div>
+                                      <div class="col-lg-9">  
+                                          <div class="row">
+                                            <div style="width: 50%;">
+                                                <nb-select [size]="'small'" [formControl]="updateUniForm.get('status') " fullWidth>        
+                                                  <nb-option [value]="1">ĐANG HOẠT ĐỘNG </nb-option>
+                                                  <nb-option [value]="0">KHÔNG HOẠT ĐỘNG </nb-option>        
+                                                </nb-select>
+                                              </div>
+                                              <div style="width: 20%; padding-left: 7%; display: flex; justify-content: start; text-align: center; align-items: center;">                                                                                   
+                                                    <label for="">Code:</label>                                                                                                                                   
+                                              </div>
+                                              <div style="width: 30%;">
+                                                <nb-form-field>    
+                                                    <!-- <nb-icon status="basic" nbPrefix icon="block-outline"></nb-icon> -->
+                                                    <i nz-icon nbPrefix nzType="key" nzTheme="outline"></i>
+                                                    <input fieldSize="small" [formControl]="updateUniForm.get('code')" type="text" placeholder=""  fullWidth nbInput 
+                                                    [status]="updateUniForm.get('code').invalid && (updateUniForm.get('code').touched || updateUniForm.get('code').dirty) ? 'danger' : 'basic'"/>
+                                                  </nb-form-field>
+                                            </div>
+                                          </div>                                                                                                                                                                                                                    
+                                      </div> 
+                                    </div>
+                                  </div>  
+                                  <div class="mt-2">
+                                    <div class="row">
+                                      <div style="width:90px; padding-left: 10px; display: flex; justify-content: start; text-align: center; align-items: center;">                                        
+                                          <label for="">Đánh Giá:</label>                                        
+                                      </div>
+                                      <div class="col-lg-9 pr-0">                                                                                                                                                                              
+                                        <nb-select [size]="'small'" [formControl]="updateUniForm.get('rating')" fullWidth>        
+                                            <nb-option [value]="1">
+                                             ⭐️
+                                            </nb-option>
+                                            <nb-option [value]="2">
+                                              <div> ⭐️ ⭐️ </div>
+                                            </nb-option>
+                                            <nb-option [value]="3">
+                                              <div>⭐️ ⭐️ ⭐️</div>
+                                            </nb-option>
+                                            <nb-option [value]="4">
+                                              <div>⭐️ ⭐️ ⭐️ ⭐️</div>
+                                            </nb-option>
+                                            <nb-option [value]="10">
+                                              <div>⭐️ ⭐️ ⭐️ ⭐️ ⭐️</div>
+                                            </nb-option>
+                                          </nb-select>
+                                      </div> 
+                                    </div>
+                                  </div>  
+                                  <div class="mt-2">
+                                    <div class="row">
+                                      <div style="width:90px; padding-left: 9px; display: flex; justify-content: start; text-align: center; align-items: center;">                                        
+                                          <label for="">Mô Tả:</label>                                        
+                                      </div>
+                                      <div class="col-lg-9 pr-0">                                                                                                                                                                              
+                                        <nb-form-field>                              
+                                            <textarea [formControl]="updateUniForm.get('description')" nbInput fullWidth placeholder="Mô tả" fieldSize="large" [innerHTML]="updateUniForm.get('description').value"></textarea>
+                                          </nb-form-field>                                          
+                                      </div> 
+                                    </div>
+                                  </div>                      
+                            </div>
+                            <div class="col-lg-5" style="border-left: 2px solid #f1f1f1;">
+                                <div class="mt-2">
+                                    <div class="row">
+                                      <div style="width:90px; padding-left: 9px; display: flex; justify-content: start; text-align: center; align-items: center;">                                        
+                                          <label for="">Website:</label>                                        
+                                      </div>
+                                      <div class="col-lg-9 pr-0">                                                                                                                                                                              
+                                        <nb-form-field>
+                                            <nb-icon [status]="'basic'" nbPrefix icon="globe-outline"></nb-icon>
+                                            <input fieldSize="small" [formControl]="updateUniForm.get('webUrl')" nbInput fullWidth type="text"
+                                            [status]="updateUniForm.get('webUrl').invalid && (updateUniForm.get('webUrl').touched || updateUniForm.get('webUrl').dirty) ? 'danger' : 'basic'">
+                                          </nb-form-field>
+                                      </div> 
+                                    </div>
+                                  </div>
+                                  <div class="mt-2">
+                                    <div class="row">
+                                      <div style="width:90px; padding-left: 9px; display: flex; justify-content: start; text-align: center; align-items: center;">                                        
+                                          <label for="">Điện Thoại:</label>                                        
+                                      </div>
+                                      <div class="col-lg-9 pr-0">                                                                                                                                                                              
+                                        <nb-form-field>
+                                            <nb-icon status="basic" nbPrefix icon="phone-outline"></nb-icon>
+                                            <input fieldSize="small" [formControl]="updateUniForm.get('phone')" nbInput type="text" fullWidth
+                                            [status]="updateUniForm.get('phone').invalid && (updateUniForm.get('phone').touched || updateUniForm.get('phone').dirty) ? 'danger' : 'basic'">
+                                          </nb-form-field>
+                                      </div> 
+                                    </div>
+                                  </div>
+                                  <div class="mt-2">
+                                    <div class="row">
+                                      <div style="width:90px; padding-left: 9px; display: flex; justify-content: start; text-align: center; align-items: center;">                                        
+                                          <label for="">Địa Chỉ:</label>                                        
+                                      </div>
+                                      <div class="col-lg-9 pr-0">                                                                                                                                                                              
+                                        <nb-form-field>
+                                            <nb-icon status="basic" nbPrefix icon="home-outline"></nb-icon>
+                                            <input fieldSize="small" nbInput type="text" [formControl]="updateUniForm.get('address')" fullWidth
+                                            [status]="updateUniForm.get('address').invalid && (updateUniForm.get('address').touched || updateUniForm.get('webUrl').dirty) ? 'danger' : 'basic'">
+                                          </nb-form-field>
+                                      </div> 
+                                    </div>
+                                  </div>
+                                  <div class="mt-2">
+                                    <div class="row">
+                                      <div style="width:90px; padding-left: 9px; display: flex; justify-content: start; text-align: center; align-items: center;">                                        
+                                          <label for="">Học Phí:</label>                                        
+                                      </div>
+                                      <div class="col-lg-9 pr-0">   
+                                          <div class="row">
+                                            <div class="p-0" style="width: 40%; position: relative;">
+                                                <span class="bold500" style="position: absolute;height: 100%;display: flex;align-items: center;left: 5%; font-size: 12px;">Từ</span>
+                                                <span class="bold500" style="position: absolute;height: 100%;display: flex;right: 3%;align-items: center; font-size: 12px;">.000 (VND)</span>
+                                                <nb-form-field>                              
+                                                  <input fieldSize="small" nbInput type="text" style="text-align: right; padding-left: 30px; padding-right: 40%;" [formControl]="updateUniForm.get('tuitionFrom')" fullWidth mask="separator.2" thousandSeparator="."
+                                                  [status]="updateUniForm.get('tuitionFrom').invalid && (updateUniForm.get('tuitionFrom').touched || updateUniForm.get('tuitionFrom').dirty) ? 'danger' : 'basic'">
+                                                </nb-form-field>                            
+                                              </div>
+                                              <div  style="width: 40%; position: relative;">
+                                                <span class="bold500" style="position: absolute;height: 100%;display: flex;align-items: center;left: 5%; font-size: 12px;">Đến</span>
+                                                <span class="bold500" style="position: absolute;height: 100%;display: flex;right: 3%;  align-items: center; font-size: 12px;">.000 (VND)</span>
+                                                <nb-form-field>                              
+                                                  <input fieldSize="small" nbInput type="text" style="text-align: right; padding-left: 30px; padding-right: 40%;" [formControl]="updateUniForm.get('tuitionTo')" fullWidth mask="separator.2" thousandSeparator="."
+                                                  [status]="updateUniForm.get('tuitionTo').invalid && (updateUniForm.get('tuitionTo').touched || updateUniForm.get('tuitionTo').dirty) ? 'danger' : 'basic'">
+                                                </nb-form-field>                            
+                                              </div> 
+                                              <div style="width: 17%;">
+                                                <nb-select size="small" style="width: 100%" [formControl]="updateUniForm.get('tuitionType')"
+                                                [status]="updateUniForm.get('tuitionType').invalid && (updateUniForm.get('tuitionType').touched || updateUniForm.get('tuitionType').dirty) ? 'danger' : 'basic'">        
+                                                  <nb-option [value]="0">/ Năm</nb-option>
+                                                  <nb-option [value]="1">/ Kì</nb-option>        
+                                                </nb-select>
+                                              </div> 
+                                          </div>                                                                                                                                                                           
+                                        
+                                      </div> 
+                                    </div>
+                                  </div>
+                                  <div style="display: flex; justify-content: flex-end; margin-top: 10px; margin-right: 65px;">                                                
+                                    <button [disabled]="updateUniForm?.invalid" size="small" nbButton status="info" (click)="updateUni()">
+                                      <nb-icon icon="save-outline"></nb-icon>
+                                      Lưu
+                                    </button>
+                                  </div>
+                            </div>
+                        </div>                        
+                    </nb-card-body>
+                </nb-card>
+            </div>
+          </div>
+    </div>    
+  <div class="container-fluid">
+      <div nz-row>
+        <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">            
+            <nb-card style="width: 100%;">                
+                <nb-card-body style="width: 100%;">
+                    <div class="major-header">
+                        <div class="none-action">
+                          <div class="major-header-title">
+                            <h5>BẢNG THÔNG TIN NGÀNH HỌC CỦA TRƯỜNG {{university.name}}</h5>
+                        </div>
+                        <div class="year">
+                            <nb-select [size]="'small'" fullWidth  [selected]="seasonSelected" (selectedChange)="getMajorBySeason($event)">                                        
+                                <nb-option *ngFor="let season of listOfSeason" [value]="season.id">{{season.name}}</nb-option>
+                            </nb-select>
+                          </div>
+                        </div>
+                        
+                        <div class="add-major">
+                          <button nz-button size="medium" nzType="primary" (click)="openCreateMajorModal(undefined)">THÊM NGÀNH</button>
+                        </div>
+                    </div>
+                    <nz-divider></nz-divider>      
+                    <div class="sticky-table-header fixed-solution" [style.visibility]="isVisibleHeader > 420 ? 'visible' : 'hidden'">      
+                        <nz-table                         
+                        nzBordered
+                        style="min-width: 1230px;"
+                        >
+                            <thead>
+                                <tr>
+                                    <th id="stt">STT</th>                                    
+                                    <th id="name">TÊN NGÀNH
+                                        <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
+                                            <i nz-icon nzType="search"></i>
+                                          </nz-filter-trigger>
+                                    </th>
+                                    <th id="programe">HỆ ĐÀO TẠO</th>
+                                    <th id="code">CODE</th>
+                                    <th id="main-addmission">CHỈ TIÊU TỔNG</th>
+                                    <th>CHỈ TIÊU PHỤ</th>
+                                    <th id="quantity">SỐ LƯỢNG</th>
+                                    <th id="group">KHỐI</th>
+                                    <th id="mark">ĐIỂM CHUẨN</th>
+                                    <th id="action">TÁC VỤ</th>
+                                </tr>
+                            </thead>
+                        </nz-table>                        
+                    </div>              
+                    <nz-table 
+                    #majorTable 
+                    nzBordered 
+                    nzShowSizeChanger 
+                    nzShowQuickJumper
+                    [nzData]="listOfDisplayMajors" 
+                    [nzFrontPagination]="false"
+                    [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"  [nzShowTotal]="totalTemplate"[nzPageSizeOptions]="[5, 10, 15]"  (nzQueryParams)="onQueryParamsChange($event)"
+                    style="min-width: 1230px;"
+                    >
+                    <thead>
+                        <tr>
+                            <th id="stt">STT</th>                            
+                            <th id="name">TÊN NGÀNH
+                                <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
+                                    <i nz-icon nzType="search"></i>
+                                  </nz-filter-trigger>
+                            </th>
+                            <th id="programe">HỆ ĐÀO TẠO</th>
+                            <th id="code">CODE</th>
+                            <th id="main-addmission">CHỈ TIÊU TỔNG</th>
+                            <th>CHỈ TIÊU PHỤ</th>
+                            <th id="quantity">SỐ LƯỢNG</th>
+                            <th id="group">KHỐI</th>
+                            <th id="mark">ĐIỂM CHUẨN</th>
+                            <th id="action">TÁC VỤ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let major of majorTable.data; let i = index">
+                            <tr [style.backgroundColor]="i % 2 == 1 ? '#f7f7f7' : '#fff'">
+                                <td>{{i + 1}}</td>                                
+                                <td>
+                                    <div style="display: flex; justify-content: flex-start; align-items: center; min-height: 2rem;">  
+                                        <span>{{major.majorName?.toUpperCase()}}</span>                                                                                                                        
+                                    </div>
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">  
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
+                                            <div *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3" [style.position]="relative">                                                                                                                                                
+                                            </div>  
+                                            <span style="position: absolute; word-break: break-word;
+                                            padding: 10px">{{majorDetailUni.trainingProgramName?.toUpperCase()}}</span>      
+                                            <div class="td-border-children-two" *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem;"></div>                                                            
+                                        </div>                                                                              
+                                    </div>
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
+                                            <div *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3" [style.position]="relative">                                                                                                                                                
+                                            </div>  
+                                            <span style="position: absolute; word-break: break-word;
+                                            padding: 10px">{{majorDetailUni.majorDetailCode}}</span>
+                                            <div class="td-border-children-two" *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem;"></div> 
+                                        </div>                                        
+                                    </div>                                
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies; let count = majorDetailUni ">                                                                                                        
+                                            <div *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3" [style.position]="relative">                                                                                                                                                
+                                            </div>  
+                                            <span style="position: absolute; word-break: break-word;
+                                            padding: 10px">{{majorDetailUni.admissionQuantity}}</span>  
+                                            <div class="td-border-children-two" *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem;"></div>                                      
+                                        </div>                                        
+                                    </div> 
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
+                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3">
+                                                <div style="width: 100%; display: flex; justify-content: center; align-items: center; flex-direction: row;">
+                                                    <!-- <span> {{majorDetailSubAdmission.admissionMethodName}} </span> - <span>{{majorDetailSubAdmission.genderId === 1 ? 'Nam' : 'Nữ'}}</span> - <span>{{majorDetailSubAdmission.provinceName}}</span> -->
+                                                    <div *ngIf="majorDetailSubAdmission.genderId === null && majorDetailSubAdmission.provinceName === null && majorDetailSubAdmission.admissionMethodName === null">
+                                                      <span>TẤT CẢ</span>
+                                                    </div>
+                                                    <div *ngIf="majorDetailSubAdmission.genderId !== null && majorDetailSubAdmission.provinceName !== null && majorDetailSubAdmission.admissionMethodName !== null">
+                                                      <span>{{majorDetailSubAdmission.admissionMethodName?.toUpperCase()}}</span> - <span>{{majorDetailSubAdmission.genderId === 1 ? 'NAM' : 'NỮ'}}</span> - <span>{{majorDetailSubAdmission.provinceName?.toUpperCase()}}</span>
+                                                    </div>
+                                                    <div *ngIf="majorDetailSubAdmission.genderId === null && majorDetailSubAdmission.provinceName === null">
+                                                      <span>{{majorDetailSubAdmission.admissionMethodName?.toUpperCase()}}</span>
+                                                    </div>
+                                                    <div *ngIf="majorDetailSubAdmission.genderId === null && majorDetailSubAdmission.admissionMethodName === null">
+                                                      <span>{{majorDetailSubAdmission.provinceName?.toUpperCase()}}</span>
+                                                    </div>
+                                                    <div *ngIf="majorDetailSubAdmission.admissionMethodName === null && majorDetailSubAdmission.provinceName === null">
+                                                      <span>{{majorDetailSubAdmission.genderId === 1 ? 'NAM' : 'NỮ'}}</span>
+                                                    </div> 
+                                                    <div *ngIf="(majorDetailSubAdmission.genderId !== null && majorDetailSubAdmission.provinceName !== null) && majorDetailSubAdmission.admissionMethodName === null">
+                                                      <span>{{majorDetailSubAdmission.genderId === 1 ? 'NAM' : 'NỮ'}}</span> - <span>{{majorDetailSubAdmission.provinceName?.toUpperCase()}}</span>
+                                                    </div>  
+                                                    <div *ngIf="(majorDetailSubAdmission.genderId !== null && majorDetailSubAdmission.admissionMethodName !== null) && majorDetailSubAdmission.provinceName === null">
+                                                      <span>{{majorDetailSubAdmission.admissionMethodName?.toUpperCase()}}</span> - <span>{{majorDetailSubAdmission.genderId === 1 ? 'NAM' : 'NỮ'}}</span>
+                                                    </div> 
+                                                    <div *ngIf="(majorDetailSubAdmission.provinceName !== null && majorDetailSubAdmission.admissionMethodName !== null) && majorDetailSubAdmission.genderId === null">
+                                                      <span>{{majorDetailSubAdmission.admissionMethodName?.toUpperCase()}}</span> - <span>{{majorDetailSubAdmission.provinceName?.toUpperCase()}}</span>
+                                                    </div>                                                                                                                                                       
+                                                </div>                                                
+                                            </div> 
+                                            <div *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem; display: flex; align-items: center;">
+                                              <span class="missInfomation" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>  
+                                            </div>                    
+                                        </div>                                        
+                                    </div> 
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
+                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions; " [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3">
+                                                <span>{{majorDetailSubAdmission.quantity}}</span>                                                
+                                            </div>                                              
+                                            <div *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem; display: flex; align-items: center;">
+                                              <span class="missInfomation" nbTooltip="Thông tin về số lượng sinh viên được tuyển đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>  
+                                            </div>                   
+                                        </div>                                        
+                                    </div>                                     
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
+                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions; let i = index">
+                                                <div class="td-border-children-two" *ngFor="let majorDetailEntryMark of majorDetailSubAdmission.majorDetailEntryMarks" style="height: 2rem;">
+                                                    <span>{{majorDetailEntryMark.subjectGroupCode}}</span>
+                                                </div>
+                                                <div class="td-border-children-two" *ngIf="majorDetailSubAdmission.majorDetailEntryMarks === null" style="height: 3rem;">    
+                                                  <span class="missInfomation" nbTooltip="Thông tin về khối đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>                                                 
+                                                </div> 
+                                            </div> 
+                                            <div *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem; display: flex; align-items: center">
+                                              <span class="missInfomation" nbTooltip="Thông tin về khối đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>    
+                                            </div>                    
+                                        </div>                                        
+                                    </div>                                     
+                                </td>
+                                <td style="padding: 0">
+                                    <div class="flex-container-custom">
+                                        <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
+                                            <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions" >
+                                                <div class="td-border-children-two" *ngFor="let majorDetailEntryMark of majorDetailSubAdmission.majorDetailEntryMarks" style="height: 2rem;">
+                                                    <span>{{majorDetailEntryMark.mark}}</span>
+                                                </div>  
+                                                <div class="td-border-children-two" *ngIf="majorDetailSubAdmission.majorDetailEntryMarks === null" style="height: 3rem;">     
+                                                  <span class="missInfomation" nbTooltip="Thông tin điểm chuẩn đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>                                             
+                                                </div>                                               
+                                            </div>  
+                                            <div *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem; display: flex; align-items: center">
+                                              <span class="missInfomation" nbTooltip="Thông tin điểm chuẩn đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>  
+                                            </div>                  
+                                        </div>                                        
+                                    </div>                                    
+                                </td>
+                                <td>
+                                    <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                                        <div class="icon-edit" (click)="openCreateMajorModal(major)">
+                                            <nb-icon icon="edit-outline"></nb-icon>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-container>                        
+                    </tbody>                    
+                    </nz-table>
+                </nb-card-body>
+            </nb-card>
+        </div>
+      </div>
+  </div>
+</div>
+
+
+<ng-template #totalTemplate>
+    <span>
+      HIỆN CÓ {{ total }} NGÀNH HỌC
+    </span>  
+  </ng-template>
+<nz-dropdown-menu #searchMenu="nzDropdownMenu">
+    <div class="ant-table-filter-dropdown">
+      <div class="search-box">
+        <input type="text" nz-input placeholder="Tìm Trường" [(ngModel)]="searchValueName" />
+        <button nz-button nzSize="small" nzType="primary" class="search-button" (click)="searchByName()"> 
+          TÌM KIẾM
+        </button>
+        <button nz-button nzSize="small" (click)="resetSearchName()">TẠO LẠI</button>
+      </div>
+    </div>
+  </nz-dropdown-menu>

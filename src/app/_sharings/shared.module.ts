@@ -23,6 +23,12 @@ import { AuthenticationComponent } from '../authentication/authentication.compon
 import { RouterModule } from '@angular/router';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
+import { SafeHtmlPipe } from '../_helper/safe-html-pipe';
+import { ProgressSpinnerComponent } from './components/progress-spinner/progress-spinner.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTableModule } from '@angular/material/table';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
+
 
 const materialModules = [
   MatNativeDateModule,
@@ -42,16 +48,21 @@ const materialModules = [
   MatListModule,
   MatMenuModule,
   MatIconModule,
-  RouterModule
+  RouterModule,
+  MatExpansionModule,
+  MatTableModule,
+  MatCarouselModule,
 ];
 
 @NgModule({
   declarations: [
     AnswerComponent,
     ToArrayPipe,
+    SafeHtmlPipe,
     AuthenticationComponent,
     ConfirmDialogComponent,
-    LoginDialogComponent
+    LoginDialogComponent,
+    ProgressSpinnerComponent,
   ],
   imports: [
     ...materialModules,
@@ -61,9 +72,11 @@ const materialModules = [
     ...materialModules,
     AnswerComponent,
     ToArrayPipe,
+    SafeHtmlPipe,
     AuthenticationComponent,
     ConfirmDialogComponent,
-    LoginDialogComponent
+    LoginDialogComponent,
+    ProgressSpinnerComponent
   ],
 })
 export class MaterialModule {

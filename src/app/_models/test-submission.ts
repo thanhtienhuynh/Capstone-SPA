@@ -6,4 +6,5 @@ export interface TestSubmission {
   numberOfRightAnswers: number;
   mark: number;
   numberOfQuestion: number;
+  subjectId: number;
 }

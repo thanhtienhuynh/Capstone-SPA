@@ -120,7 +120,7 @@ export class NebularModule {
         ...NbDialogModule.forRoot().providers,
         ...NbWindowModule.forRoot().providers,
         ...NbToastrModule.forRoot().providers,
-        ...NbTimepickerModule.forRoot().providers,
+        ...NbTimepickerModule.forRoot().providers,        
       ]
     };
   }

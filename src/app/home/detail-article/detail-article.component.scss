@@ -1,0 +1,18 @@
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-frame {
+  padding: 0px 5%;
+}
+
+:host ::ng-deep img { 
+  max-width: 100% !important;
+  height: auto;
+}
+
+.root-page {
+  margin-top: 10px;
+}

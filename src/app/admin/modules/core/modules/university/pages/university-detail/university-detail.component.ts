@@ -34,6 +34,7 @@ export class UniversityDetailComponent implements OnInit {
   updateUniForm: FormGroup;
   eventValueChange: any = undefined;
 
+  logo: string | ArrayBuffer;
 
   constructor(
     private _modalService: NzModalService,
@@ -45,7 +46,7 @@ export class UniversityDetailComponent implements OnInit {
   }
 
   ngOnInit() {    
-    this.getUniversityById();      
+    // this.getUniversityById();      
   }
   ngDoCheck(){
         
@@ -56,8 +57,9 @@ export class UniversityDetailComponent implements OnInit {
       this._universityService.getUniversityById(param.id).pipe(
         tap((rs) => {  
           this.uniId = param.id;        
-          this.university = rs;                 
-          this.listOfMajor = rs.majors.map((e, i) => ({
+          this.university = rs.data; 
+          this.logo = this.university.logoUrl;                
+          this.listOfMajor = rs.data.majors.map((e, i) => ({
             ...e,
             stt: i + 1                       
           }));             
@@ -76,7 +78,7 @@ export class UniversityDetailComponent implements OnInit {
     this._activatedRoute.params.subscribe((param) => {      
       this._universityService.getUniversityById(param.id).pipe(
         tap((rs) => {                    
-          this.university = rs;
+          this.university = rs.data;
           this.updateUniForm.get('name').setValue(university.name);
           this.updateUniForm.get('code').setValue(university.code);
           this.updateUniForm.get('address').setValue(university.address);
@@ -117,17 +119,22 @@ export class UniversityDetailComponent implements OnInit {
       nzClosable: false,
       nzFooter: null,
       nzWidth: 700,   
-      nzComponentParams: {data: data, majors: this.listOfMajor, universityId: this.uniId, universityName: this.university.name, callBack: (majors) => {
-        this.listOfMajor = majors.map((e, i) => ({
-          ...e,
-          stt: i + 1
-        }));  
-        this.listOfDisplayMajor = majors.map((e, i) => ({
-          ...e,
-          stt: i + 1
-        }));
-        this.total = this.listOfDisplayMajor.length;              
-      }},      
+      nzComponentParams: {data: data, majors: this.listOfMajor, universityId: this.uniId, universityName: this.university.name, 
+      //   callBack: (majors) => {
+      //   this.listOfMajor = majors.map((e, i) => ({
+      //     ...e,
+      //     stt: i + 1
+      //   }));  
+      //   this.listOfDisplayMajor = majors.map((e, i) => ({
+      //     ...e,
+      //     stt: i + 1
+      //   }));
+      //   this.total = this.listOfDisplayMajor.length;              
+      // },
+      callBack: () => {
+        this.getUniversityById();
+      }
+    },      
     })
   }
 
@@ -137,7 +144,7 @@ export class UniversityDetailComponent implements OnInit {
       "code": this.updateUniForm.get('code').value,
       "name": this.updateUniForm.get('name').value,
       "address": this.updateUniForm.get('address').value,
-      "logoUrl": "",
+      "file": this.image ? this.image : null,
       "description": this.updateUniForm.get('description').value,
       "phone": this.updateUniForm.get('phone').value,
       "webUrl": this.updateUniForm.get('webUrl').value,
@@ -146,7 +153,12 @@ export class UniversityDetailComponent implements OnInit {
       "tuitionTo": Number.parseInt(this.updateUniForm.get('tuitionTo').value),
       "rating": this.updateUniForm.get('rating').value,
       "status": this.updateUniForm.get('status').value
-    }       
+    }  
+    // console.log(newValue);
+    const formData = new FormData();     
+    for (let key in newValue) {
+      formData.append(key, newValue[key]);
+    }
     Swal.fire({
       title: 'Bạn có muốn lưu những thông tin đã thay đổi hay không?',
       showDenyButton: true,
@@ -156,7 +168,7 @@ export class UniversityDetailComponent implements OnInit {
       cancelButtonText: `Thoát`      
     }).then((result) => {
       if (result.isConfirmed) {
-        this._universityService.updateUniversity(newValue).pipe(
+        this._universityService.updateUniversity(formData).pipe(
           tap((rs) => {            
             let timerInterval;
             Swal.fire({
@@ -209,5 +221,28 @@ export class UniversityDetailComponent implements OnInit {
     this.listOfDisplayMajor = this.listOfMajor.filter((item: UniversityRM & {stt?:number}) => item.name.toLowerCase().indexOf(value.toLowerCase()) !== -1);    
   }
 
-
+  image: File;
+  uploadLogo(evt): void {
+    const files: File[] = evt.target.files;
+    if (files.length > 1) {
+      Swal.fire('Lỗi', 'Chọn 1 cái thối', 'error');
+    } else {
+      const file = files[0];
+      const extensions: string[] = ['image/png', 'image/jpeg', 'image/jpg'];
+      if (extensions.includes(file.type)) {
+        if (file.size < 1024*1204*2) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            this.logo = reader.result            
+          };
+          reader.readAsDataURL(file);  
+          this.image = files[0];                  
+        } else {
+          Swal.fire('Oversize', 'Vui lòng chọn ảnh có kích thước từ 2MB trở xuống', 'error');
+        }
+      } else {
+        Swal.fire('Lỗi', 'Vui lòng chỉ chọn file ảnh (.png, .jpeg, .jpg)', 'error');
+      }
+    }    
+  }
 }

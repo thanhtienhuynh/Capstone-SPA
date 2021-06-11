@@ -1,10 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Injectable, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../../_store/app.reducer';
 import * as AuthActions from './auth.actions';
-import { map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from 'src/app/_models/user';
@@ -14,6 +14,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { AuthService } from '../auth.service'; 
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { of } from 'rxjs';
+import { Response } from 'src/app/_models/response';
 
 
 @Injectable()
@@ -43,6 +45,9 @@ export class AuthEffects {
     }),
     map((token: string) => {
       return new AuthActions.LoginServer(token);
+    }),
+    catchError((error: HttpErrorResponse) => {
+      return of(new AuthActions.HasErrors([error.message]));
     })
   );
 
@@ -51,20 +56,24 @@ export class AuthEffects {
     ofType(AuthActions.LOGIN_SERVER),
     withLatestFrom(this.store.select('auth')),
     switchMap(([actionData, authState]) => {
-      return this.http.post<LoginResponse>(
+      return this.http.post<Response<LoginResponse>>(
         environment.apiUrl + 'api/v1/user/auth/google',
         { uidToken: authState.firebaseToken }
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            const expirationDuration = this.helper.getTokenExpirationDate(response.data.token).getTime() - new Date().getTime();
+            this.authService.setLogoutTimer(expirationDuration);
+            localStorage.setItem("token", response.data.token);
+            return new AuthActions.SetUser(response.data);
+          }
+          return new AuthActions.HasErrors(response.errors);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          return of(new AuthActions.HasErrors([error.message]));
+        })
       );
     }),
-    tap(resData => {
-      const expirationDuration =
-      this.helper.getTokenExpirationDate(resData.token).getTime() - new Date().getTime();
-      this.authService.setLogoutTimer(expirationDuration);
-    }),
-    map((response: LoginResponse) => {
-      localStorage.setItem("token", response.token);
-      return new AuthActions.SetUser(response);
-    })
   );
 
   @Effect()

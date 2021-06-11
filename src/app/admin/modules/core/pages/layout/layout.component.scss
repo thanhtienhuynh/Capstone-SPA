@@ -1,14 +1,16 @@
 header {
     position: fixed;
     top: 0;
-    left: 56px;
+    left: 0;
+    right: 0;
     background: white;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    padding: 6px;
+    justify-content: space-between;
+    padding: 0;
     height: 56px;
-    width: calc(100% - 56px);
+    // width: calc(100% - 56px);
+    width: 100%;
     z-index: 1000;
     border-bottom: 1px solid #e5e5e5;        
     // img.logo {
@@ -20,14 +22,29 @@ header {
     //     height: 56px;
     // }
 }
-
-@media (max-width: 789px) {
-    header {
-        left: 0;
-        width: 100%;
-        img.logo {
-            display: none;
-            // opacity: 1;
-        }
-    }
+.breadcrumb {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;    
+    margin: 0;
+    height: 44px;
+    width: 100%;
+    z-index: 1000;
+    border-bottom: 1px solid #e5e5e5;  
 }
+
+// @media (max-width: 789px) {
+//     header {
+//         left: 0;
+//         width: 100%;
+//         img.logo {
+//             display: none;
+//             // opacity: 1;
+//         }
+//     }
+// }
