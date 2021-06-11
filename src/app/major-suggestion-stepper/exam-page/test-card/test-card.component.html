@@ -10,7 +10,7 @@
 	</div>
 
 	<div class="submit" gdArea="submit">
-		<button mat-raised-button color="primary" (click)="loadTest(test.id)">Thi</button>
+		<button mat-raised-button color="primary" (click)="loadTest(test.id)">{{doneTestIds.includes(test.id) ? 'Thi lại' : 'Thi'}}</button>
 	</div>
 
   <div class="side" gdArea="time">

@@ -1,5 +1,5 @@
 export interface Option {
   id: number;
-  optionContent: string;
+  content: string;
   questionId: number;
 }

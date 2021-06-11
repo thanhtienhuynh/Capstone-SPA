@@ -1,0 +1,41 @@
+<div class="modal-wrap">
+  <div class="container-fluid">
+    <div nz-row>
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">        
+        <nb-card style="margin: 0; width: 100%; position: relative">
+          <nb-card-body style="width: 100%">
+            <div style="width: 100%;">              
+              <div style="padding: 1rem;">   
+                <div *ngIf="article === null; else articleContent">
+                  <nz-skeleton [nzActive]="true"></nz-skeleton>
+                </div>     
+                <ng-template #articleContent>
+                  <h3 [innerHtml]="article?.title"></h3>
+                  <div style="margin-bottom: 15px;">
+                    <div class="d-flex align-items-center">
+                      <div class="d-flex align-items-center">
+                        <i nz-icon nzType="link" nzTheme="outline"></i>
+                        <div style="margin-left: 5px;">
+                          <a [href]="article?.rootUrl"><span style="font-size: 1em;">Link bài gốc</span></a>                    
+                        </div>
+                      </div>
+                      <div class="text-gray">
+                        <nz-divider nzType="vertical"></nz-divider>
+                        <span>{{article?.postedDate | date: 'HH:mm dd/MM/yyyy'}}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div [innerHtml]="article?.content"></div>
+                </ng-template>                                        
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <p>
+  Bảo
+</p> -->

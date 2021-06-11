@@ -1,10 +1,15 @@
 <nb-layout>
   <nb-layout-column style="padding: 0">
-    <app-nav></app-nav>
+    <app-nav></app-nav>    
     <header>
-      <!-- <img src="assets/logo-white.png" alt="logo" class="logo">     -->
+      <app-mohs-logo></app-mohs-logo>
       <app-identification></app-identification>  
     </header>
+    <section class="breadcrumb">
+      <div>
+        <app-mosh-breadscrumb></app-mosh-breadscrumb>
+      </div>      
+    </section>
     <app-content>
       <router-outlet></router-outlet>      
     </app-content>    

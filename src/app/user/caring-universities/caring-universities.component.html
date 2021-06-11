@@ -1,0 +1,58 @@
+<div style="width: 100%; height: auto;">
+  <div class="header-frame">
+    <div class="center-all header-content">DANH SÁCH CÁC TRƯỜNG ĐẠI HỌC QUAN TÂM</div>
+  </div>
+  <div *ngIf="universityBasedFollowingDetails" class="body-frame">
+    <mat-accordion>
+      <div *ngFor="let universityBasedFollowingDetail of universityBasedFollowingDetails">
+        <div *ngFor="let trainingProgramGroupByUniversityDataSet of universityBasedFollowingDetail.trainingProgramGroupByUniversityDataSets" class="expansion-frame">
+          
+            <mat-expansion-panel >
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{universityBasedFollowingDetail.name}} - {{trainingProgramGroupByUniversityDataSet.name}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="uni-scroll content" id="style-7">
+                <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
+                  <div *ngFor="let majorGroupByTrainingProgramDataSet of trainingProgramGroupByUniversityDataSet.majorGroupByTrainingProgramDataSets" fxFlex="0 1 calc(50%)"  fxFlex.lt-md="0 1 calc(50%)"
+                  fxFlex.lt-sm="100%">
+                    <div class="uni-frame">
+                      <div class="name-bar center-all" routerLink="./detail" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                        {{majorGroupByTrainingProgramDataSet.name}}</div>
+                      <div class="information-frame">
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                          <div>Chỉ tiêu năm 2021:</div>
+                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.seasonDataSet.numberOfStudents}}</div>
+                        </div>
+                        <mat-divider class="devider"></mat-divider>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                          <div>Thứ hạng:</div>
+                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.positionOfUser}}/{{majorGroupByTrainingProgramDataSet.totalUserCared}}</div>
+                        </div>
+                        <mat-divider class="devider"></mat-divider>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                          <div>Điểm chuẩn năm 2021: </div>
+                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.seasonDataSet.entryMark}}</div>
+                        </div>
+                        <mat-divider class="devider"></mat-divider>
+                        <div fxLayout="row" fxLayoutAlign="space-between center">
+                          <div>Khối: </div>
+                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.subjectGroupCode}}</div>
+                        </div>
+                        <mat-divider class="devider"></mat-divider>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+        </div>
+
+      </div>
+      
+    </mat-accordion>
+  </div>
+
+ 
+</div>

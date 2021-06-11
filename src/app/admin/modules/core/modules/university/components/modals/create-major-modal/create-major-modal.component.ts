@@ -1,13 +1,15 @@
-import { Component, Input, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { MajorService, SubjectGroupService, TrainingProgramService } from 'src/app/admin/services';
 import { CustomSelectComponent } from 'src/app/admin/shared/components';
-import { MajorRM, SubjectGroupRM } from 'src/app/admin/view-models';
+import { SubjectGroupRM } from 'src/app/admin/view-models';
+import {Response} from 'src/app/_models/response';
 import Swal from 'sweetalert2';
+import { __values } from 'tslib';
 
 
 @Component({
@@ -18,11 +20,12 @@ import Swal from 'sweetalert2';
 export class CreateMajorModalComponent implements OnInit {
 
   //Decorator
-  @Input() data: MajorRM | undefined;
-  @Input() majors: (MajorRM & { stt?: number })[];
+  @Input() data: any | undefined;
+  @Input() majors: (any & { stt?: number })[];
   @Input() universityId: any;
   @Input() universityName: string;
-  @Input() callBack: (majors: MajorRM[]) => void;
+  // @Input() callBack: (majors: MajorRM[]) => void;  
+  @Input() callBack: () => void;  
   @ViewChild(CustomSelectComponent) customSelectComponent: CustomSelectComponent
 
   //Title
@@ -35,10 +38,10 @@ export class CreateMajorModalComponent implements OnInit {
   listFieldTmp: FormGroup[] = [];
 
   //Behavior
-  majorResult: Observable<any[]> = new BehaviorSubject([]);  
-  subjectGroupResult: Observable<any[]> = new BehaviorSubject([]);
-  trainingProgramResult: Observable<any[]> = new BehaviorSubject([]);
-  listOfDisplaySubjectGroup: Observable<any[]> = new BehaviorSubject([]);
+  majorResult: Observable<Response<any>> = new BehaviorSubject<Response<any>>({} as Response<any>);  
+  subjectGroupResult: Observable<Response<any>> = new BehaviorSubject<Response<any>>({} as Response<any>);
+  trainingProgramResult: Observable<Response<any>> = new BehaviorSubject<Response<any>>({} as Response<any>);
+  listOfDisplaySubjectGroup: Observable<Response<any>> = new BehaviorSubject<Response<any>>({} as Response<any>);
   
 
 
@@ -71,9 +74,9 @@ export class CreateMajorModalComponent implements OnInit {
   }
 
   getAllMajor(): void {
-    this.majorResult = this._majorService.getAllMajor().pipe(      
-      // map((rs) => rs.filter((mj) => (mj.id !== this.majors.find((e) => e.id === mj.id)?.id))) 
-      map((rs) => rs)
+    this.majorResult = this._majorService.getAllMajor().pipe(
+      // map((rs) => rs.filter((mj) => (mj.id !== this.majors.find((e) => e.id === mj.id)?.id)))
+      map((rs) => rs.data) 
       // chuyen gia tri rs thanh 1 gia tri khac dang. Observeble. đúng chưa?
     );        
   }
@@ -81,23 +84,24 @@ export class CreateMajorModalComponent implements OnInit {
   getAllSubjectGroup(): void {
     this.subjectGroupResult = this._subjectGroupService.getAllSubjectGroup().pipe();
     this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(
-      map((rs) => this.data ? rs.filter((sb) => (sb.id !== this.data.subjectGroups.find((e) => e.id === sb.id)?.id)) : rs),
+      map((rs) => this.data ? rs.data.filter((sb) => (sb.id !== this.data.subjectGroups.find((e) => e.id === sb.id)?.id)) : rs.data),
     )    
   }  
 
   getAllTrainingProgram(): void {
     this.trainingProgramResult = this._trainingProgramService.getAllTrainingProgram().pipe(
-      tap(rs => {
+      tap((rs) => {        
         if (!this.data) {
-          this.majorForm.get('trainingProgram').setValue(rs[0]);
+          this.majorForm.get('trainingProgram').setValue(rs.data[0]);          
         }
-      })
+      }),
+      map((rs) => rs = rs.data)
     );
   }
 
   setData(): void {
-    this.subjectGroupResult.subscribe((data) => {  
-      if (this.data != undefined) {
+    this.subjectGroupResult.subscribe((data) => {          
+      if (this.data != undefined) {        
         this.modalTitle = "Sửa Thông Tin Ngành của " + `${this.universityName}`;
         const tmp = {
           id: this.data.id,
@@ -117,11 +121,11 @@ export class CreateMajorModalComponent implements OnInit {
           for (let i = 0; i < this.data.subjectGroups.length; i++) {
             const subJectGroup = this.data.subjectGroups[i];            
             const field = this._fb.group({
-              'subjectGroup': [data.find((e) => e.id === subJectGroup.id)],
+              'subjectGroup': [data.data.find((e) => e.id === subJectGroup.id), Validators.required],
               'entryMarkId1': [`${subJectGroup.entryMarks[0]?.id}`],
-              'entryMark1': [`${subJectGroup.entryMarks[0].mark}`,],
+              'entryMark1': [`${subJectGroup.entryMarks[0].mark}`, Validators.required],
               'entryMarkId2': [`${subJectGroup.entryMarks[1]?.id}`],
-              'entryMark2': [`${subJectGroup.entryMarks[1].mark}`,],
+              'entryMark2': [`${subJectGroup.entryMarks[1].mark}`, Validators.required],
             });
             field['isUpdate'] = true;
             this.listField.push(field);
@@ -129,14 +133,14 @@ export class CreateMajorModalComponent implements OnInit {
           this.listFieldTmp = this.listField.slice();
         } else {
           const field = this._fb.group({
-            'subjectGroup': [undefined],
+            'subjectGroup': [undefined, Validators.required],
             'entryMarkId1': [-1],
-            'entryMark1': [0],
+            'entryMark1': ['', Validators.required],
             'entryMarkId2': [-1],
-            'entryMark2': [0],
+            'entryMark2': ['', Validators.required],
           });
-          this.listField.push(field);
-        }
+          this.listField.push(field);             
+        }        
       } else {
         this.modalTitle = "Thêm Ngành của " + `${this.universityName}`;
         this.addField();
@@ -176,9 +180,14 @@ export class CreateMajorModalComponent implements OnInit {
     };  
     this._majorService.createMajor(newValue).pipe(
       tap((rs) => {
-        this.callBack(rs.majors);
-        this._modalRef.close();
-        Swal.fire('Thành công', 'Thêm ngành mới thành công', 'success');
+        // this.callBack(rs.majors);
+        if (rs.succeeded === true) {
+          this.callBack();
+          this._modalRef.close();
+          Swal.fire('Thành công', 'Thêm ngành mới thành công', 'success');
+        } else {
+          Swal.fire('That bai', 'Thaats baij', 'error');
+        }
       }),
       catchError((err) => {
         Swal.fire('Lỗi', 'Thêm ngành mới thất bại', 'error');
@@ -229,12 +238,16 @@ export class CreateMajorModalComponent implements OnInit {
       "oldTrainingProgramId": this.majorForm.get('oldTrainingProgram').value?.id,
       "NewTrainingProgramId": this.majorForm.get('trainingProgram').value?.id,
       "subjectGroups": subjectGroups
-    }    
+    }      
     this._majorService.updateMajor(newValue).pipe(
       tap((rs) => {        
-        this.callBack(rs.majors);
-        Swal.fire('Thành công', 'Thay đổi thông tin thành công', 'success');
-        this._modalRef.close();
+        if (rs.succeeded === true) {
+          this.callBack();
+          this._modalRef.close();
+          Swal.fire('Thành công', 'Thay đổi thông tin thành công', 'success');
+        } else {
+          Swal.fire('That bai', 'Thaats baij', 'error');
+        }                
       }),
       catchError((err) => {
         Swal.fire('Lỗi', 'Thay đổi thông tin thất bại', 'error');
@@ -252,12 +265,12 @@ export class CreateMajorModalComponent implements OnInit {
       'entryMark2': ['', Validators.required]
       
     });
-    this.listField.push(group);
+    this.listField.push(group);    
     this.checkValidateListField();    
   }
 
   checkValidateListField(): boolean {
-    const list = this.listField.map((e) => e.invalid);
+    const list = this.listField.map((e) => e.invalid);    
     if (list.includes(true)) {
       return true;
     } 
@@ -270,9 +283,11 @@ export class CreateMajorModalComponent implements OnInit {
 
   useSelectSubjectGroup(item) {         
     const list = this.listField.filter((e) => !e['isUpdate']).map((e) => e.value);        
-    this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(      
-      map((rs) => this.data ? rs.filter((sb) => (sb.id !== this.data.subjectGroups.find((e) => e.id === sb.id)?.id)) : rs),
-      map((rs) => rs.filter((e) => !list.some((_) => _.subjectGroup?.id === e.id)) ),
+    this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(            
+      map((rs) => this.data ? rs.data.filter((sb) => (sb.id !== this.data.subjectGroups.find((e) => e.id === sb.id)?.id)) : rs.data),
+      // tap(rs => console.log('before', rs)),
+      map((rs) => rs.filter((e) => !list.some((_) => _.subjectGroup?.id === e.id)) ),      
+      // tap(rs => console.log('after', rs)),
     )
   }
 
@@ -292,7 +307,8 @@ export class CreateMajorModalComponent implements OnInit {
         this.listField.splice(index, 1);
         const list = this.listField.filter((e) => !e['isUpdate']);  
         if (field !== null) {           
-          this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(                                          
+          this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(   
+            map((rs) => rs.data)                                       
           )
         }
       }

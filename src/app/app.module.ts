@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StepperComponent } from './major-suggestion-stepper/stepper/stepper.component';
@@ -16,10 +16,7 @@ import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-pag
 import { ResultDialogComponent } from './major-suggestion-stepper/exam-page/result-dialog/result-dialog.component';
 import { CountdownModule } from 'ngx-countdown';
 import { TestCardComponent } from './major-suggestion-stepper/exam-page/test-card/test-card.component';
-import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
-import { SafeHtmlPipe } from './_helper/safe-html-pipe';
-import { AuthenticationComponent } from './authentication/authentication.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
@@ -36,9 +33,10 @@ import { MaterialModule } from './_sharings/shared.module';
 import { UserEffects } from './user/store/user.effects';
 import { SafeUrlPipe } from './_helper/safe-url-pipe';
 import { SubmitDialogComponent } from './major-suggestion-stepper/exam-page/submit-dialog/submit-dialog.component';
-import { ToArrayPipe } from './_helper/to-array-pipe';
-import { RouterModule } from '@angular/router';
 import { DetailUniversityDialogComponent } from './major-suggestion-stepper/stepper/detail-university-dialog/detail-university-dialog.component';
+import { HomeEffects } from './home/store/home.effects';
+import { FinishTestDialogComponent } from './major-suggestion-stepper/exam-page/finish-test-dialog/finish-test-dialog.component';
+
 
 
 registerLocaleData(vi);
@@ -48,15 +46,13 @@ registerLocaleData(vi);
     StepperComponent,
     ExamPageComponent,
     ResultDialogComponent,
+    FinishTestDialogComponent,
     TestCardComponent,
     HomeComponent,
-    SafeHtmlPipe,
     SafeUrlPipe,
     ShortenPipe,
-    ProgressSpinnerComponent,
     SubmitDialogComponent,
-    DetailUniversityDialogComponent
-    // HeaderComponent    
+    DetailUniversityDialogComponent,
    ],
   imports: [
     BrowserModule,
@@ -64,7 +60,7 @@ registerLocaleData(vi);
     BrowserAnimationsModule,        
     FlexLayoutModule,           
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([StepperEffects, AuthEffects, UserEffects]),
+    EffectsModule.forRoot([StepperEffects, AuthEffects, UserEffects, HomeEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
     
     AppRoutingModule,
@@ -76,9 +72,8 @@ registerLocaleData(vi);
     ReactiveFormsModule,
     CommonModule,  
     MaterialModule,
-    // RouterModule 
   ],  
-  providers: [AuthService, { provide: NZ_I18N, useValue: vi_VN },
+  providers: [AuthService, { provide: NZ_I18N, useValue: vi_VN },    
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,

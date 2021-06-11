@@ -1,0 +1,61 @@
+.result {
+  font-style: italic;
+  font-weight: 600;
+}
+
+.mark {
+  color: #1814e0;
+  font-family: "Rouge Script", cursive;
+  font-size: 6.5em;
+  font-weight: normal;
+  margin: 0 0 10px;
+  text-align: center;
+  text-shadow: 1px 1px 2px #082b34;
+  padding-top: 10px;
+}
+
+.button-login {
+  font-style: italic;
+  text-decoration: underline;
+  cursor: pointer;
+  color: rgb(98, 98, 241);
+}
+
+.login-frame {
+  margin-top: 10px;
+}
+
+.button-frame {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.table-title {
+  font-style: italic;
+}
+
+.subject-button {
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-row {
+  height: auto;
+}
+
+.mat-cell {
+  padding: 8px 0px 8px 0;
+}
+
+.mat-table-sticky-border-elem-right {
+  border-left: 1px solid #e0e0e0;
+}
+
+.mat-table-sticky-border-elem-left {
+  border-right: 1px solid #e0e0e0;
+}

@@ -3,8 +3,12 @@ import { Mark } from "../_models/mark";
 export class MarkParam {
   marks: Mark[];
   transcriptTypeId: number;
-  constructor(marks: Mark[], transcriptTypeId: number) {
+  gender: number;
+  provinceId: number;
+  constructor(marks: Mark[], transcriptTypeId: number, gender: number, provinceId: number) {
     this.marks = marks;
     this.transcriptTypeId = transcriptTypeId;
+    this.gender = gender;
+    this.provinceId = provinceId;
   }
 }
