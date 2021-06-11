@@ -1,3 +1,5 @@
+import { Province } from "src/app/admin/view-models";
+
 export const environment = {
   production: true,
   firebaseConfig: {
@@ -11,4 +13,6 @@ export const environment = {
   },
   apiUrl: 'https://mohs.azurewebsites.net/',
   // apiUrl: 'https://mohsdev.azurewebsites.net/',
+  nation: {id: 1000, name: 'TOÀN QUỐC', regionId: 1} as Province,
+  initSeasonId: 7
 };
