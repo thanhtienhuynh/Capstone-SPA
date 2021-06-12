@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,oBAAoB,CAAC;EACnB,gBAAgB,EAAE,IAAI;EACtB,KAAK,EAAE,KAAK;EACZ,MAAM,EAAE,KACV;CAAC",
-    "sources": [
-        "result-dialog.component.scss"
-    ],
-    "names": [],
-    "file": "result-dialog.component.css"
-}
