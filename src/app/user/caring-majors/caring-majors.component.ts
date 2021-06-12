@@ -40,7 +40,6 @@ export class CaringMajorsComponent implements OnInit {
   }
 
   onUncaringClick(majorId: number, universityId: number, trainingProramId: number) {
-    console.log(majorId);
   }
 
   onDetailClick( majorBasedFollowingDetail: MajorBasedFollowingDetail,

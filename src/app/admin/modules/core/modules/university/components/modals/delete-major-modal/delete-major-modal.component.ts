@@ -24,14 +24,11 @@ export class DeleteMajorModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log(this.data);
-    console.log(this.seasonSelected, 'seasonSelected')
     this.majorDetailId = this.data.majorDetailUnies[0].id;
   }
 
   filterDataByTrainingProgramId(event: any): void {
     this.majorDetailId = event;
-    console.log(event);
   }
 
   deleteMajor(): void {    
@@ -39,10 +36,8 @@ export class DeleteMajorModalComponent implements OnInit {
       'majorDetailId': this.majorDetailId,
       'status': 0
     }
-    console.log(newValue);
     this._universityService.majorUpdation(newValue).pipe(
       tap(rs => {        
-        console.log(rs);
         if (rs.succeeded === true) {
           Swal.fire('THÀNH CÔNG', 'Xóa ngành thành công', 'success');
           this.changeSeasonId(this.seasonSelected);

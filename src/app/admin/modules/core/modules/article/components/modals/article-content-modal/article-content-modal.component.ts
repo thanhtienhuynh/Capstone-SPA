@@ -17,21 +17,18 @@ export class ArticleContentModalComponent implements OnInit, OnChanges {
     private _articleService: ArticleService
   ) { }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.article);
   }
 
   
   ngOnInit() {
     this.getArticleById(this.articleId);
-    console.log(this.article);
   }
 
 
   getArticleById(id: string | number): void {
     this._articleService.getArticleById(id).pipe(
       tap((rs) => {
-        if (rs.succeeded === true) {
-          console.log(rs.data);          
+        if (rs.succeeded === true) {         
           this.article = rs.data;          
         } else {
           this.article = null;

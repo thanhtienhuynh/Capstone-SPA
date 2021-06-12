@@ -78,14 +78,12 @@ export class CreateUniversityModalComponent implements OnInit {
         'Rating': this.createUniversityForm.get('rating').value,
         'Status': this.createUniversityForm.get('status').value
       }
-      console.log(newUni);
       const formData = new FormData();
       for (let key in newUni) {
         formData.append(key, newUni[key]);
       }
       this._uniService.createUniversity(formData).pipe(
         tap((rs) => {
-          console.log(rs);
           if (rs.succeeded === true) {
             Swal.fire('Thành Công', 'Thêm mới trường đại học thành công', 'success');
             this.closeModal();
