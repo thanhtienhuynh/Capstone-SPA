@@ -16,6 +16,7 @@ export class TestReviewComponent implements OnInit {
   subscription: Subscription;
   detailTestSubmission: UserDetailTestSubmission;
   errors: string[];
+  isLoading: boolean;
 
   constructor(private store: Store<fromApp.AppState>) { }
 
@@ -26,6 +27,7 @@ export class TestReviewComponent implements OnInit {
         (userState) => {
           this.detailTestSubmission = userState.detailTestSubmission;
           this.errors = userState.errors;
+          this.isLoading = userState.isLoading;
           if (this.errors) {
             Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
             .then(() => {

@@ -47,9 +47,7 @@ registerLocaleData(vi);
     TestCardComponent,
     HomeComponent,
     SafeUrlPipe,
-    // SafeHtmlPipe,
     ShortenPipe,
-    ProgressSpinnerComponent,
     SubmitDialogComponent,
     DetailUniversityDialogComponent    
    ],
