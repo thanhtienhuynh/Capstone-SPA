@@ -77,13 +77,20 @@ export class CollapseArticleComponent implements OnInit {
         this.thirdButtonValue = this.collapseArticlesPageResponse.pageNumber - 1;
         this.secondButtonValue = this.collapseArticlesPageResponse.pageNumber - 2;
       }
-      if (this.fourthButtonValue != this.collapseArticlesPageResponse.totalPages) {
+      if (this.fourthButtonValue != this.collapseArticlesPageResponse.totalPages &&
+        this.thirdButtonValue != this.collapseArticlesPageResponse.totalPages &&
+        this.secondButtonValue != this.collapseArticlesPageResponse.totalPages) {
         this.lastButtonValue = this.collapseArticlesPageResponse.totalPages;
       }
 
       if (this.secondButtonValue != 1) {
         this.firstButtonValue = 1;
       }
+      console.log(this.firstButtonValue);
+      console.log(this.secondButtonValue);
+      console.log(this.thirdButtonValue);
+      console.log(this.fourthButtonValue);
+      console.log(this.lastButtonValue);
     }
   }
 

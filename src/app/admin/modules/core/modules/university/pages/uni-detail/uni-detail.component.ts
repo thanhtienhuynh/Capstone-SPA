@@ -8,7 +8,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { UniversityService } from 'src/app/admin/services';
 import { MajorUniversity, Season, UniversityRM } from 'src/app/admin/view-models';
 import { MediaObserver, MediaChange } from '@angular/flex-layout';
-import { ActionMajorModalComponent, CreateMajorModalComponent } from '../../components';
+import { ActionMajorModalComponent, CreateMajorModalComponent, DeleteMajorModalComponent } from '../../components';
 import Swal from 'sweetalert2';
 import { quillConfiguration } from 'src/app/admin/config';
 @Component({
@@ -72,7 +72,7 @@ export class UniDetailComponent implements OnInit {
       tap(rs => {
         if (rs.succeeded === true) {
           this.listOfSeason = [...rs.data];
-          this.seasonSelected = rs.data[0].id;          
+          this.seasonSelected = rs.data[1].id;          
           this._activatedRoute.params.subscribe((param) => {    
             this.getMajorsOfUiversity(1, 10, param?.id, this.seasonSelected, '');          
           });          
@@ -288,5 +288,21 @@ export class UniDetailComponent implements OnInit {
         Swal.fire('Changes are not saved', '', 'info')
       }
     })
+  }  
+
+  openDeleteMajorModal(data: MajorUniversity | undefined): void {    
+    const modal = this._modalService.create({
+      nzContent: DeleteMajorModalComponent,      
+      nzClosable: false,      
+      nzFooter: null,
+      nzWidth: 800,         
+      nzComponentParams: {data: data, changeSeasonId: (seasonId: number) => { this.changeSelectedSeason(seasonId) },
+        universityId: this.uniId, universityName: this.university.name, seasonSelected: this.seasonSelected
+      },      
+    });
+    modal.afterClose.pipe(
+      tap((rs) => {            
+      })
+    ).subscribe();
   }
 }
