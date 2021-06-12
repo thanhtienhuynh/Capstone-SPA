@@ -18,16 +18,7 @@ import Swal from 'sweetalert2';
 
 
 export class ActionMajorModalComponent implements OnInit, OnChanges {
-
-  maxValue(c: AbstractControl) {
-    if (!this.majorForm) {
-      return;
-    }
-    const totalAdmissionQuantity = this.majorForm.get('totalAdmissionQuantity').value;
-    return (totalAdmissionQuantity > c.value) ? {
-      invalidTotal: true
-    } : null;
-  }
+ 
   
   //DECORATOR
   @Input() data: MajorUniversity | undefined;
@@ -149,14 +140,14 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
       'majorId': [undefined, Validators.required],
       'majorCode': [''],
       'trainingProgramId': [undefined, Validators.required],
-      'totalAdmissionQuantity': [1, [Validators.required]],
+      'totalAdmissionQuantity': ['', Validators.min(1)],
       'seasonId': [this.initSeasonId, Validators.required],
       'subAdmissions': this._fb.array([
         this._fb.group({
           'genderId': [1000, Validators.required],
           'admissionMethodId': [1, Validators.required],
           'provinceId': [this.nation, Validators.required],
-          'quantity': [0, [Validators.required]],
+          'quantity': ['', Validators.min(1)],
           'subjectGroups': this._fb.array([]),
         }),
       ]),
@@ -205,7 +196,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
         'genderId': [1000, Validators.required],
         'admissionMethodId': [1, Validators.required],
         'provinceId': [this.nation, Validators.required],
-        'quantity': [0, [Validators.required]],
+        'quantity': ['', Validators.min(1)],
         'subjectGroups': this._fb.array([
           this._fb.group({
             "majorSubjectGroupId": [undefined, Validators.required],
@@ -307,7 +298,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     this.updateMajorForm = this._fb.group({
       'majorDetailId': [0],
       'majorCode': [''],
-      'totalAdmissionQuantity': [0, [Validators.required]],
+      'totalAdmissionQuantity': ['', Validators.min(1)],
       'status': [1],
       'updatingUniSubAdmissionParams': this._fb.array([])
     })
@@ -339,7 +330,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
         const field = this._fb.group({
           'subAdmissionId': [e.id],
           'status': [1],
-          'quantity': [e.quantity, [Validators.required]],
+          'quantity': [e.quantity, Validators.min(1)],
           'genderId': [e.genderId === null ? 1000 : e.genderId],
           'admissionMethodId': [e.admissionMethodId],
           'provinceId': [e.provinceId === null ? this.nation : this.listOfProvince.find(rs => rs.id === e.provinceId), Validators.required],
@@ -355,7 +346,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     this.updatingUniSubAdmissionParams.push(
       this._fb.group({
         'subAdmissionId': [0],
-        'quantity': [0, Validators.required],
+        'quantity': ['', Validators.min(1)],
         'genderId': [1000],
         'admissionMethodId': [1],
         'provinceId': [this.nation, Validators.required],
@@ -552,9 +543,3 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
   }
 }
 
-export function forbiddenUsername(c: AbstractControl) {
-  const users = ['admin', 'manager'];
-  return (users.includes(c.value)) ? {
-    invalidusername: true
-  } : null;
-}
