@@ -302,8 +302,10 @@
                                         <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies; let count = majorDetailUni ">                                                                                                        
                                             <div *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions"  [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3" [style.position]="relative">                                                                                                                                                
                                             </div>  
-                                            <span style="position: absolute; word-break: break-word;
+                                            <span *ngIf="majorDetailUni.admissionQuantity !== null" style="position: absolute; word-break: break-word;
                                             padding: 10px">{{majorDetailUni.admissionQuantity}}</span>  
+                                            <span *ngIf="majorDetailUni.admissionQuantity === null" style="position: absolute; word-break: break-word;
+                                            padding: 10px" class="missInfomation" nbTooltip="Thông tin về số lượng sinh viên được tuyển đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>                                             
                                             <div class="td-border-children-two" *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem;"></div>                                      
                                         </div>                                        
                                     </div> 
@@ -350,7 +352,8 @@
                                     <div class="flex-container-custom">
                                         <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
                                             <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions; " [style.height.rem]="majorDetailSubAdmission.majorDetailEntryMarks !== null ? 2 * majorDetailSubAdmission.majorDetailEntryMarks?.length : 3">
-                                                <span>{{majorDetailSubAdmission.quantity}}</span>                                                
+                                                <span *ngIf="majorDetailSubAdmission.quantity !== null">{{majorDetailSubAdmission.quantity}}</span>     
+                                                <span *ngIf="majorDetailSubAdmission.quantity === null" class="missInfomation" nbTooltip="Thông tin về số lượng sinh viên được tuyển đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>                                             
                                             </div>                                              
                                             <div *ngIf="majorDetailUni?.majorDetailSubAdmissions === null" style="height: 3rem; display: flex; align-items: center;">
                                               <span class="missInfomation" nbTooltip="Thông tin về số lượng sinh viên được tuyển đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>  
@@ -363,7 +366,8 @@
                                         <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
                                             <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions; let i = index">
                                                 <div class="td-border-children-two" *ngFor="let majorDetailEntryMark of majorDetailSubAdmission.majorDetailEntryMarks" style="height: 2rem;">
-                                                    <span>{{majorDetailEntryMark.subjectGroupCode}}</span>
+                                                    <span *ngIf="majorDetailEntryMark.subjectGroupCode !== null">{{majorDetailEntryMark.subjectGroupCode}}</span>
+                                                    <span *ngIf="majorDetailEntryMark.subjectGroupCode === null" class="missInfomation" nbTooltip="Thông tin về khối đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>    
                                                 </div>
                                                 <div class="td-border-children-two" *ngIf="majorDetailSubAdmission.majorDetailEntryMarks === null" style="height: 3rem;">    
                                                   <span class="missInfomation" nbTooltip="Thông tin về khối đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>                                                 
@@ -380,7 +384,8 @@
                                         <div class="td-border-children " *ngFor="let majorDetailUni of major?.majorDetailUnies" >
                                             <div class="td-border-children-one " *ngFor="let majorDetailSubAdmission of majorDetailUni?.majorDetailSubAdmissions" >
                                                 <div class="td-border-children-two" *ngFor="let majorDetailEntryMark of majorDetailSubAdmission.majorDetailEntryMarks" style="height: 2rem;">
-                                                    <span>{{majorDetailEntryMark.mark}}</span>
+                                                    <span *ngIf="majorDetailEntryMark.mark !== null">{{majorDetailEntryMark.mark}}</span>
+                                                    <span *ngIf="majorDetailEntryMark.mark === null" class="missInfomation" nbTooltip="Thông tin về điểm chuẩn đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>  
                                                 </div>  
                                                 <div class="td-border-children-two" *ngIf="majorDetailSubAdmission.majorDetailEntryMarks === null" style="height: 3rem;">     
                                                   <span class="missInfomation" nbTooltip="Thông tin điểm chuẩn đang bị thiếu" nbTooltipStatus="danger" (click)="openCreateMajorModal(major)"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>                                             
@@ -397,6 +402,9 @@
                                         <div class="icon-edit" (click)="openCreateMajorModal(major)">
                                             <nb-icon icon="edit-outline"></nb-icon>
                                         </div>
+                                        <div class="icon-edit" (click)="openDeleteMajorModal(major)">
+                                          <nb-icon icon="trash-2-outline"></nb-icon>
+                                      </div>
                                     </div>
                                 </td>
                             </tr>

@@ -14,7 +14,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { AnswerComponent } from '../major-suggestion-stepper/exam-page/answer/answer.component';
@@ -28,6 +28,7 @@ import { ProgressSpinnerComponent } from './components/progress-spinner/progress
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTableModule } from '@angular/material/table';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 const materialModules = [
@@ -52,6 +53,7 @@ const materialModules = [
   MatExpansionModule,
   MatTableModule,
   MatCarouselModule,
+  MatTooltipModule
 ];
 
 @NgModule({
