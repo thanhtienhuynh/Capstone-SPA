@@ -3,6 +3,57 @@ mat-form-field {
   margin: 16px 90px 0px 50px;
 }
 
+.step-1-title {
+  text-align: center;
+  margin: 20px 0px 20px 0px
+}
+
+.criteria-frame {
+  width: 100%;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.radio-choice {
+  margin-left: 26px;
+}
+
+.criteria-lable {
+  width: 34%;
+}
+
+.province-field {
+  width: auto;
+  margin-left: 26px
+}
+
+.score-field {
+  text-align: right
+}
+
+.top-2-group-frame {
+  padding-top: 50px; 
+}
+
+.top-2-group-in-frame {
+  height: 450px;
+  padding: 10px;
+  background-color: rgb(28, 121, 158);
+  border-radius: 30px;
+}
+
+.top-2-group-inner-frame {
+  height: 100%;
+  background-color: azure;
+  border-radius: 30px;
+}
+
+.top-2-title-frame {
+  height: 15%;
+  background-color: rgb(125, 210, 231);
+  border-radius: 30px 30px 0px 0px;
+}
+
 .center {
   margin: auto;
   width: 70%;
@@ -159,6 +210,7 @@ mat-form-field {
   font-weight: 700;
   padding-right: 32px;
   margin-bottom: 10px;
+  color: rgb(41 54 148);
 }
 
 .uni-list-header-frame {
