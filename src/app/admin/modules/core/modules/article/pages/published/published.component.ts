@@ -140,10 +140,8 @@ export class PublishedComponent implements OnInit {
           cancelButtonText: 'HỦY'
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log(newValue);
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
-                console.log(rs);
                 if (rs.succeeded === true) {
                   this.createNotification('success', 'DUYỆT BÀI VIẾT', 'Duyệt bài viết thành công', 'bottomRight');
                   // this.showElement(this.unCensorshipList, this.currentIndex);                  
@@ -153,7 +151,6 @@ export class PublishedComponent implements OnInit {
                 }
               }),
               catchError(err => {
-                console.log(err);
                 return of(err);
               })
             ).subscribe();
@@ -182,7 +179,6 @@ export class PublishedComponent implements OnInit {
           cancelButtonText: 'HỦY'
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log(newValue);
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
                 if (rs.succeeded === true) {
@@ -289,10 +285,8 @@ export class PublishedComponent implements OnInit {
             cancelButtonText: 'HỦY'
           }).then((result) => {
             if (result.isConfirmed) {
-              console.log(newValue);
               this._articleService.confirmArticle(newValue).pipe(
                 tap((rs) => {
-                  console.log(rs);
                   if (rs.succeeded === true) {
                     this.createNotification('success', 'ĐĂNG BÀI', 'Đăng bài viết thành công', 'bottomRight');
                     this.showElement(this.unPublishedList, this.currentIndex);
@@ -322,7 +316,6 @@ export class PublishedComponent implements OnInit {
     this._articleService.getArticleById(id).pipe(
       tap((rs) => {
         if (rs.succeeded === true) {
-          console.log(rs.data);
           this.listOfSelectedUniversity = rs.data.universityIds;
           this.listOfSelectedMajor = rs.data.majorIds;
           this.article = rs.data;
@@ -358,7 +351,6 @@ export class PublishedComponent implements OnInit {
 
   nextElement(): void {
     this.currentIndex = this.currentIndex < this.unPublishedList.length - 1 ? this.currentIndex + 1 : this.unPublishedList.length - 1;
-    console.log('current index', this.currentIndex);
     this.showElement(this.unPublishedList, this.currentIndex);
   }
 
@@ -397,8 +389,6 @@ export class PublishedComponent implements OnInit {
   }
 
   getListOfSelectedUniversity(): void {
-    console.log(this.listOfSelectedUniversity);
-    console.log(this.articleId)
   }
 
   createNotification(type: string, title: string, message: string, position?: NzNotificationPlacement): void {

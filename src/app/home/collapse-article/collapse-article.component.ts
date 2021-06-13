@@ -86,11 +86,6 @@ export class CollapseArticleComponent implements OnInit {
       if (this.secondButtonValue != 1) {
         this.firstButtonValue = 1;
       }
-      console.log(this.firstButtonValue);
-      console.log(this.secondButtonValue);
-      console.log(this.thirdButtonValue);
-      console.log(this.fourthButtonValue);
-      console.log(this.lastButtonValue);
     }
   }
 

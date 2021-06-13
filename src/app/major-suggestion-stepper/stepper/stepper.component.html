@@ -8,14 +8,14 @@
       >
         <ng-template matStepLabel>Nhập điểm</ng-template>
 
-        <h1 style="text-align: center; margin: 20px 0px 20px 0px">Nhập điểm trung bình học bạ hoặc điểm thi THPT Quốc gia</h1>
+        <h1 class="step-1-title">Nhập điểm trung bình học bạ hoặc điểm thi THPT Quốc gia</h1>
 
-        <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="center" style="width: 100%; height: auto; margin-bottom: 20px;">
+        <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="center" class="criteria-frame">
           <div fxFlex.lg="0 1 calc(50%)" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="100%">
 
             <div class="center-vertical">
-              <div style="width: 34%;">Tỉnh đang sinh sống: </div>
-              <mat-form-field style="width: auto; margin-left: 26px">
+              <div class="criteria-lable">Tỉnh đang sinh sống: </div>
+              <mat-form-field class="province-field">
                 <mat-label>Tỉnh, thành phố:</mat-label>
                 <input type="text"
                        placeholder="Chọn tỉnh, thành"
@@ -33,17 +33,17 @@
             </div>
 
             <div class="center-vertical" >
-              <label style="width: 34%;">Giới tính: </label>
+              <label class="criteria-lable">Giới tính: </label>
               <mat-radio-group [(ngModel)]="gender" formControlName="gender">
-                <mat-radio-button style="margin-left: 26px;" [checked]="'true'" [value]="1">Nữ</mat-radio-button>
+                <mat-radio-button class="radio-choice" [checked]="'true'" [value]="1">Nữ</mat-radio-button>
                 <mat-radio-button [value]="0">Nam</mat-radio-button>
               </mat-radio-group>
             </div>
 
              <div class="center-vertical" style="margin-top: 20px;">
-              <label style="width: 34%;">Loại điểm: </label>
+              <label class="criteria-lable">Loại điểm: </label>
               <mat-radio-group [(ngModel)]="typeScore" formControlName="transcriptTypeId">
-                <mat-radio-button style="margin-left: 26px;" [checked]="'true'" [value]="2">Điểm học bạ</mat-radio-button>
+                <mat-radio-button class="radio-choice" [checked]="'true'" [value]="2">Điểm học bạ</mat-radio-button>
                 <mat-radio-button [value]="1">Điểm THPT QG</mat-radio-button>
               </mat-radio-group>
             </div>
@@ -55,7 +55,7 @@
           <mat-form-field *ngFor="let subject of subjects; let i = index">
             <mat-label>{{ subject.name }}</mat-label>
             <input
-              style="text-align: right"
+              class="score-field"
               type="number"
               matInput
               min="0"
@@ -96,10 +96,10 @@
       <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup.length > 0" fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start" style="width: 100%; height: auto;">
         <!-- Top 2 -->
         <div fxFlex.lg="0 1 calc(32% -32px )" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="100%" >
-          <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[1]" style="padding-top: 50px; ">
-            <div style="height: 450px; padding: 10px; background-color: rgb(28, 121, 158); border-radius: 30px;">  
-              <div style="height: 100%; background-color: azure; border-radius: 30px;">
-                <div style="height: 15%; background-color: rgb(125, 210, 231); border-radius: 30px 30px 0px 0px;">
+          <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[1]" class="top-2-group-frame">
+            <div class="top-2-group-in-frame">  
+              <div class="top-2-group-inner-frame">
+                <div class="top-2-title-frame">
                   <div class="top-title-2">Top 2</div>
                 </div>
                 <div class="low-level-subject-group-frame">
@@ -221,7 +221,7 @@
       <!-- Mới nè -->
       <div *ngIf="mockTestBasedUniversity && mockTestBasedUniversity.trainingProgramBasedUniversityDataSets?.length > 0" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
         <div class="center-vertical major-title">Danh sách các trường có ngành: {{suggestedMajorName}} - Xét theo điểm thi thử</div>
-        <div style="height: auto; margin-bottom: 100px;" *ngFor="let university of mockTestBasedUniversity.trainingProgramBasedUniversityDataSets" fxFlex="0 1 calc(100%)" >
+        <div style="height: auto; margin-bottom: 100px; border-style: solid;" *ngFor="let university of mockTestBasedUniversity.trainingProgramBasedUniversityDataSets" fxFlex="0 1 calc(100%)" >
           <div gdAreas="logo name name | logo description information | logo description information" gdGap="10px" gdRows="auto auto auto"
 gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto auto auto">
             <div gdArea="logo">
@@ -270,7 +270,7 @@ gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto 
         <div class="center-vertical major-title">Danh sách các trường có ngành: {{suggestedMajorName}} - Xét theo điểm THPT QG</div>
       </div>
       <div *ngIf="this.trainingProgramBasedUniversity && this.trainingProgramBasedUniversity.length > 0" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
-        <div style="height: auto; margin-bottom: 100px;" *ngFor="let university of trainingProgramBasedUniversity" fxFlex="0 1 calc(100%)" >
+        <div style="height: auto; border: 1px solid;" *ngFor="let university of trainingProgramBasedUniversity" fxFlex="0 1 calc(100%)" >
           <div gdAreas="logo name name | logo description information | logo description information" gdGap="10px" gdRows="auto auto auto"
 gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto auto auto">
             <div gdArea="logo">
@@ -299,6 +299,7 @@ gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto 
             </div>
 
           </div>
+
           <div class="training-program-list-frame" *ngIf="university.trainingProgramSets" fxLayout="row wrap" fxLayoutAlign="center">
             <div class="training-program-item-frame" *ngFor="let trainingProgramSet of university.trainingProgramSets" fxFlex="0 1 calc(33% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
               <h4 class="center-all">Hệ {{trainingProgramSet.name}}</h4>
@@ -312,8 +313,8 @@ gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto 
               <button *ngIf="trainingProgramSet.followingDetail" (click)="onUncaringClick(trainingProgramSet.followingDetail.id, university.name)" style="background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ theo dõi</button>
               </div>
             </div>
-           
           </div>
+
         </div>
       </div>
       <div *ngIf="!trainingProgramBasedUniversity || trainingProgramBasedUniversity.length == 0">
