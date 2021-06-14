@@ -193,6 +193,8 @@ export class UniDetailComponent implements OnInit {
     console.log(seasonId, 'changeSelectedSeason');    
     this.seasonSelected = seasonId  
     this.getMajorBySeason(seasonId);  
+    this.pageIndex = 1;
+    this.pageSize = 10;
   }
   openCreateMajorModal(data: MajorUniversity | undefined): void {    
     const modal = this._modalService.create({

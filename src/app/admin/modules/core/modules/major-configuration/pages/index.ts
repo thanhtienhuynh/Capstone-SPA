@@ -1,0 +1,1 @@
+export * from './major-config-main/major-config-main.component';

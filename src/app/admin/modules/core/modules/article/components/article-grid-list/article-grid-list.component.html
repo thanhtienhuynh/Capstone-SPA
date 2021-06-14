@@ -4,12 +4,11 @@
   </nb-form-field>
   <button class="ml-1" nbButton status="info">TÌM KIẾM</button>
   <div *ngIf="status === 1" style="display: flex; align-items: center">
-    <a nz-button nzType="text" [routerLink]="['published']"
-      >Đăng bài hàng loạt</a
+    <a nz-button nzType="text" [routerLink]="['published']" target="_blank">Đăng bài hàng loạt</a
     >
   </div>
   <div *ngIf="status === 0" style="display: flex; align-items: center;">
-    <a nz-button nzType="text" [routerLink]="['censor']">Duyệt bài hàng loạt</a>
+    <a nz-button nzType="text" [routerLink]="['censor']" target="_blank">Duyệt bài hàng loạt</a>
   </div>
 </div>
 <div class="row" *ngIf="listOfArticle !== undefined; else loadingContent">
@@ -35,6 +34,7 @@
                 routerLinkActive="router-link-active"
                 class="mb-10"
                 style="text-decoration: none"
+                target="_blank"
               >
                 <span class="article-title" [innerHtml]="item.title"></span>
               </a>

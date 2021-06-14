@@ -157,4 +157,9 @@ export class UniversityMainComponent implements OnInit {
     this.pageIndex = 1;
     this.pageSize = 10;
   }
+
+  openSite(siteUrl): void {
+    console.log(siteUrl);
+    window.open("/details/" + siteUrl, '_blank');
+  }
 }

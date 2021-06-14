@@ -4,8 +4,7 @@ import { UniDetailComponent, UniversityDetailComponent, UniversityMainComponent 
 const routes: Routes = [
   {
     path: '', component: UniversityMainComponent
-  },
-  // { path: '', component: UniDetailComponent },
+  },  
   { path: 'details/:id', component: UniDetailComponent },
 ];
 

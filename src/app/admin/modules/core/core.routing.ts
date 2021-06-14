@@ -16,9 +16,11 @@ const routes: Routes = [
         path: 'article',
         loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.ArticleModule),
       },
-    ], data: {
-      breadcrumb: 'Danh sách các trường đại học'
-    }
+      {
+        path: 'major-configuration',
+        loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.MajorConfigurationModule),
+      },
+    ]
   },
 ];
 
