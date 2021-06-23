@@ -1,11 +1,22 @@
 import { Routes, RouterModule } from '@angular/router';
-import { UniDetailComponent, UniversityDetailComponent, UniversityMainComponent } from './pages';
+import { UniDetailComponent, UniversityDetailComponent, UniversityMainComponent, UniversityMainFatherComponent } from './pages';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'university-list'},
   {
-    path: '', component: UniversityMainComponent
+    path: 'university-list', component: UniversityMainFatherComponent,
+    data: {
+      breadcrumb: 'Danh Sách Trường Đại Học'
+    }, children: [
+      {path: '', component: UniversityMainComponent,},
+      {
+        path: 'details/:id', component: UniDetailComponent,
+        data: {
+          breadcrumb: 'Chi Tiết'
+        }
+      },
+    ]
   },  
-  { path: 'details/:id', component: UniDetailComponent },
 ];
 
 export const UniversityRoutes = RouterModule.forChild(routes);

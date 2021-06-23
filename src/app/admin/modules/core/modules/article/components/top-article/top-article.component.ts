@@ -25,13 +25,10 @@ export class TopArticleComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnDestroy(): void {
-    this.mediaSub.unsubscribe();
+    // this.mediaSub.unsubscribe();
   }
 
-  ngOnInit() {
-    this.mediaSub = this.mediaObserver.media$.subscribe((rs: MediaChange) => {
-      console.log(rs.mqAlias);
-    });
+  ngOnInit() {    
     this.reset();
     this.getListOfTopArticle();
     this.getPublishedArticle(1, 10, 3);

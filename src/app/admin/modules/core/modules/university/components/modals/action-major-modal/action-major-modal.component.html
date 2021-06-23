@@ -11,7 +11,7 @@
       [status]="majorForm.get('majorId').invalid && (majorForm.get('majorId').touched || majorForm.get('majorId').dirty) ? 'danger' : 'basic'">        
       </nb-form-field>   
       <nz-dropdown-menu #selectMajorName="nzDropdownMenu">        
-        <app-custom-select (useSelect)="useSelectMajor($event)" [control]="majorForm.get('majorId')" [data]="listOfDisplayMajorResult | async" [name]="'majorId'" [label]="'name'" [placeholder]="'Tìm kiếm theo tên ngành'" [titleNewItem]="'Ngành'"></app-custom-select>
+        <app-custom-select (flagAction)="openAddMajorToSystemModal($event)" (useSelect)="useSelectMajor($event)" [control]="majorForm.get('majorId')" [data]="listOfDisplayMajorResult | async" [name]="'majorId'" [label]="'name'" [placeholder]="'Tìm kiếm theo tên ngành'" [titleNewItem]="'Ngành'"></app-custom-select>
       </nz-dropdown-menu>
     </div>
     <div class="col-md-3">
@@ -108,7 +108,9 @@
                 </nz-dropdown-menu> 
               </div>
               <div class="col-md-4">
-                <input style="text-align: right;" type="number" [formControl]="getSubAddmissions.controls[i].get('subjectGroups').controls[si].get('entryMarkPerGroup')"  placeholder="Nhập Điểm" fullWidth nbInput/>           
+                <nb-form-field>
+                  <input style="text-align: right;" type="number" [formControl]="getSubAddmissions.controls[i].get('subjectGroups').controls[si].get('entryMarkPerGroup')"  placeholder="Nhập Điểm" fullWidth nbInput/>           
+                </nb-form-field>                
               </div>
               <div class="col-md-4">
                 <button (click)="addSubjectGroup(i, undefined)" nz-button nzType="default" nz-tooltip>
@@ -133,10 +135,10 @@
    
   <div class="footer">    
     <button [disabled]="majorForm.invalid" (click)="addMajor()" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
-      THÊM
+      <span style="font-size: 12px;">THÊM</span>
     </button>    
     <button (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="basic">
-      THOÁT
+      <span style="font-size: 12px;">THOÁT</span>
     </button>
   </div>
 </div>
@@ -235,7 +237,9 @@
                 </nz-dropdown-menu> 
               </div>
               <div class="col-md-4">
-                <input style="text-align: right;" type="number" [formControl]="updatingUniSubAdmissionParams.controls[i].get('majorDetailEntryMarkParams').controls[si].get('mark')"  placeholder="Nhập Điểm" fullWidth nbInput/>           
+                <nb-form-field>
+                  <input style="text-align: right;" type="number" [formControl]="updatingUniSubAdmissionParams.controls[i].get('majorDetailEntryMarkParams').controls[si].get('mark')"  placeholder="Nhập Điểm" fullWidth nbInput/>           
+                </nb-form-field>                
               </div>
               <div class="col-md-4">
                 <button (click)="addSubjectGroupUpdating(i, undefined)" nz-button nzType="default" nz-tooltip >

@@ -3,6 +3,47 @@ nb-select {
     button {
       min-width: 4rem !important;
     }
+    .select-button {
+      font-size: 12px !important;
+    }
+  }
+}
+
+nb-form-field {
+  ::ng-deep {
+    [nbInput].size-small {
+      font-size: 12px !important;
+    } 
+    [nbInput].size-large {
+      font-size: 12px !important;
+    }   
+  }
+}
+
+nb-option {
+  ::ng-deep {
+    font-size: 12px !important;
+  }
+}
+
+nz-table {
+  ::ng-deep {
+    .ant-pagination-item,
+    .ant-pagination-total-text,
+    .ant-pagination-item-ellipsis {
+      line-height: 30px;
+    }
+    a {
+      text-decoration: none;
+    }
+    nz-filter-trigger {
+      .ant-table-filter-trigger {
+        color: black;
+      }
+      .ant-table-filter-trigger.active {
+        color: #1890ff;
+      }     
+    }
   }
 }
 
@@ -16,7 +57,8 @@ label {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-weight: 500;  
+  font-size: 14px;
+  font-weight: 500;
   margin: 0;
 }
 .university-detail {
@@ -39,14 +81,11 @@ label {
 
 .flex-container-custom {
   display: flex;
-  flex-direction: column;      
+  flex-direction: column;
 }
 
 .td-border-children {
   border-bottom: 1px solid #f0f0f0;
-  // min-height: 9rem;
-  // height: 9rem;  
-  // max-width: 10rem;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -58,9 +97,7 @@ label {
 }
 
 .td-border-children .td-border-children-one {
-  border-bottom: 1px solid #f0f0f0;  
-  // height: 100%;
-  // height: calc(2rem * 2rem);  
+  border-bottom: 1px solid #f0f0f0;
   width: 100%;
   text-align: center;
   display: flex;
@@ -73,8 +110,7 @@ label {
 }
 
 .td-border-children .td-border-children-one .td-border-children-two {
-  border-bottom: 1px solid #f0f0f0;  
-  // height: 100%;  
+  border-bottom: 1px solid #f0f0f0;
   width: 100%;
   text-align: center;
   display: flex;
@@ -91,12 +127,9 @@ nz-table th {
     "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
     Helvetica, Arial, sans-serif;
   font-weight: 600;
-  // background-color: #87ceeb;
-  background-color: #f0f0f0;
-  // background-color: #e4e9f2;
-  // background-color: rgb(59, 175, 218);
-  text-align: center;
-  font-size: 12px;//
+  // background-color: #f0f0f0;
+  background-color: 	#ADD8E6;
+  text-align: center;  
 }
 
 //------ Search box -----
@@ -120,9 +153,9 @@ nz-table th {
 
 //-------------- MAJOR HEADER ------------------
 .major-header {
- display: flex;
- justify-content: space-between;
- align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .none-action {
@@ -131,12 +164,12 @@ nz-table th {
   align-items: center;
 }
 
-.major-header-title h5{
+.major-header-title h5 {
   font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
     "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
     Helvetica, Arial, sans-serif;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 12px;
   margin: 0 15px 0 0;
   color: #ff3d71;
   text-transform: uppercase;
@@ -145,19 +178,43 @@ nz-table th {
 .year {
   width: 8rem;
 }
-
-nz-table {
+nb-icon {
   ::ng-deep {
-    .ant-pagination-item, .ant-pagination-total-text, .ant-pagination-item-ellipsis {
-      line-height: 30px;
-    }
-    a {
-      text-decoration: none;
-    }
+    font-size: 14px !important;
   }
 }
 
-@media (min-width: 1472px) {
+@media (min-width: 1344px) and (max-width: 1457px) {
+  nz-table #mark {
+    width: 11%;
+  }
+  nz-table #stt {
+    width: 1%;
+  }
+  nz-table #group {
+    width: 6%;
+  }
+  nz-table #code {
+    width: 10%;
+  }
+  nz-table #quantity {
+    width: 9%;
+  }
+  nz-table #action {
+    width: 7%;
+  }
+  nz-table #programe {
+    width: 10%;
+  }
+  nz-table #main-addmission {
+    width: 11%;
+  }
+  nz-table #name {
+    width: 19%;
+  }
+}
+
+@media (min-width: 1458px) {
   nz-table #mark {
     width: 9%;
   }
@@ -170,7 +227,7 @@ nz-table {
   nz-table #code {
     width: 10%;
   }
-  nz-table #quantity{
+  nz-table #quantity {
     width: 8%;
   }
   nz-table #action {
@@ -187,7 +244,7 @@ nz-table {
   }
 }
 
-//TABLE 
+//TABLE
 .sticky-table-header {
   // background-color: #fff;
   border: none;
@@ -201,7 +258,7 @@ nz-table {
   z-index: 990;
   overflow: hidden;
   min-width: 100%;
-  padding-right: 70px;
+  padding-right: 72px;
 }
 
 .sticky-table-header.fixed-solution {
@@ -210,13 +267,18 @@ nz-table {
 }
 
 .icon-edit {
-  width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center;
-  border: 2px solid #f2f2f2;
-  background-color: #f2f2f2;
-  cursor: pointer;  
-    &:hover {
-      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    }  
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  background-color: #fff;
+  cursor: pointer;
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+  margin: 5px;
 }
 
 .add-major {
@@ -227,9 +289,15 @@ nz-table {
   cursor: pointer;
   nb-icon:hover {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  }  
+  }
 }
 
 nz-table span {
-  font-size: 12px;
+  font-size: 11px;
 }
+
+nz-table th {
+  font-size: 11px;
+}
+
+

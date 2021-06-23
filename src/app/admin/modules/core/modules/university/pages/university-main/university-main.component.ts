@@ -51,12 +51,12 @@ export class UniversityMainComponent implements OnInit {
     this._universityService.getListOfUniversity(pageNumber, pageSize, name, status).pipe(
       tap((rs) => {
         if (rs.succeeded === true) {  
-          // console.log(rs);   
-          if (rs.data !== null) {
+          console.log(rs);   
+          if (rs.data !== null) {            
             this.listOfUniversity = rs.data.map((e, i) => ({
               ...e,
               phones: e.phone.split('-'),
-              stt: i + 1        
+              stt: (rs.pageNumber * rs.pageSize) - (rs.pageSize - (i + 1))       
             }));              
             this.listOfDisplayUniversity = [...this.listOfUniversity];        
             this.total = rs.totalRecords;
@@ -156,10 +156,5 @@ export class UniversityMainComponent implements OnInit {
     this.searchByName();
     this.pageIndex = 1;
     this.pageSize = 10;
-  }
-
-  openSite(siteUrl): void {
-    console.log(siteUrl);
-    window.open("/details/" + siteUrl, '_blank');
-  }
+  }  
 }

@@ -11,6 +11,7 @@ import {
 } from './components';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SliceWordPipe } from './pipe/slice-word.pipe';
+import { CommonModule } from '@angular/common';
 const SHARE_MODULES = [
   AntModule,
   NebularModule,
@@ -20,8 +21,8 @@ const SHARE_MODULES = [
 export const ANGULAR_MODULES = [
   FormsModule,
   ReactiveFormsModule,
-  DragDropModule
-  // CommonModule,  
+  DragDropModule,
+  CommonModule,  
 ];
 
 const COMPONENTS = [CustomSelectComponent];

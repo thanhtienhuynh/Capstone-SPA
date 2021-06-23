@@ -2,8 +2,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { MajorConfigMainComponent } from './pages';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'major-list'},
   {
-    path: '', component: MajorConfigMainComponent
+    path: 'major-list', component: MajorConfigMainComponent,
+    data: {
+      breadcrumb: 'Danh Sách Ngành Học'
+    }
   },  
 ];
 

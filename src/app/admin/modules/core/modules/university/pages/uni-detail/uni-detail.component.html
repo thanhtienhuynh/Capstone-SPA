@@ -200,8 +200,8 @@
                         <div class="none-action">
                           <div class="major-header-title">
                             <h5>BẢNG THÔNG TIN NGÀNH HỌC CỦA TRƯỜNG {{university.name}}</h5>
-                        </div>
-                        <div class="year">
+                          </div>
+                          <div class="year">
                             <nb-select [size]="'small'" fullWidth  [selected]="seasonSelected" (selectedChange)="getMajorBySeason($event)">                                        
                                 <nb-option *ngFor="let season of listOfSeason" [value]="season.id">{{season.name}}</nb-option>
                             </nb-select>
@@ -209,33 +209,32 @@
                         </div>
                         
                         <div class="add-major">
-                          <button nz-button size="medium" nzType="primary" (click)="openCreateMajorModal(undefined)">THÊM NGÀNH</button>
+                          <button nz-button nzSize="medium" nzType="primary" (click)="openCreateMajorModal(undefined)">
+                            <span style="font-size: 12px;">THÊM NGÀNH</span>
+                          </button>
                         </div>
                     </div>
                     <nz-divider></nz-divider>      
                     <div class="sticky-table-header fixed-solution" [style.visibility]="isVisibleHeader > 420 ? 'visible' : 'hidden'">      
-                        <nz-table                         
-                        nzBordered
-                        style="min-width: 1230px;"
-                        >
-                            <thead>
-                                <tr>
-                                    <th id="stt">STT</th>                                    
-                                    <th id="name">TÊN NGÀNH
-                                        <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
-                                            <i nz-icon nzType="search"></i>
-                                          </nz-filter-trigger>
-                                    </th>
-                                    <th id="programe">HỆ ĐÀO TẠO</th>
-                                    <th id="code">CODE</th>
-                                    <th id="main-addmission">CHỈ TIÊU TỔNG</th>
-                                    <th>CHỈ TIÊU PHỤ</th>
-                                    <th id="quantity">SỐ LƯỢNG</th>
-                                    <th id="group">KHỐI</th>
-                                    <th id="mark">ĐIỂM CHUẨN</th>
-                                    <th id="action">TÁC VỤ</th>
-                                </tr>
-                            </thead>
+                        <nz-table>
+                          <thead>
+                            <tr>
+                                <th id="stt">STT</th>                                    
+                                <th id="name">TÊN NGÀNH
+                                    <!-- <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
+                                        <i nz-icon nzType="search"></i>
+                                      </nz-filter-trigger> -->
+                                </th>
+                                <th id="programe">HỆ ĐÀO TẠO</th>
+                                <th id="code">CODE</th>
+                                <th id="main-addmission">CHỈ TIÊU TỔNG</th>
+                                <th id="sub-addmisson">CHỈ TIÊU PHỤ</th>
+                                <th id="quantity">SỐ LƯỢNG</th>
+                                <th id="group">KHỐI</th>
+                                <th id="mark">ĐIỂM CHUẨN</th>
+                                <th id="action">TÁC VỤ</th>
+                            </tr>
+                          </thead>                            
                         </nz-table>                        
                     </div>              
                     <nz-table 
@@ -245,8 +244,8 @@
                     nzShowQuickJumper
                     [nzData]="listOfDisplayMajors" 
                     [nzFrontPagination]="false"
-                    [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"  [nzShowTotal]="totalTemplate"[nzPageSizeOptions]="[5, 10, 15]"  (nzQueryParams)="onQueryParamsChange($event)"
-                    style="min-width: 1230px;"
+                    [nzShowPagination]="total > 5"
+                    [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"  [nzShowTotal]="totalTemplate"[nzPageSizeOptions]="[5, 10]"  (nzQueryParams)="onQueryParamsChange($event)"                    
                     >
                     <thead>
                         <tr>
@@ -259,7 +258,7 @@
                             <th id="programe">HỆ ĐÀO TẠO</th>
                             <th id="code">CODE</th>
                             <th id="main-addmission">CHỈ TIÊU TỔNG</th>
-                            <th>CHỈ TIÊU PHỤ</th>
+                            <th id="sub-addmisson">CHỈ TIÊU PHỤ</th>
                             <th id="quantity">SỐ LƯỢNG</th>
                             <th id="group">KHỐI</th>
                             <th id="mark">ĐIỂM CHUẨN</th>
@@ -268,8 +267,8 @@
                     </thead>
                     <tbody>
                         <ng-container *ngFor="let major of majorTable.data; let i = index">
-                            <tr [style.backgroundColor]="i % 2 == 1 ? '#f7f7f7' : '#fff'">
-                                <td>{{i + 1}}</td>                                
+                            <tr [style.backgroundColor]="i % 2 == 1 ? '#B0E0E6' : '#E0FFFF'">
+                                <td>{{major.stt}}</td>                                
                                 <td>
                                     <div style="display: flex; justify-content: flex-start; align-items: center; min-height: 2rem;">  
                                         <span>{{major.majorName?.toUpperCase()}}</span>                                                                                                                        

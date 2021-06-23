@@ -1,31 +1,24 @@
-<div class="university-main">
-  <div class="page-header">
-    <div class="row align-items-md-center">
-      <div class="col-md-6">
-        <div class="row">
-          <div class="col-md-5">
-            <div class="text-md-left ">              
-            </div>                        
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="text-md-right m-v-10">
-          <button size="small" nbButton status="info" (click)="openCreateUniversityModal()">
-            <nb-icon icon="plus-outline"></nb-icon>
-            <span style="margin-left: 0.2rem;">Thêm trường</span>
-          </button>          
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="university-main">  
   <div class="container-fluid">
     <div nz-row>
       <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
         <nb-card style="width: 100%; height: 100%; position: relative">
-          <nb-card-body style="width: 100%">
-            <div style="width: 100%; max-height: 47rem">
-              <nz-table #basicTable nzBordered nzShowSizeChanger nzShowQuickJumper [nzFrontPagination]="false" [nzData]="listOfDisplayUniversity" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"  [nzShowTotal]="totalTemplate"[nzPageSizeOptions]="[5, 10, 15]"  (nzQueryParams)="onQueryParamsChange($event)">
+          <nb-card-body style="width: 100%; padding-bottom: 0;">
+            <div style="width: 100%;">
+              <div class="university-header">
+                <div class="none-action">
+                  <div class="university-header-title">
+                    <h5>DANH SÁCH CÁC TRƯỜNG ĐẠI HỌC CÓ TRONG HỆ THỐNG</h5>
+                  </div>
+                </div>
+                <div class="add-university">
+                  <button nz-button nzSize="medium" nzType="primary" (click)="openCreateUniversityModal()">
+                    <span style="font-size: 12px;">THÊM TRƯỜNG</span>
+                  </button>
+                </div>
+              </div>
+              <nz-divider></nz-divider>     
+              <nz-table #basicTable nzBordered nzShowSizeChanger nzShowQuickJumper [nzFrontPagination]="false" [nzData]="listOfDisplayUniversity" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"  [nzShowTotal]="totalTemplate"[nzPageSizeOptions]="[5, 10]" [nzShowPagination]="total > 5"  (nzQueryParams)="onQueryParamsChange($event)">
                 <thead>
                   <tr>
                     <th>STT</th>
@@ -89,7 +82,7 @@
                         <nz-dropdown-menu #menu1="nzDropdownMenu">
                             <ul nz-menu>
                                 <li nz-menu-item>
-                                    <a [routerLink]="['details/' + university.id]"  target="_blank">
+                                    <a [routerLink]="['details/' + university.id]">
                                       <i nz-icon nzType="eye" nzTheme="outline"></i>
                                       <span class="p-3">Xem</span>
                                     </a>                                    
@@ -121,7 +114,7 @@
 
 <ng-template #totalTemplate>
   <span>
-    Hiện có {{ total }} trường đại học
+    HIỆN CÓ {{ total }} TRƯỜNG ĐẠI HỌC
   </span>  
 </ng-template>
 

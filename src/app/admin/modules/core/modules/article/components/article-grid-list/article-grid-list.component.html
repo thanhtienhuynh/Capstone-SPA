@@ -1,4 +1,4 @@
-<div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
+<!-- <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
   <nb-form-field>
     <input #searchByTitle type="text" placeholder="" fullWidth nbInput (change)="searchValueTitle.emit({title: searchByTitle.value, status: status})" />
   </nb-form-field>
@@ -10,53 +10,77 @@
   <div *ngIf="status === 0" style="display: flex; align-items: center;">
     <a nz-button nzType="text" [routerLink]="['censor']" target="_blank">Duyệt bài hàng loạt</a>
   </div>
-</div>
-<div class="row" *ngIf="listOfArticle !== undefined; else loadingContent">
-  <div class="col-lg-11 mx-auto">
-    <div class="row">
-      <div
-        class="col-md-3"
-        *ngFor="let item of listOfArticle"        
-      >
-        <ng-template #coverTemplate>
-          <img
-            alt="example"
-            [src]="item.postImageUrl"
-            style="object-fit: contain"
-          />
-        </ng-template>
-        
-        <div (click)="openContentModal(item.id)" class="wrap-content">
-          <nz-card [nzCover]="coverTemplate">
-            <div style="min-height: 150px">
-              <a
-                [routerLink]="['details/' + item.id]"
-                routerLinkActive="router-link-active"
-                class="mb-10"
-                style="text-decoration: none"
-                target="_blank"
+</div> -->
+<nz-table
+  nzData="listOfArticle"
+  nzBordered
+  [nzShowPagination]="false"
+>
+  <thead>
+    <tr>
+      <th>
+        <span *ngIf="status === 1">DANH SÁCH CÁC BÀI VIẾT ĐÃ DUYỆT</span>
+        <span *ngIf="status === 0">DANH SÁCH CÁC BÀI VIẾT CHỜ DUYỆT</span>
+        <span *ngIf="status === 2">DANH SÁCH CÁC BÀI VIẾT BỊ CHẶN</span>
+        <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
+          <i nz-icon nzType="search"></i>
+        </nz-filter-trigger>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <div class="row" *ngIf="listOfArticle !== undefined; else loadingContent">
+          <div class="col-lg-11 mx-auto">
+            <div class="row">
+              <div
+                class="col-md-3"
+                *ngFor="let item of listOfArticle"        
               >
-                <span class="article-title" [innerHtml]="item.title"></span>
-              </a>
+                <ng-template #coverTemplate>
+                  <img
+                    alt="example"
+                    [src]="item.postImageUrl"
+                    style="object-fit: contain"
+                  />
+                </ng-template>
+                
+                <div (click)="openContentModal(item.id)" class="wrap-content">
+                  <nz-card [nzCover]="coverTemplate">
+                    <div style="min-height: 150px">
+                      <a
+                        [routerLink]="['details/' + item.id]"
+                        routerLinkActive="router-link-active"
+                        class="mb-10"
+                        style="text-decoration: none"                        
+                      >
+                        <span class="article-title" [innerHtml]="item.title"></span>
+                      </a>
+                    </div>
+                  </nz-card>
+                </div>
+              </div>
             </div>
-          </nz-card>
+            <div class="text-center" style="margin-top: 30px">
+              <nz-pagination
+                #paginationTemp
+                [nzPageSizeOptions]="[4, 8, 12]"
+                [nzPageIndex]="initPageNumber"
+                [nzTotal]="totalRecods"
+                nzShowSizeChanger
+                [nzPageSize]="initPageSize"
+                (nzPageSizeChange)="onPageSizeChange($event)"
+                (nzPageIndexChange)="onPageIndexChange($event)"
+              ></nz-pagination>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="text-center" style="margin-top: 30px">
-      <nz-pagination
-        #paginationTemp
-        [nzPageSizeOptions]="[4, 8, 12]"
-        [nzPageIndex]="initPageNumber"
-        [nzTotal]="totalRecods"
-        nzShowSizeChanger
-        [nzPageSize]="initPageSize"
-        (nzPageSizeChange)="onPageSizeChange($event)"
-        (nzPageIndexChange)="onPageIndexChange($event)"
-      ></nz-pagination>
-    </div>
-  </div>
-</div>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
 
 <ng-template #loadingContent>
   <div
@@ -71,3 +95,16 @@
     <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
   </div>
 </ng-template>
+
+
+<nz-dropdown-menu #searchMenu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input type="text" nz-input placeholder="Tìm Kiếm Bài Viết" [(ngModel)]="searchValueName"/>
+      <button  nz-button nzSize="small" nzType="primary" class="search-button" (click)="searchByTitle()"> 
+        TÌM KIẾM
+      </button>
+      <button nz-button nzSize="small" (click)="resetSearchField()">TẠO LẠI</button>
+    </div>
+  </div>
+</nz-dropdown-menu>

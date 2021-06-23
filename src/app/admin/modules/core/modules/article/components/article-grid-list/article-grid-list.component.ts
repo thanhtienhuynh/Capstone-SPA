@@ -15,11 +15,13 @@ export class ArticleGridListComponent implements OnInit, OnChanges, AfterViewIni
   @Input() status: number;
   @Input() totalRecods: number = 0;
   @Output() paging = new EventEmitter();
-  @Output() searchValueTitle: EventEmitter<string> = new EventEmitter<string>();
+  @Output() searchValueTitle: EventEmitter<any> = new EventEmitter<any>();
 
   initPageSize: number = 8;
   initPageNumber: number = 1;
 
+  visible = false;
+  searchValueName: string = '';
   constructor(
     private _articleService: ArticleService,
     private _modalService: NzModalService,
@@ -39,9 +41,15 @@ export class ArticleGridListComponent implements OnInit, OnChanges, AfterViewIni
 
   
 
-  // searchByTitle(status?: number): void {
-  //   this._articleService.searchByTitle(1, 10, status, )
-  // }
+  searchByTitle(): void {
+    console.log(this.searchValueName);
+    this.searchValueTitle.emit({title: this.searchValueName, status: this.status})
+  }
+
+  resetSearchField(): void {
+    this.searchValueName = ''; 
+    this.searchValueTitle.emit({title: this.searchValueName, status: this.status})
+  }
 
   onPageSizeChange(event: number): void {
     this.initPageSize = event;

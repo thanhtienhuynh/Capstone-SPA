@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import isThisSecond from 'date-fns/isThisSecond';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { AdmissionMethodService, MajorService, TrainingProgramService, UniversityService } from 'src/app/admin/services';
-import { AdmissionMethod, MajorDetailUniversity, MajorSubjectGroup, MajorUniversity, Province, Season } from 'src/app/admin/view-models';
+import { AdmissionMethod, MajorConfiguration, MajorDetailUniversity, MajorSubjectGroup, MajorUniversity, Province, Season } from 'src/app/admin/view-models';
 import { Response } from 'src/app/_models/response';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
+import { MajorConfigurationModalComponent } from '../../../../major-configuration/components';
 
 @Component({
   selector: 'app-action-major-modal',
@@ -78,7 +78,8 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     private _majorService: MajorService,
     private _trainingProgramService: TrainingProgramService,
     private _addmissionMethodService: AdmissionMethodService,
-    private _universityService: UniversityService
+    private _universityService: UniversityService,
+    private _modalService: NzModalService,
   ) {
     this.initMajorForm();
     this.initUpdateFormMajor();
@@ -185,10 +186,10 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     this.closeModal();                  
   }  
 
-  subjectGroups(index: number): FormArray {
-    const subAddmissions = this.majorForm.get('subAddmissions') as FormArray
-    return subAddmissions.controls[index].get('subjectGroups') as FormArray
-  }
+  // subjectGroups(index: number): FormArray {
+  //   const subAddmissions = this.majorForm.get('subAddmissions') as FormArray
+  //   return subAddmissions.controls[index].get('subjectGroups') as FormArray
+  // }
 
   addSubAddmissions(): void {
     this.getSubAddmissions.push(
@@ -540,6 +541,29 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
 
   closeModal(): void {  
     this._modalRef.close();          
+  }
+
+  openAddMajorToSystemModal(event: any): void {
+    console.log(event);
+    this.closeModal();
+    this.openMajorConfigurationModal(undefined);
+  }
+
+  openMajorConfigurationModal(data: MajorConfiguration | undefined): void {    
+    if (data === undefined) { 
+      const modal = this._modalService.create({
+        nzContent: MajorConfigurationModalComponent,
+        nzClosable: false,
+        nzFooter: null,
+        nzWidth: data !== undefined ? 600 : 600,
+        nzComponentParams: { data: data, callPlace: 'action-major-modal'},
+      });
+      modal.afterClose.pipe(
+        tap((rs) => {
+        })
+      ).subscribe();
+    }      
+
   }
 }
 

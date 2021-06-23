@@ -150,9 +150,13 @@ export class UniDetailComponent implements OnInit {
     this._universityService.getMajorOfUniversity(pageNumber, pageSize, uniId, seasonId, majorName).pipe(
       tap((rs) => {        
         if (rs.succeeded === true) {                    
-          if (rs.data !== null) {                                
+          if (rs.data !== null) {                                            
             this.listOfMajors = rs.data;
-            this.listOfDisplayMajors = [...rs.data];
+            this.listOfDisplayMajors = [...rs.data.map((e, i) => ({
+              ...e,              
+              stt: (rs.pageNumber * rs.pageSize) - (rs.pageSize - (i + 1))       
+            }))
+          ];
             this.total = rs.totalRecords;                                 
           } else {
             this.listOfMajors = [];
@@ -169,8 +173,7 @@ export class UniDetailComponent implements OnInit {
     ).subscribe();
   }
 
-  searchByName(): void { 
-    console.log(this.seasonSelected);   
+  searchByName(): void {     
     this.getMajorsOfUiversity(1, 10, this.uniId, this.seasonSelected, this.searchValueName);    
   }
 

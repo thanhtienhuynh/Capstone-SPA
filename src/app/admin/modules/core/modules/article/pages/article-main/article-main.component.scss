@@ -35,3 +35,15 @@ nz-skeleton {
 nz-skeleton:last-child {
   margin-bottom: 0;
 }
+
+nb-tabset {
+  ::ng-deep {
+    li {
+      a {
+        .tab-text {
+          font-size: 12px;
+        }
+      }
+    }    
+  }
+}

@@ -22,15 +22,24 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
   @Output() submitData = new EventEmitter<BoardData>();
   @Output() search = new EventEmitter<BoardData>();
 
-
+  visible = false;
+  searchValueName: string = '';
+  pageSize: number = 5;
+  pageIndex: number = 1;
+  total = 1;
+  listOfDisplayArticle: ArticleVM[] = [];
   constructor(    
   ) { }  
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // console.log('Danh sách đã được lọc', this.listOfArticle, this.laneId);
+  ngOnChanges(changes: SimpleChanges): void {    
+    console.log(this.listOfArticle);
+    this.listOfDisplayArticle = [...this.listOfArticle];
+    this.total = this.listOfDisplayArticle.length;
   }
 
   ngOnInit() {
+    console.log(this.listOfArticle);
+    // console.log(this.listOfDisplayArticle);
   }
 
 
@@ -141,6 +150,11 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
       return;
     };    
     this.search.emit({publisedData: undefined});    
+  }
+
+  resetSearchField(): void {
+    this.searchValueName = '';
+    this.articleFilter(this.searchValueName);
   }
 
 

@@ -1,4 +1,4 @@
-<nav class="admin-nav">  
+<!-- <nav class="admin-nav">  
   <div class="admin-menu-item" (click)="useUpdate('university')">
     <nb-icon [icon]="'home'" [pack]="'eva'"></nb-icon>
     <a [nbTooltip]="'Trường'" [nbTooltipPlacement]="'end'" >  
@@ -19,5 +19,35 @@
       <span>Ngành Học</span>    
     </a>
   </div> 
+</nav> -->
+
+<nav class="admin-nav">  
+  <nz-sider nzWidth="200px">
+    <ul nz-menu nzMode="inline" class="sider-menu" [nzTheme]="'dark'">
+      <li nz-submenu nzOpen nzTitle="Trường học">        
+        <ul>
+          <li nz-menu-item (click)="useUpdate('university-list')">Danh sách trường học</li>                   
+        </ul>
+      </li>
+      <li nz-submenu nzOpen nzTitle="Ngành học">        
+        <ul>          
+          <li nz-menu-item [nzSelected]="true" (click)="useUpdate('major-configuration')">Danh sách ngành học</li>          
+        </ul>
+      </li>
+      <li nz-submenu nzOpen nzTitle="Bài viết">
+        <ul>
+          <li nz-menu-item (click)="useUpdate('article')">Danh sách bài viết</li>
+          <li nz-menu-item (click)="useUpdate('article/censor')">Duyệt bài hàng loạt</li>
+          <li nz-menu-item (click)="useUpdate('article/published')">Đăng bài hàng loạt</li>          
+        </ul>
+      </li> 
+      <li nz-submenu nzOpen nzTitle="Đề Thi">
+        <ul>
+          <li nz-menu-item (click)="useUpdate('article')">Danh sách đề thi</li>
+          <li nz-menu-item (click)="useUpdate('article/censor')">Tạo đề thi</li>                    
+        </ul>
+      </li>     
+    </ul>
+  </nz-sider>
 </nav>
 

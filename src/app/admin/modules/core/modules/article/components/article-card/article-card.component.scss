@@ -44,8 +44,10 @@ h5 {
 }
 
 .article-title {
-  font-size: 20px;
+  font-size: 15px;
   color: #222b45;
+  font-family: none;
+  font-weight: 600;
 }
 
 .article-card-content:active {
@@ -55,6 +57,6 @@ h5 {
 
 
 .publishedPage, .postedDate,  .shortDescription{
-  font-size: 12px;
+  font-size: 11px;
 }
 

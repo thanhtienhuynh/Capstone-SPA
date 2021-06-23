@@ -11,14 +11,23 @@ const routes: Routes = [
       {
         path: 'university',
         loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.UniversityModule),
+        data: {
+          breadcrumb: 'Trường Học'
+        }
       },
       {
         path: 'article',
         loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.ArticleModule),
+        data: {
+          breadcrumb: 'Bài Viết'
+        }
       },
       {
         path: 'major-configuration',
         loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.MajorConfigurationModule),
+        data: {
+          breadcrumb: 'Ngành Học'
+        }
       },
     ]
   },

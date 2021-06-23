@@ -54,6 +54,7 @@ export class ArticleDetailComponent implements OnInit {
   dateForm: FormGroup;
 
   ngOnInit() {
+    console.log('work');
     // this.getArticleById(this.key);
     this.getArticleById();
     this.getListOfUniversity();

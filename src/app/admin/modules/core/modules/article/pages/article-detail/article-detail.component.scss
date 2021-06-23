@@ -9,6 +9,9 @@
 .action-button {
     width: 100%;
     margin-bottom: 20px;
+    button {
+      font-size: 12px;
+    }
 }
 
 .action-button-page {
@@ -37,6 +40,25 @@ nz-select {
 nz-date-picker {
   width: 100%;
   margin-bottom: 10px;
+}
+
+nz-select {
+  ::ng-deep {
+    nz-select-placeholder {
+      font-size: 14px;
+    }
+    nz-select-item {
+      font-size: 14px !important;
+    }
+  }
+}
+
+nz-date-picker {
+  ::ng-deep {
+    input {
+      font-size: 14px !important;
+    }           
+  }
 }
 
 label {
