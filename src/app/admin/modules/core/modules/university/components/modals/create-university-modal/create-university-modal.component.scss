@@ -1,55 +1,81 @@
 .header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 1rem 1rem;    
-    border-top-left-radius: calc(0.3rem - 1px);
-    border-top-right-radius: calc(0.3rem - 1px);
-    text-align: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1rem 1rem;
+  border-top-left-radius: calc(0.3rem - 1px);
+  border-top-right-radius: calc(0.3rem - 1px);
+  text-align: center;
 }
 
 .flex {
-    display: flex;
+  display: flex;
 }
 
 .flex-auto {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .text-xl {
-    font-size: 1.25rem;
-    font-weight: 500;
+  font-size: 1.25rem;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  color: #ff3d71;
 }
 
 .footer {
-    margin-top: 5rem;
-    display: flex;
-    justify-content: flex-end;
-    padding: 0 1rem;
+  margin-top: 5rem;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 1rem;
 }
 
 .footer button {
-    margin: 0 0 0 1rem;
+  margin: 0 0 0 1rem;
 }
 
-
 .ant-upload {
-    width: 200px !important;
+  width: 200px !important;
 }
 
 nb-select {
     ::ng-deep {
       button {
-        min-width: 5rem !important;
+        min-width: 4rem !important;
+      }
+      .select-button {
+        font-size: 12px !important;
       }
     }
-}
+  }
+  
+  nb-form-field {
+    ::ng-deep {
+      [nbInput].size-small {
+        font-size: 12px !important;
+      } 
+      [nbInput].size-large {
+        font-size: 12px !important;
+      }   
+      [nbInput].size-medium {
+        font-size: 12px !important;
+      }  
+    }
+  }
+  
+  nb-option {
+    ::ng-deep {
+      font-size: 12px !important;
+    }
+  }
 
 .must-required {
-    color: red;
+  color: red;
 }
 
 label {
-    // font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-    font-weight: 500;
+  // font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+  font-weight: 500;
 }

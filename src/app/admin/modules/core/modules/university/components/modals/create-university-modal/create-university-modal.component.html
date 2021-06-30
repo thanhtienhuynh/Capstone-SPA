@@ -1,19 +1,19 @@
 <div>
-  <div class="flex items-center py-3">    
-    <div class="text-xl">Thêm Trường</div>
+  <div class="flex items-center py-2">    
+    <div class="text-xl">THÊM TRƯỜNG MỚI VÀO HỆ THỐNG</div>
     <div class="flex-auto"></div>
     <button nbButton (click)="closeModal()"><nb-icon pack="eva" icon="close-outline"></nb-icon></button>
   </div>
   
   <div class="flex">        
-    <div class="col-md-6">
+    <div class="col-md-7">
       <label for="">Tên Trường <span class="must-required">*</span></label>
       <nb-form-field>        
         <nb-icon nbPrefix icon="home-outline" pack="eva"></nb-icon>
         <input [formControl]="createUniversityForm.get('name')" type="text" placeholder="" fullWidth nbInput [status]="createUniversityForm.get('name').invalid && (createUniversityForm.get('name').touched || createUniversityForm.get('name').dirty) ? 'danger' : 'basic'"/>
       </nb-form-field>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
       <label for="">Code <span class="must-required">*</span></label>
       <nb-form-field>        
         <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>

@@ -68,7 +68,7 @@ label {
 }
 
 .td-border-children {
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid black;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -84,7 +84,7 @@ label {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid black;
   text-align: center;
   height: 2.5rem;
 }
@@ -98,7 +98,7 @@ label {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-right: 1px solid #f0f0f0;
+  border-right: 1px solid black;
 }
 .td-border-item:last-child {
   border-right: none;
@@ -161,7 +161,7 @@ nz-table th {
   // background-color: #f0f0f0;
   background-color: 	#ADD8E6;
   text-align: center;
-  font-size: 11px; //
+  font-size: 12px; //
 }
 
 nz-table td {
@@ -186,7 +186,22 @@ nz-table {
         color: #1890ff;
       }     
     }
-  }
+    th {
+      border-right: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      border-top: 1px solid black !important;
+      &:first-child {
+        border-left: 1px solid black !important;
+      }
+    }        
+    td {
+      border-right: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      &:first-child {
+        border-left: 1px solid black !important;
+      }
+    }
+  }  
 }
 
 nz-table span {
@@ -202,6 +217,12 @@ nz-table {
   }
   #name {
     width: 20%;
+  }
+  #subject-group {
+    width: 9%;
+  }
+  #code {
+    width: 15%;
   }
 }
 

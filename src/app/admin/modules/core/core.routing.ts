@@ -29,6 +29,13 @@ const routes: Routes = [
           breadcrumb: 'Ngành Học'
         }
       },
+      {
+        path: 'examination',
+        loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.ExaminationModule),
+        data: {
+          breadcrumb: 'Đề Thi'
+        }
+      },
     ]
   },
 ];

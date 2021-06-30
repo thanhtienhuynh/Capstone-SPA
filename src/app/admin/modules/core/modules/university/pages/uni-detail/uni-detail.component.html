@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div nz-row>
             <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">            
-                <nb-card style="width: 100%;">                
+                <nb-card style="width: 100%; margin-bottom: 0;">                
                     <nb-card-body style="width: 100%;">
                         <div class="row">
                             <div  class="col-lg-2" [style.background-size]="'cover'" [style.background-repeat]="'no-repeat'" [style.background-image]="logo === undefined ? 'url(' + university.logoUrl + ')' :'url(' + logo + ')' " [style.border]="'1px solid #000'">
@@ -189,7 +189,7 @@
                     </nb-card-body>
                 </nb-card>
             </div>
-          </div>
+        </div>
     </div>    
   <div class="container-fluid">
       <div nz-row>
@@ -220,10 +220,7 @@
                           <thead>
                             <tr>
                                 <th id="stt">STT</th>                                    
-                                <th id="name">TÊN NGÀNH
-                                    <!-- <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
-                                        <i nz-icon nzType="search"></i>
-                                      </nz-filter-trigger> -->
+                                <th id="name">TÊN NGÀNH                                    
                                 </th>
                                 <th id="programe">HỆ ĐÀO TẠO</th>
                                 <th id="code">CODE</th>
