@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ResultDialogComponent } from '../result-dialog/result-dialog.component';
 
 @Component({
   selector: 'app-submit-dialog',
@@ -9,7 +8,7 @@ import { ResultDialogComponent } from '../result-dialog/result-dialog.component'
 })
 export class SubmitDialogComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<ResultDialogComponent>) { }
+  constructor(public dialogRef: MatDialogRef<SubmitDialogComponent>) { }
 
   ngOnInit() {
   }

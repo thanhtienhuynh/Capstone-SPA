@@ -61,7 +61,6 @@ export class ArticleMainComponent implements OnInit {
   }
 
   searchByTitle(event: any): void {
-    console.log(event);
     if (event.title === "") {
       this.getListOfArticle(1, 8, event.status); 
     } else {

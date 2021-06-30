@@ -39,14 +39,14 @@
           <div fxFlex="0 1 calc(100%)"  *ngFor="let question of detailTestSubmission.questionSubmissions; let i = index">
             <br/>
             <span style="font-weight: bold; font-size: 1.2em">Câu {{ i + 1 }}.
-              <div [innerHtml]="question.questionContent | safeHtml"></div>
+              <div [innerHtml]="question.content | safeHtml"></div>
             </span>
             <br/>
             <mat-radio-group aria-label="Select an option">
               <div *ngFor="let option of question.options; let j = index">
                 <div  class="center-vertical">
                   <mat-radio-button [disabled]='true' [value]="j" [checked]="question.rightResult.indexOf('1') === j">
-                    <div [innerHtml]="option.optionContent | safeHtml"></div>
+                    <div [innerHtml]="option.content | safeHtml"></div>
                   </mat-radio-button>
                 </div>
               </div>

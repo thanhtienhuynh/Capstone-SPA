@@ -10,7 +10,7 @@ export class TestSubmissionParam {
   }
 }
 
-export class SaveTestSubmissionParam {
+export class UnsaveTestSubmission {
   testId: number;
   spentTime: number;
   questions: QuestionParam[];

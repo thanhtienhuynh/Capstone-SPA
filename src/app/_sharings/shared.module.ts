@@ -14,7 +14,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CommonModule } from '@angular/common';
 import { AnswerComponent } from '../major-suggestion-stepper/exam-page/answer/answer.component';
@@ -26,7 +26,30 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
 import { SafeHtmlPipe } from '../_helper/safe-html-pipe';
 import { ProgressSpinnerComponent } from './components/progress-spinner/progress-spinner.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTableModule } from '@angular/material/table';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { MatBadgeModule } from '@angular/material/badge';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ShareButtonModule } from 'ngx-sharebuttons/button';
 
+import { ShareButtonsConfig, SharerMethod, SHARE_BUTTONS_CONFIG } from 'ngx-sharebuttons';
+import { ShortenPipe } from '../_helper/shorten-pipe';
+
+const customConfig: ShareButtonsConfig = {
+  include: ['facebook'],
+  exclude: [],
+  theme: 'modern-light',
+  gaTracking: true,
+  autoSetMeta: true,
+  prop: {
+    facebook: {
+      icon: ['fab', 'facebook-square']
+    },
+  },
+  sharerMethod: SharerMethod.Window,
+}
 
 const materialModules = [
   MatNativeDateModule,
@@ -47,7 +70,13 @@ const materialModules = [
   MatMenuModule,
   MatIconModule,
   RouterModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatTableModule,
+  MatCarouselModule,
+  MatTooltipModule,
+  OverlayModule,
+  MatBadgeModule,
+  ScrollingModule
 ];
 
 @NgModule({
@@ -55,24 +84,28 @@ const materialModules = [
     AnswerComponent,
     ToArrayPipe,
     SafeHtmlPipe,
+    ShortenPipe,
     AuthenticationComponent,
     ConfirmDialogComponent,
     LoginDialogComponent,
-    ProgressSpinnerComponent
+    ProgressSpinnerComponent,
   ],
   imports: [
     ...materialModules,
-    CommonModule
+    CommonModule,
+    ShareButtonModule.withConfig(customConfig),
   ],
   exports: [
     ...materialModules,
     AnswerComponent,
     ToArrayPipe,
     SafeHtmlPipe,
+    ShortenPipe,
     AuthenticationComponent,
     ConfirmDialogComponent,
     LoginDialogComponent,
-    ProgressSpinnerComponent
+    ProgressSpinnerComponent,
+    ShareButtonModule
   ],
 })
 export class MaterialModule {

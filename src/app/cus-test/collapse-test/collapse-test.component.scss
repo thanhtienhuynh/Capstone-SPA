@@ -1,0 +1,59 @@
+.title-page {
+  margin-bottom: 25px;
+}
+
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.test-frame {
+  display: block;
+  padding: 12px;
+  border: 1px solid black;
+  border-radius: 8px;
+  background-color: #f7fcff;
+}
+.header {
+  font-weight: 500;
+}
+.submit {
+  // background-color: #e3ffe3;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.test-title {
+  color: #1b3cde;
+}
+
+.three-dot {
+  margin-right: 5px;
+  width: 20px;
+  height: 35px;
+}
+
+.page-button-section {
+  padding-bottom: 50px;
+  margin-top: 30px;
+}
+
+.page-button-selected {
+  background-color: rgb(152, 196, 233);
+}
+
+
+.page-button {
+  margin-right: 5px;
+  width: 35px;
+  height: 35px;
+  border: 1px solid rgb(152, 196, 233);
+  border-radius: 2px;
+}
+
+.page-button:hover {
+  background-color: rgb(152, 196, 233);
+  cursor: pointer;
+}

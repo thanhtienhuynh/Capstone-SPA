@@ -3,9 +3,9 @@
   padding: 12px;
   border: 1px solid black;
   border-radius: 8px;
+  background-color: #f7fcff;
 }
 .header {
-  background-color: #e3e3e3;
   font-weight: 500;
 }
 .submit {
@@ -13,4 +13,8 @@
   justify-content: center;
   align-items: center;
   display: flex;
+}
+
+.test-title {
+  color: #1b3cde;
 }

@@ -145,8 +145,7 @@ export class UniDetailComponent implements OnInit {
   }
   
 
-  getMajorsOfUiversity(pageNumber: number, pageSize: number, uniId: string, seasonId: number, majorName: string): void {   
-    console.log('uniId', uniId, 'seasonId', seasonId);     
+  getMajorsOfUiversity(pageNumber: number, pageSize: number, uniId: string, seasonId: number, majorName: string): void {       
     this._universityService.getMajorOfUniversity(pageNumber, pageSize, uniId, seasonId, majorName).pipe(
       tap((rs) => {        
         if (rs.succeeded === true) {                    
@@ -164,7 +163,6 @@ export class UniDetailComponent implements OnInit {
             this.total = rs.totalRecords;
           }
         } else {
-          console.log('Load University/Detail Lỗi');
         }
       }),
       catchError((err) => {
@@ -173,7 +171,11 @@ export class UniDetailComponent implements OnInit {
     ).subscribe();
   }
 
+<<<<<<< HEAD
   searchByName(): void {     
+=======
+  searchByName(): void {  
+>>>>>>> dev
     this.getMajorsOfUiversity(1, 10, this.uniId, this.seasonSelected, this.searchValueName);    
   }
 
@@ -192,8 +194,7 @@ export class UniDetailComponent implements OnInit {
     }     
   }
     
-  changeSelectedSeason(seasonId: number): void {
-    console.log(seasonId, 'changeSelectedSeason');    
+  changeSelectedSeason(seasonId: number): void {   
     this.seasonSelected = seasonId  
     this.getMajorBySeason(seasonId);  
     this.pageIndex = 1;
@@ -219,7 +220,6 @@ export class UniDetailComponent implements OnInit {
   
   uploadLogo(evt): void {    
     const files: File[] = evt.target.files;
-    console.log(files);
     if (files.length > 1) {
       Swal.fire('Lỗi', 'Chỉ được chọn 1 file', 'error');
     } else {
@@ -263,7 +263,6 @@ export class UniDetailComponent implements OnInit {
       "rating": this.updateUniForm.get('rating').value,
       "status": this.updateUniForm.get('status').value
     }  
-    console.log(newValue);
     const formData = new FormData();     
     for (let key in newValue) {
       formData.append(key, newValue[key]);

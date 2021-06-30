@@ -108,7 +108,6 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
   // }
 
   drop(event: CdkDragDrop<any[]>) {
-    console.log(event);
     const newArticle = { ...event.item.data };
     const newArticles = [...event.container.data];
     let isMovingInsideTheSameList = event.previousContainer === event.container;
@@ -121,7 +120,6 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
         // const publishedData = undefined;
         const topData = event.container.data;
         this.callParent.emit({ topData: topData } as BoardData);
-        console.log(this.listOfArticle);
       };
     } else {
       if (event.previousContainer.id === "top") {

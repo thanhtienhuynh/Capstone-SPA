@@ -11,7 +11,7 @@ import { CommonModule } from "@angular/common";
 import { TestReviewComponent } from "./test-submissions/test-review/test-review.component";
 import { CaringMajorsComponent } from "./caring-majors/caring-majors.component";
 import { CaringUniversitiesComponent } from "./caring-universities/caring-universities.component";
-import { UserMajorDetailComponent } from "./user-major-detail/user-major-detail.component";
+import { FollowingDetailComponent } from "./following-detail/following-detail.component";
 
 @NgModule({
   declarations: [
@@ -21,7 +21,7 @@ import { UserMajorDetailComponent } from "./user-major-detail/user-major-detail.
     TestReviewComponent,
     CaringMajorsComponent,
     CaringUniversitiesComponent,
-    UserMajorDetailComponent
+    FollowingDetailComponent
   ],
   imports: [
     RouterModule,

@@ -45,6 +45,9 @@ export class AuthEffects {
     }),
     map((token: string) => {
       return new AuthActions.LoginServer(token);
+    }),
+    catchError((error: HttpErrorResponse) => {
+      return of(new AuthActions.HasErrors([error.message]));
     })
   );
 

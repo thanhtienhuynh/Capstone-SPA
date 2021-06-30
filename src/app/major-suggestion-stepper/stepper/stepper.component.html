@@ -1,28 +1,61 @@
-<mat-horizontal-stepper linear #stepper>
+<mat-horizontal-stepper #stepper>
   <mat-step #stepOne [stepControl]="secondFormGroup" editable="true">
     <div class="center">
       <form
         *ngIf="secondFormGroup != null; elseNull"
         [formGroup]="secondFormGroup"
-        (ngSubmit)="onScoreSubmit()"
+        (ngSubmit)="getAction(1)"
       >
         <ng-template matStepLabel>Nhập điểm</ng-template>
-        <!-- <div style="height: 400px;" class="wrap">
-          <button type="submit" class="blob blue">Thi thử</button>
-        </div> -->
-        <h1 style="text-align: center; margin: 20px 0px 20px 0px">Nhập điểm trung bình học bạ hoặc điểm thi THPT Quốc gia</h1>
-        <div class="center-horizontal" style="margin: 50px 0 50px -100px;">
-          <label style="margin-right: 26px;">Chọn loại điểm: </label>
-          <mat-radio-group [(ngModel)]="typeScore" formControlName="transcriptTypeId">
-            <mat-radio-button [checked]="'true'" [value]="2">Điểm học bạ</mat-radio-button>
-            <mat-radio-button [value]="1">Điểm THPT QG</mat-radio-button>
-          </mat-radio-group>
+
+        <h1 class="step-1-title">Nhập điểm trung bình học bạ hoặc điểm thi THPT Quốc gia</h1>
+
+        <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="center" class="criteria-frame">
+          <div fxFlex.lg="0 1 calc(50%)" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="100%">
+
+            <div class="center-vertical">
+              <div class="criteria-lable">Tỉnh đang sinh sống: </div>
+              <mat-form-field class="province-field">
+                <mat-label>Tỉnh, thành phố:</mat-label>
+                <input type="text"
+                       placeholder="Chọn tỉnh, thành"
+                       required
+                       matInput
+                       formControlName="province"
+                       [matAutocomplete]="auto"
+                       [(ngModel)]="provinceId">
+                <mat-autocomplete  autoActiveFirstOption #auto="matAutocomplete" [displayWith]="getProvinceName.bind(this)" >
+                  <mat-option *ngFor="let option of filteredOptions | async" [value]="option.id">
+                    {{option.name}}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+
+            <div class="center-vertical" >
+              <label class="criteria-lable">Giới tính: </label>
+              <mat-radio-group [(ngModel)]="gender" formControlName="gender">
+                <mat-radio-button class="radio-choice" [checked]="'true'" [value]="1">Nữ</mat-radio-button>
+                <mat-radio-button [value]="0">Nam</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+             <div class="center-vertical" style="margin-top: 20px;">
+              <label class="criteria-lable">Loại điểm: </label>
+              <mat-radio-group [(ngModel)]="typeScore" formControlName="transcriptTypeId">
+                <mat-radio-button class="radio-choice" [checked]="'true'" [value]="2">Điểm học bạ</mat-radio-button>
+                <mat-radio-button [value]="1">Điểm THPT QG</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+          </div>
         </div>
+
         <div>
           <mat-form-field *ngFor="let subject of subjects; let i = index">
             <mat-label>{{ subject.name }}</mat-label>
             <input
-              style="text-align: right"
+              class="score-field"
               type="number"
               matInput
               min="0"
@@ -59,30 +92,35 @@
   </mat-step>
   <mat-step #stepTwo >
     <ng-template matStepLabel>Kết quả</ng-template>
-    <div class="center" >
-      <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start" style="width: 100%; height: auto;">
+    <div class="center">
+      <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup.length > 0" fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="flex-start" style="width: 100%; height: auto;">
         <!-- Top 2 -->
-        <div fxFlex.lg="0 1 calc(32% -32px )" fxFlex.md="0 1 calc(100%)" fxFlex.sm="100%" >
-          <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[1]" style="padding-top: 50px; ">
-            <div style="height: 450px; padding: 10px; background-color: rgb(28, 121, 158); border-radius: 30px;" >  
-              <div style="height: 100%; background-color: azure; border-radius: 30px;">
-                <div style="height: 15%; background-color: rgb(125, 210, 231); border-radius: 30px 30px 0px 0px;">
-                  <div class="top-title-2">Top 2</div>
+        <div fxFlex.lg="0 1 calc(32% -32px )" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="100%" >
+          <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[1]" class="top-2-group-frame">
+            <div class="top-2-group-in-frame">  
+              <div class="top-2-group-inner-frame">
+                <div class="top-2-title-frame">
+                  <div class="top-2-title">Top 2</div>
                 </div>
-                <div style="height: 30%; background-color: rgb(231, 238, 240);">
-                  <div style="height: 100%; padding-top: 8px;">
-                    <div style="background-color: rgb(82, 221, 240); height: 120px; width: 120px; display: flex; margin: auto; border-radius: 50%;">
-                      <div class="center-vertical" style="background-color: rgb(11, 69, 192); height: 100px; width: 100px; margin: auto; border-radius: 50%;">
-                        <div class="group-top2-name">{{suggestedSubjectsGroup[1].name}}</div>
+                <div class="low-level-subject-group-frame">
+                  <div class="low-level-in-subject-group-frame">
+                    <div class="top-2-out-circle-frame"
+                    #tooltip="matTooltip"
+                    [matTooltip]="getSubjectNames(suggestedSubjectsGroup[1])"
+                    matTooltipPosition="above"
+                    matTooltipHideDelay="100000">
+                      <div class="center-vertical top-2-circle-frame">
+                        <div class="group-top-2-name">{{suggestedSubjectsGroup[1].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div style="height: 55%; background-color: rgb(125, 210, 231); border-radius: 0px 0px 30px 30px;">
-                  <div style="height: 91%;" class="major-scroll" id="style-7">
+                <div class="top-2-major-frame">
+                  <div style="height: 91%; width: 100%;" class="major-scroll" id="style-7">
                     <button *ngFor="let major of suggestedSubjectsGroup[1].suggestedMajors" style="width: 100%;" mat-button 
-                      (click)="getUniversity(suggestedSubjectsGroup[1].id, major.id, suggestedSubjectsGroup[1].totalMark, major.name)">
-                      {{major.name | shorten:22}} - {{major.highestEntryMark}}
+                    (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[1], major: major})">
+                      {{major.name | shorten:22}} 
+                      <!-- - {{major.highestEntryMark}} - {{major.weightMark}} -->
                     </button>
                   </div>
                 </div>
@@ -91,26 +129,31 @@
           </div>
         </div>
         <!-- Top 1 -->
-        <div fxFlex="0 1 calc(36% - 32px)" fxFlex.md="0 1 calc(100%)" fxFlex.sm="0 1 calc(100%)">
-            <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[0]" style="height: 550px; padding: 10px; background-color: rgb(28, 121, 158); border-radius: 30px;" >  
+        <div fxFlex="0 1 calc(36% - 32px)" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="0 1 calc(100%)">
+            <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[0]" class="top-1-group-in-frame" >  
               <div style="height: 100%; background-color: azure; border-radius: 30px;">
-                <div style="height: 15%; background-color: rgb(125, 210, 231); border-radius: 30px 30px 0px 0px;">
-                  <div class="top-title-1">Top 1</div>
+                <div class="top-1-title-frame">
+                  <div class="top-1-title">Top 1</div>
                 </div>
                 <div style="height: 30%; background-color: rgb(231, 238, 240);">
                   <div style="height: 100%; padding-top: 12px;">
-                    <div style="background-color: rgb(82, 221, 240); height: 140px; width: 140px; display: flex; margin: auto; border-radius: 50%;">
-                      <div class="center-vertical" style="background-color: rgb(11, 69, 192); height: 120px; width: 120px; margin: auto; border-radius: 50%;">
-                        <div class="group-top1-name">{{suggestedSubjectsGroup[0].name}}</div>
+                    <div class="top-1-out-circle-frame"
+                      #tooltip="matTooltip"
+                      [matTooltip]="getSubjectNames(suggestedSubjectsGroup[0])"
+                      matTooltipPosition="above"
+                      matTooltipHideDelay="100000">
+                      <div class="center-vertical top-1-circle-frame">
+                        <div class="group-top-1-name">{{suggestedSubjectsGroup[0].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div style="height: 55%; background-color: rgb(125, 210, 231); border-radius: 0px 0px 30px 30px;">
-                  <div style="height: 91%;" class="major-scroll"  id="style-7">
+                <div class="top-1-major-frame">
+                  <div style="height: 91%; width: 100%;" class="major-scroll"  id="style-7">
                     <button *ngFor="let major of suggestedSubjectsGroup[0].suggestedMajors" style="width: 100%;" mat-button 
-                      (click)="getUniversity(suggestedSubjectsGroup[0].id, major.id, suggestedSubjectsGroup[0].totalMark, major.name)">
-                      {{major.name | shorten:30}} - {{major.highestEntryMark}}
+                      (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[0], major: major})">
+                      {{major.name | shorten:30}}
+                       <!-- - {{major.highestEntryMark}} - {{major.weightMark}} -->
                     </button>
                   </div>
                 </div>
@@ -118,27 +161,32 @@
             </div>
         </div>
         <!-- Top 3 -->
-        <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[2]" fxFlex="0 1 calc(32% - 32px)" fxFlex.md="0 1 calc(100%)" fxFlex.sm="0 1 calc(100%)">
+        <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[2]" fxFlex="0 1 calc(32% - 32px)" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="0 1 calc(100%)">
           <div style="padding-top: 50px;">
-            <div style="height: 450px; padding: 10px; background-color: rgb(28, 121, 158); border-radius: 30px;" >  
+            <div class="top-3-group-in-frame" >  
               <div style="height: 100%; background-color: azure; border-radius: 30px;">
-                <div style="height: 15%; background-color: rgb(125, 210, 231); border-radius: 30px 30px 0px 0px;">
-                  <div class="top-title-2">Top 3</div>
+                <div class="top-3-title-frame">
+                  <div class="top-3-title">Top 3</div>
                 </div>
-                <div style="height: 30%; background-color: rgb(231, 238, 240);">
-                  <div style="height: 100%; padding-top: 8px;">
-                    <div style="background-color: rgb(82, 221, 240); height: 120px; width: 120px; display: flex; margin: auto; border-radius: 50%;">
-                      <div class="center-vertical" style="background-color: rgb(11, 69, 192); height: 100px; width: 100px; margin: auto; border-radius: 50%;">
-                        <div class="group-top2-name">{{suggestedSubjectsGroup[2].name}}</div>
+                <div class="low-level-subject-group-frame">
+                  <div class="low-level-in-subject-group-frame">
+                    <div class="top-3-out-circle-frame"
+                      #tooltip="matTooltip"
+                      [matTooltip]="getSubjectNames(suggestedSubjectsGroup[2])"
+                      matTooltipPosition="above"
+                      matTooltipHideDelay="100000">
+                      <div class="center-vertical top-3-circle-frame">
+                        <div class="group-top-3-name">{{suggestedSubjectsGroup[2].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div style="height: 55%; background-color: rgb(125, 210, 231); border-radius: 0px 0px 30px 30px;">
-                  <div style="height: 91%; border-radius: 0px 0px 30px 30px;"  class="major-scroll"  id="style-7" >
+                <div class="top-3-major-frame">
+                  <div style="height: 91%; border-radius: 0px 0px 30px 30px; width: 100%;"  class="major-scroll"  id="style-7" >
                     <button *ngFor="let major of suggestedSubjectsGroup[2].suggestedMajors" style="width: 100%;" mat-button 
-                      (click)="getUniversity(suggestedSubjectsGroup[2].id, major.id, suggestedSubjectsGroup[2].totalMark, major.name)">
-                      {{major.name  | shorten:22}} - {{major.highestEntryMark}}
+                      (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[2], major: major})">
+                      {{major.name  | shorten:22}} 
+                      <!-- - {{major.highestEntryMark}}- {{major.weightMark}} -->
                     </button>
                   </div>
                 </div>
@@ -146,6 +194,9 @@
             </div>  
           </div>
         </div>
+      </div>
+      <div *ngIf="(!suggestedSubjectsGroup || suggestedSubjectsGroup.length == 0) && !isLoading" class="center-all">
+        <h3 >Không có khối ngành phù hợp!</h3>
       </div>
       <div style="margin-top: 25px;">
         <button mat-raised-button color="warn" matStepperPrevious>Trở lại</button>
@@ -157,84 +208,128 @@
   <mat-step  #stepThree >
     <ng-template matStepLabel>Danh sách trường</ng-template>
     <div class="center">
-      <div style="margin-bottom: 19px;" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
-        <div fxFlex="0 1 calc(50%)">
-          <div style="font-size: 1.3em; font-weight: 300; padding-right: 32px;" class="center-vertical">Danh sách các trường có ngành: {{suggestedMajorName}}</div>
-        </div>
-        <div fxFlex="0 1 calc(50%)" style="border-left: solid;" class="center-horizontal">
-          <div style="font-size: 1.2em; font-weight: 300; padding-left: 32px; padding-right: 10px; width: 78%;" class="center-vertical">
-            Hệ thống sẽ giúp bạn xếp hạng và đánh giá năng lực thông qua việc thi thử
+      <div class="uni-list-header-frame" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+        
+        <div fxFlex="0 1 calc(100%)" fxFlex.lt-sm="100%" class="center-horizontal">
+          <div class="center-vertical mock-test-title">
+            Hệ thống sẽ giúp bạn đánh giá năng lực và xếp hạng chính xác hơn thông qua việc thi thử
           </div>
-          <div class="wrap center-vertical" style="width: 22%;">
-            <button type="submit" (click)="loadTests()" class="blob blue">Thi thử</button>
+          <div class="wrap center-vertical mock-test-button">
+            <button type="submit" (click)="getAction(3)" class="blob blue">Thi thử</button>
           </div>
-        </div>
-       
+        </div>       
       </div>
-      <!-- Bắt đầu flex-->
-      <div *ngIf="universitiesBaseOnTrainingProgram" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
-        <div *ngFor="let trainingProgram of universitiesBaseOnTrainingProgram" fxFlex="0 1 calc(100%)" fxFlex.lt-sm="100%">
-          <!-- Bắt đầu flex-->
-          <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
-            <div fxFlex="0 1 calc(100%)" style="margin-bottom: -10px; font-size: 1.3em; font-weight: 600;" class="center-horizontal">Chương trình {{trainingProgram.name}}:</div>
-            <div *ngFor="let university of trainingProgram.universities" fxFlex="0 1 calc(50%)" fxFlex.lt-md="0 1 calc(50%)"
-                fxFlex.lt-sm="100%">
-                <!-- Bắt đầu flex-->
-                <div style="height: 250px; background-color: red;"  fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
-                  <div style="background-color: rgb(231, 238, 240); height: 22%;" fxFlex="0 1 calc(100%)">
-                    <div style="font-size: 1.1em; font-weight: bold; height: 100%; padding: 10px; text-align: center;" class="center-all">{{ university.name }}</div>
-                  </div>
-                  <div style="background-color: rgb(231, 238, 240); height: 78%; position: relative;" fxFlex="0 1 calc(100%)">
-                    <mat-grid-list [cols]="2" rowHeight="100%">
-                      <mat-grid-tile [colspan]="1" [rowspan]="1">
-                        <img width="100%" height="100%" src="{{ university.logoUrl }}" alt="">
-                      </mat-grid-tile>
-                      <mat-grid-tile [colspan]="1" [rowspan]="1">
-                        <div style="width: 100%; height: 100%;">
-                          <mat-grid-list [cols]="1" rowHeight="25%">
-                            <mat-grid-tile [colspan]="1" [rowspan]="3">
-                              <div style="width: 100%; height: 100%;">
-                                 <mat-grid-list [cols]="1" rowHeight="25%">
-                                  <mat-grid-tile [colspan]="1" [rowspan]="1">
-                                    <div class="top-vertical university-field">
-                                      <strong>Điểm chuẩn:&nbsp;</strong> {{university.nearestYearEntryMark}}
-                                    </div>
-                                  </mat-grid-tile>
-                                  <mat-grid-tile [colspan]="1" [rowspan]="1">
-                                    <div class="top-vertical university-field">
-                                      <strong>Chỉ tiêu năm 2020:&nbsp;</strong> {{university.numberOfStudents <= 0 ? 'Chưa có' : university.numberOfStudents}}
-                                    </div>
-                                  </mat-grid-tile>
-                                  <mat-grid-tile [colspan]="1" [rowspan]="1">
-                                    <div class="top-vertical university-field">
-                                      <strong>Số người quan tâm:&nbsp;</strong> {{university.numberOfCaring <= 0 ? '0' : university.numberOfCaring}}
-                                    </div>
-                                  </mat-grid-tile>
-                                  <mat-grid-tile [colspan]="1" [rowspan]="1">
-                                    <div class="top-vertical university-field">
-                                      <strong>Bạn đang đứng top:&nbsp;</strong> {{university.rank}}
-                                    </div>
-                                  </mat-grid-tile>
 
-                                 </mat-grid-list>
-                              </div>
-                            </mat-grid-tile>
-                            <mat-grid-tile [colspan]="1" [rowspan]="1">
-                              <!-- <div style="height: 70%; width: 100%; background-color: seagreen;"></div> -->
-                              <button (click)="openDetailDialog(university)" style="margin: 0 10% 12px 0" mat-flat-button color="primary">Chi tiết</button>
-                              <button *ngIf="!university.isCared" (click)="onCaringClick(university.id, trainingProgram.id)" style="margin-bottom: 12px;" mat-flat-button color="accent">Quan tâm</button>
-                              <button *ngIf="university.isCared" (click)="onUncaringClick(university.id, trainingProgram.id, university.name)" style="margin-bottom: 12px; background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ quan tâm</button>
-                            </mat-grid-tile>
-                           
-                          </mat-grid-list>
-                        </div>
-                      </mat-grid-tile>
-                    </mat-grid-list>
-                  </div>
+
+      <!-- Mới nè -->
+      <div *ngIf="mockTestBasedUniversity" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+        <div class="center-vertical major-title">Danh sách các trường có ngành: {{suggestedMajorName}} - Xét theo điểm thi thử</div>
+        <div fxFlex="0 1 calc(100%)"  class="mock-test-score-title">Tổng điểm thi thử của bạn là: {{mockTestBasedUniversity.totalMark}}</div>
+        <div *ngIf="mockTestBasedUniversity.trainingProgramBasedUniversityDataSets?.length > 0">
+          <div style="height: auto; margin-bottom: 100px; border-style: solid;" *ngFor="let university of mockTestBasedUniversity.trainingProgramBasedUniversityDataSets" fxFlex="0 1 calc(100%)" >
+            <div gdAreas="logo name name | logo description information | logo description information" gdGap="10px" gdRows="auto auto auto"
+  gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto auto auto">
+              <div gdArea="logo">
+                <img class="img-frame" src="{{university.logoUrl}}" alt="">
+              </div>
+              <h3 class="center-all" gdArea="name">
+                {{university.name}}
+              </h3>
+              <div gdArea="description">
+                <div class="first-line-uni-information"><strong>- Mã trường: </strong> {{university.code}}</div>
+                <div><strong>- Địa chỉ: </strong> {{university.address}}</div>
+                <div><strong>- Số điện thoại: </strong> {{university.phone}}</div>
+                <div><strong>- Học phí:</strong> Từ {{university.tuitionFrom | number:'1.0':'en-US'}},000 đến {{university.tuitionTo | number:'1.0':'en-US'}},000/{{ university.tuitionType == 0 ? "Kì" : "Năm"}}</div>
+              </div>
+              <div gdArea="information">
+                <div class="first-line-uni-information"><strong>- Mô tả: </strong> {{university.description}}</div>
+                <div><strong>- Chất lượng: </strong> {{university.rating}} sao</div>
+                <div><strong>- Web: </strong> <a [href]="university.webUrl | safeUrl">{{university.webUrl}}</a></div>
+              </div>
+  
+            </div>
+            <div class="training-program-list-frame" *ngIf="university.trainingProgramSets" fxLayout="row wrap" fxLayoutAlign="center">
+              <div class="training-program-item-frame" *ngFor="let trainingProgramSet of university.trainingProgramSets" fxFlex="0 1 calc(33% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+                <h4 class="center-all">Hệ {{trainingProgramSet.name}}</h4>
+                <div><strong>Điểm chuẩn năm {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[0].entryMark}}</div>
+                <div><strong>Chỉ tiêu năm {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[0].numberOfStudents}}</div>
+                <div><strong>Chỉ tiêu năm {{trainingProgramSet.seasonDataSets[1].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[1].numberOfStudents}}</div>
+                <div><strong>Số người quan tâm hiện tại:&nbsp;</strong>{{trainingProgramSet.numberOfCaring}}</div>
+                <div><strong>Bạn đang đứng top:&nbsp;</strong>{{trainingProgramSet.rank}}</div>
+                <div class="center-all follow-button-frame">
+                  <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, 3)" mat-flat-button color="accent">Theo dõi</button>
+                  <button *ngIf="trainingProgramSet.followingDetail" (click)="onUncaringClick(trainingProgramSet.followingDetail.id, university.name)" style="background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ theo dõi</button>
                 </div>
+              </div>
+             
             </div>
           </div>
         </div>
+
+        <div class="mock-test-score-title" *ngIf="!mockTestBasedUniversity.trainingProgramBasedUniversityDataSets?.length > 0">
+          Điểm thi thử của bạn không phù hợp với bất kì trường Đại học nào.
+        </div>
+
+      </div>
+
+
+      <!-- Bắt đầu flex-->
+      <div *ngIf="this.typeScore == 2" >
+        <div class="center-vertical major-title">Danh sách các trường có ngành: {{suggestedMajorName}} - Xét theo điểm học bạ</div>
+      </div>
+      <div *ngIf="this.typeScore == 1" >
+        <div class="center-vertical major-title">Danh sách các trường có ngành: {{suggestedMajorName}} - Xét theo điểm THPT QG</div>
+      </div>
+      <div *ngIf="this.trainingProgramBasedUniversity && this.trainingProgramBasedUniversity.length > 0" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+        <div style="height: auto; border: 1px solid;" *ngFor="let university of trainingProgramBasedUniversity" fxFlex="0 1 calc(100%)" >
+          <div gdAreas="logo name name | logo description information | logo description information" gdGap="10px" gdRows="auto auto auto"
+gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto auto auto">
+            <div gdArea="logo">
+              <img class="img-frame" src="{{university.logoUrl}}" alt="">
+            </div>
+            <h3 class="center-all" gdArea="name">
+              {{university.name}}
+            </h3>
+            <div gdArea="description">
+              <div class="first-line-uni-information"><strong>- Mã trường: </strong> {{university.code}}</div>
+              <div><strong>- Địa chỉ: </strong> {{university.address}}</div>
+              <div><strong>- Số điện thoại: </strong> {{university.phone}}</div>
+              <div *ngIf="university.tuitionTo == university.tuitionFrom">
+                <strong>- Học phí:</strong> khoảng {{university.tuitionTo | number:'1.0':'en-US'}},000/{{university.tuitionType == 0 ? "kì" : "năm"}}
+              </div>
+              <div *ngIf="university.tuitionTo != university.tuitionFrom">
+                <strong>- Học phí:</strong>: từ {{university.tuitionFrom | number:'1.0':'en-US'}},000
+                đến {{university.tuitionTo | number:'1.0':'en-US'}},000/
+                {{ university.tuitionType == 0 ? "kì" : "năm"}}
+              </div>
+            </div>
+            <div gdArea="information">
+              <div class="first-line-uni-information"><strong>- Mô tả: </strong> {{university.description}}</div>
+              <div><strong>- Chất lượng: </strong> {{university.rating}} sao</div>
+              <div><strong>- Web: </strong> <a [href]="university.webUrl | safeUrl">{{university.webUrl}}</a></div>
+            </div>
+
+          </div>
+
+          <div class="training-program-list-frame" *ngIf="university.trainingProgramSets" fxLayout="row wrap" fxLayoutAlign="center">
+            <div class="training-program-item-frame" *ngFor="let trainingProgramSet of university.trainingProgramSets" fxFlex="0 1 calc(33% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+              <h4 class="center-all">Hệ {{trainingProgramSet.name}}</h4>
+              <div><strong>Điểm chuẩn năm {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[0].entryMark}}</div>
+              <div><strong>Chỉ tiêu năm {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[0].numberOfStudents}}</div>
+              <div><strong>Chỉ tiêu năm {{trainingProgramSet.seasonDataSets[1].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[1].numberOfStudents}}</div>
+              <div><strong>Số người quan tâm hiện tại:&nbsp;</strong>{{trainingProgramSet.numberOfCaring}}</div>
+              <div><strong>Bạn đang đứng top:&nbsp;</strong>{{trainingProgramSet.rank}}</div>
+              <div class="center-all follow-button-frame">
+              <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, this.typeScore)" mat-flat-button color="accent">Theo dõi</button>
+              <button *ngIf="trainingProgramSet.followingDetail" (click)="onUncaringClick(trainingProgramSet.followingDetail.id, university.name)" style="background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ theo dõi</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div *ngIf="(!trainingProgramBasedUniversity || trainingProgramBasedUniversity.length == 0) && !isLoading">
+        <h2>Không có trường đại học nào phù hợp!</h2>
       </div>
 
       <div style="margin-top: 25px;">
@@ -248,7 +343,7 @@
     <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
       <div *ngFor="let subjectBasedTests of tests" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)"
       fxFlex.lt-sm="100%">
-        <h2 *ngIf="getSubjectName(subjectBasedTests.subjectId)">Môn: {{subjectName}}</h2>
+        <h2 class="test-subject-title" *ngIf="getSubjectName(subjectBasedTests.subjectId)">Đề thi môn: {{subjectName}}</h2>
         <h2 *ngIf="subjectBasedTests.universityId">{{getUniversityName(subjectBasedTests.universityId)}}</h2>
         <div>
           <div *ngFor="let test of subjectBasedTests.tests" style="margin-bottom: 10px;">
@@ -258,24 +353,24 @@
       </div>
   </div>
   <div style="margin-top: 25px;">
-    <button mat-raised-button matStepperPrevious color="warn">Trở lại</button>
+    <button (click)="backAfterDoingMockTest()" mat-raised-button matStepperPrevious color="warn">Trở lại</button>
   </div>
 </div>
   </mat-step>
   <mat-step  #stepFive >
     <ng-template matStepLabel>Làm bài thi</ng-template>
     <div>
-      <app-exam-page></app-exam-page>
+      <app-exam-page (isReloadUni)="reloadUni($event)"></app-exam-page>
       
       <div >
-        <!-- <button mat-button matStepperPrevious>Trở lại</button>
-        <button mat-button class="btn-step-one" (click)="stepper.reset()">Reset</button> -->
+        <button mat-raised-button matStepperPrevious color="warn">Trở lại</button>
+        <!--<button mat-button class="btn-step-one" (click)="stepper.reset()">Reset</button> -->
       </div>
     </div>
   </mat-step>
 
 </mat-horizontal-stepper>
 
-<app-progress-spinner *ngIf="isLoading || isAuthLoading"></app-progress-spinner>
+<app-progress-spinner *ngIf="isLoading || isAuthLoading || isUserLoading || countStepperActionLoad > 0"></app-progress-spinner>
 
 

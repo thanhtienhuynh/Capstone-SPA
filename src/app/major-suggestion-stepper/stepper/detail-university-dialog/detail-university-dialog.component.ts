@@ -2,7 +2,6 @@ import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { University } from 'src/app/_models/university';
 import * as fromApp from '../../../_store/app.reducer';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 @Component({
@@ -12,13 +11,11 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 })
 export class DetailUniversityDialogComponent implements OnInit {
 
-  university: University;
   subscription: Subscription;
 
   constructor(public dialogRef: MatDialogRef<DetailUniversityDialogComponent>,
             private store: Store<fromApp.AppState>,
-            @Inject(MAT_DIALOG_DATA) public data: {university: University}) {
-              this.university = data.university;
+            @Inject(MAT_DIALOG_DATA) public data: {}) {
   }
 
 

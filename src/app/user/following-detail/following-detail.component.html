@@ -1,0 +1,90 @@
+<div style="width: 100%; height: auto;">
+  <div class="header-frame">
+    <div class="center-all header-content">THÔNG TIN CHI TIẾT</div>
+  </div>
+  <div *ngIf="selectedFollowingDetail" class="body-frame">
+    <div gdAreas="avatar title title | avatar description description" gdGap="10px" gdRows="auto auto"
+gdAreas.lt-md="title | avatar | description" gdRows.lt-md="auto auto auto">
+      <div gdArea="avatar">
+        <img style="width: 100%; height: 100%;" src="{{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.logoUrl || '../../assets/img/news.png'}}" alt="">
+      </div>
+      <div gdArea="title">
+        <h3 class="uni-title">Trường {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.name}} - Ngành {{selectedFollowingDetail.majorBasedFollowingDetail.name}} - Hệ {{selectedFollowingDetail.trainingProgramGroupByMajorDataSet.name}}</h3>
+      </div>
+      <div gdArea="description">
+        <div class="description" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+          {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.description}}
+        </div>
+      </div>
+    </div>
+
+    <div class="information" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+      <div class="ranking-information" fxFlex="0 1 calc(40% - 16px)" fxFlex.lt-md="100%">
+        <div class="rank-information">
+          <h3>
+            Thông tin xếp hạng
+          </h3>
+          <div>Chỉ tiêu năm {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.seasonDataSet.name}}: {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.seasonDataSet.numberOfStudents}}</div>
+          <div>Khối: {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.subjectGroupCode}}</div>
+          <div>Loại điểm: </div>
+          <div>Điểm chuẩn năm  {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.seasonDataSet.name}}: {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.seasonDataSet.entryMark}}</div>
+          <div>Xếp hạng:  {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.positionOfUser}}</div>
+        </div>
+        <div class="uni-information">
+          <h3>
+            Thông tin trường
+          </h3>
+          <div>Mã trường: {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.code}}</div>
+          <div>Sđt: {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.phone}}</div>
+          <div>Địa chỉ: {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.address}}</div>
+          <div *ngIf="selectedFollowingDetail.universityGroupByTrainingProgramDataSet.tuitionTo == selectedFollowingDetail.universityGroupByTrainingProgramDataSet.tuitionFrom">
+            Học phí: khoảng {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.tuitionTo | number:'1.0':'en-US'}},000/{{ selectedFollowingDetail.universityGroupByTrainingProgramDataSet.tuitionType == 0 ? "kì" : "năm"}}</div>
+          <div *ngIf="selectedFollowingDetail.universityGroupByTrainingProgramDataSet.tuitionTo != selectedFollowingDetail.universityGroupByTrainingProgramDataSet.tuitionFrom">
+            Học phí: từ {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.tuitionFrom | number:'1.0':'en-US'}},000
+            đến {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.tuitionTo | number:'1.0':'en-US'}},000/
+            {{ selectedFollowingDetail.universityGroupByTrainingProgramDataSet.tuitionType == 0 ? "kì" : "năm"}}</div>
+          <div>Website: <a href="{{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.webUrl}}" target="_blank">{{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.webUrl}}</a></div>
+        </div>
+        <div class="major-information">
+          <h3>
+            Thông tin ngành
+          </h3>
+          <div>Mã ngành: {{selectedFollowingDetail.majorBasedFollowingDetail.code}}</div>
+          <div>Hệ: {{selectedFollowingDetail.trainingProgramGroupByMajorDataSet.name}}</div>
+        </div>
+        <!-- <share-button [theme]="'default'"
+          [button]="'facebook'"
+          [showText]="true"
+          [size]="4"
+          [url]="'https://unilinks-41d0e.web.app/customer/home'"
+        ></share-button> -->
+      </div>
+      <div class="user-information" fxFlex="0 1 calc(60% - 16px)" fxFlex.lt-md="100%">
+        <div>
+          <h3>Bảng xếp hạng</h3>
+          <table>
+              <thead>
+                  <tr>
+                      <th>No.</th>
+                      <th>Họ tên</th>
+                      <th>Thứ hạng</th>
+                      <th>Tổng điểm</th>
+                      <th>Khối thi</th>
+                  </tr>
+              </thead>
+              <tbody *ngFor="let rankType of rankingUserInformationGroupByRankTypes; let i = index">
+                    <tr class="rank-type">{{rankType.name}}</tr>
+                    <tr *ngFor="let userRanking of rankType.rankingUserInformations; let j = index">
+                      <td>{{count(i) + j + 1}}</td>
+                      <td [ngClass]="{'is-user': this.userId == userRanking.id}">{{userRanking.fullname}}</td>
+                      <td>{{userRanking.position}}</td>
+                      <td>{{userRanking.totalMark}}</td>
+                      <td>{{userRanking.groupCode}}</td>
+                    </tr>
+              </tbody>
+          </table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

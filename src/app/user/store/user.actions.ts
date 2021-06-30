@@ -1,18 +1,29 @@
 import { Action } from "@ngrx/store";
-import { MajorBasedUserMajorDetail } from "src/app/_models/major-based-user-major-detail";
-import { SelectedUserMajorDetail } from "src/app/_models/selected-user-major-detail";
-import { UniversityBasedUserMajorDetail } from "src/app/_models/university-based-user-major-detail";
+import { MajorBasedFollowingDetail } from "src/app/_models/major-based-following-detail";
+import { RankingUserInformationGroupByTranscriptType } from "src/app/_models/ranking-user-information";
+import { SelectedFollowingDetail } from "src/app/_models/selected-following-detail";
+import { UniversityBasedFollowingDetail } from "src/app/_models/university-based-following-detail";
 import { UserDetailTestSubmission, UserTestSubmission } from "src/app/_models/user-test-submission";
+import { TranscriptType } from "src/app/_models/transcript";
+import { CollapseArticle } from "src/app/_models/collapse-article";
 
 export const LOAD_SUBMISSIONS = '[User] Load Submissions';
 export const SET_SUBMISSIONS = '[User] Set Submissions';
 export const LOAD_DETAIL_SUBMISSION = '[User] Load Detail Submission';
 export const SET_DETAIL_SUBMISSION = '[User] Set Question Submission';
-export const LOAD_MAJOR_BASED_USER_MAJOR_DETAILS = '[User] Load Major Based User Major Details';
-export const SET_MAJOR_BASED_USER_MAJOR_DETAILS = '[User] Set Major Based User Major Details';
-export const LOAD_UNIVERSITY_BASED_USER_MAJOR_DETAILS = '[User] Load University Based User Major Details';
-export const SET_UNIVERSITY_BASED_USER_MAJOR_DETAILS = '[User] Set University Based User Major Details';
-export const SET_DETAIL_USER_MAJOR_DETAIL = '[User] Set Detail User Major Details';
+export const LOAD_MAJOR_BASED_FOLLOWING_DETAILS = '[User] Load Major Based Following Details';
+export const SET_MAJOR_BASED_FOLLOWING_DETAILS = '[User] Set Major Based Following Details';
+export const LOAD_UNIVERSITY_BASED_FOLLOWING_DETAILS = '[User] Load University Based Following Details';
+export const SET_UNIVERSITY_BASED_FOLLOWING_DETAILS = '[User] Set University Based Following Details';
+export const SET_DETAIL_FOLLOWING_DETAIL = '[User] Set Detail Following Detail';
+export const LOAD_RANKING_USER_INFORMATION = '[User] Load Ranking User Information';
+export const SET_RANKING_USER_INFORMATION = '[User] Set Ranking User Information';
+export const LOAD_TRANSCRIPTS = '[User] Load Transcripts';
+export const SET_TRANSCRIPTS = '[User] Set Transcripts';
+export const LOAD_CARING_ARTICLES = '[User] Load Caring Articles';
+export const SET_CARING_ARTICLES = '[User] Set Caring Articles';
+export const SET_NOTIFICATION_ARTICLE_IDS = '[User] Set Notification Article Ids';
+export const UNCARING_ACTION = '[User] Uncaring Action';
 export const HAS_ERRORS = '[User] Has Errors';
 export const CONFIRM_ERRORS = '[User] Confirm Errors';
 
@@ -35,27 +46,64 @@ export class SetDetailSubmission implements Action {
   constructor(public payload: UserDetailTestSubmission) {}
 }
 
-export class LoadMajorBasedUserMajorDetails implements Action {
-  readonly type = LOAD_MAJOR_BASED_USER_MAJOR_DETAILS;
+export class LoadMajorBasedFollowingDetails implements Action {
+  readonly type = LOAD_MAJOR_BASED_FOLLOWING_DETAILS;
 }
 
-export class SetMajorBasedUserMajorDetails implements Action {
-  readonly type = SET_MAJOR_BASED_USER_MAJOR_DETAILS;
-  constructor(public payload: MajorBasedUserMajorDetail[]) {}
+export class SetMajorBasedFollowingDetails implements Action {
+  readonly type = SET_MAJOR_BASED_FOLLOWING_DETAILS;
+  constructor(public payload: MajorBasedFollowingDetail[]) {}
 }
 
-export class LoadUniversityBasedUserMajorDetails implements Action {
-  readonly type = LOAD_UNIVERSITY_BASED_USER_MAJOR_DETAILS;
+export class LoadUniversityBasedFollowingDetails implements Action {
+  readonly type = LOAD_UNIVERSITY_BASED_FOLLOWING_DETAILS;
 }
 
-export class SetUniversityBasedUserMajorDetails implements Action {
-  readonly type = SET_UNIVERSITY_BASED_USER_MAJOR_DETAILS;
-  constructor(public payload: UniversityBasedUserMajorDetail[]) {}
+export class SetUniversityBasedFollowingDetails implements Action {
+  readonly type = SET_UNIVERSITY_BASED_FOLLOWING_DETAILS;
+  constructor(public payload: UniversityBasedFollowingDetail[]) {}
 }
 
-export class SetDetailUserMajorDetail implements Action {
-  readonly type = SET_DETAIL_USER_MAJOR_DETAIL;
-  constructor(public payload: SelectedUserMajorDetail) {}
+export class SetDetailFollowingDetail implements Action {
+  readonly type = SET_DETAIL_FOLLOWING_DETAIL;
+  constructor(public payload: SelectedFollowingDetail) {}
+}
+
+export class LoadRankingUserInformation implements Action {
+  readonly type = LOAD_RANKING_USER_INFORMATION;
+}
+
+export class SetRankingUserInformation implements Action {
+  readonly type = SET_RANKING_USER_INFORMATION;
+  constructor(public payload: RankingUserInformationGroupByTranscriptType[]) {}
+}
+
+export class LoadTranscripts implements Action {
+  readonly type = LOAD_TRANSCRIPTS;
+}
+
+export class SetTranscripts implements Action {
+  readonly type = SET_TRANSCRIPTS;
+  constructor(public payload: TranscriptType[]) {}
+}
+
+export class LoadCaringArticles implements Action {
+  readonly type = LOAD_CARING_ARTICLES;
+}
+
+export class SetCaringArticles implements Action {
+  readonly type = SET_CARING_ARTICLES;
+  constructor(public payload: CollapseArticle[]) {}
+}
+
+export class SetNotificationArticleIds implements Action {
+  readonly type = SET_NOTIFICATION_ARTICLE_IDS;
+  constructor(public payload: number) {}
+}
+
+export class UncaringAction implements Action {
+  readonly type = UNCARING_ACTION;
+  constructor(public payload: {uncaringType: number, followingDetailId: number}) {}
 }
 
 export class HasErrors implements Action {
@@ -68,5 +116,7 @@ export class ConfirmErrors implements Action {
 }
 
 export type UserActions = LoadSubmissions | SetSubmissions | LoadDetailSubmission | SetDetailSubmission | HasErrors | ConfirmErrors
-                          | LoadMajorBasedUserMajorDetails | SetMajorBasedUserMajorDetails | LoadUniversityBasedUserMajorDetails
-                          | SetUniversityBasedUserMajorDetails | SetDetailUserMajorDetail;
+                          | LoadMajorBasedFollowingDetails | SetMajorBasedFollowingDetails | LoadUniversityBasedFollowingDetails
+                          | SetUniversityBasedFollowingDetails | SetDetailFollowingDetail | LoadRankingUserInformation
+                          | SetRankingUserInformation | LoadTranscripts | SetTranscripts | LoadCaringArticles | SetCaringArticles
+                          | SetNotificationArticleIds | UncaringAction;

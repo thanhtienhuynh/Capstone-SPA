@@ -186,10 +186,8 @@ export class ArticleDetailComponent implements OnInit {
           cancelButtonText: 'HỦY'
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log(newValue);
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
-                console.log(rs);
                 if (rs.succeeded === true) {
                   this.createNotification('success', 'DUYỆT BÀI VIẾT', 'Duyệt bài viết thành công', 'bottomRight');
                   this.getArticleById();
@@ -199,7 +197,6 @@ export class ArticleDetailComponent implements OnInit {
                 }
               }),
               catchError(err => {
-                console.log(err);
                 return of(err);
               })
             ).subscribe();
@@ -228,7 +225,6 @@ export class ArticleDetailComponent implements OnInit {
           cancelButtonText: 'HỦY'
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log(newValue);
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
                 if (rs.succeeded === true) {
@@ -334,10 +330,8 @@ export class ArticleDetailComponent implements OnInit {
           cancelButtonText: 'HỦY'
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log(newValue);
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
-                console.log(rs);
                 if (rs.succeeded === true) {
                   this.createNotification('success', 'ĐĂNG BÀI', 'Đăng bài viết thành công', 'bottomRight');
                   this.getArticleById();
@@ -374,10 +368,8 @@ export class ArticleDetailComponent implements OnInit {
           cancelButtonText: 'HỦY'
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log(newValue);
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
-                console.log(rs);
                 if (rs.succeeded === true) {
                   this.createNotification('success', 'ĐĂNG BÀI', 'Đăng bài viết thành công', 'bottomRight');
                   this.getArticleById();

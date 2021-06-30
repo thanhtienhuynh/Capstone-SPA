@@ -81,8 +81,7 @@ export class TopArticleComponent implements OnInit, OnDestroy {
 
 
 
-  reloadLaneData(event: BoardData): void {
-    console.log(event);      
+  reloadLaneData(event: BoardData): void {    
     if (!event) {
       return;
     }
@@ -105,12 +104,10 @@ export class TopArticleComponent implements OnInit, OnDestroy {
       return;
     }
     const data = event.topData.map(rs => rs.id);
-    console.log(data);
     this.updateTopArticle(data)
   }
 
   searchByTitle(event: BoardData): void {
-    console.log(event);
     if (!event) {
       return;
     };

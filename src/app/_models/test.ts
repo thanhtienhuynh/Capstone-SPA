@@ -4,6 +4,7 @@ export interface Test {
   id: number;
   name: string;
   level: number;
+  timeLimit: number;
   numberOfQuestion: number;
   year: Date;
   createDate: Date;

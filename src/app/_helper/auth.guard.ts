@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate {
       }),
       map(user => {
         const isAuth = !!user;
-        if (isAuth && user.isAdmin) {
+        if (isAuth && ((user.isAdmin && route.data.isAdmin) ||  (!user.isAdmin && !route.data.isAdmin))) {
           return true;
         }
         return this.router.createUrlTree(['/customer']);

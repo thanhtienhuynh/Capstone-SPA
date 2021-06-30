@@ -65,7 +65,6 @@ export class UniversityMainComponent implements OnInit {
             this.listOfDisplayUniversity = [...this.listOfUniversity];   
           }          
         } else {
-          console.log('fail');
         }
       }),
       catchError((err) => {
@@ -87,7 +86,6 @@ export class UniversityMainComponent implements OnInit {
           this.listOfDisplayUniversity = [...this.listOfUniversity];        
           this.total = this.listOfUniversity.length;  
         } else {
-          console.log('fail');
         }                                                    
       }),
       catchError((err) => {
@@ -148,7 +146,6 @@ export class UniversityMainComponent implements OnInit {
 
   searchByName(): void {
     this.getListOfUniversity(1, this.pageSize, this.searchValueName, '');
-    console.log(this.searchValueName);
   }
 
   resetSearchName(): void {

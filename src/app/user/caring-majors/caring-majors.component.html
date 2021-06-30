@@ -2,14 +2,14 @@
   <div style="width: 100%; background-color: rgb(218, 235, 240);border-radius: 15px;">
     <div style="width: 100%; height: 15%; background-color: rgb(57, 199, 235); font-size: 1.5em; font-weight: 600; border-radius: 15px;" class="center-all">DANH SÁCH CÁC NGÀNH HỌC QUAN TÂM</div>
   </div>
-  <div *ngIf="majorBasedUserMajorDetails" style="width: 100%; padding: 5px 5px 0 5px;">
+  <div *ngIf="majorBasedFollowingDetails" style="width: 100%; padding: 5px 5px 0 5px;">
     <mat-accordion>
-      <div *ngFor="let majorBasedUserMajorDetail of majorBasedUserMajorDetails">
-        <div *ngFor="let trainingProgramGroupByMajorDataSet of majorBasedUserMajorDetail.trainingProgramGroupByMajorDataSets" class="expansion-frame">
+      <div *ngFor="let majorBasedFollowingDetail of majorBasedFollowingDetails">
+        <div *ngFor="let trainingProgramGroupByMajorDataSet of majorBasedFollowingDetail.trainingProgramGroupByMajorDataSets" class="expansion-frame">
             <mat-expansion-panel >
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  {{majorBasedUserMajorDetail.name}} - {{trainingProgramGroupByMajorDataSet.name}}
+                  {{majorBasedFollowingDetail.name}} - {{trainingProgramGroupByMajorDataSet.name}}
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <div class="uni-scroll content" id="style-7">
@@ -22,7 +22,7 @@
                       <div style=" padding: 15px;">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                           <div>Chỉ tiêu năm 2021:</div>
-                          <div class="information-value">{{universityGroupByTrainingProgramDataSet.numberOfStudent}}</div>
+                          <div class="information-value">{{universityGroupByTrainingProgramDataSet.seasonDataSet.numberOfStudents}}</div>
                         </div>
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -32,7 +32,7 @@
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
                           <div>Điểm chuẩn năm 2021: </div>
-                          <div class="information-value">{{universityGroupByTrainingProgramDataSet.newestEntryMark}}</div>
+                          <div class="information-value">{{universityGroupByTrainingProgramDataSet.seasonDataSet.entryMark}}</div>
                         </div>
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -41,8 +41,10 @@
                         </div>        
                         <mat-divider class="devider"></mat-divider>
                         <div class="center-all button-frame">
-                          <button (click)="onDetailClick(majorBasedUserMajorDetail, trainingProgramGroupByMajorDataSet, universityGroupByTrainingProgramDataSet)" class="detail-button" routerLink="./detail" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" mat-stroked-button color="primary">Chi tiết</button>
-                          <button (click)="onUncaringClick(1, 1, 1)" class="uncaring-button" mat-stroked-button>Bỏ quan tâm</button>
+                          <button (click)="onDetailClick(majorBasedFollowingDetail, trainingProgramGroupByMajorDataSet, universityGroupByTrainingProgramDataSet)"
+                           class="detail-button" routerLink="./detail" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                           mat-flat-button color="primary">Chi tiết</button>
+                          <button (click)="onUncaringClick(universityGroupByTrainingProgramDataSet.followingDetailId, universityGroupByTrainingProgramDataSet.name)" mat-flat-button color="warn">Bỏ quan tâm</button>
                         </div>
                       </div>
                     </div>
