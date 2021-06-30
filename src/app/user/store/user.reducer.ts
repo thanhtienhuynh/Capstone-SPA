@@ -1,3 +1,4 @@
+import { CollapseArticle } from 'src/app/_models/collapse-article';
 import { MajorBasedFollowingDetail } from 'src/app/_models/major-based-following-detail';
 import { RankingUserInformationGroupByTranscriptType } from 'src/app/_models/ranking-user-information';
 import { SelectedFollowingDetail } from 'src/app/_models/selected-following-detail';
@@ -16,7 +17,11 @@ export interface State {
   selectedFollowingDetail: SelectedFollowingDetail;
   rankingUserInformationGroupByRankTypes: RankingUserInformationGroupByTranscriptType[];
   transcripts: TranscriptType[];
+  caringArticles: CollapseArticle[];
+  notiArticleIds: number[];
   errors: string[];
+  uncaringFollowingDetailId: number;
+  uncareType: number;
 }
 
 const initialState: State = {
@@ -28,7 +33,11 @@ const initialState: State = {
   universityBasedFollowingDetails: null,
   selectedFollowingDetail: null,
   rankingUserInformationGroupByRankTypes: [],
+  caringArticles: [],
   transcripts: [],
+  notiArticleIds: [],
+  uncaringFollowingDetailId: null,
+  uncareType: null,
   errors: null,
 };
 
@@ -109,6 +118,29 @@ export function userReducer(
         isLoading: false,
         transcripts: action.payload
       }
+    case UserActions.LOAD_CARING_ARTICLES:
+      return {
+        ...state,
+        isLoading: true
+      };
+    case UserActions.SET_CARING_ARTICLES:
+      return {
+        ...state,
+        isLoading: false,
+        caringArticles: action.payload
+      }
+    case UserActions.SET_NOTIFICATION_ARTICLE_IDS:
+      return {
+        ...state,
+        notiArticleIds: [...state.notiArticleIds, action.payload]
+      }
+    case UserActions.UNCARING_ACTION:
+        return {
+          ...state,
+          isLoading: false,
+          uncaringFollowingDetailId: action.payload.followingDetailId,
+          uncareType: action.payload.uncaringType
+        }
     case UserActions.HAS_ERRORS:
       return {
         ...state,

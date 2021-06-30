@@ -2,9 +2,30 @@
   <div class="home">
     <button mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/">Trang chủ</button>
     <button mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="./stepper">Gợi ý ngành học</button>
+    <button mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="./university">Trường đại học</button>
+    <button mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="./major">Ngành học</button>
+    <button mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="./test">Luyện thi</button>
   </div>
-  <div class="login" >
+ 
+  <div class="login login-button" >
     <app-authentication></app-authentication>
+  </div>
+  
+  <div *ngIf="user" class="login noti-button center-vertical">
+    <mat-icon (click)="viewNoti()" type="button" cdkOverlayOrigin #trigger="cdkOverlayOrigin" matBadge="{{notiArticleIds.length > 0 ? notiArticleIds.length : ''}}" matBadgeColor="warn">notifications_active</mat-icon>
+    <ng-template
+      cdkConnectedOverlay
+      [cdkConnectedOverlayOrigin]="trigger"
+      [cdkConnectedOverlayOpen]="isOpen"
+    >
+    <!-- <cdk-virtual-scroll-viewport #scroller itemSize="72" class="content"> -->
+      <ul class="example-list">
+        <li *ngFor="let article of caringArticles" class="title">
+          <p (click)="articleClick(article.id)">{{article.title}} {{isNew(article.id) ? ' - Mới' : ''}}</p>
+        </li>
+      </ul>
+    <!-- </cdk-virtual-scroll-viewport> -->
+    </ng-template>
   </div>
 </div>
 

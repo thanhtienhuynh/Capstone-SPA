@@ -63,11 +63,14 @@ export class ExamPageComponent implements OnInit, OnDestroy {
               this.openFinishTestDialog();
             }
           }
-          this.isSaved = stepperState.isSubmissionSaved;
-          if (this.isSaved && this.isSaving) {
-            this.openResultDialog();
-            this.isSaving = false;
+          if (this.isSaved != stepperState.isSubmissionSaved) {
+            this.isSaved = stepperState.isSubmissionSaved;
+            if (this.isSaved && this.isSaving) {
+              this.openResultDialog();
+              this.isSaving = false;
+            }
           }
+          
           this.test = stepperState.test;
           if (this.test) {
             this.selectedIndex = null;
@@ -104,11 +107,14 @@ export class ExamPageComponent implements OnInit, OnDestroy {
       .select('auth')
       .subscribe(
         (authState) => {
-          this.user = authState.user;
-          if (this.isSaving && this.user) {
-            this.dialog.closeAll();
-            this.store.dispatch(new StepperActions.SaveUnsaveTestSubmissions());
+          if (this.user != authState.user) {
+            this.user = authState.user;
+            if (this.isSaving && this.user) {
+              this.dialog.closeAll();
+              this.store.dispatch(new StepperActions.SaveUnsaveTestSubmissions());
+            }
           }
+          
         },
         (error) => {
         }

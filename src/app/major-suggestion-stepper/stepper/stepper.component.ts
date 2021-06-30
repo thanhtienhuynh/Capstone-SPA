@@ -30,6 +30,7 @@ import { Major } from 'src/app/_models/major';
 import { UnsaveTestSubmission } from 'src/app/_params/question-param';
 import { TranscriptType } from 'src/app/_models/transcript';
 
+
 @Component({
   selector: 'app-stepper',
   templateUrl: './stepper.component.html',
@@ -37,6 +38,7 @@ import { TranscriptType } from 'src/app/_models/transcript';
 })
 export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('stepper') private myStepper: MatStepper;
+  countStepperActionLoad: number = 0;
   typeScore: number = 2;
   gender: number = 1;
   provinceId: number;
@@ -116,16 +118,29 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
     this.combineSubscription = combineLatest(this.store.select('stepper'),
       this.store.select('auth'), (stepperState, authState) => ({stepperState, authState}))
       .subscribe((state) => {
+        this.isAuthLoading = state.authState.isLoading;
+        this.isLoading = state.stepperState.isLoading;
+        this.countStepperActionLoad = state.stepperState.actionCount;
         if (this.user != state.authState.user || this.provinceOptions != state.stepperState.provinces) {
-          this.user = state.authState.user;
-          this.provinceOptions = state.stepperState.provinces;
-          if (this.provinceOptions) {
-            this.filteredOptions = this.secondFormGroup.controls['province'].valueChanges.pipe(
-              startWith(''),
-              map(value => value ? this._filter(value) : this.provinceOptions.slice())
-            );
+          if (this.provinceOptions != state.stepperState.provinces) {
+            this.provinceOptions = state.stepperState.provinces;
+            if (this.provinceOptions) {
+              this.filteredOptions = this.secondFormGroup.controls['province'].valueChanges.pipe(
+                startWith(''),
+                map(value => value ? this._filter(value) : this.provinceOptions.slice())
+              );
+            }
           }
-          if (this.provinceOptions && this.user) {
+          
+          if (this.user != state.authState.user) {
+            this.user = state.authState.user;
+            if (this.user && this.trainingProgramBasedUniversity && this.trainingProgramBasedUniversity.length > 0 && this.isFollowing) {
+              this.store.dispatch(new StepperActions.ReloadUniversities());
+              this.isFollowing = false;
+            }
+          }
+
+          if (this.provinceOptions && this.provinceOptions.length > 0 && this.user) {
             this.store.dispatch(new StepperActions.LoadUserSuggestion());
           }
         }
@@ -148,20 +163,9 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
           this.test = stepperState.test;
           this.mockTestBasedUniversity = stepperState.mockTestBasedUniversity;
           this.unsaveTestSubmissions = stepperState.unsaveTestSubmissions;
-          
-          //load provinces
-          if (this.provinceOptions != stepperState.provinces) {
-            this.provinceOptions = stepperState.provinces;
-            if (this.provinceOptions) {
-              this.filteredOptions = this.secondFormGroup.controls['province'].valueChanges.pipe(
-                startWith(''),
-                map(value => value ? this._filter(value) : this.provinceOptions.slice())
-              );
-            }
-          }
 
            //load subjects
-           if (this.subjects != stepperState.subjects) {
+          if (this.subjects != stepperState.subjects) {
             this.subjects = stepperState.subjects
             if (this.subjects && this.subjects.length > 0) {
               for (let subject of this.subjects) {
@@ -179,8 +183,20 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
           //load user suggestion
           if (this.userSuggestionSubjectGroup != stepperState.userSuggestionSubjectGroup) {
             this.userSuggestionSubjectGroup = stepperState.userSuggestionSubjectGroup;
-            if (this.userSuggestionSubjectGroup) {
-              this.gender = this.userSuggestionSubjectGroup.gender;
+
+            if (stepperState.userSuggestionSubjectGroup) {
+              Swal.fire({
+                title: 'Hệ thống ghi nhận bạn đã có kết quả gợi ý từ lần đăng nhập trước',
+                text: "Bạn có muốn xem lại kết quả cũ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Xem kết quả cũ',
+                cancelButtonText: 'Tiếp tục'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.gender = this.userSuggestionSubjectGroup.gender;
 
               this.typeScore = this.userSuggestionSubjectGroup.transcriptTypeId;
               if (this.typeScore && this.typeScore > 0) {
@@ -193,7 +209,7 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
               }
 
               if (this.userSuggestionSubjectGroup.subjectGroupDataSets) {
-                this.store.dispatch(new StepperActions.SetSuggestedSubjectsGroup(this.userSuggestionSubjectGroup.subjectGroupDataSets));
+                this.store.dispatch(new StepperActions.UpdateUserSuggestion());
               }
 
               this.transcripts = stepperState.userSuggestionSubjectGroup.transcriptDetails;
@@ -206,7 +222,8 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
                   }
                 });
               }
-
+                }
+              })
             }
           }
           
@@ -226,14 +243,7 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
       .select('auth')
       .subscribe(
         (authState) => {
-          this.isAuthLoading = authState.isLoading;
-          if (this.user != authState.user) {
-            this.user = authState.user;
-            if (this.user && this.trainingProgramBasedUniversity && this.trainingProgramBasedUniversity.length > 0 && this.isFollowing) {
-              this.store.dispatch(new StepperActions.ReloadUniversities());
-              this.isFollowing = false;
-            }
-          }
+         
         },
         (error) => {
         }
@@ -243,7 +253,7 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
       .select('user')
       .subscribe(
         (userState) => {
-          this.isAuthLoading = userState.isLoading;
+          this.isUserLoading = userState.isLoading;
         },
         (error) => {
         }
@@ -264,6 +274,7 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
         break;
       case 2: // Từ 1 => 2
         this.myStepper.selectedIndex = 2;
+        this.isFollowing = true;
         this.getUniversity(data.suggestedSubjectsGroup, data.major);
         break;
       case 3: // Từ 2 => 3
@@ -277,6 +288,7 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
         break;
       case 5: //Xem lai ket qua goi y 4 => 2
         this.myStepper.selectedIndex = 2;
+        this.isFollowing = true;
         this.store.dispatch(new StepperActions.LoadAfterMockTestsUniversities());
         break;
       case 6: //Xem ket qua goi y cũ khi đăng nhập 0 => 1
@@ -294,7 +306,7 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   backAfterDoingMockTest() {
-    if (this.doneTestIds.length == this.tests.length) {
+    if (this.doneTestIds.length == this.tests.length && this.doneTestIds.length > 0) {
       this.getAction(5);
     }
   }
@@ -324,6 +336,7 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
     return "Khối này gồm các môn: " + subjectNames;
   }
   
+
   onScoreSubmit() {
     this.marksValidator();
     if (this.secondFormGroup.valid) {

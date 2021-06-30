@@ -36,8 +36,10 @@ export const LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS = '[Stepper] Load Universit
 export const SET_UNIVERSIIES_AFTER_DOING_MOCK_TESTS = '[Stepper] Set Universities After Doing Mock Tests';
 export const LOAD_USER_SUGGESTION = '[Stepper] Load User Suggestion';
 export const SET_USER_SUGGESTION = '[Stepper] Set User Suggestion';
+export const UPDATE_USER_SUGGESTION = '[Stepper] Update User Suggestion';
 export const LOAD_PROVINCES = '[Stepper] Load Provinces';
 export const SET_PROVINCES = '[Stepper] Set Provinces';
+export const DONE_LOADING = '[Stepper] Done Loading';
 export const RESET_STATE = '[Stepper] Reset State';
 export const HAS_ERRORS = '[Stepper] Has Errors';
 export const CONFIRM_ERRORS = '[Stepper] Confirm Errors';
@@ -154,6 +156,10 @@ export class SetUserSuggestion implements Action {
   constructor(public payload: UserSuggestionSubjectGroup) {}
 }
 
+export class UpdateUserSuggestion implements Action {
+  readonly type = UPDATE_USER_SUGGESTION;
+}
+
 export class LoadProvinces implements Action {
   readonly type = LOAD_PROVINCES;
 }
@@ -161,6 +167,10 @@ export class LoadProvinces implements Action {
 export class SetProvinces implements Action {
   readonly type = SET_PROVINCES;
   constructor(public payload: Province[]) {}
+}
+
+export class DoneLoading implements Action {
+  readonly type = DONE_LOADING;
 }
 
 export class HasErrors implements Action {
@@ -180,4 +190,5 @@ export type StepperActions = ResetState | ScoringTest | SetTestMark | LoadTest |
             SetSubjects | SetMarks | SetSuggestedSubjectsGroup | LoadUniversities | ReloadUniversities | SetUniversities |
             LoadTests | SetTests | SaveUnsaveTestSubmissions | SaveUnsaveTestSubmissionsSuccess | RefreshTest | CaringAction |
             CaringActionSuccess | UncaringAction | UncaringActionSuccess | LoadAfterMockTestsUniversities | SetAfterMockTestsUniversities |
-            LoadUserSuggestion | SetUserSuggestion | LoadProvinces | SetProvinces | HasErrors | ConfirmErrors;
+            LoadUserSuggestion | SetUserSuggestion | UpdateUserSuggestion | LoadProvinces | SetProvinces | HasErrors | ConfirmErrors |
+            DoneLoading;

@@ -1,4 +1,123 @@
-<p>
-  information works!
-</p>
-<button style="width: 60px;" routerLink="./history" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Hello</button>
+<div style="width: 100%; height: auto">
+  <div class="header-frame">
+    <div class="center-all header-content">THÔNG TIN TÀI KHOẢN</div>
+  </div>
+  <div class="body-frame">
+    <div gdAreas="information information avatar" gdGap="10px" gdRows="auto auto" gdAreas.lt-md="avatar | information"
+      gdRows.lt-md="auto">
+      <div style="height: 300px;" gdArea="information">
+        <table class="info-table">
+          <tbody>
+            <tr >
+              <td>Họ và tên</td>
+              <td>
+                <input class="text-field" type="text" id="fullname" value="{{user.fullname}}" />
+              </td>
+            </tr>
+
+            <tr >
+              <td>Email</td>
+              <td>
+                <input class="text-field" id="email" type="text" disabled="" value="{{user.email}}"/>
+              </td>
+            </tr>
+
+            <tr >
+              <td>Số điện thoại</td>
+              <td>
+                <input class="text-field" id="phone" type="text" value="{{user.phone}}"/>
+              </td>
+            </tr>
+
+            <tr >
+              <td>Giới tính</td>
+              <td class="sex">
+                <div class="male-field">
+                  <input name="sex" id="nam" type="radio" value="1" />
+                  <label for="nam">Nam</label>
+                </div>
+                <div>
+                  <input name="sex" id="nu" checked="" type="radio" value="2" />
+                  <label for="nu">Nữ</label>
+                </div>
+              </td>
+            </tr>
+
+            <tr >
+              <td>Tỉnh/Thành phố</td>
+              <td>
+                <input class="text-field" id="city" type="text" disabled="" value="Kon Tum"/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div gdArea="avatar">
+        <div class="center-all ">
+          <img class="center-all " style="width: 70%; height: 70%" src="{{user.avatarUrl || '../../assets/img/news.png'}}" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <div id="score-info" class="score-info" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start" >
+      <div class="score-title">Bảng điểm</div>
+      <table class="score-table border-table">
+        <thead>
+          <tr>
+            <th class="cell-head">Loại điểm</th>
+            <th class="cell">Toán</th>
+            <th class="cell">Vật lý</th>
+            <th class="cell">Hóa</th>
+            <th class="cell">Ngữ văn</th>
+            <th class="cell">Anh văn</th>
+            <th class="cell">Sinh học</th>
+            <th class="cell">Lịch sử</th>
+            <th class="cell">Địa lý</th>
+            <th class="cell">GDCD</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr >
+            <th class="cell-head">THPT QG</th>
+            <td [ngClass]="getMark(1,1) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(1,1) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(1,3) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(1,3) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(1,4) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(1,4) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(1,10) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(1,10) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(1,5) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(1,5) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(1,6) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(1,6) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(1,8) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(1,8) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(1,7) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(1,7) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(1,9) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(1,9) || '&#8709;'}}</td>
+          </tr>
+
+          <tr >
+            <th class="cell-head">Thi thử</th>
+            <td [ngClass]="getMark(3,1) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(3,1) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(3,3) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(3,3) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(3,4) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(3,4) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(3,10) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(3,10) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(3,5) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(3,5) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(3,6) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(3,6) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(3,8) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(3,8) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(3,7) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(3,7) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(3,9) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(3,9) || '&#8709;'}}</td>
+          </tr>
+
+          <tr >
+            <th class="cell-head">Học bạ</th>
+            <td [ngClass]="getMark(2,1) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(2,1) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(2,3) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(2,3) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(2,4) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(2,4) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(2,10) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(2,10) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(2,5) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(2,5) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(2,6) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(2,6) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(2,8) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(2,8) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(2,7) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(2,7) || '&#8709;'}}</td>
+            <td [ngClass]="getMark(2,9) ? 'green-mark' : 'empty-mark'" class="cell">{{getMark(2,9) || '&#8709;'}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

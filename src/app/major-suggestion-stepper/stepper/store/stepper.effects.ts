@@ -87,9 +87,9 @@ export class StepperEffects {
       queryParams = queryParams.append('subjectGroupId', stepperState.selectedSubjectGroup.id.toString());
       queryParams = queryParams.append('majorId', stepperState.selectedMajor.id.toString());
       queryParams = queryParams.append('totalMark', stepperState.selectedSubjectGroup.totalMark.toString());
-      queryParams = queryParams.append('transcriptTypeId', '2');
+      queryParams = queryParams.append('transcriptTypeId', stepperState.transcriptTypeId.toString());
       queryParams = queryParams.append('gender', stepperState.gender.toString());
-      if ( stepperState.provinceId) {
+      if (stepperState.provinceId) {
         queryParams = queryParams.append('provinceId', stepperState.provinceId.toString());
       }
       return this.http.get<Response<TrainingProgramBasedUniversity[]>>(
@@ -119,7 +119,7 @@ export class StepperEffects {
       var hbMarks = stepperState.marks.slice();
       var mockTestMarks = stepperState.testMarks;
       if (stepperState.tests == null || mockTestMarks == null || stepperState.tests.length == 0 || mockTestMarks.length != stepperState.tests.length) {
-        return of({type: 'DUMMY'});
+        return of(new StepperActions.DoneLoading());
       }
       for(var i = 0, l = hbMarks.length; i < l; i++) {
         for(var j = 0, ll = mockTestMarks.length; j < ll; j++) {
@@ -246,7 +246,7 @@ export class StepperEffects {
         );
       }
       else {
-        return of({type: 'DUMMY'});
+        return of(new StepperActions.DoneLoading());
       }
     })
   );
@@ -269,7 +269,7 @@ export class StepperEffects {
       ).pipe(
         switchMap((response) => {
           if (response.succeeded) {
-            return ([new StepperActions.LoadUniversities(
+            return ([new StepperActions.CaringActionSuccess(), new StepperActions.LoadUniversities(
                         { 
                           subjectGroup: stepperState.selectedSubjectGroup,
                           major: stepperState.selectedMajor,
@@ -298,7 +298,7 @@ export class StepperEffects {
       ).pipe(
         switchMap((response) => {
           if (response.succeeded) {
-            return [new StepperActions.LoadUniversities(
+            return [new StepperActions.UncaringActionSuccess(), new StepperActions.LoadUniversities(
               {subjectGroup: stepperState.selectedSubjectGroup,
                 major: stepperState.selectedMajor,
                 gender: stepperState.gender,

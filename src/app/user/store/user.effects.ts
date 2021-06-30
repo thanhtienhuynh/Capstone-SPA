@@ -1,9 +1,10 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Actions, Effect, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
 import { of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
+import { CollapseArticle } from "src/app/_models/collapse-article";
 import { MajorBasedFollowingDetail } from "src/app/_models/major-based-following-detail";
 import { RankingUserInformationGroupByTranscriptType } from "src/app/_models/ranking-user-information";
 import { Response } from "src/app/_models/response";
@@ -147,5 +148,59 @@ export class UserEffects {
         })
       );
     })
+  );
+
+  @Effect()
+  loadCaringArticles = this.actions$.pipe(
+    ofType(UserActions.LOAD_CARING_ARTICLES),
+    switchMap(() => {
+      let queryParams = new HttpParams();
+      queryParams = queryParams.append('pageSize', '10');
+      queryParams = queryParams.append('pageNumber', '1');
+      return this.http.get<Response<CollapseArticle[]>>(
+        environment.apiUrl + 'api/v1/article/following-article',
+        {
+          params: queryParams
+        }
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new UserActions.SetCaringArticles(response.data);
+          }
+          return new UserActions.HasErrors(response.errors);
+        }),
+        catchError((error) => {
+          return of(new UserActions.HasErrors([error.message]));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  uncaringAction = this.actions$.pipe(
+    ofType(UserActions.UNCARING_ACTION),
+    withLatestFrom(this.store.select('user')),
+    switchMap(([actionData, userState]) => {
+      return this.http.delete<Response<boolean>>(
+        environment.apiUrl + 'api/v1/following-detail/' + userState.uncaringFollowingDetailId.toString()
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            console.log("success: ", userState.uncareType);
+            if (userState.uncareType == 0) {
+
+              return new UserActions.LoadMajorBasedFollowingDetails();
+            } else if (userState.uncareType == 1) {
+              return new UserActions.LoadUniversityBasedFollowingDetails();
+            }
+            return of ({ type: 'DUMMY' }); 
+          }
+          return new UserActions.HasErrors(response.errors);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          return of(new UserActions.HasErrors([error.message]));
+        })
+      );
+    }),
   );
 }

@@ -100,26 +100,27 @@
             <div class="top-2-group-in-frame">  
               <div class="top-2-group-inner-frame">
                 <div class="top-2-title-frame">
-                  <div class="top-title-2">Top 2</div>
+                  <div class="top-2-title">Top 2</div>
                 </div>
                 <div class="low-level-subject-group-frame">
                   <div class="low-level-in-subject-group-frame">
-                    <div class="low-level-out-circle-frame"
+                    <div class="top-2-out-circle-frame"
                     #tooltip="matTooltip"
                     [matTooltip]="getSubjectNames(suggestedSubjectsGroup[1])"
                     matTooltipPosition="above"
                     matTooltipHideDelay="100000">
-                      <div class="center-vertical low-level-circle-frame">
-                        <div class="group-top2-name">{{suggestedSubjectsGroup[1].name}}</div>
+                      <div class="center-vertical top-2-circle-frame">
+                        <div class="group-top-2-name">{{suggestedSubjectsGroup[1].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div style="height: 55%; background-color: rgb(125, 210, 231); border-radius: 0px 0px 30px 30px;">
+                <div class="top-2-major-frame">
                   <div style="height: 91%; width: 100%;" class="major-scroll" id="style-7">
                     <button *ngFor="let major of suggestedSubjectsGroup[1].suggestedMajors" style="width: 100%;" mat-button 
                     (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[1], major: major})">
-                      {{major.name | shorten:22}} - {{major.highestEntryMark}} - {{major.weightMark}}
+                      {{major.name | shorten:22}} 
+                      <!-- - {{major.highestEntryMark}} - {{major.weightMark}} -->
                     </button>
                   </div>
                 </div>
@@ -129,29 +130,30 @@
         </div>
         <!-- Top 1 -->
         <div fxFlex="0 1 calc(36% - 32px)" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="0 1 calc(100%)">
-            <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[0]" style="height: 550px; padding: 10px; background-color: rgb(28, 121, 158); border-radius: 30px;" >  
+            <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[0]" class="top-1-group-in-frame" >  
               <div style="height: 100%; background-color: azure; border-radius: 30px;">
-                <div style="height: 15%; background-color: rgb(125, 210, 231); border-radius: 30px 30px 0px 0px;">
-                  <div class="top-title-1">Top 1</div>
+                <div class="top-1-title-frame">
+                  <div class="top-1-title">Top 1</div>
                 </div>
                 <div style="height: 30%; background-color: rgb(231, 238, 240);">
                   <div style="height: 100%; padding-top: 12px;">
-                    <div style="background-color: rgb(82, 221, 240); height: 140px; width: 140px; display: flex; margin: auto; border-radius: 50%;"
+                    <div class="top-1-out-circle-frame"
                       #tooltip="matTooltip"
                       [matTooltip]="getSubjectNames(suggestedSubjectsGroup[0])"
                       matTooltipPosition="above"
                       matTooltipHideDelay="100000">
-                      <div class="center-vertical" style="background-color: rgb(11, 69, 192); height: 120px; width: 120px; margin: auto; border-radius: 50%;">
-                        <div class="group-top1-name">{{suggestedSubjectsGroup[0].name}}</div>
+                      <div class="center-vertical top-1-circle-frame">
+                        <div class="group-top-1-name">{{suggestedSubjectsGroup[0].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div style="height: 55%; background-color: rgb(125, 210, 231); border-radius: 0px 0px 30px 30px;">
+                <div class="top-1-major-frame">
                   <div style="height: 91%; width: 100%;" class="major-scroll"  id="style-7">
                     <button *ngFor="let major of suggestedSubjectsGroup[0].suggestedMajors" style="width: 100%;" mat-button 
                       (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[0], major: major})">
-                      {{major.name | shorten:30}} - {{major.highestEntryMark}} - {{major.weightMark}}
+                      {{major.name | shorten:30}}
+                       <!-- - {{major.highestEntryMark}} - {{major.weightMark}} -->
                     </button>
                   </div>
                 </div>
@@ -161,29 +163,30 @@
         <!-- Top 3 -->
         <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[2]" fxFlex="0 1 calc(32% - 32px)" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="0 1 calc(100%)">
           <div style="padding-top: 50px;">
-            <div style="height: 450px; padding: 10px; background-color: rgb(28, 121, 158); border-radius: 30px;" >  
+            <div class="top-3-group-in-frame" >  
               <div style="height: 100%; background-color: azure; border-radius: 30px;">
-                <div style="height: 15%; background-color: rgb(125, 210, 231); border-radius: 30px 30px 0px 0px;">
-                  <div class="top-title-2">Top 3</div>
+                <div class="top-3-title-frame">
+                  <div class="top-3-title">Top 3</div>
                 </div>
                 <div class="low-level-subject-group-frame">
                   <div class="low-level-in-subject-group-frame">
-                    <div class="low-level-out-circle-frame"
+                    <div class="top-3-out-circle-frame"
                       #tooltip="matTooltip"
                       [matTooltip]="getSubjectNames(suggestedSubjectsGroup[2])"
                       matTooltipPosition="above"
                       matTooltipHideDelay="100000">
-                      <div class="center-vertical low-level-circle-frame">
-                        <div class="group-top2-name">{{suggestedSubjectsGroup[2].name}}</div>
+                      <div class="center-vertical top-3-circle-frame">
+                        <div class="group-top-3-name">{{suggestedSubjectsGroup[2].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div style="height: 55%; background-color: rgb(125, 210, 231); border-radius: 0px 0px 30px 30px;">
+                <div class="top-3-major-frame">
                   <div style="height: 91%; border-radius: 0px 0px 30px 30px; width: 100%;"  class="major-scroll"  id="style-7" >
                     <button *ngFor="let major of suggestedSubjectsGroup[2].suggestedMajors" style="width: 100%;" mat-button 
                       (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[2], major: major})">
-                      {{major.name  | shorten:22}} - {{major.highestEntryMark}}- {{major.weightMark}}
+                      {{major.name  | shorten:22}} 
+                      <!-- - {{major.highestEntryMark}}- {{major.weightMark}} -->
                     </button>
                   </div>
                 </div>
@@ -192,7 +195,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="!suggestedSubjectsGroup || suggestedSubjectsGroup.length == 0" class="center-all">
+      <div *ngIf="(!suggestedSubjectsGroup || suggestedSubjectsGroup.length == 0) && !isLoading" class="center-all">
         <h3 >Không có khối ngành phù hợp!</h3>
       </div>
       <div style="margin-top: 25px;">
@@ -219,46 +222,54 @@
 
 
       <!-- Mới nè -->
-      <div *ngIf="mockTestBasedUniversity && mockTestBasedUniversity.trainingProgramBasedUniversityDataSets?.length > 0" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+      <div *ngIf="mockTestBasedUniversity" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
         <div class="center-vertical major-title">Danh sách các trường có ngành: {{suggestedMajorName}} - Xét theo điểm thi thử</div>
-        <div style="height: auto; margin-bottom: 100px; border-style: solid;" *ngFor="let university of mockTestBasedUniversity.trainingProgramBasedUniversityDataSets" fxFlex="0 1 calc(100%)" >
-          <div gdAreas="logo name name | logo description information | logo description information" gdGap="10px" gdRows="auto auto auto"
-gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto auto auto">
-            <div gdArea="logo">
-              <img class="img-frame" src="{{university.logoUrl}}" alt="">
-            </div>
-            <h3 class="center-all" gdArea="name">
-              {{university.name}}
-            </h3>
-            <div gdArea="description">
-              <div class="first-line-uni-information"><strong>- Mã trường: </strong> {{university.code}}</div>
-              <div><strong>- Địa chỉ: </strong> {{university.address}}</div>
-              <div><strong>- Số điện thoại: </strong> {{university.phone}}</div>
-              <div><strong>- Học phí:</strong> Từ {{university.tuitionFrom | number:'1.0':'en-US'}},000 đến {{university.tuitionTo | number:'1.0':'en-US'}},000/{{ university.tuitionType == 0 ? "Kì" : "Năm"}}</div>
-            </div>
-            <div gdArea="information">
-              <div class="first-line-uni-information"><strong>- Mô tả: </strong> {{university.description}}</div>
-              <div><strong>- Chất lượng: </strong> {{university.rating}} sao</div>
-              <div><strong>- Web: </strong> <a [href]="university.webUrl | safeUrl">{{university.webUrl}}</a></div>
-            </div>
-
-          </div>
-          <div class="training-program-list-frame" *ngIf="university.trainingProgramSets" fxLayout="row wrap" fxLayoutAlign="center">
-            <div class="training-program-item-frame" *ngFor="let trainingProgramSet of university.trainingProgramSets" fxFlex="0 1 calc(33% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
-              <h4 class="center-all">Hệ {{trainingProgramSet.name}}</h4>
-              <div><strong>Điểm chuẩn năm {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[0].entryMark}}</div>
-              <div><strong>Chỉ tiêu năm {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[0].numberOfStudents}}</div>
-              <div><strong>Chỉ tiêu năm {{trainingProgramSet.seasonDataSets[1].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[1].numberOfStudents}}</div>
-              <div><strong>Số người quan tâm hiện tại:&nbsp;</strong>{{trainingProgramSet.numberOfCaring}}</div>
-              <div><strong>Bạn đang đứng top:&nbsp;</strong>{{trainingProgramSet.rank}}</div>
-              <div class="center-all follow-button-frame">
-                <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, 3)" mat-flat-button color="accent">Theo dõi</button>
-                <button *ngIf="trainingProgramSet.followingDetail" (click)="onUncaringClick(trainingProgramSet.followingDetail.id, university.name)" style="background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ theo dõi</button>
+        <div fxFlex="0 1 calc(100%)"  class="mock-test-score-title">Tổng điểm thi thử của bạn là: {{mockTestBasedUniversity.totalMark}}</div>
+        <div *ngIf="mockTestBasedUniversity.trainingProgramBasedUniversityDataSets?.length > 0">
+          <div style="height: auto; margin-bottom: 100px; border-style: solid;" *ngFor="let university of mockTestBasedUniversity.trainingProgramBasedUniversityDataSets" fxFlex="0 1 calc(100%)" >
+            <div gdAreas="logo name name | logo description information | logo description information" gdGap="10px" gdRows="auto auto auto"
+  gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto auto auto">
+              <div gdArea="logo">
+                <img class="img-frame" src="{{university.logoUrl}}" alt="">
               </div>
+              <h3 class="center-all" gdArea="name">
+                {{university.name}}
+              </h3>
+              <div gdArea="description">
+                <div class="first-line-uni-information"><strong>- Mã trường: </strong> {{university.code}}</div>
+                <div><strong>- Địa chỉ: </strong> {{university.address}}</div>
+                <div><strong>- Số điện thoại: </strong> {{university.phone}}</div>
+                <div><strong>- Học phí:</strong> Từ {{university.tuitionFrom | number:'1.0':'en-US'}},000 đến {{university.tuitionTo | number:'1.0':'en-US'}},000/{{ university.tuitionType == 0 ? "Kì" : "Năm"}}</div>
+              </div>
+              <div gdArea="information">
+                <div class="first-line-uni-information"><strong>- Mô tả: </strong> {{university.description}}</div>
+                <div><strong>- Chất lượng: </strong> {{university.rating}} sao</div>
+                <div><strong>- Web: </strong> <a [href]="university.webUrl | safeUrl">{{university.webUrl}}</a></div>
+              </div>
+  
             </div>
-           
+            <div class="training-program-list-frame" *ngIf="university.trainingProgramSets" fxLayout="row wrap" fxLayoutAlign="center">
+              <div class="training-program-item-frame" *ngFor="let trainingProgramSet of university.trainingProgramSets" fxFlex="0 1 calc(33% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+                <h4 class="center-all">Hệ {{trainingProgramSet.name}}</h4>
+                <div><strong>Điểm chuẩn năm {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[0].entryMark}}</div>
+                <div><strong>Chỉ tiêu năm {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[0].numberOfStudents}}</div>
+                <div><strong>Chỉ tiêu năm {{trainingProgramSet.seasonDataSets[1].name}}:&nbsp;</strong>{{trainingProgramSet.seasonDataSets[1].numberOfStudents}}</div>
+                <div><strong>Số người quan tâm hiện tại:&nbsp;</strong>{{trainingProgramSet.numberOfCaring}}</div>
+                <div><strong>Bạn đang đứng top:&nbsp;</strong>{{trainingProgramSet.rank}}</div>
+                <div class="center-all follow-button-frame">
+                  <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, 3)" mat-flat-button color="accent">Theo dõi</button>
+                  <button *ngIf="trainingProgramSet.followingDetail" (click)="onUncaringClick(trainingProgramSet.followingDetail.id, university.name)" style="background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ theo dõi</button>
+                </div>
+              </div>
+             
+            </div>
           </div>
         </div>
+
+        <div class="mock-test-score-title" *ngIf="!mockTestBasedUniversity.trainingProgramBasedUniversityDataSets?.length > 0">
+          Điểm thi thử của bạn không phù hợp với bất kì trường Đại học nào.
+        </div>
+
       </div>
 
 
@@ -317,7 +328,7 @@ gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto 
 
         </div>
       </div>
-      <div *ngIf="!trainingProgramBasedUniversity || trainingProgramBasedUniversity.length == 0">
+      <div *ngIf="(!trainingProgramBasedUniversity || trainingProgramBasedUniversity.length == 0) && !isLoading">
         <h2>Không có trường đại học nào phù hợp!</h2>
       </div>
 
@@ -332,7 +343,7 @@ gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto 
     <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
       <div *ngFor="let subjectBasedTests of tests" fxFlex="0 1 calc(50% - 32px)" fxFlex.lt-md="0 1 calc(50% - 32px)"
       fxFlex.lt-sm="100%">
-        <h2 *ngIf="getSubjectName(subjectBasedTests.subjectId)">Đề thi môn: {{subjectName}}</h2>
+        <h2 class="test-subject-title" *ngIf="getSubjectName(subjectBasedTests.subjectId)">Đề thi môn: {{subjectName}}</h2>
         <h2 *ngIf="subjectBasedTests.universityId">{{getUniversityName(subjectBasedTests.universityId)}}</h2>
         <div>
           <div *ngFor="let test of subjectBasedTests.tests" style="margin-bottom: 10px;">
@@ -360,6 +371,6 @@ gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto 
 
 </mat-horizontal-stepper>
 
-<app-progress-spinner *ngIf="isLoading || isAuthLoading || isUserLoading"></app-progress-spinner>
+<app-progress-spinner *ngIf="isLoading || isAuthLoading || isUserLoading || countStepperActionLoad > 0"></app-progress-spinner>
 
 

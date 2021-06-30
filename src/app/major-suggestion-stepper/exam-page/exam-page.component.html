@@ -6,7 +6,7 @@
       <div style="height: auto; width: 100%;">
         <div class="center-all" style="height: auto;">Thời gian</div>
         <div class="center-all" style="height: fit-content;" >
-          <countdown style="padding: 10px; border-radius: 10px; background-color: rgb(139, 119, 224); "  #cd [config]="{ leftTime: test.timeLimit * 60, format: test.timeLimit > 60 ? 'h:m:s' : 'm:s' }" (event)="handleCoundown($event)"></countdown>
+          <countdown class="count-down-frame"  #cd [config]="{ leftTime: test.timeLimit * 60, format: test.timeLimit > 60 ? 'h:m:s' : 'm:s' }" (event)="handleCoundown($event)"></countdown>
         </div>
       </div>
       <!-- Khung câu hỏi -->

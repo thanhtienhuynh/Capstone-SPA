@@ -9,7 +9,7 @@ gdAreas.lt-md="title | avatar | description" gdRows.lt-md="auto auto auto">
         <img style="width: 100%; height: 100%;" src="{{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.logoUrl || '../../assets/img/news.png'}}" alt="">
       </div>
       <div gdArea="title">
-        <h3>Trường {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.name}} - Ngành {{selectedFollowingDetail.majorBasedFollowingDetail.name}} - Hệ {{selectedFollowingDetail.trainingProgramGroupByMajorDataSet.name}}</h3>
+        <h3 class="uni-title">Trường {{selectedFollowingDetail.universityGroupByTrainingProgramDataSet.name}} - Ngành {{selectedFollowingDetail.majorBasedFollowingDetail.name}} - Hệ {{selectedFollowingDetail.trainingProgramGroupByMajorDataSet.name}}</h3>
       </div>
       <div gdArea="description">
         <div class="description" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
@@ -52,6 +52,12 @@ gdAreas.lt-md="title | avatar | description" gdRows.lt-md="auto auto auto">
           <div>Mã ngành: {{selectedFollowingDetail.majorBasedFollowingDetail.code}}</div>
           <div>Hệ: {{selectedFollowingDetail.trainingProgramGroupByMajorDataSet.name}}</div>
         </div>
+        <!-- <share-button [theme]="'default'"
+          [button]="'facebook'"
+          [showText]="true"
+          [size]="4"
+          [url]="'https://unilinks-41d0e.web.app/customer/home'"
+        ></share-button> -->
       </div>
       <div class="user-information" fxFlex="0 1 calc(60% - 16px)" fxFlex.lt-md="100%">
         <div>
@@ -66,10 +72,10 @@ gdAreas.lt-md="title | avatar | description" gdRows.lt-md="auto auto auto">
                       <th>Khối thi</th>
                   </tr>
               </thead>
-              <tbody *ngFor="let rankType of rankingUserInformationGroupByRankTypes; let j = index">
-                    <tr>{{rankType.name}}</tr>
-                    <tr *ngFor="let userRanking of rankType.rankingUserInformations; let i = index">
-                      <td>{{i + j + 1}}</td>
+              <tbody *ngFor="let rankType of rankingUserInformationGroupByRankTypes; let i = index">
+                    <tr class="rank-type">{{rankType.name}}</tr>
+                    <tr *ngFor="let userRanking of rankType.rankingUserInformations; let j = index">
+                      <td>{{count(i) + j + 1}}</td>
                       <td [ngClass]="{'is-user': this.userId == userRanking.id}">{{userRanking.fullname}}</td>
                       <td>{{userRanking.position}}</td>
                       <td>{{userRanking.totalMark}}</td>

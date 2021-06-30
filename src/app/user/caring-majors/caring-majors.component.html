@@ -41,8 +41,10 @@
                         </div>        
                         <mat-divider class="devider"></mat-divider>
                         <div class="center-all button-frame">
-                          <button (click)="onDetailClick(majorBasedFollowingDetail, trainingProgramGroupByMajorDataSet, universityGroupByTrainingProgramDataSet)" class="detail-button" routerLink="./detail" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" mat-stroked-button color="primary">Chi tiết</button>
-                          <button (click)="onUncaringClick(1, 1, 1)" class="uncaring-button" mat-stroked-button>Bỏ quan tâm</button>
+                          <button (click)="onDetailClick(majorBasedFollowingDetail, trainingProgramGroupByMajorDataSet, universityGroupByTrainingProgramDataSet)"
+                           class="detail-button" routerLink="./detail" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                           mat-flat-button color="primary">Chi tiết</button>
+                          <button (click)="onUncaringClick(universityGroupByTrainingProgramDataSet.followingDetailId, universityGroupByTrainingProgramDataSet.name)" mat-flat-button color="warn">Bỏ quan tâm</button>
                         </div>
                       </div>
                     </div>

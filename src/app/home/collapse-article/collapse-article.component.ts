@@ -83,7 +83,7 @@ export class CollapseArticleComponent implements OnInit {
         this.lastButtonValue = this.collapseArticlesPageResponse.totalPages;
       }
 
-      if (this.secondButtonValue != 1) {
+      if (this.secondButtonValue != 1 && this.thirdButtonValue != 1 && this.fourthButtonValue != 1) {
         this.firstButtonValue = 1;
       }
     }

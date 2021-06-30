@@ -39,6 +39,7 @@ export interface State {
   doneTestIds: number[];
   provinces: Province[];
   userSuggestionSubjectGroup: UserSuggestionSubjectGroup;
+  actionCount: number;
   errors: string[];
 }
 
@@ -70,6 +71,7 @@ const initialState: State = {
   provinces: [],
   doneTestIds: [],
   userSuggestionSubjectGroup: null,
+  actionCount: 0,
   errors: null
 };
 
@@ -82,12 +84,14 @@ export function stepReducer(
       return {
         ...state,
         isLoading: true,
+        actionCount: state.actionCount + 1,
       };
     case StepperActions.SET_SUBJECTS:
       return {
         ...state,
         subjects: [...action.payload],
         isLoading: false,
+        actionCount: state.actionCount - 1,
       };
     case StepperActions.SET_MARKS:
       return {
@@ -100,13 +104,15 @@ export function stepReducer(
         marks: [...action.payload.marks],
         transcriptTypeId: action.payload.transcriptTypeId,
         gender: action.payload.gender,
-        provinceId: action.payload.provinceId
+        provinceId: action.payload.provinceId,
+        actionCount: state.actionCount + 1,
       };
     case StepperActions.SET_SUGGESTED_SUBJECTS_GROUP:
       return {
         ...state,
         suggestedSubjectsGroup: action.payload,
         isLoading: false,
+        actionCount: state.actionCount - 1,
       };
     case StepperActions.LOAD_UNIVERSIIES:
       return {
@@ -116,7 +122,14 @@ export function stepReducer(
         mockTestBasedUniversity: null,    
         selectedSubjectGroup: action.payload.subjectGroup,
         selectedMajor: action.payload.major,
+        actionCount: state.actionCount + 1
       };
+    case StepperActions.RELOAD_UNIVERSIIES:
+        return {
+          ...state,
+          isLoading: true,
+          actionCount: state.actionCount + 1
+        };
     case StepperActions.SET_UNIVERSIIES:
       return {
         ...state,
@@ -124,24 +137,28 @@ export function stepReducer(
         isLoading: false,
         // tests: [],
         test: null,
+        actionCount: state.actionCount - 1
       };
     case StepperActions.LOAD_TESTS:
       return {
         ...state,
         isLoading: true,
         test: null,
+        actionCount: state.actionCount + 1
       };
     case StepperActions.SET_TESTS:
       return {
         ...state,
         tests: action.payload,
         isLoading: false,
+        actionCount: state.actionCount - 1
       };
     case StepperActions.LOAD_TEST:
       return {
         ...state,
         selectedTestId: action.payload,
         isLoading: true,
+        actionCount: state.actionCount + 1
       };
     case StepperActions.SET_TEST:
       const tempIds =  [...state.doneTestIds, action.payload.id];
@@ -150,6 +167,7 @@ export function stepReducer(
         test: action.payload,
         doneTestIds: tempIds.filter((v,i) => tempIds.indexOf(v) === i),
         isLoading: false,
+        actionCount: state.actionCount - 1
       };
     case StepperActions.REFRESH_TEST:
       return {
@@ -159,13 +177,14 @@ export function stepReducer(
         testSubmissionParam: null,
         testSubmissionReponse: null,
         isSubmissionSaved: false,
-        isLoading: false,
+        // isLoading: false,
       };
     case StepperActions.SCORING_TEST:
       return {
         ...state,
         testSubmissionParam: action.payload,
         isLoading: true,
+        actionCount: state.actionCount + 1
       };
     case StepperActions.SET_TEST_MARK:
       var testMarks = state.testMarks;
@@ -206,18 +225,21 @@ export function stepReducer(
         testMarks: [...testMarks],
         unsaveTestSubmissions: [...unsaveTestSubmissions],
         isLoading: false,
+        actionCount: state.actionCount - 1
       };
     case StepperActions.SAVE_UNSAVE_TEST_SUBMISSIONS:
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        actionCount: state.actionCount + 1
       };
     case StepperActions.SAVE_UNSAVE_TEST_SUBMISSIONS_SUCCESS:
       return {
         ...state,
         isSubmissionSaved: true,
         isLoading: false,
-        unsaveTestSubmissions: []
+        unsaveTestSubmissions: [],
+        actionCount: state.actionCount - 1
       };
     case StepperActions.CARING_ACTION:
       return {
@@ -225,62 +247,87 @@ export function stepReducer(
         isLoading: true,
         selectedUniversityId: action.payload.universityId,
         selectedTrainingProgramId: action.payload.trainingProgramId,
-        followTranscriptTypeId: action.payload.followTranscriptTypeId
+        followTranscriptTypeId: action.payload.followTranscriptTypeId,
+        actionCount: state.actionCount + 1
       };
     case StepperActions.CARING_ACTION_SUCCESS:
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        actionCount: state.actionCount - 1
       };
     case StepperActions.UNCARING_ACTION:
       return {
         ...state,
         isLoading: true,
-        removeFollowingDetailId: action.payload
+        removeFollowingDetailId: action.payload,
+        actionCount: state.actionCount + 1
       };
     case StepperActions.UNCARING_ACTION_SUCCESS:
       return {
         ...state,
-        isLoading: false
+        isLoading: false,
+        actionCount: state.actionCount - 1
       };
     case StepperActions.LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS:
       return {
         ...state,
         isLoading: true,
+        actionCount: state.actionCount + 1
       };  
     case StepperActions.SET_UNIVERSIIES_AFTER_DOING_MOCK_TESTS:
       return {
         ...state,
         mockTestBasedUniversity: action.payload,
         isLoading: false,
+        actionCount: state.actionCount - 1
       };  
     case StepperActions.LOAD_USER_SUGGESTION:
       return {
         ...state,
         isLoading: true,
+        actionCount: state.actionCount + 1
       };  
     case StepperActions.SET_USER_SUGGESTION:
       return {
         ...state,
         userSuggestionSubjectGroup: action.payload,
-        isLoading: false
+        isLoading: false,
+        actionCount: state.actionCount - 1
+      };  
+    case StepperActions.UPDATE_USER_SUGGESTION:
+      return {
+        ...state,
+        suggestedSubjectsGroup: state.userSuggestionSubjectGroup.subjectGroupDataSets,
+        transcriptTypeId: state.userSuggestionSubjectGroup.transcriptTypeId,
+        provinceId: state.userSuggestionSubjectGroup.provinceId,
+        gender: state.userSuggestionSubjectGroup.gender
       };  
     case StepperActions.LOAD_PROVINCES:
       return {
         ...state,
         isLoading: true,
+        actionCount: state.actionCount + 1
       };  
     case StepperActions.SET_PROVINCES:
       return {
         ...state,
         provinces: action.payload,
-        isLoading: false
-      };  
+        isLoading: false,
+        actionCount: state.actionCount - 1
+      };
+    case StepperActions.DONE_LOADING:
+      return {
+        ...state,
+        isLoading: false,
+        actionCount: state.actionCount - 1
+      };
     case StepperActions.HAS_ERRORS:
       return {
         ...state,
         errors: action.payload,
-        isLoading: false
+        isLoading: false,
+        actionCount: state.actionCount - 1
       };
     case StepperActions.CONFIRM_ERRORS:
       return {

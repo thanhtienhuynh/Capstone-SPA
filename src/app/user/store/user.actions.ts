@@ -5,6 +5,7 @@ import { SelectedFollowingDetail } from "src/app/_models/selected-following-deta
 import { UniversityBasedFollowingDetail } from "src/app/_models/university-based-following-detail";
 import { UserDetailTestSubmission, UserTestSubmission } from "src/app/_models/user-test-submission";
 import { TranscriptType } from "src/app/_models/transcript";
+import { CollapseArticle } from "src/app/_models/collapse-article";
 
 export const LOAD_SUBMISSIONS = '[User] Load Submissions';
 export const SET_SUBMISSIONS = '[User] Set Submissions';
@@ -19,6 +20,10 @@ export const LOAD_RANKING_USER_INFORMATION = '[User] Load Ranking User Informati
 export const SET_RANKING_USER_INFORMATION = '[User] Set Ranking User Information';
 export const LOAD_TRANSCRIPTS = '[User] Load Transcripts';
 export const SET_TRANSCRIPTS = '[User] Set Transcripts';
+export const LOAD_CARING_ARTICLES = '[User] Load Caring Articles';
+export const SET_CARING_ARTICLES = '[User] Set Caring Articles';
+export const SET_NOTIFICATION_ARTICLE_IDS = '[User] Set Notification Article Ids';
+export const UNCARING_ACTION = '[User] Uncaring Action';
 export const HAS_ERRORS = '[User] Has Errors';
 export const CONFIRM_ERRORS = '[User] Confirm Errors';
 
@@ -82,6 +87,25 @@ export class SetTranscripts implements Action {
   constructor(public payload: TranscriptType[]) {}
 }
 
+export class LoadCaringArticles implements Action {
+  readonly type = LOAD_CARING_ARTICLES;
+}
+
+export class SetCaringArticles implements Action {
+  readonly type = SET_CARING_ARTICLES;
+  constructor(public payload: CollapseArticle[]) {}
+}
+
+export class SetNotificationArticleIds implements Action {
+  readonly type = SET_NOTIFICATION_ARTICLE_IDS;
+  constructor(public payload: number) {}
+}
+
+export class UncaringAction implements Action {
+  readonly type = UNCARING_ACTION;
+  constructor(public payload: {uncaringType: number, followingDetailId: number}) {}
+}
+
 export class HasErrors implements Action {
   readonly type = HAS_ERRORS;
   constructor(public payload: string[]) {}
@@ -94,4 +118,5 @@ export class ConfirmErrors implements Action {
 export type UserActions = LoadSubmissions | SetSubmissions | LoadDetailSubmission | SetDetailSubmission | HasErrors | ConfirmErrors
                           | LoadMajorBasedFollowingDetails | SetMajorBasedFollowingDetails | LoadUniversityBasedFollowingDetails
                           | SetUniversityBasedFollowingDetails | SetDetailFollowingDetail | LoadRankingUserInformation
-                          | SetRankingUserInformation | LoadTranscripts | SetTranscripts;
+                          | SetRankingUserInformation | LoadTranscripts | SetTranscripts | LoadCaringArticles | SetCaringArticles
+                          | SetNotificationArticleIds | UncaringAction;

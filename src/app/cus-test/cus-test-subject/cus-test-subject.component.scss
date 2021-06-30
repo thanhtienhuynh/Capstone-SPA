@@ -1,0 +1,51 @@
+.title-page {
+  margin-bottom: 25px;
+}
+
+.subject-img {
+  height: 65px;
+  max-width: 80px;
+}
+
+.subject-frame {
+  border: 1px solid rgb( 225, 225, 225 );;
+  padding: 10px 0;
+  border-radius: 5px;
+}
+
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.course-name {
+  font-size: 1em;
+}
+
+.img-frame {
+  margin-bottom: 10px;
+}
+
+.detail-btn {
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px 20px;
+  border: 1px solid rgb(88, 153, 236);
+  color: rgb(53, 117, 236);
+  font-family: Roboto, sans-serif;
+}
+
+.subject-frame:hover {
+  border: 1px solid rgb(53, 117, 236);
+  cursor: pointer;
+}
+
+.subject-frame:hover .course-name {
+  color: rgb(53, 117, 236);
+}
+
+.subject-frame:hover .detail-btn {
+  background-color: rgb(53, 117, 236);
+  color: white;
+}

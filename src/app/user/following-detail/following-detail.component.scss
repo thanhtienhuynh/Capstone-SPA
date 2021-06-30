@@ -14,7 +14,7 @@
 }
 
 .uni-title {
-  padding: 10% 20px 10% 0;
+  color: #160477;
 }
 
 .body-frame {
@@ -41,7 +41,7 @@ td, th {
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+  background-color: #e7f6fb;
 }
 
 .is-user {
@@ -50,4 +50,12 @@ tr:nth-child(even) {
 
 .information {
   margin-top: 20px;
+}
+.row-item {
+  // background-color: #e7f6fb;
+}
+
+.rank-type {
+  color: #2f0ee0;
+  font-weight: 500;
 }

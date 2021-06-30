@@ -69,6 +69,18 @@ export class FollowingDetailComponent implements OnInit {
     );
   }
 
+  
+  count(index: number) {
+    let count = 0;
+    for (let i = 0; i < this.rankingUserInformationGroupByRankTypes.length; i++) {
+      if (i == index) {
+        break;
+      }
+      count += this.rankingUserInformationGroupByRankTypes[i].rankingUserInformations.length;
+    }
+    return count;
+  }
+
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();

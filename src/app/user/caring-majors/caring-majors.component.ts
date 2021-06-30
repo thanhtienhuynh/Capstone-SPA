@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { MajorBasedFollowingDetail, TrainingProgramGroupByMajorDataSet, UniversityGroupByTrainingProgramDataSet } from 'src/app/_models/major-based-following-detail';
 import { SelectedFollowingDetail } from 'src/app/_models/selected-following-detail';
+import { ConfirmDialogComponent } from 'src/app/_sharings/components/confirm-dialog/confirm-dialog.component';
 import Swal from 'sweetalert2';
 import * as fromApp from '../../_store/app.reducer';
 import * as UserActions from '../store/user.actions';
+import * as StepperActions from '../../major-suggestion-stepper/stepper/store/stepper.actions';
 
 @Component({
   selector: 'app-caring-majors',
@@ -14,7 +17,8 @@ import * as UserActions from '../store/user.actions';
 })
 export class CaringMajorsComponent implements OnInit {
 
-  constructor(private store: Store<fromApp.AppState>) { }
+
+  constructor(private store: Store<fromApp.AppState>, public dialog: MatDialog) { }
   subscription: Subscription;
   majorBasedFollowingDetails: MajorBasedFollowingDetail[];
   errors: string[];
@@ -39,7 +43,19 @@ export class CaringMajorsComponent implements OnInit {
     );
   }
 
-  onUncaringClick(majorId: number, universityId: number, trainingProramId: number) {
+  onUncaringClick(followingDetailId: number, universityName: string) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      height: '140px',
+      disableClose: false,
+      data: "Bỏ quan tâm " + universityName + "?"
+    });
+    dialogRef.afterClosed()
+    .subscribe((response) => {
+      if (response === 1) {
+        this.store.dispatch(new UserActions.UncaringAction({followingDetailId: followingDetailId, uncaringType: 0}));
+      }
+    });
   }
 
   onDetailClick( majorBasedFollowingDetail: MajorBasedFollowingDetail,

@@ -63,3 +63,98 @@ export interface MockTestBasedUniversity {
   totalMark: number;
   trainingProgramBasedUniversityDataSets: TrainingProgramBasedUniversity[]
 }
+
+export interface CusUniversity {
+  id: number;
+  code: string;
+  name: string;
+  address: string;
+  logoUrl: string;
+  description: string;
+  rating: number;
+  tuitionFrom: number;
+  tuitionType: number;
+  tuitionTo: number;
+  webUrl: string;
+  phone: string;
+}
+
+export class CusUniversityMajorDetail {
+  universityId: number;
+  majorId: number;
+  majorCode: string;
+  majorName: string;
+  majorDetailUnies: CusMajorDetail[];
+  rows: number = 0;
+}
+
+export class CusMajorDetail
+{
+  id: number;
+  trainingProgramId: number;
+  trainingProgramName: string;
+  admissionQuantity: number;
+  majorDetailCode: string;
+  seasonId: number;
+  seasonName: string;
+  majorDetailSubAdmissions: CusSubAdmission[];
+  rows: number;
+}
+
+export class CusSubAdmission
+{
+  id: number;
+  quantity: number;
+  genderId: number;
+  admissionMethodId: number;
+  admissionMethodName: string;
+  provinceId: number;
+  provinceName: number;
+  majorDetailEntryMarks: CusEntryMark[]
+  rows: number;
+}
+
+export class CusEntryMark
+{
+  id: number;
+  mark: number;
+  majorSubjectGoupId: number;
+  subjectGroupId: number;
+  subjectGroupCode: string;
+  rows: number;
+}
+
+export class MajorDetailFilter {
+  universityId: number;
+  seasonId: number;
+  majorCode: string;
+  majorName: string;
+  order: number;
+
+  constructor({universityId, seasonId, majorCode, majorName, order}) {
+    this.universityId = universityId;
+    this.seasonId = seasonId;
+    this.majorCode = majorCode;
+    this.order = order;
+    this.majorName = majorName;
+  }
+}
+
+export class Cell {
+  rowspan: number;
+  data: any;
+  isNumber: boolean;
+}
+
+export class Row {
+  cells: Cell[];
+  isOdd: boolean;
+}
+
+export class UniSeason {
+  id: number;
+  name: string;
+  fromDate: Date;
+  toDate: Date;
+  status: number;
+}

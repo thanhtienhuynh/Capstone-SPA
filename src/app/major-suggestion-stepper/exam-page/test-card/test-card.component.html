@@ -2,11 +2,11 @@
 	gdAreas.lt-md="name name | year submit | time submit | question submit " gdRows.lt-md="auto auto auto auto">
 
 	<div class="header" gdArea="name">
-		{{test.name}}
+		<span class="test-title">{{test.name}}</span>
 	</div>
 
 	<div class="side" gdArea="year">
-		Năm: {{test.year ? test.year : "2017"}}
+		Năm: {{test.year ? test.year : "Đang cập nhật"}}
 	</div>
 
 	<div class="submit" gdArea="submit">
@@ -14,7 +14,7 @@
 	</div>
 
   <div class="side" gdArea="time">
-		Thời gian: 90 phút
+		Thời gian: {{test.timeLimit ? test.timeLimit : "Đang cập nhật"}}
 	</div>
 
 	<div class="content" gdArea="question">
