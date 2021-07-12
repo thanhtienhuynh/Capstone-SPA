@@ -123,13 +123,7 @@ export class TopArticleComponent implements OnInit, OnDestroy {
       tap(rs => {
         if (rs.succeeded === true) {
           if (rs.data !== null) {                       
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: 'Thiết lập thành công',
-              showConfirmButton: false,
-              timer: 1500
-            });
+            Swal.fire('Thành Công', 'Thiết lập thành công', 'success');
             this.getListOfTopArticle();
             this.getPublishedArticle(1, 10, 3);
           } else {            
@@ -137,13 +131,7 @@ export class TopArticleComponent implements OnInit, OnDestroy {
             this.getPublishedArticle(1, 10, 3);
           }
         } else {
-          Swal.fire({
-            position: 'top-end',
-            icon: 'error',
-            title: rs.errors[0],
-            showConfirmButton: false,
-            timer: 1500
-          });
+          Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
           this.getListOfTopArticle();
           this.getPublishedArticle(1, 10, 3);
         }

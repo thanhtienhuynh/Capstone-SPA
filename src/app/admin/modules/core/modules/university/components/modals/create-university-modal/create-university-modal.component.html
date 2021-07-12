@@ -2,7 +2,7 @@
   <div class="flex items-center py-2">    
     <div class="text-xl">THÊM TRƯỜNG MỚI VÀO HỆ THỐNG</div>
     <div class="flex-auto"></div>
-    <button nbButton (click)="closeModal()"><nb-icon pack="eva" icon="close-outline"></nb-icon></button>
+    <!-- <button nbButton (click)="closeModal()"><nb-icon pack="eva" icon="close-outline"></nb-icon></button> -->
   </div>
   
   <div class="flex">        
@@ -165,10 +165,10 @@
   </div>
   
   <div class="footer">
-    <button (click)="submitForm()" [disabled]="createUniversityForm?.invalid" nz-button [nzSize]="'medium'" nzType="primary">
+    <button (click)="submitForm()" [nzLoading]="isLoadingCreation" [disabled]="createUniversityForm?.invalid" nz-button [nzSize]="'medium'" nzType="primary">
       Thêm 
     </button>
-    <button (click)="cancel()" nz-button [nzSize]="'medium'" nzType="basic">
+    <button (click)="cancel()" [disabled]="isLoadingCreation" nz-button [nzSize]="'medium'" nzType="basic">
       Thoát 
     </button>
   </div>

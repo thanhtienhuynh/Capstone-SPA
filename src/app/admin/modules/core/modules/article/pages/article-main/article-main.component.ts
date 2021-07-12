@@ -18,6 +18,8 @@ export class ArticleMainComponent implements OnInit {
   @ViewChild('gridOne') gridOne: ArticleGridListComponent;
   @ViewChild('gridTwo') gridTwo: ArticleGridListComponent;
   @ViewChild('gridThree') gridThree: ArticleGridListComponent;
+  @ViewChild('gridFour') gridFour: ArticleGridListComponent;
+  @ViewChild('gridFive') gridFive: ArticleGridListComponent;
 
   listOfArticle: ArticleVM[]; 
   totalArticleRecords: number;  
@@ -33,9 +35,13 @@ export class ArticleMainComponent implements OnInit {
   getListOfArticle(pageNumber: number, pageSize: number, status: number): void {
     this._articleService.getListOfArticle(pageNumber, pageSize, status).pipe(
       tap((rs) => {
-        if (rs.succeeded === true) {  
-          this.totalArticleRecords = rs.totalRecords;                  
-          this.listOfArticle = rs.data;                                     
+        if (rs.succeeded === true) {
+          if (rs.data !== null) {
+            this.totalArticleRecords = rs.totalRecords;                  
+            this.listOfArticle = rs.data;   
+          } else {
+            this.listOfArticle = [];   
+          }                                  
         } else {
           
         }
@@ -70,7 +76,7 @@ export class ArticleMainComponent implements OnInit {
   
 
   changeTab(event: NbTabComponent){  
-    if (event.tabTitle === "top bài viết") {
+    if (event.tabTitle === "bài viết được đăng") {
       this.topArticle.ngOnInit();      
     } 
     if (event.tabTitle === "bài viết đã duyệt") {
@@ -78,7 +84,9 @@ export class ArticleMainComponent implements OnInit {
       this.getListOfArticle(1, 8, 1);      
       this.gridOne.resetPageModel();     
       this.gridTwo.resetPageModel();
-      this.gridThree.resetPageModel();
+      this.gridThree.resetPageModel(); 
+      this.gridFour.resetPageModel();
+      this.gridFive.resetPageModel();     
     } 
     if (event.tabTitle === "bài viết chờ duyệt") {
       this.listOfArticle = undefined;      
@@ -86,6 +94,8 @@ export class ArticleMainComponent implements OnInit {
       this.gridOne.resetPageModel();     
       this.gridTwo.resetPageModel();
       this.gridThree.resetPageModel();
+      this.gridFour.resetPageModel();
+      this.gridFive.resetPageModel();
     }
     if (event.tabTitle === "bài viết bị chặn") {
       this.listOfArticle = undefined;      
@@ -93,7 +103,27 @@ export class ArticleMainComponent implements OnInit {
       this.gridOne.resetPageModel();     
       this.gridTwo.resetPageModel();
       this.gridThree.resetPageModel();
+      this.gridFour.resetPageModel();
+      this.gridFive.resetPageModel();
     }
+    if(event.tabTitle === "bài viết quá hạn"){
+      this.listOfArticle = undefined;      
+      this.getListOfArticle(1, 8, 4);      
+      this.gridOne.resetPageModel();     
+      this.gridTwo.resetPageModel();
+      this.gridThree.resetPageModel(); 
+      this.gridFour.resetPageModel();
+      this.gridFive.resetPageModel();     
+    }
+    if(event.tabTitle === "xem xét"){
+      this.listOfArticle = undefined;      
+      this.getListOfArticle(1, 8, 5);      
+      this.gridOne.resetPageModel();     
+      this.gridTwo.resetPageModel();
+      this.gridThree.resetPageModel(); 
+      this.gridFour.resetPageModel();
+      this.gridFive.resetPageModel();     
+    }            
   }
 
   pagination(event: PageModel): void {    

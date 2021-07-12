@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { differenceInCalendarDays } from 'date-fns';
 import { NzNotificationPlacement, NzNotificationService } from 'ng-zorro-antd/notification';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -323,4 +324,9 @@ export class CensorshipComponent implements OnInit {
       { nzPlacement: position }
     );
   }
+
+  today = new Date();
+  disabledDate = (current: Date): boolean =>
+  // Can not select days before today and today
+  differenceInCalendarDays(current, this.today) < 0
 }

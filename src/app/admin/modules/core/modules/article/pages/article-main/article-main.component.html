@@ -3,7 +3,7 @@
     <nb-card>
       <nb-card-body>
         <nb-tabset (changeTab)="changeTab($event)" fullWidth>
-          <nb-tab tabTitle="top bài viết" tabIcon="layers-outline" responsive>
+          <nb-tab tabTitle="bài viết được đăng" tabIcon="layers-outline" responsive>
             <app-top-article #topArticle></app-top-article>
           </nb-tab>
           <nb-tab tabTitle="bài viết đã duyệt" tabIcon="checkmark-circle-outline" responsive>            
@@ -15,8 +15,11 @@
           <nb-tab tabTitle="bài viết bị chặn" tabIcon="close-circle-outline" responsive>
             <app-article-grid-list #gridThree [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="2" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list> 
           </nb-tab>
-          <nb-tab tabTitle="kết quả tìm kiếm" tabIcon="search-outline" responsive>
-            <p>List of <strong>transactions</strong>.</p>
+          <nb-tab tabTitle="bài viết quá hạn" tabIcon="search-outline" responsive>
+            <app-article-grid-list #gridFour [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="4" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list> 
+          </nb-tab>
+          <nb-tab tabTitle="xem xét" tabIcon="search-outline" responsive>
+            <app-article-grid-list #gridFive [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="5" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list> 
           </nb-tab>
         </nb-tabset>
       </nb-card-body>

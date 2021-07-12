@@ -8,7 +8,7 @@ const routes: Routes = [
     data: {
       breadcrumb: 'Danh Sách Trường Đại Học'
     }, children: [
-      { path: '', component: UniversityMainComponent, },
+      { path: '', component: UniversityMainComponent, },            
       {
         path: 'details/:id', component: UniDetailComponent,
         data: {

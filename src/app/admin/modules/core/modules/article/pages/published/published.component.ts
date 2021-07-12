@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { differenceInCalendarDays } from 'date-fns';
 import { NzNotificationPlacement, NzNotificationService } from 'ng-zorro-antd/notification';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -268,13 +269,15 @@ export class PublishedComponent implements OnInit {
             'id': this.articleId,
             'publicFromDate': null,
             'publicToDate': null,
-            'status': 1,
-            'university': this.listOfSelectedUniversity,
-            'major': this.listOfSelectedMajor
+            'status': 5,
+            // 'university': this.listOfSelectedUniversity,
+            // 'major': this.listOfSelectedMajor
+            'university': [],
+            'major': []
           };
           Swal.fire({
             title: 'HỦY ĐĂNG BÀI',
-            text: "Bài viết sẽ được chuyển tiếp về danh sách đã được duyệt.",
+            text: "Bài viết sẽ được chuyển tiếp về danh sách cần được xem xét.",
             icon: 'warning',
             showCancelButton: true,
             showLoaderOnConfirm: true,
@@ -360,8 +363,8 @@ export class PublishedComponent implements OnInit {
   }
   initDateForm(): void {
     this.dateForm = this._fb.group({
-      'publicFromDate': [new Date],
-      'publicToDate': [new Date]
+      'publicFromDate': [new Date, Validators.required],
+      'publicToDate': [new Date, Validators.required]
     })
   }
   //Date
@@ -390,6 +393,12 @@ export class PublishedComponent implements OnInit {
 
   getListOfSelectedUniversity(): void {
   }
+
+  today = new Date();
+
+  disabledDate = (current: Date): boolean =>
+    // Can not select days before today and today
+    differenceInCalendarDays(current, this.today) < 0
 
   createNotification(type: string, title: string, message: string, position?: NzNotificationPlacement): void {
     this.notification.create(

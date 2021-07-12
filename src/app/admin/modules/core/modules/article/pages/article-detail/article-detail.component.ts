@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { differenceInCalendarDays } from 'date-fns';
 import { NzNotificationPlacement, NzNotificationService } from 'ng-zorro-antd/notification';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -231,7 +232,7 @@ export class ArticleDetailComponent implements OnInit {
                   this.createNotification('success', 'BỎ DUYỆT BÀI VIẾT', 'BỎ DUYỆT bài viết thành công', 'bottomRight');
                   this.getArticleById();
                 } else {
-                  this.createNotification('error', 'BỎ DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
+                  this.createNotification('error', 'BỎ DUYỆT BÀI VIẾT', `${rs.errors[0]}`, 'bottomRight');
                 }
               })
             ).subscribe();
@@ -351,9 +352,11 @@ export class ArticleDetailComponent implements OnInit {
           'id': this.articleId,
           'publicFromDate': null,
           'publicToDate': null,
-          'status': 1,
-          'university': this.listOfSelectedUniversity,
-          'major': this.listOfSelectedMajor
+          'status': 5,
+          // 'university': this.listOfSelectedUniversity,
+          // 'major': this.listOfSelectedMajor
+          'university': [],
+          'major': []
         };
         Swal.fire({
           title: 'HỦY ĐĂNG BÀI',
@@ -428,4 +431,9 @@ export class ArticleDetailComponent implements OnInit {
       { nzPlacement: position }
     );
   }
+
+  today = new Date();
+  disabledDate = (current: Date): boolean =>
+  // Can not select days before today and today
+  differenceInCalendarDays(current, this.today) < 0
 }

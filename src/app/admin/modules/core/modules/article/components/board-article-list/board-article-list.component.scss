@@ -70,21 +70,26 @@ h5 {
 }
 
 nz-table th {
+  
   font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
     "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
     Helvetica, Arial, sans-serif;
-  font-weight: 600;
-  background-color: #f0f0f0;  
-  font-size: 12px; //
+  font-weight: 600;     
 }
 
-nz-pagination {
-  ::ng-deep {
-    .ant-pagination-item, .ant-pagination-total-text, .ant-pagination-item-ellipsis {
-      line-height: 30px;
-    }
-    a {
-      text-decoration: none;
-    }
-  }
+nz-table thead {
+  background-color: #f4f5f7; 
 }
+
+nz-table .ant-pagination-item, .ant-pagination-total-text, .ant-pagination-item-ellipsis{
+  line-height: 30px;
+  a {
+    text-decoration: none;
+  } 
+}
+
+// nz-table a {
+//   text-decoration: none;
+// }
+
+

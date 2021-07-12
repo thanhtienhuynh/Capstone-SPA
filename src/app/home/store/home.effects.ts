@@ -101,7 +101,7 @@ export class HomeEffects {
       if (actionData.payload.searchTerm) {
         queryParams = queryParams.append('name', actionData.payload.searchTerm);
       }
-      return this.http.get<PagedResponse<Test[]>>(environment.apiUrl + 'api/v1/test/test-by-subject',
+      return this.http.get<PagedResponse<Test[]>>(environment.apiUrl + 'api/v1/test/user-by-subject',
         {
           params: queryParams
         }

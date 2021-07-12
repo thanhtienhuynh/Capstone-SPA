@@ -32,6 +32,7 @@
       <li nz-submenu nzOpen nzTitle="Ngành học">        
         <ul>          
           <li nz-menu-item [nzSelected]="true" (click)="useUpdate('major-configuration')">Danh sách ngành học</li>          
+          <li nz-menu-item (click)="useUpdate('major-configuration/new-major')">Thêm ngành</li>     
         </ul>
       </li>
       <li nz-submenu nzOpen nzTitle="Bài viết">
@@ -44,7 +45,7 @@
       <li nz-submenu nzOpen nzTitle="Đề Thi">
         <ul>
           <li nz-menu-item (click)="useUpdate('examination')">Danh sách đề thi</li>
-          <li nz-menu-item (click)="useUpdate('examination/create-exam')">Tạo đề thi</li>                    
+          <li nz-menu-item (click)="useUpdate('examination/create-exam')">Nhập đề thi</li>                    
         </ul>
       </li>     
     </ul>

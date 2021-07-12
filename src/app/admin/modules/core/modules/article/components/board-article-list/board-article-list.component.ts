@@ -32,13 +32,13 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
   ) { }  
 
   ngOnChanges(changes: SimpleChanges): void {    
-    console.log(this.listOfArticle);
+    // console.log(this.listOfArticle, this.laneTitle, 'onChange');
     this.listOfDisplayArticle = [...this.listOfArticle];
     this.total = this.listOfDisplayArticle.length;
   }
 
   ngOnInit() {
-    console.log(this.listOfArticle);
+    // console.log(this.listOfArticle, this.laneTitle,'onInit');
     // console.log(this.listOfDisplayArticle);
   }
 
@@ -108,6 +108,7 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
   // }
 
   drop(event: CdkDragDrop<any[]>) {
+    console.log(event);
     const newArticle = { ...event.item.data };
     const newArticles = [...event.container.data];
     let isMovingInsideTheSameList = event.previousContainer === event.container;
@@ -119,7 +120,7 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         // const publishedData = undefined;
         const topData = event.container.data;
-        this.callParent.emit({ topData: topData } as BoardData);
+        this.callParent.emit({ topData: topData } as BoardData);        
       };
     } else {
       if (event.previousContainer.id === "top") {
@@ -134,8 +135,12 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
         const topData = event.container.data;
         this.callParent.emit({ publisedData: publishedData, topData: topData } as BoardData);
       }
-    }
+    }    
   }
+ 
+
+
+
 
   articleFilter(event: string): void {
     console.log(event);

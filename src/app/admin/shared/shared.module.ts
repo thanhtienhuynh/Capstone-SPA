@@ -27,7 +27,7 @@ export const ANGULAR_MODULES = [
 
 const COMPONENTS = [CustomSelectComponent];
 const PIPE = [
-  SliceWordPipe
+  SliceWordPipe  
 ]
 @NgModule({
   exports: [...SHARE_MODULES, ...ANGULAR_MODULES, ...COMPONENTS],

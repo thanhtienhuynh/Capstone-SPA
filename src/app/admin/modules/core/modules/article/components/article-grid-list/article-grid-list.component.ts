@@ -31,12 +31,13 @@ export class ArticleGridListComponent implements OnInit, OnChanges, AfterViewIni
     // this.paginationTemp.nzPageIndex = 1;  
   }
   
-  ngOnChanges(changes: SimpleChanges): void {        
+  ngOnChanges(changes: SimpleChanges): void {   
+    console.log(this.listOfArticle, 'listOfArticle')     
     
   }
 
   ngOnInit() {    
-    
+    console.log(this.listOfArticle, 'listOfArticle')
   }
 
   

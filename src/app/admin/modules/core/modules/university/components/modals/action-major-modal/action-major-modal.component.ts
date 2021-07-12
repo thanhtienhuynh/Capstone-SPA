@@ -30,6 +30,9 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
   @Output() seasonId = new EventEmitter<any>();
 
   modalTitle: string = 'Thêm ngành của ';
+
+  isLoadingAdd: boolean = false;
+  isLoadingUpdate: boolean = false;
   nation = environment.nation;
   initSeasonId = environment.initSeasonId
 
@@ -156,6 +159,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
   };
 
   addMajor(): void {
+    this.isLoadingAdd = true;
     const majorId = this.majorForm.get('majorId').value.id;
     const trainingProgramId = this.majorForm.get('trainingProgramId').value.id;
     const subAdmissionsTmp = this.getSubAddmissions.controls.map(rs => rs.value);
@@ -174,10 +178,12 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     this._universityService.majorAddition(newValue).pipe(
       tap(rs => {        
         if (rs.succeeded === true) {
+          this.isLoadingAdd = false;
           Swal.fire({ position: 'center', icon: 'success', title: 'Thành Công', showConfirmButton: false, timer: 1500 });
           this.changeSeasonId(this.majorForm.get('seasonId').value);          
           this.closeModal();                    
         } else {
+          this.isLoadingAdd = false;
           Swal.fire({ position: 'center', icon: 'error', title: 'Thất Bại', text: rs.errors[0], showConfirmButton: false, timer: 1500 });
         }
       })
@@ -435,6 +441,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
   }
 
   updateMajor(): void {
+    this.isLoadingUpdate = true;
     const tmpUpdatingUniSubAdmissionParams = this.updatingUniSubAdmissionParams.controls.map(rs => rs.value).concat(this.handleUpdatingUniSubAdmissionParams);
     const subAddmission = tmpUpdatingUniSubAdmissionParams.map(rs => {
       const sjGroups = this.handleTmpSubjectGroup !== [] ? this.handleTmpSubjectGroup.filter(_ => _.subAdmissionId === rs.subAdmissionId).map(__ => {
@@ -449,16 +456,16 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
       const tmp = { ...rs, 'genderId': rs.genderId !== 1000 ? rs.genderId : null, 'provinceId': rs.provinceId.id !== 1000 ? rs.provinceId.id : null, 'majorDetailEntryMarkParams': tmpMajorDetailEntryMarkParams }
       return tmp;
     });
-    const newValue = { ...this.updateMajorForm.value, updatingUniSubAdmissionParams: subAddmission };
-    console.log(newValue);
+    const newValue = { ...this.updateMajorForm.value, updatingUniSubAdmissionParams: subAddmission };    
     this._universityService.majorUpdation(newValue).pipe(
-      tap(rs => {
-        console.log(rs);
+      tap(rs => {        
         if (rs.succeeded === true) {
+          this.isLoadingUpdate = false;
           Swal.fire({ position: 'center', icon: 'success', title: 'Thành Công', showConfirmButton: false, timer: 1500 });
           this.changeSeasonId(this.data.majorDetailUnies[0].seasonId);   
           this.closeModal();
         } else {
+          this.isLoadingUpdate = false;
           Swal.fire({ position: 'center', icon: 'error', title: 'Thất Bại', text: rs.errors[0], showConfirmButton: false, timer: 1500 });
         }
       }),

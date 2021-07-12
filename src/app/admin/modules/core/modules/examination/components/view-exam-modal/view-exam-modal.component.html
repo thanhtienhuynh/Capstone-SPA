@@ -1,8 +1,3 @@
-<!-- <nb-card>
-  <nb-card-body>
-    
-  </nb-card-body>
-</nb-card> -->
 <div *ngIf="data !== undefined">
   <div class="exam-title">
     <label for="" style="font-size: 18px;" *ngIf="data.name !== ''">{{data.name}}</label>  
@@ -22,7 +17,7 @@
       <ng-container > 
         <div style="display: flex; justify-content: flex-start;">
           <div class="question-content"><p style="margin-right: 10px; width: 70px; font-weight: 600;">Câu {{i + 1}}.</p></div>
-          <div class="question-content" [innerHtml]="question.content"></div>
+          <div class="question-content" [innerHtml]="question.content | safeAdminHtml"></div>
         </div>               
       </ng-container>
     </div>
@@ -31,13 +26,13 @@
         <ng-container *ngIf="question.type === 1">
           <div style="display: flex; justify-self: flex-start; align-items: center;">
             <label nz-radio [ngModel]="option.isResult" [nzDisabled]="option.isResult === false" style="margin-right: 10px;"></label>  
-            <p [innerHtml]="option.content"></p>          
+            <p [innerHtml]="option.content | safeAdminHtml"></p>          
           </div>
         </ng-container>
         <ng-container *ngIf="question.type === 0">
           <div style="display: flex; justify-self: flex-start; align-items: center;">
             <label nz-checkbox [ngModel]="option.isResult" [nzDisabled]="option.isResult === false" style="margin-right: 10px;"></label>  
-            <p [innerHtml]="option.content"></p>          
+            <p [innerHtml]="option.content | safeAdminHtml"></p>          
           </div>
         </ng-container>
       </div> 
@@ -45,8 +40,11 @@
   </div>
 </div>
 <div class="footer">
-  <button nz-button (click)="createExam()" [nzLoading]="isLoading" [nzSize]="'medium'" nzType="primary" style="margin-right: 10px;">
+  <button *ngIf="status !== 'update'" nz-button (click)="createExam()" [nzLoading]="isLoading" [nzSize]="'medium'" nzType="primary" style="margin-right: 10px;">
     XÁC NHẬN
+  </button>
+  <button *ngIf="status === 'update'" nz-button (click)="updateExam()" [nzLoading]="isLoading" [nzSize]="'medium'" nzType="primary" style="margin-right: 10px;">
+    XÁC NHẬN LƯU
   </button>
   <button nz-button (click)="closeModal()" [nzSize]="'medium'" nzType="basic">
     THOÁT

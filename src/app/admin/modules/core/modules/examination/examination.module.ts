@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { ExaminationRoutes } from './examination.routing';
 import { SharedModule } from 'src/app/admin/shared/shared.module';
-import { CreateExamComponent, ExaminationFatherComponent, ExamListComponent } from './pages';
+import { CreateExamComponent, ExamDetailComponent, ExaminationFatherComponent, ExamListBySubjectComponent, ExamListComponent, ExamListFatherComponent } from './pages';
 import { ViewExamModalComponent } from './components';
+import { SafeAdminHtmlPipe } from 'src/app/admin/shared/pipe';
+
 
 const COMPONENTS = [
   ViewExamModalComponent
@@ -10,14 +12,21 @@ const COMPONENTS = [
 
 const PAGES = [
   ExaminationFatherComponent,
+  ExamListFatherComponent,
   ExamListComponent,
-  CreateExamComponent
+  ExamListBySubjectComponent,
+  CreateExamComponent,
+  ExamDetailComponent
+];
+
+const PIPE = [  
+  SafeAdminHtmlPipe
 ]
 @NgModule({
   imports: [
     SharedModule.forChild(),
     ExaminationRoutes
   ],
-  declarations: [...PAGES, ...COMPONENTS]
+  declarations: [...PAGES, ...COMPONENTS, ...PIPE]
 })
 export class ExaminationModule { }

@@ -15,6 +15,7 @@ import { AddSubjectGroupModalComponent, MajorConfigurationModalComponent } from 
 })
 export class MajorConfigMainComponent implements OnInit {
 
+  isLoadingData: boolean = false;
   isVisibleHeader = 0;
   total = 100;
   pageSize = 10;
@@ -45,27 +46,40 @@ export class MajorConfigMainComponent implements OnInit {
     }
   }
 
+  getDefault(): void {
+    this.searchValueName = '';
+    this.pageIndex = 1;
+    this.pageSize = 10;
+    this.getListOfSubjectWeight(this.pageIndex, this.pageSize, this.searchValueName)
+  }
   getListOfSubjectWeight(pageNumber: number, pageSize: number, majorName: string): void {
+    this.isLoadingData = true;
     this._majorConfigService.getListOfSubjectWeight(pageNumber, pageSize, majorName).pipe(
       tap(rs => {        
         if (rs.succeeded === true) {
-          console.log(rs);
-          this.listOfSubjectWeight = rs.data;          
-          this.listOfDisplaySubjectWeight = [...rs.data.map((e, i) => ({
-            ...e,
-            stt: (rs.pageNumber * rs.pageSize) - (rs.pageSize - (i + 1))            
-          }))
-          ];
-          this.total = rs.totalRecords;
+          this.isLoadingData = false;
+          if (rs.data !== null) {            
+            this.listOfSubjectWeight = rs.data;          
+            this.listOfDisplaySubjectWeight = [...rs.data.map((e, i) => ({
+              ...e,
+              stt: (rs.pageNumber * rs.pageSize) - (rs.pageSize - (i + 1))            
+            }))
+            ];
+            this.total = rs.totalRecords;
+          } else {
+            this.listOfSubjectWeight = [];
+          }       
         } else {
-
+          this.isLoadingData = false;
         }
       }),
     ).subscribe();
   }
 
-  onQueryParamsChange(params: NzTableQueryParams): void {    
-    this.getListOfSubjectWeight(params.pageIndex, params.pageSize, '');
+  onQueryParamsChange(params: NzTableQueryParams): void { 
+    this.pageIndex = params.pageIndex;
+    this.pageSize = params.pageSize;   
+    this.getListOfSubjectWeight(params.pageIndex, params.pageSize, this.searchValueName);
   }
 
   searchByName(): void {

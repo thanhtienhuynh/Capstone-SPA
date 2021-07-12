@@ -11,11 +11,8 @@ import { University } from 'src/app/_models/university';
 import { ViewExamModalComponent } from '../../components';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../../../../../../../_store/app.reducer';
-import * as AuthActions from '../../../../../../../authentication/store/auth.actions';
 import { User } from 'src/app/_models/user';
 import Swal from 'sweetalert2';
-// import * as fromApp from '../../../../../ _store/app.reducer';
-// import * as AuthActions from '../../../../../authentication/store/auth.actions';
 
 @Component({
   selector: 'app-create-exam',
@@ -75,7 +72,7 @@ export class CreateExamComponent implements OnInit {
       'level': [1],
       'year': [2021],
       'subjectId': [undefined],
-      'userId': [0],
+      'userId': [0],      
       'testTypeId': [1],
       'universityId': [undefined],
       'timeLimit': ['', Validators.required],
@@ -269,8 +266,7 @@ export class CreateExamComponent implements OnInit {
     for (let i = 0; i < options.controls.length; i++) {
       const element = options.controls[i];
       element.get('isResult').setValue(false);     
-    }
-    console.log(event);
+    }    
   }
 
   examinationType(event: any): void{

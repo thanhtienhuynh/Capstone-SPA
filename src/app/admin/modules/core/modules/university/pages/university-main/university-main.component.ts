@@ -18,7 +18,7 @@ import { CreateUniversityModalComponent, UniversityDetailModalComponent } from '
 })
 export class UniversityMainComponent implements OnInit {
     
-  loading: true;  
+  isLoadingData = false;  
   visible = false;
 
   total = 100;
@@ -47,12 +47,14 @@ export class UniversityMainComponent implements OnInit {
     this.getListOfUniversity(1, 10, '', '');   
   }
 
-  getListOfUniversity(pageNumber: number, pageSize: number, name: string, status:string): void {
+  getListOfUniversity(pageNumber: number, pageSize: number, name: string, status:string): void {  
+    this.isLoadingData = true;     
     this._universityService.getListOfUniversity(pageNumber, pageSize, name, status).pipe(
       tap((rs) => {
         if (rs.succeeded === true) {  
           console.log(rs);   
-          if (rs.data !== null) {            
+          if (rs.data !== null) { 
+            this.isLoadingData = false;                            
             this.listOfUniversity = rs.data.map((e, i) => ({
               ...e,
               phones: e.phone.split('-'),
@@ -71,6 +73,11 @@ export class UniversityMainComponent implements OnInit {
         return of(undefined);
       })
     ).subscribe();
+  }
+
+  getDefaultList(): void {
+    this.searchValueName = ''; 
+    this.getListOfUniversity(1, 10, '', '');   
   }
 
   getAllUniversity(): void {
@@ -105,9 +112,9 @@ export class UniversityMainComponent implements OnInit {
         this.listOfUniversity.push(item);        
         this.listOfUniversity.splice(0, 0, item);
         // this.listOfDisplayUniversity = [...this.listOfUniversity];
-        this.listOfDisplayUniversity = this.listOfUniversity.map((e) => ({
+        this.listOfDisplayUniversity = this.listOfUniversity.map((e, i) => ({
           ...e,
-          stt: e.stt + 1                   
+          stt: i + 1                   
         }));
         }
       , index: this.listOfUniversity.length}    
@@ -122,12 +129,12 @@ export class UniversityMainComponent implements OnInit {
   filterStatusFn = (status: number, item: UniversityRM) => item.status === status;
   filterTuitionTypeFn = (tuitionType: number, item: UniversityRM) => item.tuitionType === tuitionType;
 
-  onQueryParamsChange(params: NzTableQueryParams): void {  
+  onQueryParamsChange(params: NzTableQueryParams): void {        
     this.pageIndex = params.pageIndex;
     this.pageSize = params.pageSize;  
     const status = params.filter.filter(rs => rs.key === 'status')[0].value;
     const tuition = params.filter.filter(rs => rs.key === 'tuition')[0].value; 
-    if (status === null) {
+    if (status === null) {            
       this.getListOfUniversity(params.pageIndex, params.pageSize, this.searchValueName, '');
       return;
     };

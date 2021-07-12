@@ -66,10 +66,10 @@
           </nb-card-body>
         </nb-card>
       </nb-card-body>
-      <button (click)="addSubjectGroup()" nz-button nzType="default" nz-tooltip>
+      <button (click)="addSubjectGroup()" nz-button nzType="default" nz-tooltip [nzTooltipTitle]="'Thêm khối mới'">
         <nb-icon icon="plus"></nb-icon>
       </button>
-      <button (click)="removeSubjectGroup(i)" style="margin-top: 2px;" nz-button nz-tooltip>
+      <button (click)="removeSubjectGroup(i)" style="margin-top: 2px;" nz-button nz-tooltip [nzTooltipTitle]="'Xóa khối'">
         <nb-icon icon="minus"></nb-icon>
       </button>
     </nb-card>
@@ -80,10 +80,10 @@
     </nb-card>
   </div>
   <div class="footer">    
-    <button [disabled]="addSubjectGroupForm.invalid" (click)="addNewSubjectGroup()" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
+    <button [nzLoading]="isLoading" [disabled]="addSubjectGroupForm.invalid" (click)="addNewSubjectGroup()" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
       <span style="font-size: 12px;">THÊM</span>
     </button>    
-    <button (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="basic">
+    <button [nzDisabled]="isLoading" (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="basic">
       <span style="font-size: 12px;">THOÁT</span>
     </button>
   </div>

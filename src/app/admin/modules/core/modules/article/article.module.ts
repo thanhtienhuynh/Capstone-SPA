@@ -4,6 +4,8 @@ import { SharedModule } from 'src/app/admin/shared/shared.module';
 import { ArticleDetailComponent, ArticleMainComponent, PublishedComponent, CensorshipComponent, ArticleMainFatherComponent } from './pages';
 import { ArticleCardComponent, ArticleContentModalComponent, ArticleGridListComponent, BoardArticleListComponent, SearchByConditionComponent, TopArticleComponent } from './components';
 import { SliceWordPipe } from 'src/app/admin/shared/pipe/slice-word.pipe';
+import { SafeAdminHtmlPipe, SafeArticleHtmlPipe } from 'src/app/admin/shared/pipe';
+
 
 const COMPONENTS = [
   ArticleCardComponent,
@@ -23,8 +25,11 @@ const PAGES = [
 ];
 
 const PIPE = [
-  SliceWordPipe
+  SliceWordPipe, 
+  // SafeAdminHtmlPipe 
+  SafeArticleHtmlPipe
 ]
+
 @NgModule({
   imports: [
     SharedModule.forChild(),

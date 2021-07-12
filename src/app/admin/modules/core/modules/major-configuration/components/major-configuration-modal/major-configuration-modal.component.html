@@ -80,11 +80,13 @@
     </nb-card>
   </div>
   <div class="footer">    
-    <button [disabled]="majorForm.invalid" (click)="addNewMajorToSystem()" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
-      <span style="font-size: 12px;">THÊM</span>
+    <button [nzLoading]="additionLoading" [disabled]="addMajorForm.invalid" (click)="addNewMajorToSystem()" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
+      <!-- <span style="font-size: 12px;">THÊM</span> -->
+      Thêm
     </button>    
-    <button (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="basic">
-      <span style="font-size: 12px;">THOÁT</span>
+    <button [disabled]="additionLoading" (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="basic">
+      <!-- <span style="font-size: 12px;">THOÁT</span> -->
+      Thoát
     </button>
   </div>
 </div>
@@ -111,7 +113,10 @@
     </div>
     <div class="col-md-3">
       <label for="">Khối <span style="color: red;">*</span></label>
-      <nb-select [(selected)]="majorForm.get('subjectGroup').controls.id.value" (selectedChange)="filterDataBySubjectGroup($event)" fullWidth>                                  
+      <!-- <nb-select [selected]="majorForm.get('subjectGroup').controls.id.value" (selectedChange)="filterDataBySubjectGroup($event)" fullWidth>                                  
+        <nb-option *ngFor="let item of data.subjectGroups" [value]="item?.id">{{item.groupCode}}</nb-option>
+      </nb-select>  -->
+      <nb-select [formControl]="majorForm.get('subjectGroup').get('id')" (selectedChange)="filterDataBySubjectGroup($event, this.data)" fullWidth>                                  
         <nb-option *ngFor="let item of data.subjectGroups" [value]="item?.id">{{item.groupCode}}</nb-option>
       </nb-select> 
     </div>
@@ -144,10 +149,13 @@
     </nb-card>
   </div>
   <div class="footer">    
-    <button [disabled]="majorForm.invalid" (click)="updateMajorToSystem()" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
+    <button [disabled]="majorForm.invalid || !majorForm.touched" [nzLoading]="updationLoading" (click)="updateMajorToSystem('update')" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
       <span style="font-size: 12px;">LƯU</span>
     </button>    
-    <button (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="basic">
+    <button [disabled]="updationLoading" [nzLoading]="deletetionLoading" (click)="updateMajorToSystem('delete')" nz-button [nzSize]="'medium'" nzDanger style="margin-right: 15px;">
+      <span style="font-size: 12px;">XÓA</span>
+    </button> 
+    <button [disabled]="updationLoading" (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="dashed">
       <span style="font-size: 12px;">THOÁT</span>
     </button>
   </div>

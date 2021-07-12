@@ -19,6 +19,8 @@ export class AddSubjectGroupModalComponent implements OnInit {
   @Input() callBack: (pageNumber: number, pageSize: number, majorName: string) => void;
   @Input() callPlace: any;
 
+  isLoading: boolean = false;
+
   subjectGroupResult: Observable<Response<SubjectGroupVM[]>> = new BehaviorSubject<Response<SubjectGroupVM[]>>({} as Response<SubjectGroupVM[]>);
   listOfDisplaySubjectGroup: Observable<SubjectGroupVM[]> = new BehaviorSubject<SubjectGroupVM[]>({} as SubjectGroupVM[]);
   addSubjectGroupForm: FormGroup;
@@ -43,10 +45,15 @@ export class AddSubjectGroupModalComponent implements OnInit {
       'id': [''],
       'name': ['', Validators.required],
       'code': ['', Validators.required],
+      'description': [''],
+      'humanQuality': [''],
+      'curriculum': [''],
+      'salaryDescription': [''],
       'status': [1],
       'subjectGroup': this._fb.array([
-        this._fb.group({
-          'id': [undefined],
+        this._fb.group({          
+          'id': [undefined, Validators.required],
+          'status': [1],
           'subjectWeights': this._fb.array([])
         })
       ])
@@ -57,6 +64,10 @@ export class AddSubjectGroupModalComponent implements OnInit {
     this.addSubjectGroupForm.get('id').setValue(data.id);
     this.addSubjectGroupForm.get('name').setValue(data.name.toUpperCase());
     this.addSubjectGroupForm.get('code').setValue(data.code);
+    this.addSubjectGroupForm.get('description').setValue(data.description);
+    this.addSubjectGroupForm.get('humanQuality').setValue(data.humanQuality);
+    this.addSubjectGroupForm.get('curriculum').setValue(data.curriculum);
+    this.addSubjectGroupForm.get('salaryDescription').setValue(data.salaryDescription);
   }
 
   get getSubjectGroups(): FormArray {
@@ -72,7 +83,8 @@ export class AddSubjectGroupModalComponent implements OnInit {
   addSubjectGroup(): void {
     this.getSubjectGroups.push(
       this._fb.group({
-        'id': [undefined],
+        'id': [undefined, Validators.required],
+        'status': [1],
         'subjectWeights': this._fb.array([])
       })
     );
@@ -114,15 +126,16 @@ export class AddSubjectGroupModalComponent implements OnInit {
       const tmp = {subjectId: data[i].id, subjectName: data[i].name}
       subjectWeights.push(        
         this._fb.group({
-          'subjectId': [tmp],
-          'weight': [1],
+          'subjectId': [tmp, Validators.required],
+          'weight': [1, Validators.required],
           'isSpecialSubjectGroup': [data[i].isSpecialSubjectGroup]
         })
       );
     }
   }
 
-  addNewSubjectGroup(): void {    
+  addNewSubjectGroup(): void {        
+    this.isLoading = true;
     const subjectGroupsValues = this.getSubjectGroups.controls.map(rs => rs.value);
     const subjectGroups = subjectGroupsValues.map(rs => {
       const subjectWeightTmp = rs?.subjectWeights.map(rss => {
@@ -133,10 +146,11 @@ export class AddSubjectGroupModalComponent implements OnInit {
       return tmp
     });    
     const newValue = {...this.addSubjectGroupForm.value, subjectGroup: subjectGroups}  
-    console.log(newValue);
+    console.log(newValue, "newValue");
     this._majorConfigService.updateMajorToSystem(newValue).pipe(
       tap(rs => {
         if (rs.succeeded === true) {
+          this.isLoading = false;
           Swal.fire({
             position: 'center',
             icon: 'success',
@@ -146,6 +160,15 @@ export class AddSubjectGroupModalComponent implements OnInit {
           })
           this.callBack(1, 10, this.addSubjectGroupForm.get('name').value);
           this.closeModal();
+        } else {
+          this.isLoading = false;
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: `${rs.errors[0]}`,
+            showConfirmButton: false,
+            timer: 1500
+          })          
         }
 
       })

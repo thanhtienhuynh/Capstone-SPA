@@ -1,4 +1,4 @@
-<div class="status-list">  
+<div class="status-list" cdkDropList [cdkDropListData]="listOfArticle" (cdkDropListDropped)="drop($event)" [id]="laneId">  
   <!-- <div *ngIf="laneId === 'published'" class="px-3 pt-3 row">
     <div class="col-lg-6">
       <h5 style="font-size: 15px; font-weight: 600; color: #ff3d71;">{{ laneTitle }}</h5>
@@ -40,30 +40,33 @@
     [nzPageSize]="pageSize" 
     [nzPageIndex]="pageIndex"  
     [nzPageSizeOptions]="[5, 10]"
+    [nzShowPagination]="listOfArticle?.length > 5"
     >
       <thead>
         <tr>
-          <th *ngIf="laneId === 'published'" style="text-align: center;">
+          <th *ngIf="laneId === 'published'" style="display: flex; align-items: center; justify-content: space-between; height: 50px; margin-bottom: 5px;">
             <span style="font-size: 14px; font-weight: 600; color: #ff3d71;">{{ laneTitle }}</span>
             <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
               <i nz-icon nzType="search"></i>
             </nz-filter-trigger>
           </th>
-          <th *ngIf="laneId === 'top'">            
-            <div style="display: flex; justify-content: flex-end; align-items: center;">
+          <th *ngIf="laneId === 'top'" style="display: flex; align-items: center; justify-content: space-between; height: 50px; margin-bottom: 5px;">            
+            <div style="text-align: center;">
               <span style="font-size: 14px; font-weight: 600; color: #ff3d71;">{{ laneTitle }}</span>
+            </div>
+            <div>
               <button nz-button (click)="resetTopArticle()" nzType="default" style="margin-right: 10px;">
-                <span style="font-size: 12px;">TẠO LẠI</span></button>                
+                <span style="font-size: 12px;">Tạo lại</span></button>                
               <button nz-button (click)="apply()" nzType="primary" style="margin-right: 10px;">
-                <span style="font-size: 12px;">ÁP DỤNG</span>          
+                <span style="font-size: 12px;">Áp dụng</span>          
               </button>
             </div>
           </th>
         </tr>
       </thead>
-      <tbody cdkDropList [cdkDropListData]="boardTable.data" (cdkDropListDropped)="drop($event)" [id]="laneId">
+      <tbody style="background-color:#f4f5f7;">
         <tr *ngFor="let item of boardTable.data; let i = index">
-          <td style="padding-right: 0; padding-left: 0;">
+          <td style="padding-right: 0; padding-left: 0; padding-bottom: 0; padding-top: 0;  border-bottom: none;">
             <app-article-card [topNumber]="laneId === 'top' ? i : undefined" [article]="item" [cdkDragData]="item" cdkDrag>                
             </app-article-card>
           </td>

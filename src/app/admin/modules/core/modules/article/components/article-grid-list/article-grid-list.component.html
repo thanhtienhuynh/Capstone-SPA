@@ -19,9 +19,11 @@
   <thead>
     <tr>
       <th>
-        <span *ngIf="status === 1">DANH SÁCH CÁC BÀI VIẾT ĐÃ DUYỆT</span>
-        <span *ngIf="status === 0">DANH SÁCH CÁC BÀI VIẾT CHỜ DUYỆT</span>
-        <span *ngIf="status === 2">DANH SÁCH CÁC BÀI VIẾT BỊ CHẶN</span>
+        <span *ngIf="status === 1" style="color: rgb(87, 165, 90);">DANH SÁCH CÁC BÀI VIẾT ĐÃ DUYỆT</span>
+        <span *ngIf="status === 0" style="color: rgb(233, 127, 51);">DANH SÁCH CÁC BÀI VIẾT CHỜ DUYỆT</span>
+        <span *ngIf="status === 2" style="color: #ff3d71;">DANH SÁCH CÁC BÀI VIẾT BỊ CHẶN</span>
+        <span *ngIf="status === 4" style="color: #ff3d71;">DANH SÁCH CÁC BÀI VIẾT QUÁ HẠN</span>
+        <span *ngIf="status === 5" style="color: #ff3d71;">DANH SÁCH CÁC BÀI VIẾT CẦN XEM XÉT LẠI</span>
         <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
           <i nz-icon nzType="search"></i>
         </nz-filter-trigger>
@@ -31,7 +33,7 @@
   <tbody>
     <tr>
       <td>
-        <div class="row" *ngIf="listOfArticle !== undefined; else loadingContent">
+        <div class="row" *ngIf="listOfArticle !== undefined">
           <div class="col-lg-11 mx-auto">
             <div class="row">
               <div
@@ -64,38 +66,39 @@
             </div>
             <div class="text-center" style="margin-top: 30px">
               <nz-pagination
+                *ngIf="listOfArticle?.length !== 0"
                 #paginationTemp
                 [nzPageSizeOptions]="[4, 8, 12]"
                 [nzPageIndex]="initPageNumber"
                 [nzTotal]="totalRecods"
                 nzShowSizeChanger
-                [nzPageSize]="initPageSize"
+                [nzPageSize]="initPageSize"                
                 (nzPageSizeChange)="onPageSizeChange($event)"
                 (nzPageIndexChange)="onPageIndexChange($event)"
               ></nz-pagination>
             </div>
           </div>
         </div>
+        <div class="row" *ngIf="listOfArticle === undefined">
+          <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 550px;
+          "
+        >
+          <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+        </div>
+        </div>
+        <div class="row" *ngIf="listOfArticle?.length === 0">
+          <p><b><i>Không có bài viết nào được hiển thị</i></b></p>
+        </div>
       </td>
     </tr>
   </tbody>
 </nz-table>
-
-
-<ng-template #loadingContent>
-  <div
-    style="
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 550px;
-    "
-  >
-    <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
-  </div>
-</ng-template>
-
 
 <nz-dropdown-menu #searchMenu="nzDropdownMenu">
   <div class="ant-table-filter-dropdown">

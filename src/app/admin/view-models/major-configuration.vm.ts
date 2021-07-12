@@ -2,6 +2,10 @@ export interface MajorConfiguration {
     id?: number,
     name?: string,
     code?: string,
+    description?: string,
+    curriculum?: string,
+    humanQuality?: string,
+    salaryDescription?: string,
     subjectGroups?: SubjetGroup[],
     status?: number  
 }
