@@ -166,7 +166,7 @@ export class MajorConfigurationModalComponent implements OnInit {
     if (action === 'delete') {
       this.deletetionLoading = true;
       Swal.fire({
-        title: 'CẢNH BÁO',
+        title: 'LƯU Ý',
         html: `Xóa khối, ngành <b><i>${newValue.name}</i></b>`,
         icon: 'warning',
         showCancelButton: true,
@@ -305,9 +305,7 @@ export class MajorConfigurationModalComponent implements OnInit {
 
   previousSubjetGroupIndex: number = 0;
 
-  filterDataBySubjectGroup(id: number, data: MajorConfiguration): void {
-    console.log(id);
-    console.log(data);
+  filterDataBySubjectGroup(id: number, data: MajorConfiguration): void {        
     if (this.data === undefined) {
       return;
     }

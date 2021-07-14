@@ -1,3 +1,199 @@
-<p>
-  major-config-detail works!
-</p>
+<div class="major-config-detail">
+  <div class="container-fluid">
+    <div nz-row style="display: flex; justify-content: space-between;">
+      <div nz-col [nzXs]="14" [nzSm]="14" [nzMd]="14" [nzLg]="14" [nzXl]="14" [nzXXl]="14" class="mb-2">
+        <nb-card style="width: 100%;">
+          <nb-card-body style="width: 100%;">
+            <div>
+              <nb-card style="margin-bottom: 0;">
+                <nb-card-body style="min-height: 650px;">
+                  <div class="pt-2" style="display: flex; align-items: center; justify-content: center;">
+                    <span class="text-xl">THÔNG TIN MÔ TẢ</span> 
+                  </div>
+                  <nz-divider></nz-divider>
+                  <div class="d-flex">
+                    <div class="col-md-2 pr-0 pl-0">
+                      <label for="">Tên ngành: </label>
+                    </div>
+                    <div>
+                      <p>{{majorDetail?.name?.toUpperCase()}}</p>
+                    </div>
+                  </div>
+                  <div class="d-flex" style="justify-content: flex-start; align-items: center;">
+                    <div class="col-md-2 pr-0 pl-0">
+                      <label for="" style="margin-bottom: 0;">Mã ngành: </label>
+                    </div>
+                    <div *ngIf="majorForm.get('code')['isUpdateHtml']" class="col-md-10 isEdit pl-0" (click)="getMajorFormControls('code')">
+                      <div class="editIcon">                        
+                        <nb-icon icon="edit-2-outline"></nb-icon>                        
+                      </div>
+                      <p style="margin-bottom: 0;">{{majorForm.get('code')?.value}}</p>
+                    </div>
+                    <div *ngIf="!majorForm.get('code')['isUpdateHtml']" class="col-md-10 pl-0">
+                      <div style="display: flex; justify-self: flex-start; align-items: center;">
+                        <div class="col-md-6 pl-0">                          
+                            <input type="text" [formControl]="majorForm.get('code')" nz-input>                                  
+                        </div>
+                        <div class="col-md-4 pl-0 pr-0">
+                          <button nz-button nzType="primary" class="mr-2" (click)="saveData('code')">Lưu</button>
+                          <button nz-button nzType="default" (click)="cancelData('code')" *ngIf="majorForm.get('code').value !== majorDetail?.code">Mặc định</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div> 
+                  <div class="d-flex mt-2">
+                    <nz-collapse>
+                      <nz-collapse-panel [nzHeader]="'Miêu tả ngành nghề'">
+                        <button *ngIf="majorForm.get('description').value === null && majorForm.get('description')['isUpdateHtml']" (click)="getMajorFormControls('description')" nz-button nzType="primary">Thêm</button>
+                        <div class="isEdit" *ngIf="majorForm.get('description')['isUpdateHtml']" (click)="getMajorFormControls('description')">
+                          <p  [innerHtml]="majorForm.get('description').value"></p>
+                        </div> 
+                        <div style="width: 100%;" *ngIf="!majorForm.get('description')['isUpdateHtml']">
+                          <quill-editor                           
+                          class="content-editor" 
+                          [formControl]="majorForm.get('description')"  
+                          [modules]="editorOptions"                                                     
+                          [placeholder]="'Nhập nội dung miêu tả..'"                  
+                          ></quill-editor> 
+                          <div class="mt-2 d-flex justify-content-end">
+                            <button nz-button nzType="primary" class="mr-2" (click)="saveData('description')">Lưu</button>
+                            <button nz-button nzType="default" (click)="cancelData('description')">Mặc định</button>
+                          </div>                    
+                        </div> 
+                      </nz-collapse-panel>  
+                    </nz-collapse>                
+                  </div>  
+                  <div class="d-flex mt-2">
+                    <nz-collapse>
+                      <nz-collapse-panel [nzHeader]="'Chương trình đào tạo'">
+                        <button *ngIf="majorForm.get('curriculum').value === null && majorForm.get('curriculum')['isUpdateHtml']" (click)="getMajorFormControls('curriculum')" nz-button nzType="primary">Thêm</button>
+                        <div class="isEdit" *ngIf="majorForm.get('curriculum')['isUpdateHtml']" (click)="getMajorFormControls('curriculum')">
+                          <p  [innerHtml]="majorForm.get('curriculum').value"></p>
+                        </div> 
+                        <div style="width: 100%;" *ngIf="!majorForm.get('curriculum')['isUpdateHtml']">
+                          <quill-editor                           
+                          class="content-editor" 
+                          [formControl]="majorForm.get('curriculum')"  
+                          [modules]="editorOptions"                                                     
+                          [placeholder]="'Nhập nội dung chương trình đào tạo..'"                  
+                          ></quill-editor> 
+                          <div class="mt-2 d-flex justify-content-end">
+                            <button nz-button nzType="primary" class="mr-2" (click)="saveData('curriculum')">Lưu</button>
+                            <button nz-button nzType="default" (click)="cancelData('curriculum')">Mặc định</button>
+                          </div>                    
+                        </div> 
+                      </nz-collapse-panel>  
+                    </nz-collapse>                
+                  </div>
+                  <div class="d-flex mt-2">
+                    <nz-collapse>
+                      <nz-collapse-panel [nzHeader]="'Tố chất nghề nghiệp'">
+                        <button *ngIf="majorForm.get('humanQuality').value === null && majorForm.get('humanQuality')['isUpdateHtml']" (click)="getMajorFormControls('humanQuality')" nz-button nzType="primary">Thêm</button>
+                        <div class="isEdit" *ngIf="majorForm.get('humanQuality')['isUpdateHtml']" (click)="getMajorFormControls('humanQuality')">
+                          <p  [innerHtml]="majorForm.get('humanQuality').value"></p>
+                        </div> 
+                        <div style="width: 100%;" *ngIf="!majorForm.get('humanQuality')['isUpdateHtml']">
+                          <quill-editor                           
+                          class="content-editor" 
+                          [formControl]="majorForm.get('humanQuality')"  
+                          [modules]="editorOptions"                                                     
+                          [placeholder]="'Nhập nội dung tố chất nghề nghiệp..'"                  
+                          ></quill-editor> 
+                          <div class="mt-2 d-flex justify-content-end">
+                            <button nz-button nzType="primary" class="mr-2" (click)="saveData('humanQuality')">Lưu</button>
+                            <button nz-button nzType="default" (click)="cancelData('humanQuality')">Mặc định</button>
+                          </div>                    
+                        </div> 
+                      </nz-collapse-panel>  
+                    </nz-collapse>                
+                  </div> 
+                  <div class="d-flex mt-2">
+                    <nz-collapse>
+                      <nz-collapse-panel [nzHeader]="'Cơ hội nghề nghiệp'">
+                        <button *ngIf="majorForm.get('salaryDescription').value === null && majorForm.get('salaryDescription')['isUpdateHtml']" (click)="getMajorFormControls('salaryDescription')" nz-button nzType="primary">Thêm</button>
+                        <div class="isEdit" *ngIf="majorForm.get('salaryDescription')['isUpdateHtml']" (click)="getMajorFormControls('salaryDescription')">
+                          <p  [innerHtml]="majorForm.get('salaryDescription').value"></p>
+                        </div> 
+                        <div style="width: 100%;" *ngIf="!majorForm.get('salaryDescription')['isUpdateHtml']">
+                          <quill-editor                           
+                          class="content-editor" 
+                          [formControl]="majorForm.get('salaryDescription')"  
+                          [modules]="editorOptions"                                                     
+                          [placeholder]="'Nhập nội dung cơ hội nghề nghiệp..'"                  
+                          ></quill-editor> 
+                          <div class="mt-2 d-flex justify-content-end">
+                            <button nz-button nzType="primary" class="mr-2" (click)="saveData('salaryDescription')">Lưu</button>
+                            <button nz-button nzType="default" (click)="cancelData('salaryDescription')">Mặc định</button>
+                          </div>                    
+                        </div> 
+                      </nz-collapse-panel>  
+                    </nz-collapse>                
+                  </div>                                  
+                </nb-card-body>
+              </nb-card>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div nz-col [nzXs]="9" [nzSm]="9" [nzMd]="8" [nzLg]="9" [nzXl]="9" [nzXXl]="9" class="mb-2">
+        <nb-card style="width: 100%;">
+          <nb-card-body style="width: 100%;">
+            <div>
+              <nb-card *ngFor="let c of getSubjectGroups.controls; let i = index">
+                <nb-card-body style="width: 100%;">
+                  <div class="d-flex" style="justify-content: space-between;">
+                    <div class="col-md-7 pr-0 pl-0" style="display: flex; justify-content: center; align-items: center;">
+                      <div class="text-xl">
+                        <span>CHỌN KHỐI THI TƯƠNG ỨNG</span>
+                      </div>
+                    </div>
+                    <div class="col-md-4 pr-0">
+                      <nb-form-field>        
+                        <input [disabled]="getSubjectGroups.controls[i]?.isUpdate === true" placeholder="Chọn khối thi"  readonly nz-dropdown type="text" [value]="getSubjectGroups.controls[i].get('id').value?.groupCode" [nzDropdownMenu]="selectSubjectGroup" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
+                      >        
+                      </nb-form-field>   
+                      <nz-dropdown-menu #selectSubjectGroup="nzDropdownMenu">        
+                        <app-custom-select (useSelect)="useSelectSubjectGroup($event, i)" [control]="getSubjectGroups.controls[i].get('id')" [data]="listOfDisplaySubjectGroup | async" [name]="'id'" [label]="'groupCode'" [placeholder]="'Tìm kiếm khối thi'"></app-custom-select>
+                      </nz-dropdown-menu>
+                    </div>                     
+                  </div>
+                  <nb-card class="mt-2" style="margin-bottom: 0;" *ngIf="getSubjectGroups.controls[i].get('id').value">
+                    <nb-card-body>
+                      <div class="d-flex">
+                        <div class="col-md-6" style="display: flex; align-items: center; justify-content: center;">
+                          <label for="">Môn Học <span style="color: red;">*</span></label>
+                        </div>
+                        <div class="col-md-6" style="display: flex; align-items: center; justify-content: center;">
+                          <label for="">Trọng Số <span style="color: red;">*</span></label>
+                        </div>
+                      </div>
+                      <div class="d-flex mt-2" *ngFor="let s of getSubjectGroups.controls[i].get('subjectWeights').controls; index as si">
+                        <div class="col-md-6">
+                          <nb-form-field>        
+                            <input readonly type="text" [value]="getSubjectGroups.controls[i].get('subjectWeights').controls[si].get('subjectId').value?.subjectName?.toUpperCase()" fullWidth nbInput>        
+                          </nb-form-field>   
+                        </div> 
+                        <div class="col-md-6">
+                          <nb-form-field>        
+                            <input style="text-align: right;" type="number" [formControl]="getSubjectGroups.controls[i].get('subjectWeights').controls[si].get('weight')" fullWidth nbInput>        
+                          </nb-form-field>   
+                        </div>            
+                      </div> 
+                    </nb-card-body>
+                  </nb-card>                                    
+                </nb-card-body>
+                <button (click)="addSubjectGroup()" nz-button nzType="primary" nz-tooltip>
+                  <nb-icon icon="plus"></nb-icon>
+                </button>
+                <button (click)="removeSubjectGroup(i)" style="margin-top: 2px;" nzDanger nz-button nz-tooltip>
+                  <nb-icon icon="minus"></nb-icon>
+                </button>
+              </nb-card> 
+              <button nz-button nzType="primary" (click)="updateMajorToSystem()">Lưu</button> 
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>

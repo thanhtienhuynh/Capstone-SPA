@@ -1,7 +1,7 @@
 <div class="major-create">
   <div class="container-fluid">
     <div nz-row>
-      <div nz-col [nzXs]="14" [nzSm]="14" [nzMd]="14" [nzLg]="14" [nzXl]="14" [nzXXl]="14" class="mb-2">
+      <div nz-col [nzXs]="13" [nzSm]="13" [nzMd]="13" [nzLg]="13" [nzXl]="13" [nzXXl]="13" class="mb-2" style="margin-right: 20px;">
         <nb-card style="width: 100%;">
           <nb-card-body style="width: 100%;">
             <div>
@@ -92,14 +92,14 @@
               <nb-card *ngFor="let c of getSubjectGroups.controls; let i = index">
                 <nb-card-body style="width: 100%;">
                   <div class="d-flex">
-                    <div class="col-md-6" style="display: flex; justify-content: center; align-items: center;">
+                    <div class="col-md-6 pr-0 pl-0" style="display: flex; justify-content: center; align-items: center;">
                       <div class="text-xl">
                         <span>
                           CHỌN KHỐI THI TƯƠNG ỨNG
                         </span>              
                       </div>
                     </div> 
-                    <div class="col-md-6">
+                    <div class="col-md-6 pr-0" >
                       <nb-form-field>        
                         <input placeholder="Chọn khối thi"  readonly nz-dropdown type="text" [value]="getSubjectGroups.controls[i].get('id').value?.groupCode" [nzDropdownMenu]="selectSubjectGroup" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
                       >        

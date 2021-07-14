@@ -27,6 +27,9 @@ export class MajorConfigurationService {
     return this._http.get<PagedResponse<MajorConfiguration[]>>(this.baseUrl + 'api/v1/major/subject-weight', { params });
   }
 
+  getMajorById(id: number): Observable<PagedResponse<MajorConfiguration>> {    
+    return this._http.get<PagedResponse<MajorConfiguration>>(this.baseUrl + '/api/v1/major/subject-weight/' +  `${id}`);
+  }
   addNewMajorToSystem(body: any): Observable<Response<any>> {
     return this._http.post<Response<any>>(this.baseUrl + 'api/v1/major/subject-weight', body);
   }

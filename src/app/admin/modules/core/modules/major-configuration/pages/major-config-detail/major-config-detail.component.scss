@@ -1,0 +1,73 @@
+.major-config-detail {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  overflow: auto;
+  position: relative;
+  // max-height: 50rem;
+}
+
+.text-xl {
+  font-size: 13px;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  color: #ff3d71;
+}
+
+label {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 500;
+  font-size: 14px;
+  // margin: 0;
+}
+
+.footer {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 1rem;
+}
+
+.isEdit {  
+  position: relative;
+  // background-color: red;
+  &:hover {
+    background-color: #f1f1f1;
+    cursor: text;
+    opacity: 1;
+    // .question-content {    
+    // .question-wrap {
+    //     background-color: #f1f1f1;
+    // }
+    .editIcon {
+      visibility: visible;
+    }
+  }
+}
+
+.editIcon {  
+  position: absolute;
+  visibility: hidden;
+  bottom: 0;
+  right: 0;
+}
+
+.title-detail {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f1f1f1;
+  width: 100%;
+}
+
+:host ::ng-deep img { 
+  max-width: 100% !important;
+  height: auto;
+}
+nz-collapse {
+  width: 100%;
+}
