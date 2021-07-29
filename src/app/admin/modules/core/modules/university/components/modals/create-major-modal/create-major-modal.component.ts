@@ -58,7 +58,7 @@ export class CreateMajorModalComponent implements OnInit {
   }
   ngOnInit() {
     this.getAllMajor();
-    this.getAllSubjectGroup();
+    // this.getAllSubjectGroup();
     this.getAllTrainingProgram();
     this.setData();
   }

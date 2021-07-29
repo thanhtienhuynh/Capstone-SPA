@@ -17,9 +17,11 @@ import Swal from 'sweetalert2';
 })
 export class CreateUniversityModalComponent implements OnInit {
 
-  // @Input() callBack: (item: UniversityRM & {stt?:number, phones?: string[]}) => void;
-  @Input() callBack: (item: UniversityRM & { stt?: number, phones?: string[] }) => void;
+  
+  @Input() callBack: (item: UniversityRM & { stt?: number, phones?: string[] }) => void;  
   @Input() index: any;
+
+  isLoadingCreation: boolean = false;
   logo: string | ArrayBuffer;
   createUniversityForm: FormGroup;
   editorOptions = quillConfiguration;
@@ -62,6 +64,7 @@ export class CreateUniversityModalComponent implements OnInit {
   }
 
   submitForm(): void {
+    this.isLoadingCreation = true;
     if (this.createUniversityForm.valid) {
       const newUni = {
         'File': this.image ? this.image : null,
@@ -85,29 +88,13 @@ export class CreateUniversityModalComponent implements OnInit {
       this._uniService.createUniversity(formData).pipe(
         tap((rs) => {
           if (rs.succeeded === true) {
+            this.isLoadingCreation = false;
             Swal.fire('Thành Công', 'Thêm mới trường đại học thành công', 'success');
+            this.callBack(rs.data);
             this.closeModal();
           } else {
-
-          }
-          // const newValue = {
-          //   id: rs.data.id,
-          //   address: rs.data.address,
-          //   code: rs.data.code,
-          //   description: rs.data.description,
-          //   logoUrl: rs.data.logoUrl,
-          //   name: rs.data.name,
-          //   phone: rs.data.phone,
-          //   rating: rs.data.rating,
-          //   status: rs.data.status,
-          //   tuitionFrom: rs.data.tuitionFrom,
-          //   tuitionTo: rs.data.tuitionTo,
-          //   tuitionType: rs.data.tuitionType,
-          //   webUrl: rs.data.webUrl,
-          //   stt: 0,   
-          //   phones: rs.data.phone.split('-')         
-          // }                  
-          // this.callBack(newValue);                   
+            this.isLoadingCreation = false;
+          }                
         }),
         catchError((err) => {
           Swal.fire('Lỗi', 'Thêm mới trường đại học thất bại', 'error');

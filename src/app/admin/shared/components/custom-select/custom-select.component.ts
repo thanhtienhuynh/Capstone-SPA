@@ -38,6 +38,8 @@ export class CustomSelectComponent implements OnInit, OnChanges {
   @Output()
   public useSelect: EventEmitter<unknown> = new EventEmitter<unknown>();
   
+  @Output()
+  public flagAction: EventEmitter<unknown> = new EventEmitter<unknown>();
 
   public dataFilters: unknown[] = [];
 
@@ -65,6 +67,7 @@ export class CustomSelectComponent implements OnInit, OnChanges {
   }  
 
   open() {
-    this.popover.show();
+    // this.popover.show();
+    this.flagAction.emit(this.titleNewItem);
   }
 }

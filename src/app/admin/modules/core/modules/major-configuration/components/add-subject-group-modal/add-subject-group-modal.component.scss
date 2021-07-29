@@ -1,0 +1,55 @@
+
+.text-xl {
+    font-size: 14px;
+    font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+      Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    color: #ff3d71;
+  }
+  
+  label {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-weight: 500;
+    font-size: 14px;
+    // margin: 0;  
+  }
+  
+  nb-select {
+    ::ng-deep {
+      button {
+        min-width: 4rem !important;
+      }
+      .select-button {
+        font-size: 12px !important;
+      }
+    }
+  }
+  
+  nb-form-field {
+    ::ng-deep {
+      [nbInput].size-small {
+        font-size: 12px !important;
+      } 
+      [nbInput].size-large {
+        font-size: 12px !important;
+      }  
+      [nbInput].size-medium {
+        font-size: 12px !important;
+      }  
+    }
+  }
+  
+  nb-option {
+    ::ng-deep {
+      font-size: 12px !important;
+    }
+  }
+  .footer {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 1rem;
+  }

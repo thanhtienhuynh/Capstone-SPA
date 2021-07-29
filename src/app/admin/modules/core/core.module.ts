@@ -23,7 +23,7 @@ const PAGES = [
   ],
   declarations: [
     ...PAGES,
-    ...COMPONENTS
+    ...COMPONENTS    
   ]
 })
 export class CoreModule { }

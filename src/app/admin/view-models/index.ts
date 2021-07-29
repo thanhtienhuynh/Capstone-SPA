@@ -8,3 +8,6 @@ export * from './paging.vm';
 export * from './board_data.vm';
 export * from './season.vm';
 export * from './admission-method.vm';
+export * from './major-configuration.vm';
+export * from './subject.vm';
+export * from './examination';

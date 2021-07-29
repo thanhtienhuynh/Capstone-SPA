@@ -1,5 +1,5 @@
 <div class="article-detail">  
-  <div class="container-fluid">
+  <div class="container-fluid" style="padding-left: 0;">
     <div nz-row *ngIf="unCensorshipList !== undefined; else loading">
       <div nz-col [nzXs]="17" [nzSm]="17" [nzMd]="17" [nzLg]="17" [nzXl]="17" [nzXXl]="17" class="mb-2">
         <div class="action-button-page">
@@ -28,7 +28,7 @@
                       </div>
                     </div>
                   </div>
-                  <div [innerHtml]="article.content"></div>
+                  <div [innerHtml]="article.content | safeArticleHtml"></div>
                 </ng-template>                                        
               </div>
             </div>
@@ -78,7 +78,7 @@
                     [nzDisabled]="article.status !== 0"
                     [nzSize]="'large'"
                     [nzMaxTagCount]="3"
-                    [nzMaxTagPlaceholder]="tagPlaceHolder"
+                    [nzMaxTagPlaceholder]="tagPlaceHolderMajor"
                     nzMode="multiple"
                     nzPlaceHolder="Chọn danh sách các ngành"
                     [(ngModel)]="listOfSelectedMajor"
@@ -93,28 +93,28 @@
         </nb-card>
         <div *ngIf="article.status !== 2">
           <div style="display: flex; justify-content: center;">
-            <div class="action-button col-lg-6" style="padding-left: 0px;">
+            <div *ngIf="article.status === 0" class="action-button col-lg-6" style="padding-left: 0px;">
               <button *ngIf="article.status === 0" fullWidth nbButton  status="success" (click)="confirmArticle('accept')">DUYỆT BÀI VIẾT</button>
-              <button *ngIf="article.status === 1" fullWidth nbButton  status="success" outline (click)="confirmArticle('deny')">BỎ DUYỆT</button>
+              <!-- <button *ngIf="article.status === 1" fullWidth nbButton  status="success" outline (click)="confirmArticle('deny')">BỎ DUYỆT</button> -->
             </div>            
-            <div class="action-button col-lg-6" style="padding-right: 0px;">
+            <div [class]="article.status === 0 ? 'action-button col-lg-6' : 'action-button col-lg-12'" style="padding-right: 0px; padding-left: 0;">
               <button fullWidth [disabled]="article.status === 2" nbButton outline status="danger" (click)="confirmArticle('reject')">CHẶN BÀI VIẾT</button>
             </div>
           </div>  
-          <div class="action-button">
+          <!-- <div class="action-button">
             <button (click)="nextElement()" nz-button style="width: 100%; background-color: #fca130; border-color: #fca130; color: #fff; text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
             box-shadow: 0 2px 0 rgb(0 0 0 / 5%);" nzSize="large">BỎ QUA</button>
-          </div>
+          </div> -->
         </div>
         <div *ngIf="article.status === 2">
           <div style="display: flex; justify-content: center;">
-            <div class="action-button col-lg-6" style="padding-left: 0px;">
+            <div class="action-button col-lg-12" style="padding-left: 0px; padding-right: 0;">
               <button outline fullWidth nbButton  status="success" (click)="confirmArticle('unReject')">GỠ CHẶN</button>              
             </div>            
-            <div class="action-button col-lg-6" style="padding-right: 0px;">
+            <!-- <div class="action-button col-lg-6" style="padding-right: 0px;">
               <button (click)="nextElement()" nz-button style="width: 100%; background-color: #fca130; border-color: #fca130; color: #fff; text-shadow: 0 -1px 0 rgb(0 0 0 / 12%);
             box-shadow: 0 2px 0 rgb(0 0 0 / 5%);" nzSize="large">BỎ QUA</button>
-            </div>
+            </div> -->
           </div>          
         </div>
              
@@ -124,6 +124,6 @@
 </div>
 <ng-template #loading>
   <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 700px;">
-    <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+    <nz-spin nzSimple [nzSize]="'large'" nzTip="Đang tải lên các bài viết chờ duyệt"></nz-spin>
   </div>  
 </ng-template>

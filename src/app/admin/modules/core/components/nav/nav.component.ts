@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SharedDataService } from 'src/app/admin/services/data/shared-data.service';
 
 @Component({
   selector: 'app-nav',
@@ -9,11 +10,18 @@ import { Router } from '@angular/router';
 export class NavComponent implements OnInit {
 
   constructor(
-    protected readonly router: Router,
+    private router: Router,
+    private _sharedDataService: SharedDataService
   ) { }
 
+  url: string;
+
   ngOnInit() {
+    this.url = this.router.url;    
+    console.log(this.url);
+    // this._sharedDataService.currentMessage.subscribe(message => this.url = message)
   }
+
 
   useUpdate(link?: string): void {
     if(link){

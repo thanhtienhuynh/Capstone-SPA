@@ -23,14 +23,12 @@ header {
     // }
 }
 .breadcrumb {
+    padding: 0;
     position: fixed;
     top: 56px;
     left: 0;
     right: 0;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;    
+    background: white;              
     margin: 0;
     height: 44px;
     width: 100%;

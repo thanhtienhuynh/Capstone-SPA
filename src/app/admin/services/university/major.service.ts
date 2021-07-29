@@ -12,20 +12,20 @@ export class MajorService {
 
   baseUrl = environment.apiUrl;
 
-  createMajor(body: any): Observable<Response<any>> {    
+  createMajor(body: any): Observable<Response<any>> {
     return this._http.post<Response<any>>(this.baseUrl + 'api/v1/university/major-addition', body);
   }
 
-  getAllMajor(): Observable<Response<any>>{
+  getAllMajor(): Observable<Response<any>> {
     return this._http.get<Response<any>>(this.baseUrl + 'api/v1/major');
   }
- 
-  updateMajor(body: any): Observable<any>{
+
+  updateMajor(body: any): Observable<any> {
     return this._http.put<any>(this.baseUrl + 'api/v1/university/major-updation', body);
   }
 
-  addNewMajorSystem(body: any): Observable<any>{
+  addNewMajorSystem(body: any): Observable<any> {
     return this._http.post(this.baseUrl + 'api/v1/major', body);
   }
-  
+
 }
