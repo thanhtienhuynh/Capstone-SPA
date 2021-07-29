@@ -88,6 +88,7 @@ export function homeReducer(
       return {
         ...state,
         selectedArticleId: action.payload,
+        detailSelectedArticle: null,
         actionsQueue: [...state.actionsQueue, action],
       }
     case HomeActions.SET_DETAIL_ARTICLE:
@@ -100,6 +101,7 @@ export function homeReducer(
     case HomeActions.LOAD_TOP_ARTICLES:
       return {
         ...state,
+        homeArticles: [],
         actionsQueue: [...state.actionsQueue, action],
       }  
       case HomeActions.SET_TOP_ARTICLES:
@@ -112,6 +114,7 @@ export function homeReducer(
     case HomeActions.LOAD_COLLAPSE_TESTS:
       return {
         ...state,
+        collapseTestsPageResponse: null,
         actionsQueue: [...state.actionsQueue, action],
       }
     case HomeActions.SET_COLLAPSE_TESTS:
@@ -125,6 +128,7 @@ export function homeReducer(
       return {
         ...state,
         selectedTestId: action.payload,
+        selectedTest: null,
         actionsQueue: [...state.actionsQueue, action],
       }
     case HomeActions.SET_DETAIL_TEST:
@@ -174,6 +178,7 @@ export function homeReducer(
     case HomeActions.LOAD_UNIVERSITIES:
       return {
         ...state,
+        universitiesPageResponse: null,
         actionsQueue: [...state.actionsQueue, action],
       }
     case HomeActions.SET_UNIVERSITIES: {
@@ -188,6 +193,7 @@ export function homeReducer(
       return {
         ...state,
         selectedUniversityId: action.payload,
+        selectedUniversity: null,
         actionsQueue: [...state.actionsQueue, action],
       }
     case HomeActions.SET_UNIVERSITY: {
@@ -203,6 +209,7 @@ export function homeReducer(
         ...state,
         cusMajorDetailPageFilter: action.payload.pageFilter,
         majorDetailFilter: action.payload.queryFilter,
+        cusMajorDetailPageResponse: null,
         actionsQueue: [...state.actionsQueue, action],
       }
     case HomeActions.SET_UNIVERSITY_MAJOR_DETAIL:
@@ -229,6 +236,7 @@ export function homeReducer(
         ...state,
         cusMajorPageParam: action.payload.pageParam,
         cusMajorFilter:  action.payload.queryParam,
+        cusMajorPageResponse: null,
         actionsQueue: [...state.actionsQueue, action],
       }
     case HomeActions.SET_MAJORS:
@@ -242,6 +250,7 @@ export function homeReducer(
       return {
         ...state,
         selectedMajorId: action.payload,
+        cusMajorDetail: null,
         actionsQueue: [...state.actionsQueue, action],
       }
     case HomeActions.SET_MAJOR:
