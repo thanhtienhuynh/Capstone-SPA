@@ -1,11 +1,12 @@
 import { Action } from "@ngrx/store";
 import { MajorBasedFollowingDetail } from "src/app/_models/major-based-following-detail";
-import { RankingUserInformationGroupByTranscriptType } from "src/app/_models/ranking-user-information";
-import { SelectedFollowingDetail } from "src/app/_models/selected-following-detail";
+import { UserFollowingDetail } from "src/app/_models/ranking-user-information";
 import { UniversityBasedFollowingDetail } from "src/app/_models/university-based-following-detail";
-import { UserDetailTestSubmission, UserTestSubmission } from "src/app/_models/user-test-submission";
+import { TestSubmissionDetailParam, UserDetailTestSubmission, UserTestSubmission } from "src/app/_models/user-test-submission";
 import { TranscriptType } from "src/app/_models/transcript";
 import { CollapseArticle } from "src/app/_models/collapse-article";
+import { NotificationDataSet } from "src/app/_models/notification";
+import { PagedResponse } from "src/app/_models/paged-response";
 
 export const LOAD_SUBMISSIONS = '[User] Load Submissions';
 export const SET_SUBMISSIONS = '[User] Set Submissions';
@@ -15,20 +16,30 @@ export const LOAD_MAJOR_BASED_FOLLOWING_DETAILS = '[User] Load Major Based Follo
 export const SET_MAJOR_BASED_FOLLOWING_DETAILS = '[User] Set Major Based Following Details';
 export const LOAD_UNIVERSITY_BASED_FOLLOWING_DETAILS = '[User] Load University Based Following Details';
 export const SET_UNIVERSITY_BASED_FOLLOWING_DETAILS = '[User] Set University Based Following Details';
-export const SET_DETAIL_FOLLOWING_DETAIL = '[User] Set Detail Following Detail';
-export const LOAD_RANKING_USER_INFORMATION = '[User] Load Ranking User Information';
-export const SET_RANKING_USER_INFORMATION = '[User] Set Ranking User Information';
+export const LOAD_USER_FOLLOWING_DETAIL = '[User] Load User Following Detail';
+export const SET_USER_FOLLOWING_DETAIL = '[User] Set Ranking User Information';
 export const LOAD_TRANSCRIPTS = '[User] Load Transcripts';
 export const SET_TRANSCRIPTS = '[User] Set Transcripts';
 export const LOAD_CARING_ARTICLES = '[User] Load Caring Articles';
 export const SET_CARING_ARTICLES = '[User] Set Caring Articles';
 export const SET_NOTIFICATION_ARTICLE_IDS = '[User] Set Notification Article Ids';
+export const LOAD_NUMBER_OF_UNREAD_NOTIFICATIONS = '[User] Load Number Of Unread Notifications';
+export const SET_NUMBER_OF_UNREAD_NOTIFICATIONS = '[User] Set Number Of Unread Notifications';
+export const MARK_AS_ALL_READ = '[User] Mark As All Read';
+export const MARK_AS_READ = '[User] Mark As Read';
+export const LOAD_NOTIFICATIONS = '[User] Load Notifications';
+export const SET_NOTIFICATIONS = '[User] Set Notifications';
+export const LOAD_MORE_NOTIFICATIONS = '[User] Load More Notifications';
+export const SET_MORE_NOTIFICATIONS = '[User] Set More Notifications';
 export const UNCARING_ACTION = '[User] Uncaring Action';
+export const DONE_LOADING = '[User] Done Loading';
 export const HAS_ERRORS = '[User] Has Errors';
 export const CONFIRM_ERRORS = '[User] Confirm Errors';
 
 export class LoadSubmissions implements Action {
   readonly type = LOAD_SUBMISSIONS;
+  readonly message = "Đang tìm các bài thi";
+  constructor(public payload: TestSubmissionDetailParam) {}
 }
 
 export class SetSubmissions implements Action {
@@ -38,6 +49,7 @@ export class SetSubmissions implements Action {
 
 export class LoadDetailSubmission implements Action {
   readonly type = LOAD_DETAIL_SUBMISSION;
+  readonly message = "Đang nạp chi tiết bài thi";
   constructor(public payload: number) {}
 }
 
@@ -48,6 +60,7 @@ export class SetDetailSubmission implements Action {
 
 export class LoadMajorBasedFollowingDetails implements Action {
   readonly type = LOAD_MAJOR_BASED_FOLLOWING_DETAILS;
+  readonly message = "Đang tìm các ngành học đã theo dõi";
 }
 
 export class SetMajorBasedFollowingDetails implements Action {
@@ -57,6 +70,7 @@ export class SetMajorBasedFollowingDetails implements Action {
 
 export class LoadUniversityBasedFollowingDetails implements Action {
   readonly type = LOAD_UNIVERSITY_BASED_FOLLOWING_DETAILS;
+  readonly message = "Đang tìm các trường đại học đã theo dõi";
 }
 
 export class SetUniversityBasedFollowingDetails implements Action {
@@ -64,22 +78,20 @@ export class SetUniversityBasedFollowingDetails implements Action {
   constructor(public payload: UniversityBasedFollowingDetail[]) {}
 }
 
-export class SetDetailFollowingDetail implements Action {
-  readonly type = SET_DETAIL_FOLLOWING_DETAIL;
-  constructor(public payload: SelectedFollowingDetail) {}
+export class LoadUserFollowingDetail implements Action {
+  readonly type = LOAD_USER_FOLLOWING_DETAIL;
+  readonly message = "Đang nạp chi tiết khối ngành";
+  constructor(public payload: number) {}
 }
 
-export class LoadRankingUserInformation implements Action {
-  readonly type = LOAD_RANKING_USER_INFORMATION;
-}
-
-export class SetRankingUserInformation implements Action {
-  readonly type = SET_RANKING_USER_INFORMATION;
-  constructor(public payload: RankingUserInformationGroupByTranscriptType[]) {}
+export class SetUserFollowingDetail implements Action {
+  readonly type = SET_USER_FOLLOWING_DETAIL;
+  constructor(public payload: UserFollowingDetail) {}
 }
 
 export class LoadTranscripts implements Action {
   readonly type = LOAD_TRANSCRIPTS;
+  readonly message = "Đang nạp thông tin tài khoản";
 }
 
 export class SetTranscripts implements Action {
@@ -106,9 +118,50 @@ export class UncaringAction implements Action {
   constructor(public payload: {uncaringType: number, followingDetailId: number}) {}
 }
 
+export class LoadNumberOfUnreadNotifications implements Action {
+  readonly type = LOAD_NUMBER_OF_UNREAD_NOTIFICATIONS;
+}
+
+export class SetNumberOfUnreadNotifications implements Action {
+  readonly type = SET_NUMBER_OF_UNREAD_NOTIFICATIONS;
+  constructor(public payload: number) {}
+}
+
+export class LoadNotifications implements Action {
+  readonly type = LOAD_NOTIFICATIONS;
+}
+
+export class SetNotifications implements Action {
+  readonly type = SET_NOTIFICATIONS;
+  constructor(public payload: PagedResponse<NotificationDataSet[]>) {}
+}
+
+export class MarkAsAllRead implements Action {
+  readonly type = MARK_AS_ALL_READ;
+}
+
+export class MarkAsRead implements Action {
+  readonly type = MARK_AS_READ;
+  constructor(public payload: number) {}
+}
+
+export class LoadMoreNotifications implements Action {
+  readonly type = LOAD_MORE_NOTIFICATIONS;
+}
+
+export class SetMoreNotifications implements Action {
+  readonly type = SET_MORE_NOTIFICATIONS;
+  constructor(public payload: PagedResponse<NotificationDataSet[]>) {}
+}
+
+export class DoneLoading implements Action {
+  readonly type = DONE_LOADING;
+  constructor(public payload: string) {}
+}
+
 export class HasErrors implements Action {
   readonly type = HAS_ERRORS;
-  constructor(public payload: string[]) {}
+  constructor(public payload: {action: string, messages: string[]}) {}
 }
 
 export class ConfirmErrors implements Action {
@@ -117,6 +170,8 @@ export class ConfirmErrors implements Action {
 
 export type UserActions = LoadSubmissions | SetSubmissions | LoadDetailSubmission | SetDetailSubmission | HasErrors | ConfirmErrors
                           | LoadMajorBasedFollowingDetails | SetMajorBasedFollowingDetails | LoadUniversityBasedFollowingDetails
-                          | SetUniversityBasedFollowingDetails | SetDetailFollowingDetail | LoadRankingUserInformation
-                          | SetRankingUserInformation | LoadTranscripts | SetTranscripts | LoadCaringArticles | SetCaringArticles
-                          | SetNotificationArticleIds | UncaringAction;
+                          | SetUniversityBasedFollowingDetails | LoadUserFollowingDetail | LoadNotifications | SetNotifications
+                          | SetUserFollowingDetail | LoadTranscripts | SetTranscripts | LoadCaringArticles | SetCaringArticles
+                          | SetNotificationArticleIds | UncaringAction | LoadMoreNotifications | SetMoreNotifications
+                          | LoadNumberOfUnreadNotifications | SetNumberOfUnreadNotifications | MarkAsAllRead | MarkAsRead
+                          | DoneLoading;

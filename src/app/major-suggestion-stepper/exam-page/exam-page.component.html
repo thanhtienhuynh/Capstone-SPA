@@ -1,34 +1,43 @@
 
-<div *ngIf="test" fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
-  <div fxFlex="0 1 calc(27% - 32px)" fxFlex.lt-sm="100%" >
-    <div *ngIf="!isScored" style="width: 100%; border-radius: 15px; box-shadow: 0 0 6px 3px #cac8c8; border: 2px solid rgb(56, 97, 231)">
-      <!-- Khung giờ -->
-      <div style="height: auto; width: 100%;">
-        <div class="center-all" style="height: auto;">Thời gian</div>
-        <div class="center-all" style="height: fit-content;" >
-          <countdown class="count-down-frame"  #cd [config]="{ leftTime: test.timeLimit * 60, format: test.timeLimit > 60 ? 'h:m:s' : 'm:s' }" (event)="handleCoundown($event)"></countdown>
-        </div>
-      </div>
-      <!-- Khung câu hỏi -->
-      <div style="width: 100%; margin-top: 10px;">
-        <div fxLayout="row wrap" fxLayoutGap="3px grid" fxLayoutAlign="flex-start" 
-            style="padding: 7px;">
-          <div fxFlex="0 1 calc(11%)" *ngFor="let question of test.numberOfQuestion | toArray ; let i = index">
-            <app-answer
-            [numericalOrder]="i"
-            [selectedIndex]="selectedIndex"
-            ></app-answer>
+<div *ngIf="test" gdAreas="score test" gdRows="auto auto" gdColumns="27% 73%" gdGap="32px"
+gdAreas.lt-md="score | test" gdRows.lt-md="auto" gdColumns.lt-md="100%">
+  <div gdArea="score" >
+    <div class="score-frame">
+      <h1 mat-dialog-title class="test-title">{{test.name}}</h1>
+      <div *ngIf="!isScored">
+        <!-- Khung giờ -->
+        <div class="line-frame">
+          <div class="center-vertical timer-title" >Thời gian còn lại:</div>
+          <div class="center-all">
+            <countdown class="count-down-frame" #cd [config]="{ leftTime: test.timeLimit * 60, format: test.timeLimit > 60 ? 'h:m:s' : 'm:s' }" 
+              (event)="handleCoundown($event)">
+            </countdown>
           </div>
         </div>
+        <div class="line-frame">
+          <div class="center-vertical timer-title" >Số câu hoàn thành:&nbsp;</div>
+          <div class="center-vertical count-down-frame" >{{numberOfCompletedQuestion}}/{{test.numberOfQuestion}}</div>
+        </div>
+        <!-- Khung câu hỏi -->
+        <div class="no-question-frame">
+          <div fxLayout="row wrap" fxLayoutGap="7px grid" fxLayoutAlign="flex-start" >
+              <div fxFlex="0 1 calc(11%)" *ngFor="let question of test.numberOfQuestion | toArray ; let i = index">
+                <app-answer
+                class="answer-item"
+                (click)="answerClick(i)"
+                [numericalOrder]="i"
+                [selectedIndex]="selectedIndex"
+                ></app-answer>
+            </div>
+          </div>
+        </div>
+        <div class="center-all score-frame-btn">
+          <button (click)="onSubmitClick()" class="detail-btn" form="examSubmitForm">Nộp bài</button>
+        </div>
       </div>
-      <div class="center-all" style="margin: 10px 0 10px 0;">
-        <button mat-raised-button color="primary" type="submit" form="examSubmitForm">Nộp bài</button>
-      </div>
-    </div>
-
+      <!-- Sau khi chấm điểm -->
       <div *ngIf="isScored">
-        <div >
-          <h1 mat-dialog-title style="font-weight: 700;">{{test.name}}</h1>
+        <div>
           <div mat-dialog-content>
               <p>Điểm:</p>
               <div class="mark">{{testSubmissionReponse.mark | number : '1.2-2'}}</div>
@@ -36,47 +45,41 @@
               <p>Thời gian làm bài: <span class="result">{{testSubmissionReponse.spentTime}}/{{test.timeLimit}} phút</span></p>
           </div>
         </div>   
-        <div *ngIf="!isSaved" >
-          <p style="font-size: small; font-style: italic;">
-            <span style="color: rgb(240, 30, 30);">Chú ý:</span> 
-            Bạn có thể lưu lại kết quả bài thi thử bằng cách nhấn vào nút "Lưu". 
-            Hệ thống sẽ gợi ý ngành học cho bạn dựa trên môn học có điểm thi thử.</p>     
-          <div mat-dialog-actions>
-            <button mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/" >Đóng</button>
-            <button mat-button color="primary" (click)="onSave()" cdkFocusInitial>Lưu</button>
-          </div>
+
+        <div class="center-all score-frame-btn">
+          <button *ngIf="needDoneTestIds.length > 0" mat-raised-button color="primary" (click)="onDoMoreClick()" cdkFocusInitial>Làm tiếp</button>
+          <button *ngIf="needDoneTestIds.length <= 0" mat-raised-button color="primary" (click)="reSuggestUni()" cdkFocusInitial>Xem kết quả gợi ý mới</button>
         </div>
-        <button *ngIf="tests.length > doneTestIds.length" mat-button color="primary" (click)="onDoMoreClick()" cdkFocusInitial>Làm tiếp</button>
-        <button *ngIf="tests.length == doneTestIds.length" mat-button color="primary" (click)="reSuggestUni()" cdkFocusInitial>Xem kết quả gợi ý mới</button>
       </div>
+    </div>
   </div>
-  <div class="test-exam-scroll" fxFlex="0 1 calc(73% - 32px)" fxFlex.lt-sm="100%">
-    <mat-card  class="card" class="question_widget">
+  <div class="test-exam-scroll" gdArea="test"  id="style-7" ngClass.lt-md="test-exam-scroll-lt-md">
+    <mat-card  class="card question_widget">
       <mat-card-content class="card-body p-0">
-        <form  [formGroup]="examSubmissionFormGroup" id="examSubmitForm" (ngSubmit)="onSubmit()">
-        <div *ngFor="let question of test.questions; let i = index">
-          <br/>
-          <div *ngIf="question.isAnnotate">
-            <span style="font-weight: bold; font-size: 1.2em">
-              <div [innerHtml]="question.content | safeHtml"></div>
-            </span>
-          </div>
-          <div *ngIf="!question.isAnnotate">
-            <span style="font-weight: bold; font-size: 1.2em">Câu {{ question.realOrder + 1 }}.
-              <div [innerHtml]="question.content | safeHtml"></div>
-            </span>
-            <mat-radio-group formControlName="{{question.id}}"  aria-label="Select an option">
-              <div *ngFor="let option of question.options; let j = index">
-                <div  class="center-vertical">
-                  <mat-radio-button value="{{ j }}" >
-                    <div [innerHtml]="option.content | safeHtml"></div>
-                  </mat-radio-button>
+        <form  [formGroup]="examSubmissionFormGroup" id="examSubmitForm">
+          <div *ngFor="let question of test.questions; let i = index">
+            <br/>
+            <div *ngIf="question.isAnnotate">
+              <span style="font-weight: bold; font-size: 1.2em">
+                <div [innerHtml]="question.content | safeHtml"></div>
+              </span>
+            </div>
+            <div *ngIf="!question.isAnnotate">
+              <span id="{{question.realOrder}}" style="font-weight: bold; font-size: 1.2em">Câu {{ question.realOrder + 1 }}.
+                <div [innerHtml]="question.content | safeHtml"></div>
+              </span>
+              <mat-radio-group formControlName="{{question.id}}"  aria-label="Select an option" [disabled]="isScored">
+                <div *ngFor="let option of question.options; let j = index">
+                  <div class="center-vertical">
+                    <mat-radio-button value="{{ j }}" >
+                      <div [innerHtml]="option.content | safeHtml"></div>
+                    </mat-radio-button>
+                  </div>
                 </div>
-              </div>
-            </mat-radio-group>
+              </mat-radio-group>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
       </mat-card-content>
     </mat-card>  
   </div>

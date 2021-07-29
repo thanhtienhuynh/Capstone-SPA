@@ -1,24 +1,18 @@
-<mat-carousel
-
-    timings="250ms ease-in"
-    [autoplay]="true"
-    interval="5000"
-    color="primary"
-    maxWidth="auto"
-    proportion="25"
-    slides="5"
-    [loop]="true"
-    [hideArrows]="true"
-    [hideIndicators]="false"
-    [useKeyboard]="true"
-    [useMouseWheel]="false"
-    orientation="ltr">
-    <mat-carousel-slide
-    style="height: 1000px;"
-      #matCarouselSlide
-      *ngFor="let article of topArticles; let i = index"
-      overlayColor="#00000040"
-      [hideOverlay]="false">
+<div class="home-frame">
+  <div class="bg-frame">
+    <div class="search-section">
+      <form (ngSubmit)="onSearch()" class="search-frame center-all">
+        <input placeholder="Tiêu đề bài viết..." class="text-field" type="text" id="fullname" [(ngModel)]="searchTerm" name="searchTerm"/>
+        <div class="center-vertical mock-test-button">
+          <button type="submit" class="blob blue">Tìm kiếm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- <mat-carousel timings="250ms ease-in" [autoplay]="true" interval="5000" color="primary" maxWidth="auto" proportion="25" slides="5"
+      [loop]="true" [hideArrows]="true" [hideIndicators]="false" [useKeyboard]="true" [useMouseWheel]="false" orientation="ltr">
+    <mat-carousel-slide *ngFor="let article of topArticles; let i = index"
+      overlayColor="#00000040" [hideOverlay]="false" style="height: 1000px;" #matCarouselSlide>
       <div class="item-news" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
         <div class="thumnail" fxFlex="0 1 calc(50% - 16px)" fxFlex.lt-sm="100%">
           <img style="width: 100%; height: 100%;" src="{{article.postImageUrl}}" alt="">
@@ -28,38 +22,128 @@
           <p class="description">{{article.shortDescription}}</p>
         </div>
       </div>
-  </mat-carousel-slide>
-</mat-carousel>
+    </mat-carousel-slide>
+  </mat-carousel> -->
 
-<div *ngIf="collapseArticlesPageResponse" class="item-news-list">
-  <div *ngFor="let article of collapseArticlesPageResponse.data" style="margin-bottom: 10px;">
-    <div gdAreas="title title thumnail | discription discription thumnail | postedDate source thumnail" gdGap="10px" gdRows="auto auto auto"
-gdAreas.lt-md="title | thumnail | discription | source | postedDate" gdRows.lt-md="auto auto auto auto auto">
-      <h3 class="title" gdArea="title" routerLink="./{{article.id}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-        {{article.title}}
-      </h3>
-
-      <div gdArea="discription">
-        <p>{{article.shortDescription}}</p>
+    <div class="frame-content">
+      <div class="menu-news">
+        <div class="menu-item hot-news orange center-vertical" (click)="scrollToElement(hotNewsFrame, 1)"><div>BẢN TIN HOT</div></div>
+        <div class="menu-item today-news center-vertical" (click)="scrollToElement(todayNewsFrame, 2)"><div>BẢN TIN HÔM NAY</div></div>
+        <div class="menu-item past-news center-vertical" (click)="scrollToElement(pastNewsFrame, 3)"><div>BẢN TIN CŨ HƠN</div></div>
+        <div class="menu-item all-news center-vertical" (click)="viewAll()"><div>XEM TẤT CẢ</div></div>
       </div>
-      <p gdArea="postedDate" class="sub-dis">Ngày đăng: {{article.postedDate}}</p>
-      <p gdArea="source" class="sub-dis">Nguồn: <a href="{{article.publishedPage}}">{{article.publishedPage}}</a></p>
-      <div gdArea="thumnail">
-        <img style="width: 100%; height: 100%;" src="{{article.postImageUrl || '../../assets/img/news.png'}}" alt="">
+      
+      <div [ngClass]="{'hidden': !isViewAll}" #viewAllEl class="hot-news-frame">
+        <div class="frame-title">TẤT CẢ BẢN TIN</div>
+        <div class="under-line"></div>
+        <div *ngIf="collapseArticlesPageResponse && collapseArticlesPageResponse.data" class="news-list">
+          <div class="flex-frame" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+            <div class="item-news" fxFlex="0 1 calc(25% - 16px)" fxFlex.lt-md="100%" *ngFor="let article of collapseArticlesPageResponse.data;">
+              <img class="news-thumbnail" src="{{article.postImageUrl}}" alt="">
+              <h3 class="title" routerLink="./{{article.id}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                {{article.title}}
+              </h3>
+              <div class="post-date">{{article.timeAgo}}</div>
+              <p class="news-description">{{article.shortDescription | shorten:140}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="empty-title" *ngIf="!(collapseArticlesPageResponse && collapseArticlesPageResponse.data)">
+          Chưa có bản tin nào!
+        </div>
+      </div>
+
+      <!-- hot news -->
+      <div [ngClass]="{'hidden': isViewAll}" #hotNewsFrame class="hot-news-frame">
+        <div class="frame-title">BẢN TIN HOT</div>
+        <div class="under-line"></div>
+        <div *ngIf="homeArticles && homeArticles[0] && homeArticles[0].articles && homeArticles[0].articles.length > 0" class="news-list">
+          <div class="flex-frame" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+            <div class="item-news" fxFlex="0 1 calc(25% - 16px)" fxFlex.lt-md="100%" *ngFor="let article of homeArticles[0].articles;">
+              <img class="news-thumbnail" src="{{article.postImageUrl}}" alt="">
+              <h3 class="title" routerLink="./{{article.id}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                {{article.title}}
+              </h3>
+              <div class="post-date">{{article.timeAgo}}</div>
+              <p class="news-description">{{article.shortDescription | shorten:140}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="empty-title" *ngIf="!(homeArticles && homeArticles[0] && homeArticles[0].articles && homeArticles[0].articles.length > 0)">
+          Hiện đang cập nhật!
+        </div>
+      </div>
+
+      <!-- today news  -->
+      <div [ngClass]="{'hidden': isViewAll}" #todayNewsFrame class="today-news-frame">
+        <div class="frame-title">BẢN TIN HÔM NAY</div>
+        <div class="under-line"></div>
+        <div *ngIf="homeArticles && homeArticles[1] && homeArticles[1].articles && homeArticles[1].articles.length > 0" class="news-list">
+          <div class="flex-frame" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+            <div class="item-news" fxFlex="0 1 calc(25% - 16px)" fxFlex.lt-md="100%" *ngFor="let article of homeArticles[1].articles;">
+              <img class="news-thumbnail" src="{{article.postImageUrl}}" alt="">
+              <h3 class="title" routerLink="./{{article.id}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                {{article.title}}
+              </h3>
+              <div class="post-date">{{article.timeAgo}}</div>
+              <p class="news-description">{{article.shortDescription | shorten:140}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="empty-title" *ngIf="!(homeArticles && homeArticles[1] && homeArticles[1].articles && homeArticles[1].articles.length > 0)">
+          Hôm nay chưa có tin tức nào!
+        </div>
+      </div>
+
+      <!-- past news  -->
+      <div [ngClass]="{'hidden': isViewAll}" #pastNewsFrame class="past-news-frame">
+        <div class="frame-title">BẢN TIN CŨ HƠN</div>
+        <div class="under-line"></div>
+        <div *ngIf="homeArticles && homeArticles[2] && homeArticles[2].articles && homeArticles[2].articles.length > 0" class="news-list">
+          <div class="flex-frame" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
+            <div class="item-news" fxFlex="0 1 calc(25% - 16px)" fxFlex.lt-md="100%" *ngFor="let article of homeArticles[2].articles;">
+              <img class="news-thumbnail" src="{{article.postImageUrl}}" alt="">
+              <h3 class="title" routerLink="./{{article.id}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                {{article.title}}
+              </h3>
+              <div class="post-date">{{article.timeAgo}}</div>
+              <p class="news-description">{{article.shortDescription | shorten:140}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="empty-title" *ngIf="!(homeArticles && homeArticles[2] && homeArticles[2].articles && homeArticles[2].articles.length > 0)">
+          Không có tin nào!
+        </div>
+      </div>
+
+
+      <!-- <div *ngIf="collapseArticlesPageResponse" class="item-news-list">
+        <div *ngFor="let article of collapseArticlesPageResponse.data" style="margin-bottom: 10px;">
+          <div gdAreas="title title thumnail | discription discription thumnail | postedDate source thumnail" gdGap="10px" gdRows="auto auto auto"
+              gdAreas.lt-md="title | thumnail | discription | source | postedDate" gdRows.lt-md="auto auto auto auto auto">
+            <h3 [innerHtml]="article.title" class="title" gdArea="title" routerLink="./{{article.id}}" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"></h3>
+    
+            <div gdArea="discription">
+              <p>{{article.shortDescription}}</p>
+            </div>
+            <p gdArea="postedDate" class="sub-dis">Ngày đăng: {{article.postedDate}}</p>
+            <p gdArea="source" class="sub-dis">Nguồn: <a target="_blank" href="{{article.publishedPage }}">{{article.publishedPage}}</a></p>
+            <div gdArea="thumnail">
+              <img class="img-frame" [src]="(article.postImageUrl | safeUrl) || '../../assets/img/news.png'" onerror="'../../assets/img/news.png'" alt="">
+              </div>
+          </div>
+          <mat-divider class="item-divider"></mat-divider>
+        </div>
+      </div> -->
+      <div *ngIf="collapseArticlesPageResponse && isViewAll" class="page-button-section center-all">
+        <div *ngIf="firstButtonValue > 0" (click)="pageClick(firstButtonValue)" class="page-button center-all">{{firstButtonValue}}</div>
+        <div *ngIf="firstButtonValue > 0" class="center-all three-dot">...</div>
+        <div *ngIf="secondButtonValue > 0" (click)="pageClick(secondButtonValue)" [ngClass]="{'page-button-selected': secondButtonValue == collapseArticlesPageResponse.pageNumber}" class="page-button center-all">{{secondButtonValue}}</div>
+        <div *ngIf="thirdButtonValue > 0" (click)="pageClick(thirdButtonValue)" [ngClass]="{'page-button-selected': thirdButtonValue == collapseArticlesPageResponse.pageNumber}" class="page-button center-all ">{{thirdButtonValue}}</div>
+        <div *ngIf="fourthButtonValue > 0" (click)="pageClick(fourthButtonValue)" [ngClass]="{'page-button-selected': fourthButtonValue == collapseArticlesPageResponse.pageNumber}" class="page-button center-all">{{fourthButtonValue}}</div>
+        <div *ngIf="lastButtonValue > 0" class="center-all three-dot">...</div>
+        <div *ngIf="lastButtonValue > 0" (click)="pageClick(lastButtonValue)" class="page-button center-all">{{lastButtonValue}}</div>
       </div>
     </div>
-    <mat-divider class="item-divider"></mat-divider>
   </div>
-</div>
-<div *ngIf="collapseArticlesPageResponse" class="page-button-section center-all">
-  <div *ngIf="firstButtonValue > 0" (click)="pageClick(firstButtonValue)" class="page-button center-all">{{firstButtonValue}}</div>
-  <div *ngIf="firstButtonValue > 0" class="center-all three-dot">...</div>
-  <div *ngIf="secondButtonValue > 0" (click)="pageClick(secondButtonValue)" [ngClass]="{'page-button-selected': secondButtonValue == collapseArticlesPageResponse.pageNumber}" class="page-button center-all">{{secondButtonValue}}</div>
-  <div *ngIf="thirdButtonValue > 0" (click)="pageClick(thirdButtonValue)" [ngClass]="{'page-button-selected': thirdButtonValue == collapseArticlesPageResponse.pageNumber}" class="page-button center-all ">{{thirdButtonValue}}</div>
-  <div *ngIf="fourthButtonValue > 0" (click)="pageClick(fourthButtonValue)" [ngClass]="{'page-button-selected': fourthButtonValue == collapseArticlesPageResponse.pageNumber}" class="page-button center-all">{{fourthButtonValue}}</div>
-  <div *ngIf="lastButtonValue > 0" class="center-all three-dot">...</div>
-  <div *ngIf="lastButtonValue > 0" (click)="pageClick(lastButtonValue)" class="page-button center-all">{{lastButtonValue}}</div>
-</div>
-
-<app-progress-spinner *ngIf="isLoading"></app-progress-spinner>
-
+<app-progress-spinner [actions]="homeActionQueue" *ngIf="homeActionQueue && homeActionQueue.length > 0"></app-progress-spinner>

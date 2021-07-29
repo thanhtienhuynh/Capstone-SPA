@@ -13,10 +13,7 @@ export interface SuggestedSubjectsGroup {
 }
 
 export interface UserSuggestionSubjectGroup {
-  transcriptTypeId: number;
-  transcriptTypeName: string;
   provinceId: number;
   gender: number;
-  subjectGroupDataSets: SuggestedSubjectsGroup[];
   transcriptDetails: TranscriptType[];
 }

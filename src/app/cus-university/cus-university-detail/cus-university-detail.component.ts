@@ -8,6 +8,7 @@ import * as fromApp from '../../_store/app.reducer';
 import * as HomeActions from '../../home/store/home.actions';
 import { PageParam } from 'src/app/_params/page-param';
 import { FormControl, FormGroup } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cus-university-detail',
@@ -22,9 +23,10 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
   subsription: Subscription;
   majors: CusUniversityMajorDetail[] = [];
   cusMajorDetailPageResponse: PagedResponse<CusUniversityMajorDetail[]>;
-  isLoading: boolean;
+  homeActionQueue: HomeActions.HomeActions[] = [];
   seasons: UniSeason[];
   selectedSeasonId: number;
+  errors: string[];
   
   firstButtonValue: number;
   secondButtonValue: number;
@@ -38,7 +40,6 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
-    this.store.dispatch(new HomeActions.ResetState());
     this.store.dispatch(new HomeActions.LoadSeasons());
     this.subsription = this.store.select('home').subscribe((homeState) => {
       if (this.university != homeState.selectedUniversity) {
@@ -47,7 +48,6 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
 
       if (this.seasons != homeState.seasons) {
         this.seasons = homeState.seasons;
-        console.log('ss: ', this.seasons);
         if (this.seasons != null && this.seasons.length > 0) {
           this.selectedSeasonId = this.seasons.find(s => s.status)?.id;
           if (!this.selectedSeasonId) {
@@ -57,17 +57,15 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
           this.form.addControl(
             'season', this.seasonControl
           );
-          console.log('form ss:',  this.form);
-          this.form.controls['season'].valueChanges.subscribe(c => {
-            console.log(c);
-            this.store.dispatch(new HomeActions.LoadUniversityMajorDetail(
-                {pageFilter: new PageParam(1, 10), queryFilter: new MajorDetailFilter({majorCode: null, order: 4, majorName: null, seasonId: c, universityId: this.university.id})}));
-          });
-          console.log("Subscribe nha");
           if (this.university) {
             this.store.dispatch(new HomeActions.LoadUniversityMajorDetail(
               {pageFilter: new PageParam(1, 10), queryFilter: new MajorDetailFilter({majorCode: null, order: 4, majorName: null, seasonId: this.selectedSeasonId, universityId: this.university.id})}));
           }
+
+          this.form.controls['season'].valueChanges.subscribe(c => {
+            this.store.dispatch(new HomeActions.LoadUniversityMajorDetail(
+                {pageFilter: new PageParam(1, 10), queryFilter: new MajorDetailFilter({majorCode: null, order: 4, majorName: null, seasonId: c, universityId: this.university.id})}));
+          });
         }
       }
 
@@ -119,8 +117,14 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
         }
       }
 
-      if (this.isLoading != homeState.isLoading) {
-        this.isLoading = homeState.isLoading;
+      this.homeActionQueue = homeState.actionsQueue;
+
+      this.errors = this.errors;
+      if (this.errors && this.errors.length > 0) {
+        Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
+          .then(() => {
+            this.store.dispatch(new HomeActions.ConfirmErrors());
+          });
       }
     });
   }
@@ -205,6 +209,7 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
+    this.store.dispatch(new HomeActions.SetSeasons(null));
     if (this.subsription) {
       this.subsription.unsubscribe();
     }

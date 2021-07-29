@@ -1,0 +1,46 @@
+.caution-title {
+  font-style: 1.4em;
+  color: rgb(255, 0, 34);
+  font-weight: 600;
+  text-align: center;
+}
+
+.emphasized-title {
+  font-size: 1.1em;
+  font-weight: 500;
+  color: rgb(17, 155, 235);
+  cursor: pointer;
+}
+
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.detail-btn {
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px 20px;
+  border: 1px solid rgb(88, 153, 236);
+  color: rgb(53, 117, 236);
+  font-family: Roboto, sans-serif;
+}
+
+.detail-btn:hover:enabled {
+  background-color: rgb(53, 117, 236);
+  color: white;
+}
+
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.disabled-btn {
+  border: black;
+  color: black;
+  background-color: gray;
+}

@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "capstone-7071e"
+    "default": "unilinks-41d0e",
+    "prod": "unilinks-41d0e"
   }
 }

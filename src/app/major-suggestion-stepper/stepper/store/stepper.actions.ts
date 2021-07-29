@@ -7,12 +7,14 @@ import { SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from "src/app/_mod
 import { Test } from "src/app/_models/test";
 import { TestSubmission } from "src/app/_models/test-submission";
 import { MockTestBasedUniversity, TrainingProgramBasedUniversity } from "src/app/_models/university";
+import { MarkParam } from "src/app/_params/mark-param";
 import { TestSubmissionParam } from "src/app/_params/question-param";
 import { Subject } from "../../../_models/subject";
 
 export const LOAD_SUBJECTS = '[Stepper] Load Subjects';
 export const SET_SUBJECTS = '[Stepper] Set Subjects';
 export const SET_MARKS = '[Stepper] Set Marks';
+export const SAVE_MARKS = '[Stepper] Save Marks';
 export const SET_SUGGESTED_SUBJECTS_GROUP = '[Stepper] Set Suggested Subjects Group';
 export const SET_UNIVERSIIES = '[Stepper] Set Universities';
 export const LOAD_UNIVERSIIES = '[Stepper] Load Universities';
@@ -36,9 +38,9 @@ export const LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS = '[Stepper] Load Universit
 export const SET_UNIVERSIIES_AFTER_DOING_MOCK_TESTS = '[Stepper] Set Universities After Doing Mock Tests';
 export const LOAD_USER_SUGGESTION = '[Stepper] Load User Suggestion';
 export const SET_USER_SUGGESTION = '[Stepper] Set User Suggestion';
-export const UPDATE_USER_SUGGESTION = '[Stepper] Update User Suggestion';
 export const LOAD_PROVINCES = '[Stepper] Load Provinces';
 export const SET_PROVINCES = '[Stepper] Set Provinces';
+export const SET_TEST_SUBMISSION_ID = '[Stepper] Set Test Submission Id';
 export const DONE_LOADING = '[Stepper] Done Loading';
 export const RESET_STATE = '[Stepper] Reset State';
 export const HAS_ERRORS = '[Stepper] Has Errors';
@@ -46,6 +48,7 @@ export const CONFIRM_ERRORS = '[Stepper] Confirm Errors';
 
 export class LoadSubjects implements Action {
   readonly type = LOAD_SUBJECTS;
+  readonly message = "Đang nạp danh sách các môn học";
 }
 
 export class SetSubjects implements Action {
@@ -55,7 +58,13 @@ export class SetSubjects implements Action {
 
 export class SetMarks implements Action {
   readonly type = SET_MARKS;
-  constructor(public payload: {marks: Mark[], transcriptTypeId: number, gender: number, provinceId: number}) {}
+  readonly message = "Đang tính toán kết quả gợi ý";
+  constructor(public payload:  MarkParam, public shouldSave: boolean) {}
+}
+
+export class SaveMarks implements Action {
+  readonly type = SAVE_MARKS;
+  readonly message = "Đang lưu điểm";
 }
 
 export class SetSuggestedSubjectsGroup implements Action {
@@ -65,11 +74,13 @@ export class SetSuggestedSubjectsGroup implements Action {
 
 export class LoadUniversities implements Action {
   readonly type = LOAD_UNIVERSIIES;
-  constructor(public payload: {subjectGroup: SuggestedSubjectsGroup, major: Major, gender: number, provinceId: number}) {}
+  readonly message = "Đang tìm các trường đại học phù hợp";
+  constructor(public payload: {subjectGroup: SuggestedSubjectsGroup, major: Major}) {}
 }
 
 export class ReloadUniversities implements Action {
   readonly type = RELOAD_UNIVERSIIES;
+  readonly message = "Đang nạp lại danh sách các trường đại học";
 }
 
 export class SetUniversities implements Action {
@@ -84,16 +95,19 @@ export class SetTests implements Action {
 
 export class LoadTests implements Action {
   readonly type = LOAD_TESTS;
+  readonly message = "Đang nạp danh sách các bài thi thử";
 }
 
 
 export class LoadTest implements Action {
   readonly type = LOAD_TEST;
+  readonly message = "Đang nạp bài thi";
   constructor(public payload: number) {}
 }
 
 export class SetTest implements Action {
   readonly type = SET_TEST;
+  readonly message = "Đang cấu hình bài thi";
   constructor(public payload: Test) {}
 }
 
@@ -103,6 +117,7 @@ export class RefreshTest implements Action {
 
 export class ScoringTest implements Action {
   readonly type = SCORING_TEST;
+  readonly message = "Đang chấm điểm";
   constructor(public payload: TestSubmissionParam) {}
 }
 
@@ -122,6 +137,7 @@ export class SaveUnsaveTestSubmissionsSuccess implements Action {
 
 export class CaringAction implements Action {
   readonly type = CARING_ACTION;
+  readonly message = "Đang theo dõi";
   constructor(public payload: {trainingProgramId: number, universityId: number, followTranscriptTypeId: number}) {}
 }
 
@@ -131,6 +147,7 @@ export class CaringActionSuccess implements Action {
 
 export class UncaringAction implements Action {
   readonly type = UNCARING_ACTION;
+  readonly message = "Đang bỏ theo dõi";
   constructor(public payload: number) {}
 }
 
@@ -139,6 +156,7 @@ export class UncaringActionSuccess implements Action {
 }
 
 export class LoadAfterMockTestsUniversities implements Action {
+  readonly message = "Đang tính toán lại danh sách các trường đại học";
   readonly type = LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS;
 }
 
@@ -148,6 +166,7 @@ export class SetAfterMockTestsUniversities implements Action {
 }
 
 export class LoadUserSuggestion implements Action {
+  readonly message = "Đang tìm lại kết quả gợi ý trước đó";
   readonly type = LOAD_USER_SUGGESTION;
 }
 
@@ -156,12 +175,9 @@ export class SetUserSuggestion implements Action {
   constructor(public payload: UserSuggestionSubjectGroup) {}
 }
 
-export class UpdateUserSuggestion implements Action {
-  readonly type = UPDATE_USER_SUGGESTION;
-}
-
 export class LoadProvinces implements Action {
   readonly type = LOAD_PROVINCES;
+  readonly message = "Đang nạp danh sách tỉnh thành";
 }
 
 export class SetProvinces implements Action {
@@ -169,13 +185,19 @@ export class SetProvinces implements Action {
   constructor(public payload: Province[]) {}
 }
 
+export class SetTestSubmissionId implements Action {
+  readonly type = SET_TEST_SUBMISSION_ID;
+  constructor(public payload: number) {}
+}
+
 export class DoneLoading implements Action {
   readonly type = DONE_LOADING;
+  constructor(public payload: string) {}
 }
 
 export class HasErrors implements Action {
   readonly type = HAS_ERRORS;
-  constructor(public payload: string[]) {}
+  constructor(public payload: {action: string, messages: string[]}) {}
 }
 
 export class ConfirmErrors implements Action {
@@ -190,5 +212,5 @@ export type StepperActions = ResetState | ScoringTest | SetTestMark | LoadTest |
             SetSubjects | SetMarks | SetSuggestedSubjectsGroup | LoadUniversities | ReloadUniversities | SetUniversities |
             LoadTests | SetTests | SaveUnsaveTestSubmissions | SaveUnsaveTestSubmissionsSuccess | RefreshTest | CaringAction |
             CaringActionSuccess | UncaringAction | UncaringActionSuccess | LoadAfterMockTestsUniversities | SetAfterMockTestsUniversities |
-            LoadUserSuggestion | SetUserSuggestion | UpdateUserSuggestion | LoadProvinces | SetProvinces | HasErrors | ConfirmErrors |
-            DoneLoading;
+            LoadUserSuggestion | SetUserSuggestion | LoadProvinces | SetProvinces | HasErrors | ConfirmErrors |
+            DoneLoading | SaveMarks | SetTestSubmissionId;

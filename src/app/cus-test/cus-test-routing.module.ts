@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { CanDeactivateGuard } from "../_helper/can-deactivate-guard.service";
 import { TestSubjectGuard } from "../_helper/test-subject.guard";
 import { CollapseTestComponent } from "./collapse-test/collapse-test.component";
 import { CusTestDetailComponent } from "./cus-test-detail/cus-test-detail.component";
@@ -13,7 +14,7 @@ const routes: Routes = [
     children: [
       { path: '', component: CusTestSubjectComponent},
       { path: ':subject-name', canActivate: [TestSubjectGuard], component: CollapseTestComponent},
-      { path: ':subject-name/:id', component: CusTestDetailComponent},
+      { path: ':subject-name/:id', component: CusTestDetailComponent, canDeactivate: [CanDeactivateGuard]},
     ]
   }
 ];

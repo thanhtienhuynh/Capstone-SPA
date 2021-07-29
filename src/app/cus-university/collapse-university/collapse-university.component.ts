@@ -6,6 +6,7 @@ import * as fromApp from '../../_store/app.reducer'
 import * as HomeActions from '../../home/store/home.actions';
 import { PagedResponse } from 'src/app/_models/paged-response';
 import { PageParam } from 'src/app/_params/page-param';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-collapse-university',
@@ -15,7 +16,7 @@ import { PageParam } from 'src/app/_params/page-param';
 export class CollapseUniversityComponent implements OnInit, OnDestroy {
 
   subscription: Subscription;
-  isLoading: boolean;
+  homeActionQueue: HomeActions.HomeActions[] = [];
   universitiesPageResponse: PagedResponse<CusUniversity[]>;
 
   searchTerm: string = null;
@@ -25,6 +26,8 @@ export class CollapseUniversityComponent implements OnInit, OnDestroy {
   thirdButtonValue: number;
   fourthButtonValue: number;
   lastButtonValue: number;
+
+  errors: string[];
 
   constructor(private store: Store<fromApp.AppState>) { }
 
@@ -36,8 +39,14 @@ export class CollapseUniversityComponent implements OnInit, OnDestroy {
         this.generatePagingButton();
       }
 
-      if (this.isLoading != homeState.isLoading) {
-        this.isLoading = homeState.isLoading;
+      this.homeActionQueue = homeState.actionsQueue;
+
+      this.errors = this.errors;
+      if (this.errors && this.errors.length > 0) {
+        Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
+          .then(() => {
+            this.store.dispatch(new HomeActions.ConfirmErrors());
+          });
       }
     });
   }

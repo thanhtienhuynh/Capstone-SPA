@@ -1,0 +1,48 @@
+.root-frame {
+  width: 100%;
+  height: auto;
+}
+
+.major-title {
+  border-bottom: 1px solid black;
+  padding-bottom: 15px;
+  color: #033969;
+  font-weight: 700;
+}
+
+.content-title {
+  border: 0.5px solid ;
+  padding: 5px;
+  margin: 15px 0px;
+  color: white;
+  background-color: rgb(42, 154, 228);
+}
+
+.uni-title {
+  cursor: pointer;
+  color: #0c3253;
+  font-weight: 500;
+}
+
+.article {
+  border-radius: 6px;
+  border: 1px solid rgb(70, 141, 235);
+  padding: 5px;
+  margin-bottom: 5px;
+
+  background-color: rgb(70, 141, 235); 
+  color: white;
+  cursor: pointer;
+}
+
+.article:hover {
+  background-color: white; 
+  color: rgb(70, 141, 235);
+}
+
+.article-frame-title {
+  border-bottom: 1px solid black;
+  padding-bottom: 12px;
+  color: #033969;
+  font-weight: 600;
+}

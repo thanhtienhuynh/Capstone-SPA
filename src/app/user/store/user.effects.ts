@@ -6,7 +6,9 @@ import { of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import { CollapseArticle } from "src/app/_models/collapse-article";
 import { MajorBasedFollowingDetail } from "src/app/_models/major-based-following-detail";
-import { RankingUserInformationGroupByTranscriptType } from "src/app/_models/ranking-user-information";
+import { NotificationDataSet } from "src/app/_models/notification";
+import { PagedResponse } from "src/app/_models/paged-response";
+import { UserFollowingDetail } from "src/app/_models/ranking-user-information";
 import { Response } from "src/app/_models/response";
 import { TranscriptType } from "src/app/_models/transcript";
 import { UniversityBasedFollowingDetail } from "src/app/_models/university-based-following-detail";
@@ -26,18 +28,33 @@ export class UserEffects {
   @Effect()
   loadUserSubmissions = this.actions$.pipe(
     ofType(UserActions.LOAD_SUBMISSIONS),
-    switchMap(() => {
+    withLatestFrom(this.store.select('user')),
+    switchMap(([actionData, userState]) => {
+      let queryParams = new HttpParams();
+      if (userState.testSubmissionParam.testTypeId != null && userState.testSubmissionParam.testTypeId != 0) {
+        queryParams = queryParams.append('testTypeId', userState.testSubmissionParam.testTypeId.toString());
+      }
+      if (userState.testSubmissionParam.subjectId != null && userState.testSubmissionParam.subjectId != 0) {
+        queryParams = queryParams.append('subjectId', userState.testSubmissionParam.subjectId.toString());
+      }
+      if (userState.testSubmissionParam.isSuggestedTest != null) {
+        queryParams = queryParams.append('isSuggestedTest', userState.testSubmissionParam.isSuggestedTest ? 'true' : 'false');
+      }
+      queryParams.append('order',userState.testSubmissionParam.order.toString());
       return this.http.get<Response<UserTestSubmission[]>>(
-        environment.apiUrl + 'api/v1/test-submission'
+        environment.apiUrl + 'api/v1/test-submission',
+        {
+          params: queryParams
+        }
       ).pipe(
         map((response) => {
           if (response.succeeded) {
             return new UserActions.SetSubmissions(response.data);
           }
-          return new UserActions.HasErrors(response.errors);
+          return new UserActions.HasErrors({action: UserActions.LOAD_SUBMISSIONS, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new UserActions.HasErrors([error.message]));
+          return of(new UserActions.HasErrors({action: UserActions.LOAD_SUBMISSIONS, messages:[error.message]}));
         })
       );
     })
@@ -47,18 +64,18 @@ export class UserEffects {
   loadUserDetailSubmission = this.actions$.pipe(
     ofType(UserActions.LOAD_DETAIL_SUBMISSION),
     withLatestFrom(this.store.select('user')),
-    switchMap(([actionData, stepperState]) => {
+    switchMap(([actionData, userState]) => {
       return this.http.get<Response<UserDetailTestSubmission>>(
-        environment.apiUrl + 'api/v1/test-submission/' + stepperState.selectedTestSubmissionId.toString()
+        environment.apiUrl + 'api/v1/test-submission/' + userState.selectedTestSubmissionId.toString()
       ).pipe(
         map((response) => {
           if (response.succeeded) {
             return new UserActions.SetDetailSubmission(response.data);
           }
-          return new UserActions.HasErrors(response.errors);
+          return new UserActions.HasErrors({action: UserActions.LOAD_DETAIL_SUBMISSION, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new UserActions.HasErrors([error.message]));
+          return of(new UserActions.HasErrors({action: UserActions.LOAD_DETAIL_SUBMISSION, messages:[error.message]}));
         })
       );
     })
@@ -76,10 +93,10 @@ export class UserEffects {
           if (response.succeeded) {
             return new UserActions.SetMajorBasedFollowingDetails(response.data);
           }
-          return new UserActions.HasErrors(response.errors);
+          return new UserActions.HasErrors({action: UserActions.LOAD_MAJOR_BASED_FOLLOWING_DETAILS, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new UserActions.HasErrors([error.message]));
+          return of(new UserActions.HasErrors({action: UserActions.LOAD_MAJOR_BASED_FOLLOWING_DETAILS, messages:[error.message]}));
         })
       );
     })
@@ -97,34 +114,35 @@ export class UserEffects {
           if (response.succeeded) {
             return new UserActions.SetUniversityBasedFollowingDetails(response.data);
           }
-          return new UserActions.HasErrors(response.errors);
+          return new UserActions.HasErrors({action: UserActions.LOAD_UNIVERSITY_BASED_FOLLOWING_DETAILS, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new UserActions.HasErrors([error.message]));
+          return of(new UserActions.HasErrors({action: UserActions.LOAD_UNIVERSITY_BASED_FOLLOWING_DETAILS, messages:[error.message]}));
         })
       );
     })
   );
 
   @Effect()
-  loadUserRankingInformation = this.actions$.pipe(
-    ofType(UserActions.LOAD_RANKING_USER_INFORMATION),
+  loadUserFollowingDetail = this.actions$.pipe(
+    ofType(UserActions.LOAD_USER_FOLLOWING_DETAIL),
     withLatestFrom(this.store.select('user')),
     switchMap(([actionData, stepperState]) => {
-      if (!stepperState.selectedFollowingDetail) {
+      if (!stepperState.selectedFollowingDetailId) {
         return of ({ type: 'DUMMY' }); 
       }
-      return this.http.get<Response<RankingUserInformationGroupByTranscriptType[]>>(
-        environment.apiUrl + 'api/v1/following-detail/users-group-by-major-detail/' + stepperState.selectedFollowingDetail.universityGroupByTrainingProgramDataSet.followingDetailId.toString()
+      return this.http.get<Response<UserFollowingDetail>>(
+        environment.apiUrl + 'api/v1/following-detail/detail/' + stepperState.selectedFollowingDetailId.toString()
       ).pipe(
         map((response) => {
           if (response.succeeded) {
-            return new UserActions.SetRankingUserInformation(response.data);
+            console.log(response.data)
+            return new UserActions.SetUserFollowingDetail(response.data);
           }
-          return new UserActions.HasErrors(response.errors);
+          return new UserActions.HasErrors({action: UserActions.LOAD_USER_FOLLOWING_DETAIL, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new UserActions.HasErrors([error.message]));
+          return of(new UserActions.HasErrors({action: UserActions.LOAD_USER_FOLLOWING_DETAIL, messages:[error.message]}));
         })
       );
     })
@@ -141,10 +159,10 @@ export class UserEffects {
           if (response.succeeded) {
             return new UserActions.SetTranscripts(response.data);
           }
-          return new UserActions.HasErrors(response.errors);
+          return new UserActions.HasErrors({action: UserActions.LOAD_TRANSCRIPTS, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new UserActions.HasErrors([error.message]));
+          return of(new UserActions.HasErrors({action: UserActions.LOAD_TRANSCRIPTS, messages:[error.message]}));
         })
       );
     })
@@ -167,10 +185,130 @@ export class UserEffects {
           if (response.succeeded) {
             return new UserActions.SetCaringArticles(response.data);
           }
-          return new UserActions.HasErrors(response.errors);
+          return new UserActions.HasErrors({action: UserActions.LOAD_CARING_ARTICLES, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new UserActions.HasErrors([error.message]));
+          return of(new UserActions.HasErrors({action: UserActions.LOAD_CARING_ARTICLES, messages:[error.message]}));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  loadNotifications = this.actions$.pipe(
+    ofType(UserActions.LOAD_NOTIFICATIONS),
+    switchMap(() => {
+      let queryParams = new HttpParams();
+      queryParams = queryParams.append('pageSize', '10');
+      queryParams = queryParams.append('pageNumber', '1');
+      return this.http.get<PagedResponse<NotificationDataSet[]>>(
+        environment.apiUrl + 'api/v1/notification/user',
+        {
+          params: queryParams
+        }
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new UserActions.SetNotifications(response);
+          }
+          return new UserActions.HasErrors({action: UserActions.LOAD_NOTIFICATIONS, messages: response.errors});
+        }),
+        catchError((error) => {
+          return of(new UserActions.HasErrors({action: UserActions.LOAD_NOTIFICATIONS, messages:[error.message]}));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  loadMoreNotifications = this.actions$.pipe(
+    ofType(UserActions.LOAD_MORE_NOTIFICATIONS),
+    withLatestFrom(this.store.select('user')),
+    switchMap(([actionData, userState]) => {
+      let queryParams = new HttpParams();
+      queryParams = queryParams.append('pageSize', '10');
+      console.log("page: ", userState.pagedNotifications.pageNumber + 1);
+      queryParams = queryParams.append('pageNumber', (userState.pagedNotifications.pageNumber + 1).toString());
+      return this.http.get<PagedResponse<NotificationDataSet[]>>(
+        environment.apiUrl + 'api/v1/notification/user',
+        {
+          params: queryParams
+        }
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new UserActions.SetMoreNotifications(response);
+          }
+          return new UserActions.HasErrors({action: UserActions.LOAD_MORE_NOTIFICATIONS, messages: response.errors});
+        }),
+        catchError((error) => {
+          return of(new UserActions.HasErrors({action: UserActions.LOAD_MORE_NOTIFICATIONS, messages:[error.message]}));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  loadNumberOfUnread = this.actions$.pipe(
+    ofType(UserActions.LOAD_NUMBER_OF_UNREAD_NOTIFICATIONS),
+    withLatestFrom(this.store.select('user')),
+    switchMap(([actionData, userState]) => {
+      return this.http.get<Response<number>>(
+        environment.apiUrl + 'api/v1/notification/unread'
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new UserActions.SetNumberOfUnreadNotifications(response.data);
+          }
+          return new UserActions.HasErrors({action: UserActions.LOAD_NUMBER_OF_UNREAD_NOTIFICATIONS, messages: response.errors});
+        }),
+        catchError((error) => {
+          return of(new UserActions.HasErrors({action: UserActions.LOAD_NUMBER_OF_UNREAD_NOTIFICATIONS, messages:[error.message]}));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  markAsRead = this.actions$.pipe(
+    ofType(UserActions.MARK_AS_READ),
+    withLatestFrom(this.store.select('user')),
+    switchMap(([actionData, userState]) => {
+      return this.http.put<Response<boolean>>(
+        environment.apiUrl + 'api/v1/notification/' + userState.markAsReadId.toString(),
+        {}
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new UserActions.LoadNumberOfUnreadNotifications();
+          }
+          return new UserActions.HasErrors({action: UserActions.MARK_AS_READ, messages: response.errors});
+        }),
+        catchError((error) => {
+          return of(new UserActions.HasErrors({action: UserActions.MARK_AS_READ, messages:[error.message]}));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  markAsAllRead = this.actions$.pipe(
+    ofType(UserActions.MARK_AS_ALL_READ),
+    withLatestFrom(this.store.select('user')),
+    switchMap(([actionData, userState]) => {
+      return this.http.put<Response<boolean>>(
+        environment.apiUrl + 'api/v1/notification',
+        {}
+      ).pipe(
+        switchMap((response) => {
+          if (response.succeeded) {
+            return [new UserActions.LoadNumberOfUnreadNotifications(),
+              new UserActions.LoadNotifications()];
+          }
+          return of(new UserActions.HasErrors({action: UserActions.MARK_AS_ALL_READ, messages: response.errors}));
+        }),
+        catchError((error) => {
+          return of(new UserActions.HasErrors({action: UserActions.MARK_AS_ALL_READ, messages:[error.message]}));
         })
       );
     })
@@ -184,21 +322,23 @@ export class UserEffects {
       return this.http.delete<Response<boolean>>(
         environment.apiUrl + 'api/v1/following-detail/' + userState.uncaringFollowingDetailId.toString()
       ).pipe(
-        map((response) => {
+        switchMap((response) => {
           if (response.succeeded) {
             console.log("success: ", userState.uncareType);
             if (userState.uncareType == 0) {
 
-              return new UserActions.LoadMajorBasedFollowingDetails();
+              return [new UserActions.LoadMajorBasedFollowingDetails(),
+                      new UserActions.DoneLoading(UserActions.UNCARING_ACTION)];
             } else if (userState.uncareType == 1) {
-              return new UserActions.LoadUniversityBasedFollowingDetails();
+              return [new UserActions.LoadUniversityBasedFollowingDetails(),
+                new UserActions.DoneLoading(UserActions.UNCARING_ACTION)];
             }
             return of ({ type: 'DUMMY' }); 
           }
-          return new UserActions.HasErrors(response.errors);
+          return of (new UserActions.HasErrors({action: UserActions.UNCARING_ACTION, messages: response.errors}));
         }),
         catchError((error: HttpErrorResponse) => {
-          return of(new UserActions.HasErrors([error.message]));
+          return of(new UserActions.HasErrors({action: UserActions.UNCARING_ACTION, messages: [error.message]}));
         })
       );
     }),

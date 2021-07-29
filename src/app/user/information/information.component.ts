@@ -42,7 +42,7 @@ export class InformationComponent implements OnInit, OnDestroy {
       if (type) {
         let detail = type.transcriptDetails.find(d => d.subjectId == subjectId);
         if (detail) {
-          return detail.mark;
+          return detail.mark.toString();
         }
       }
     }
