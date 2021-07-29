@@ -1,0 +1,155 @@
+<div class="major-create">
+  <div class="container-fluid">
+    <div nz-row>
+      <div nz-col [nzXs]="13" [nzSm]="13" [nzMd]="13" [nzLg]="13" [nzXl]="13" [nzXXl]="13" class="mb-2" style="margin-right: 20px;">
+        <nb-card style="width: 100%;">
+          <nb-card-body style="width: 100%;">
+            <div>
+              <nb-card style="margin-bottom: 0;">
+                <nb-card-body style="min-height: 650px;">
+                  <div class="pt-2" style="display: flex; align-items: center; justify-content: center;">
+                    <span class="text-xl">THÊM NGÀNH MỚI VÀO HỆ THỐNG</span>               
+                  </div> 
+                  <nz-divider></nz-divider>
+                  <div class="d-flex">
+                    <div class="col-md-8" style="padding-left: 0;">
+                      <label for="">Tên ngành <span style="color: red;">*</span></label> 
+                      <nb-form-field>
+                        <nb-icon nbPrefix icon="briefcase-outline"></nb-icon>
+                        <input type="text" [formControl]="addMajorForm.get('name')" fullWidth nbInput>        
+                      </nb-form-field>  
+                    </div>
+                    <div class="col-md-4" style="padding-right: 0;">
+                      <label for="">Code <span style="color: red;">*</span></label> 
+                      <nb-form-field>
+                        <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
+                        <input type="text" [formControl]="addMajorForm.get('code')" fullWidth nbInput>        
+                      </nb-form-field> 
+                    </div>
+                  </div>
+                  <div class="d-flex mb-2 mt-2">
+                    <div class="col-md-4" style="display: flex; justify-content: start; align-items: center; padding-left: 0;">
+                      <label for="" style="margin-bottom: 0; margin-right: 10px;">Miêu tả </label>
+                    </div>                                     
+                  </div>
+                  <!-- <div class="d-flex mt-2">                     
+                    <div class="col-md-12" style="padding-right: 0; padding-left: 0;">
+                                           
+                    </div>
+                  </div> -->
+                  <quill-editor 
+                    [formControl]="addMajorForm.get('description')"
+                    class="content-editor"                      
+                    [modules]="editorOptions"                                                     
+                    [placeholder]="'Nhập nội dung..'"                  
+                    ></quill-editor> 
+                  <div class="d-flex mb-2 mt-2">
+                    <div class="col-md-4" style="display: flex; justify-content: start; align-items: center; padding-left: 0;">
+                      <label for="" style="margin-bottom: 0; margin-right: 10px;">Khung chương trình </label>
+                    </div>                                     
+                  </div>
+                  <quill-editor 
+                  [formControl]="addMajorForm.get('curriculum')"
+                  class="content-editor"                      
+                  [modules]="editorOptions"                                                     
+                  [placeholder]="'Nhập nội dung..'"                  
+                  ></quill-editor> 
+                  <div class="d-flex mb-2 mt-2">
+                    <div class="col-md-4" style="display: flex; justify-content: start; align-items: center; padding-left: 0;">
+                      <label for="" style="margin-bottom: 0; margin-right: 10px;">Tố chất </label>
+                    </div>                                     
+                  </div>
+                  <quill-editor 
+                  [formControl]="addMajorForm.get('humanQuality')"
+                  class="content-editor"                      
+                  [modules]="editorOptions"                                                     
+                  [placeholder]="'Nhập nội dung..'"                  
+                  ></quill-editor> 
+                  <div class="d-flex mb-2 mt-2">
+                    <div class="col-md-4" style="display: flex; justify-content: start; align-items: center; padding-left: 0;">
+                      <label for="" style="margin-bottom: 0; margin-right: 10px;">Mức lương </label>
+                    </div>                                     
+                  </div>
+                  <quill-editor 
+                  [formControl]="addMajorForm.get('salaryDescription')"
+                  class="content-editor"                      
+                  [modules]="editorOptions"                                                     
+                  [placeholder]="'Nhập nội dung..'"                  
+                  ></quill-editor> 
+                </nb-card-body>
+              </nb-card>
+              <div class="footer" style="padding-right: 0;">
+                <button (click)="addNewMajorToSystem()" nz-button nzType="primary" [disabled]="addMajorForm.invalid">Thêm ngành</button>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div nz-col [nzXs]="10" [nzSm]="10" [nzMd]="10" [nzLg]="10" [nzXl]="10" [nzXXl]="10" class="mb-2">
+        <nb-card style="width: 100%;">
+          <nb-card-body style="width: 100%;">
+            <div>
+              <nb-card *ngFor="let c of getSubjectGroups.controls; let i = index">
+                <nb-card-body style="width: 100%;">
+                  <div class="d-flex">
+                    <div class="col-md-6 pr-0 pl-0" style="display: flex; justify-content: center; align-items: center;">
+                      <div class="text-xl">
+                        <span>
+                          CHỌN KHỐI THI TƯƠNG ỨNG
+                        </span>              
+                      </div>
+                    </div> 
+                    <div class="col-md-6 pr-0" >
+                      <nb-form-field>        
+                        <input placeholder="Chọn khối thi"  readonly nz-dropdown type="text" [value]="getSubjectGroups.controls[i].get('id').value?.groupCode" [nzDropdownMenu]="selectSubjectGroup" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
+                      >        
+                      </nb-form-field>   
+                      <nz-dropdown-menu #selectSubjectGroup="nzDropdownMenu">        
+                        <app-custom-select (useSelect)="useSelectSubjectGroup($event, i)" [control]="getSubjectGroups.controls[i].get('id')" [data]="listOfDisplaySubjectGroup | async" [name]="'id'" [label]="'groupCode'" [placeholder]="'Tìm kiếm khối thi'"></app-custom-select>
+                      </nz-dropdown-menu>
+                    </div>         
+                  </div>
+                  <nb-card class="mt-2" style="margin-bottom: 0;" *ngIf="getSubjectGroups.controls[i].get('id').value">
+                    <nb-card-body>
+                      <div class="d-flex">
+                        <div class="col-md-6" style="display: flex; align-items: center; justify-content: center;">
+                          <label for="">Môn Học <span style="color: red;">*</span></label>
+                        </div>
+                        <div class="col-md-6" style="display: flex; align-items: center; justify-content: center;">
+                          <label for="">Trọng Số <span style="color: red;">*</span></label>
+                        </div>
+                      </div>
+                      <div class="d-flex mt-2" *ngFor="let s of getSubjectGroups.controls[i].get('subjectWeights').controls; index as si">
+                        <div class="col-md-6">
+                          <nb-form-field>        
+                            <input readonly type="text" [value]="getSubjectGroups.controls[i].get('subjectWeights').controls[si].get('subjectId').value?.subjectName?.toUpperCase()" fullWidth nbInput>        
+                          </nb-form-field>   
+                        </div> 
+                        <div class="col-md-6">
+                          <nb-form-field>        
+                            <input style="text-align: right;" type="number" [formControl]="getSubjectGroups.controls[i].get('subjectWeights').controls[si].get('weight')" fullWidth nbInput>        
+                          </nb-form-field>   
+                        </div>            
+                      </div> 
+                    </nb-card-body>
+                  </nb-card>
+                </nb-card-body>
+                <button (click)="addSubjectGroup()" nz-button nzType="default" nz-tooltip>
+                  <nb-icon icon="plus"></nb-icon>
+                </button>
+                <button (click)="removeSubjectGroup(i)" style="margin-top: 2px;" nz-button nz-tooltip>
+                  <nb-icon icon="minus"></nb-icon>
+                </button>
+              </nb-card>
+              <nb-card *ngIf="getSubjectGroups.controls.length === 0">      
+                <button (click)="addSubjectGroup()" nz-button nzType="default" nz-tooltip>
+                  <nb-icon icon="plus"></nb-icon>
+                </button>      
+              </nb-card>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>

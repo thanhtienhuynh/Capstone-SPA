@@ -1,7 +1,7 @@
-<div class="status-list">  
-  <div *ngIf="laneId === 'published'" class="px-3 pt-3 row">
+<div class="status-list" cdkDropList [cdkDropListData]="listOfArticle" (cdkDropListDropped)="drop($event)" [id]="laneId">  
+  <!-- <div *ngIf="laneId === 'published'" class="px-3 pt-3 row">
     <div class="col-lg-6">
-      <h5 style="font-size: 18px;">{{ laneTitle }}</h5>
+      <h5 style="font-size: 15px; font-weight: 600; color: #ff3d71;">{{ laneTitle }}</h5>
     </div>
     <div class="col-lg-6" style="max-width: 100%;">
       <div class="row">
@@ -10,26 +10,71 @@
             <nb-icon nbSuffix icon="search-outline" pack="eva"></nb-icon>                 
             <input (change)="articleFilter(searchByTitle.value)" fullWidth fieldSize="small" type="text" placeholder="Enter để tìm kiếm theo tiêu đề bài viết" nbInput #searchByTitle/>
           </nb-form-field>
-        </div>
-        <!-- <div style="max-width: 100%;">
-          <button (click)="articleFilter(searchByTitle.value)" nbButton size="small" status="info">TÌM KIẾM</button>           
-        </div>                         -->
+        </div>        
       </div>      
     </div>
   </div>
   <div *ngIf="laneId === 'top'" class="px-3 pt-3 row">
     <div class="col-lg-6 col-md-6">
-      <h5 style="font-size: 18px;">{{ laneTitle }}</h5>
+      <h5 style="font-size: 15px; font-weight: 600; color: #ff3d71;">{{ laneTitle }}</h5>
     </div>
     <div class="col-lg-6 col-md-6">
       <div style="display: flex; justify-content: flex-end; align-items: center;">
-        <button nz-button (click)="resetTopArticle()" nzType="default" style="margin-right: 10px;">TẠO LẠI</button>                
-        <button nz-button (click)="apply()" nzType="primary" style="margin-right: 10px;">ÁP DỤNG</button>
+        <button nz-button (click)="resetTopArticle()" nzType="default" style="margin-right: 10px;">
+          <span style="font-size: 12px;">TẠO LẠI</span></button>                
+        <button nz-button (click)="apply()" nzType="primary" style="margin-right: 10px;">
+          <span style="font-size: 12px;">ÁP DỤNG</span>          
+        </button>
       </div>           
     </div>
-  </div>
-  <nz-divider></nz-divider>
-  <div class="article-card-container" cdkDropList [cdkDropListData]="listOfArticle" (cdkDropListDropped)="drop($event)" [id]="laneId">
+  </div> -->
+  <!-- <nz-divider></nz-divider> -->
+  <div class="pt-2">
+    <nz-table    
+    #boardTable      
+    nzShowSizeChanger
+    nzShowQuickJumper    
+    [nzData]="listOfArticle"    
+    [nzTotal]="total"
+    [nzFrontPagination]="true"
+    [nzPageSize]="pageSize" 
+    [nzPageIndex]="pageIndex"  
+    [nzPageSizeOptions]="[5, 10]"
+    [nzShowPagination]="listOfArticle?.length > 5"
+    >
+      <thead>
+        <tr>
+          <th *ngIf="laneId === 'published'" style="display: flex; align-items: center; justify-content: space-between; height: 50px; margin-bottom: 5px;">
+            <span style="font-size: 14px; font-weight: 600; color: #ff3d71;">{{ laneTitle }}</span>
+            <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
+              <i nz-icon nzType="search"></i>
+            </nz-filter-trigger>
+          </th>
+          <th *ngIf="laneId === 'top'" style="display: flex; align-items: center; justify-content: space-between; height: 50px; margin-bottom: 5px;">            
+            <div style="text-align: center;">
+              <span style="font-size: 14px; font-weight: 600; color: #ff3d71;">{{ laneTitle }}</span>
+            </div>
+            <div>
+              <button nz-button (click)="resetTopArticle()" nzType="default" style="margin-right: 10px;">
+                <span style="font-size: 12px;">Tạo lại</span></button>                
+              <button nz-button (click)="apply()" nzType="primary" style="margin-right: 10px;">
+                <span style="font-size: 12px;">Áp dụng</span>          
+              </button>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody style="background-color:#f4f5f7;">
+        <tr *ngFor="let item of boardTable.data; let i = index">
+          <td style="padding-right: 0; padding-left: 0; padding-bottom: 0; padding-top: 0;  border-bottom: none;">
+            <app-article-card [topNumber]="laneId === 'top' ? i : undefined" [article]="item" [cdkDragData]="item" cdkDrag>                
+            </app-article-card>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>    
+  </div>  
+  <!-- <div class="article-card-container" cdkDropList [cdkDropListData]="listOfArticle" (cdkDropListDropped)="drop($event)" [id]="laneId">
     <div *ngIf="listOfArticle.length === 0 && laneId === 'published'" style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px;">Không có kết quả tương ứng</div>      
     <div *ngIf="listOfArticle.length === 0 && laneId === 'top'" style="display: flex; justify-content: center; align-items: center; margin-bottom: 15px;">Chưa có bài viết nào được thiết lập làm TOP bài viết hot nhất</div>      
     <div *ngFor="let item of listOfArticle; let i = index">
@@ -40,7 +85,7 @@
     <div *ngIf="listOfArticle.length >= 10 && laneId === 'published'" style="display: flex; justify-content: center; align-items: center; margin-bottom: 24px;">
       <nz-pagination [nzPageIndex]="1" [nzTotal]="50"></nz-pagination>   
     </div>        
-  </div>    
+  </div>     -->
 </div>
 
 <ng-template #loadingData>
@@ -48,3 +93,15 @@
     <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
   </div>
 </ng-template>
+
+<nz-dropdown-menu #searchMenu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input type="text" nz-input placeholder="Tìm Kiếm Bài Viết" [(ngModel)]="searchValueName"/>
+      <button  nz-button nzSize="small" nzType="primary" class="search-button" (click)="articleFilter(searchValueName)"> 
+        TÌM KIẾM
+      </button>
+      <button nz-button nzSize="small" (click)="resetSearchField()">TẠO LẠI</button>
+    </div>
+  </div>
+</nz-dropdown-menu>

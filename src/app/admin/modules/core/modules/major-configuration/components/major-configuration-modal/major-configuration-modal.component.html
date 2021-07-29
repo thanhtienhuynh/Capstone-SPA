@@ -1,0 +1,162 @@
+<div *ngIf="data === undefined; else update">
+  <div class="pt-2">
+    <span class="text-xl">THÊM NGÀNH MỚI VÀO HỆ THỐNG</span>               
+  </div>
+  <nz-divider nzDashed ></nz-divider> 
+  <div class="d-flex">
+    <div class="col-md-8">
+      <label for="">Tên Ngành <span style="color: red;">*</span></label> 
+      <nb-form-field>
+        <nb-icon nbPrefix icon="briefcase-outline"></nb-icon>
+        <input type="text" [formControl]="addMajorForm.get('name')" fullWidth nbInput>        
+      </nb-form-field>  
+    </div>
+    <div class="col-md-4">
+      <label for="">Code <span style="color: red;">*</span></label> 
+      <nb-form-field>
+        <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
+        <input type="text" [formControl]="addMajorForm.get('code')" fullWidth nbInput>        
+      </nb-form-field> 
+    </div>
+  </div>
+  <nz-divider nzDashed ></nz-divider> 
+  <div>
+    <nb-card *ngFor="let c of getSubjectGroups.controls; let i = index">
+      <nb-card-body>
+        <div class="d-flex">
+          <div class="col-md-6" style="display: flex; justify-content: center; align-items: center;">
+            <div class="text-xl">
+              <span>
+                CHỌN KHỐI THI TƯƠNG ỨNG
+              </span>              
+            </div>
+          </div> 
+          <div class="col-md-6">
+            <nb-form-field>        
+              <input placeholder="CHỌN KHỐI THI"  readonly nz-dropdown type="text" [value]="getSubjectGroups.controls[i].get('id').value?.groupCode" [nzDropdownMenu]="selectSubjectGroup" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
+            >        
+            </nb-form-field>   
+            <nz-dropdown-menu #selectSubjectGroup="nzDropdownMenu">        
+              <app-custom-select (useSelect)="useSelectSubjectGroup($event, i)" [control]="getSubjectGroups.controls[i].get('id')" [data]="listOfDisplaySubjectGroup | async" [name]="'id'" [label]="'groupCode'" [placeholder]="'Tìm kiếm khối thi'"></app-custom-select>
+            </nz-dropdown-menu>
+          </div>         
+        </div>
+        <nb-card class="mt-2" style="margin-bottom: 0;" *ngIf="getSubjectGroups.controls[i].get('id').value">
+          <nb-card-body>
+            <div class="d-flex">
+              <div class="col-md-6" style="display: flex; align-items: center; justify-content: center;">
+                <label for="">Môn Học <span style="color: red;">*</span></label>
+              </div>
+              <div class="col-md-6" style="display: flex; align-items: center; justify-content: center;">
+                <label for="">Trọng Số <span style="color: red;">*</span></label>
+              </div>
+            </div>
+            <div class="d-flex mt-2" *ngFor="let s of getSubjectGroups.controls[i].get('subjectWeights').controls; index as si">
+              <div class="col-md-6">
+                <nb-form-field>        
+                  <input readonly type="text" [value]="getSubjectGroups.controls[i].get('subjectWeights').controls[si].get('subjectId').value?.subjectName?.toUpperCase()" fullWidth nbInput>        
+                </nb-form-field>   
+              </div> 
+              <div class="col-md-6">
+                <nb-form-field>        
+                  <input style="text-align: right;" type="number" [formControl]="getSubjectGroups.controls[i].get('subjectWeights').controls[si].get('weight')" fullWidth nbInput>        
+                </nb-form-field>   
+              </div>            
+            </div> 
+          </nb-card-body>
+        </nb-card>
+      </nb-card-body>
+      <button (click)="addSubjectGroup()" nz-button nzType="default" nz-tooltip>
+        <nb-icon icon="plus"></nb-icon>
+      </button>
+      <button (click)="removeSubjectGroup(i)" style="margin-top: 2px;" nz-button nz-tooltip>
+        <nb-icon icon="minus"></nb-icon>
+      </button>
+    </nb-card>
+    <nb-card *ngIf="getSubjectGroups.controls.length === 0">      
+      <button (click)="addSubjectGroup()" nz-button nzType="default" nz-tooltip>
+        <nb-icon icon="plus"></nb-icon>
+      </button>      
+    </nb-card>
+  </div>
+  <div class="footer">    
+    <button [nzLoading]="additionLoading" [disabled]="addMajorForm.invalid" (click)="addNewMajorToSystem()" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
+      <!-- <span style="font-size: 12px;">THÊM</span> -->
+      Thêm
+    </button>    
+    <button [disabled]="additionLoading" (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="basic">
+      <!-- <span style="font-size: 12px;">THOÁT</span> -->
+      Thoát
+    </button>
+  </div>
+</div>
+
+<ng-template #update>
+  <div class="pt-2">
+    <span class="text-xl">SỬA THÔNG TIN NGÀNH {{data.name.toUpperCase()}}</span>           
+  </div>
+  <nz-divider nzDashed ></nz-divider> 
+  <div class="d-flex">
+    <div class="col-md-6">
+      <label for="">Tên Ngành <span style="color: red;">*</span></label> 
+      <nb-form-field>
+        <nb-icon nbPrefix icon="briefcase-outline"></nb-icon>
+        <input readonly type="text" [formControl]="majorForm.get('name') " fullWidth nbInput>        
+      </nb-form-field>         
+    </div>
+    <div class="col-md-3">
+      <label for="">Code <span style="color: red;">*</span></label>
+      <nb-form-field>        
+        <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
+        <input style="text-align: right;" [formControl]="majorForm.get('code') "  type="text" placeholder="Mã Ngành" fullWidth nbInput />        
+      </nb-form-field>
+    </div>
+    <div class="col-md-3">
+      <label for="">Khối <span style="color: red;">*</span></label>
+      <!-- <nb-select [selected]="majorForm.get('subjectGroup').controls.id.value" (selectedChange)="filterDataBySubjectGroup($event)" fullWidth>                                  
+        <nb-option *ngFor="let item of data.subjectGroups" [value]="item?.id">{{item.groupCode}}</nb-option>
+      </nb-select>  -->
+      <nb-select [formControl]="majorForm.get('subjectGroup').get('id')" (selectedChange)="filterDataBySubjectGroup($event, this.data)" fullWidth>                                  
+        <nb-option *ngFor="let item of data.subjectGroups" [value]="item?.id">{{item.groupCode}}</nb-option>
+      </nb-select> 
+    </div>
+  </div>
+  <nz-divider nzDashed ></nz-divider> 
+  <div>
+    <nb-card>
+      <nb-card-body>
+        <div class="d-flex">
+          <div class="col-md-6" style="display: flex; justify-content: center; align-items: center;">
+            <label for="">Danh sách môn học tương ứng <span style="color: red;">*</span></label>
+          </div>
+          <div class="col-md-6"  style="display: flex; justify-content: center; align-items: center;">
+            <label for="">Trọng Số <span style="color: red;">*</span></label>
+          </div>
+        </div>
+        <div class="d-flex mt-2" *ngFor="let control of subjectWeightsUpdating.controls; let i = index">
+          <div class="col-md-6">
+            <nb-form-field>
+              <input readonly [value]="control.get('subjectId')?.value?.subjectName?.toUpperCase()"  type="text" fullWidth nbInput />        
+            </nb-form-field>            
+          </div>
+          <div class="col-md-6">
+            <nb-form-field>
+              <input style="text-align: right;" [formControl]="control.get('weight')"  type="number" placeholder="Mã Ngành" fullWidth nbInput />        
+            </nb-form-field>
+          </div>          
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="footer">    
+    <button [disabled]="majorForm.invalid || !majorForm.touched" [nzLoading]="updationLoading" (click)="updateMajorToSystem('update')" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
+      <span style="font-size: 12px;">LƯU</span>
+    </button>    
+    <button [disabled]="updationLoading" [nzLoading]="deletetionLoading" (click)="updateMajorToSystem('delete')" nz-button [nzSize]="'medium'" nzDanger style="margin-right: 15px;">
+      <span style="font-size: 12px;">XÓA</span>
+    </button> 
+    <button [disabled]="updationLoading" (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="dashed">
+      <span style="font-size: 12px;">THOÁT</span>
+    </button>
+  </div>
+</ng-template>

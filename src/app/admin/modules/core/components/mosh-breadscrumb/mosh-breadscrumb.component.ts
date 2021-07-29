@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-mosh-breadscrumb',
@@ -7,9 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MoshBreadscrumbComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private _activatedRoute: ActivatedRoute,
+  ) { }
 
-  ngOnInit() {
+  ngOnInit() {    
   }
 
 }

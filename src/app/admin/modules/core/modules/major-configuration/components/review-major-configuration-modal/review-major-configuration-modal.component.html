@@ -1,0 +1,76 @@
+<header class="major-title">
+  <label for="">NGÀNH {{ data.name.toUpperCase() }}</label>
+</header>
+<nz-divider></nz-divider>
+<div class="d-flex mt-2">
+  <h5 for="" class="mr-2">I:</h5>
+  <h5>Thông tin xét tuyển</h5>
+</div>
+<div class="d-flex mt-2">
+  <label for="" class="mr-2">Mã ngành: </label>
+  <label>{{ data.code.toUpperCase() }}</label>
+</div>
+<div class="d-flex mt-2">
+  <label for="" class="mr-2">Các khối xét tuyển: </label>
+  <div class="d-flex justify-content-start align-items-center">
+    <label *ngFor="let item of subjectGroups" class="mr-2">{{ item.id.groupCode.toUpperCase() }},</label>
+  </div>    
+</div>
+<div class="d-flex mt-2">
+  <h5 for="" class="mr-2">II:</h5>
+  <h5>Ngành {{ data.name.toLowerCase() }} là gì?</h5>
+</div>
+<div class="d-flex mt-2">
+  <p *ngIf="data.description === null || data.description === ''"><i>Đang cập nhật...</i></p>
+  <p [innerHtml]="data.description"></p>
+</div>
+<div class="d-flex mt-2">
+  <h5 for="" class="mr-2">III:</h5>
+  <h5>Chương trình đào tạo</h5>
+</div>
+<div class="d-flex mt-2">
+  <p *ngIf="data.curriculum === null || data.curriculum === ''"><i>Đang cập nhật...</i></p>
+  <p [innerHtml]="data.curriculum"></p>
+</div>
+<div class="d-flex mt-2">
+  <h5 for="" class="mr-2">IV:</h5>
+  <h5>
+    Những tố chất cần có để thành công trong ngành {{ data.name.toLowerCase() }}
+  </h5>
+</div>
+<div class="d-flex mt-2">
+  <p *ngIf="data.humanQuality === null || data.humanQuality === ''"><i>Đang cập nhật...</i></p>
+  <p [innerHtml]="data.humanQuality"></p>
+</div>
+<div class="d-flex mt-2">
+  <h5 for="" class="mr-2">V:</h5>
+  <h5>Cơ hội việc làm trong ngành {{ data.name.toLowerCase() }}</h5>
+</div>
+<div class="d-flex mt-2">
+  <p *ngIf="data.salaryDescription === null || data.salaryDescription === ''"><i>Đang cập nhật...</i></p>
+  <p [innerHtml]="data.salaryDescription"></p>
+</div>
+<nz-divider></nz-divider>
+<footer>
+  <div style="display: flex; justify-content: flex-end; align-items: center">
+    <button *ngIf="callPlace === 'update'"
+      [nzLoading]="isUpdateLoading"
+      (click)="updateMajorToSystem()"
+      nz-button
+      nzType="primary"
+      class="mr-2"
+    >
+      Xác nhận
+    </button>
+    <button *ngIf="callPlace === 'create'"
+      [nzLoading]="isCreateLoading"
+      (click)="createMajorToSystem()"
+      nz-button
+      nzType="primary"
+      class="mr-2"
+    >
+      Xác nhận
+    </button>
+    <button nz-button nzType="default" (click)="closeModal()">Thoát</button>
+  </div>
+</footer>

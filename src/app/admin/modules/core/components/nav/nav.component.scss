@@ -1,49 +1,69 @@
 .admin-nav {
-    position: fixed;
-    top: 100px;
-    min-height: 100vh;
-    max-height: 100vh;
-    width: 150px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background: rgb(64, 67, 70);    
-    user-select: none;
-    z-index: 1000;        
-    .admin-menu-item {
-        padding-left: 15px;
-        display: flex;
-        height: 56px;
-        position: relative;
-        width: 100%;
-        justify-content: flex-start;
-        align-items: center;
-        text-decoration: none;
-        &.selected {
-            color: #6be487 !important;
-            nb-icon {
-                color: #6be487 !important;
-            }
-        }
-        &.mobile {
-            display: none;
-        }
-        &:hover {
-            background: rgb(32, 34, 37);
-            cursor: pointer;
-        }                
-        nb-icon {
-            color: white;
-            font-size: 1.5rem;
-        }
-        span {
-            color: white;
-            margin-left: 10px;            
-        }
+  position: fixed;
+  top: 100px;
+  min-height: 100vh;
+  max-height: 100vh;
+  width: 200px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  // background: rgb(64, 67, 70);
+  // background-color: #fff;
+  background-color: #000c17;
+  user-select: none;
+  z-index: 1000;
+  .admin-menu-item {
+    padding-left: 15px;
+    display: flex;
+    height: 56px;
+    position: relative;
+    width: 100%;
+    justify-content: flex-start;
+    align-items: center;
+    text-decoration: none;
+    &.selected {
+      color: #6be487 !important;
+      nb-icon {
+        color: #6be487 !important;
+      }
     }
+    &.mobile {
+      display: none;
+    }
+    &:hover {
+      background: rgb(32, 34, 37);
+      cursor: pointer;
+    }
+    nb-icon {
+      color: white;
+      font-size: 1.5rem;
+    }
+    span {
+      color: white;
+      margin-left: 10px;
+    }
+  }
 }
 
 @media (max-width: 789px) {
-    .admin-nav {
-        display: none;
+  .admin-nav {
+    display: none;
+  }
+}
+
+nz-sider {
+  ::ng-deep {
+    li {
+      font-family: none;
     }
+    .ant-menu-submenu-selected,
+    .ant-menu-item-selected {
+      // color: #1890ff;
+    }
+    .anticon {
+      vertical-align: 0 !important
+    }
+    i {
+      font-size: 20px !important;
+    }
+  }
 }

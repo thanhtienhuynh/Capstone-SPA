@@ -13,7 +13,7 @@
               <a
                 [routerLink]="['details/' + article.id]"
                 routerLinkActive="router-link-active"                
-                style="text-decoration: none"
+                style="text-decoration: none"                
               >
                 <span class="article-title" [innerHtml]="article.title"></span>
               </a>
@@ -38,8 +38,8 @@
                 <span class="shortDescription">{{article.shortDescription | sliceWord:30}}</span>
               </p>
               <div *ngIf="topNumber !== undefined" style="display: flex; justify-content: flex-end; align-items: center;">
-                <nz-tag nzColor="success" style="width: 100px; height: 30px; display: flex; justify-content: center; align-items: center;">
-                  <span style="font-size: larger;">TOP {{topNumber + 1}}</span>
+                <nz-tag nzColor="success" style="width: 85px; height: 25px; display: flex; justify-content: center; align-items: center;">
+                  <span style="font-size: 12px;">TOP {{topNumber + 1}}</span>
                 </nz-tag>
               </div>
             </div>

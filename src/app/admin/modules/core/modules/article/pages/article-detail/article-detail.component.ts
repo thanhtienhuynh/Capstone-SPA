@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { differenceInCalendarDays } from 'date-fns';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationPlacement, NzNotificationService } from 'ng-zorro-antd/notification';
 import { of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -9,6 +11,7 @@ import { ArticleService } from 'src/app/admin/services/article';
 import { ArticleVM, MajorRM } from 'src/app/admin/view-models';
 import { University } from 'src/app/_models/university';
 import Swal from 'sweetalert2';
+import { UpdateArticleComponent } from '../../components';
 
 @Component({
   selector: 'app-article-detail',
@@ -18,6 +21,7 @@ import Swal from 'sweetalert2';
 export class ArticleDetailComponent implements OnInit {
 
   @Input() key: string | number;
+  today = new Date();
 
   constructor(
     private _fb: FormBuilder,
@@ -26,7 +30,8 @@ export class ArticleDetailComponent implements OnInit {
     private _articleService: ArticleService,
     private _universityService: UniversityService,
     private _majorService: MajorService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private _modalService: NzModalService,
   ) {
     this.initDateForm();
   }
@@ -54,7 +59,6 @@ export class ArticleDetailComponent implements OnInit {
   dateForm: FormGroup;
 
   ngOnInit() {
-    // this.getArticleById(this.key);
     this.getArticleById();
     this.getListOfUniversity();
     this.getListOfMajor();
@@ -82,7 +86,6 @@ export class ArticleDetailComponent implements OnInit {
       this._articleService.getArticleById(param.id).pipe(
         tap((rs) => {
           if (rs.succeeded === true) {
-            console.log(rs.data);
             this.listOfSelectedUniversity = rs.data.universityIds;
             this.listOfSelectedMajor = rs.data.majorIds;
             this.article = rs.data;
@@ -99,49 +102,6 @@ export class ArticleDetailComponent implements OnInit {
     });
   }
 
-
-  // getArticleById(key?: string | number): void {
-  //   if (key) {
-  //     this._articleService.getArticleById(key).pipe(
-  //       tap((rs) => {
-  //         if (rs.succeeded === true) {
-  //           console.log(rs.data);
-  //           this.listOfSelectedUniversity = rs.data.universityIds;
-  //           this.listOfSelectedMajor = rs.data.majorIds;
-  //           this.article = rs.data;
-  //           this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
-  //         } else {
-  //           this.article = null;
-  //         }
-  //       }),
-  //       catchError((err) => {
-  //         this.article = null;
-  //         return of(undefined);
-  //       })
-  //     ).subscribe();
-  //     return;
-  //   };
-  //   this.activatedRoute.params.subscribe((param) => {
-  //     this.articleId = param.id;
-  //     this._articleService.getArticleById(param.id).pipe(
-  //       tap((rs) => {
-  //         if (rs.succeeded === true) {
-  //           console.log(rs.data);
-  //           this.listOfSelectedUniversity = rs.data.universityIds;
-  //           this.listOfSelectedMajor = rs.data.majorIds;
-  //           this.article = rs.data;
-  //           this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
-  //         } else {
-  //           this.article = null;
-  //         }
-  //       }),
-  //       catchError((err) => {
-  //         this.article = null;
-  //         return of(undefined);
-  //       })
-  //     ).subscribe();
-  //   });
-  // }
   getListOfUniversity(): void {
     this._universityService.getAllUniversity().pipe(
       tap((rs) => {
@@ -190,7 +150,6 @@ export class ArticleDetailComponent implements OnInit {
                 if (rs.succeeded === true) {
                   this.createNotification('success', 'DUYỆT BÀI VIẾT', 'Duyệt bài viết thành công', 'bottomRight');
                   this.getArticleById();
-                  // this.showElement(this.unCensorshipList, this.currentIndex);                                    
                 } else {
                   this.createNotification('error', 'Duyệt Bài', 'Duyệt bài viết thất bại', 'bottomRight');
                 }
@@ -230,7 +189,7 @@ export class ArticleDetailComponent implements OnInit {
                   this.createNotification('success', 'BỎ DUYỆT BÀI VIẾT', 'BỎ DUYỆT bài viết thành công', 'bottomRight');
                   this.getArticleById();
                 } else {
-                  this.createNotification('error', 'BỎ DUYỆT BÀI VIẾT', 'Thất bại', 'bottomRight');
+                  this.createNotification('error', 'BỎ DUYỆT BÀI VIẾT', `${rs.errors[0]}`, 'bottomRight');
                 }
               })
             ).subscribe();
@@ -350,9 +309,11 @@ export class ArticleDetailComponent implements OnInit {
           'id': this.articleId,
           'publicFromDate': null,
           'publicToDate': null,
-          'status': 1,
-          'university': this.listOfSelectedUniversity,
-          'major': this.listOfSelectedMajor
+          'status': 5,
+          // 'university': this.listOfSelectedUniversity,
+          // 'major': this.listOfSelectedMajor
+          'university': [],
+          'major': []
         };
         Swal.fire({
           title: 'HỦY ĐĂNG BÀI',
@@ -409,14 +370,9 @@ export class ArticleDetailComponent implements OnInit {
   }
 
   onCalendarChangeToDate(result: Array<Date | null>): void {
-
   }
 
-
-
   getListOfSelectedUniversity(): void {
-
-
   }
 
   createNotification(type: string, title: string, message: string, position?: NzNotificationPlacement): void {
@@ -426,5 +382,28 @@ export class ArticleDetailComponent implements OnInit {
       message,
       { nzPlacement: position }
     );
+  }
+
+
+  disabledDate = (current: Date): boolean =>
+    differenceInCalendarDays(current, this.today) < 0
+
+
+  openUpdateModal(): void {
+    const modal = this._modalService.create({
+      nzContent: UpdateArticleComponent,
+      nzClosable: false,
+      nzFooter: null,
+      nzWidth: 1000,
+      nzComponentParams: {
+        data: this.article, callBack: () => {
+          this.getArticleById()
+        }
+      },
+    });
+    modal.afterClose.pipe(
+      tap((rs) => {
+      })
+    ).subscribe();
   }
 }

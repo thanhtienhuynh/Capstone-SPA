@@ -1,0 +1,1 @@
+export * from './view-exam-modal/view-exam-modal.component';

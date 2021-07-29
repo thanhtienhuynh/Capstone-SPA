@@ -59,3 +59,10 @@ export interface MajorSubjectGroup {
     id?: number,
     subjectGroupName?: string
 }
+
+export interface subjectGroupTmp {
+    entryMarkId?: number,
+    mark?: number,
+    majorSubjectGroupId?: number,
+    status?: number
+}
