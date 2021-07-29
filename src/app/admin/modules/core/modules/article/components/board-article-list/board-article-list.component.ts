@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { ArticleVM, BoardData, PageModel } from 'src/app/admin/view-models';
 import Swal from 'sweetalert2';
 
@@ -42,7 +43,17 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
     // console.log(this.listOfDisplayArticle);
   }
 
+  onQueryParamsChange(params: NzTableQueryParams): void {        
+    this.pageIndex = params.pageIndex;
+    this.pageSize = params.pageSize;                 
+  }
 
+  getTopNumber(currentIndex: number): number {
+    this.listOfArticle.map((rs, index) => {
+
+    })
+    return 1;
+  }
 
 
   // drop(event: CdkDragDrop<any[]>) {     

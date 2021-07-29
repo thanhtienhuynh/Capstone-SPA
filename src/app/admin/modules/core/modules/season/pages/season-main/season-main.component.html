@@ -16,7 +16,7 @@
                     <span style="font-size: 12px;" (click)="openCreateSeasonModal()">Thêm mùa</span>
                   </button>
                   <button nz-button nzSize="medium" nzType="dashed">
-                    <span style="font-size: 12px;">Mặc định</span>
+                    <span style="font-size: 12px;" (click)="getListOfSeason()">Mặc định</span>
                   </button>
                 </div>                                
               </div>
@@ -31,7 +31,8 @@
                           <i nz-icon nzType="search"></i>
                         </nz-filter-trigger>
                       </th>
-                      <th>NGÀY BẮT ĐẦU</th>                                                                                                         
+                      <th>NGÀY BẮT ĐẦU</th>  
+                      <th></th>                                                                                                       
                       <th>THAO TÁC</th>
                     </tr>
                   </thead>
@@ -39,7 +40,7 @@
                     <tr *ngFor="let season of basicTable.data; let i = index" [style.backgroundColor]="i % 2 == 1 ? '#B0E0E6' : '#fff'">
                       <td>{{i + 1}}</td>
                       <td>{{season.name}}</td>
-                      <td>{{season.fromDate}}</td>
+                      <td>{{season.fromDate | date:'mediumDate'}}</td>
                       <td>
                         <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
                           <div class="icon-edit" (click)="openUpdateSeasonModal('edit', season)">

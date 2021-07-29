@@ -41,6 +41,7 @@
     [nzPageIndex]="pageIndex"  
     [nzPageSizeOptions]="[5, 10]"
     [nzShowPagination]="listOfArticle?.length > 5"
+    (nzQueryParams)="onQueryParamsChange($event)"
     >
       <thead>
         <tr>
@@ -67,7 +68,7 @@
       <tbody style="background-color:#f4f5f7;">
         <tr *ngFor="let item of boardTable.data; let i = index">
           <td style="padding-right: 0; padding-left: 0; padding-bottom: 0; padding-top: 0;  border-bottom: none;">
-            <app-article-card [topNumber]="laneId === 'top' ? i : undefined" [article]="item" [cdkDragData]="item" cdkDrag>                
+            <app-article-card [topNumber]="laneId === 'top' ? getTopNumber(i) : undefined" [article]="item" [cdkDragData]="item" cdkDrag>                
             </app-article-card>
           </td>
         </tr>
