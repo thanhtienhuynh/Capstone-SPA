@@ -6,6 +6,6 @@
   <div class="content-frame">
     <div class="content" [innerHtml]="detailAricle.content | safeHtml"></div>
   </div>
-  <div class="root-page"><i>Xem bài viết gốc tại <a href="{{detailAricle.rootUrl}}">đây</a></i></div>
+  <div class="root-page"><i>Xem bài viết gốc tại <a href="{{detailAricle.rootUrl}}" target="_blank">đây</a></i></div>
 </div>
 <app-progress-spinner [actions]="homeActionQueue" *ngIf="homeActionQueue && homeActionQueue.length > 0"></app-progress-spinner>
