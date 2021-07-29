@@ -10,7 +10,7 @@
   background-color: rgb(57, 199, 235);
   font-size: 1.5em;
   font-weight: 600;
-  border-radius: 15px;
+  border-radius: 5px;
 }
 
 .body-frame {
@@ -38,6 +38,14 @@
   width: 100%;
   height: auto;
   padding-top: 12px;
+}
+
+.button-frame {
+  margin-top: 10px;
+}
+
+.detail-button {
+  margin-right: 20%;
 }
 
 .content {

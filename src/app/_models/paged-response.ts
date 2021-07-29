@@ -11,7 +11,8 @@ export class PagedResponse<T> extends Response<T>
     nextPage: number;
     previousPage: number;
 
-    constructor(data: T, succeeded: boolean, errors: string[], message: string, pageNumber: number, pageSize: number)
+    constructor(data: T, succeeded: boolean, errors: string[], message: string, pageNumber: number, pageSize: number, totalPages: number, 
+      nextPage: number, previousPage: number)
     {
       super(data, succeeded, errors, message);
       this.pageNumber = pageNumber;
@@ -19,6 +20,9 @@ export class PagedResponse<T> extends Response<T>
       this.data = data;
       this.message = null;
       this.succeeded = true;
+      this.totalPages = totalPages;
+      this.nextPage = nextPage;
+      this.previousPage = previousPage;
       this.errors = null;
     }
 }

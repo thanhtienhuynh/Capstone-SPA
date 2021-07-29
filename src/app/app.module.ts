@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StepperComponent } from './major-suggestion-stepper/stepper/stepper.component';
@@ -19,29 +19,32 @@ import { TestCardComponent } from './major-suggestion-stepper/exam-page/test-car
 import { HomeComponent } from './home/home.component';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { NZ_I18N, vi_VN } from 'ng-zorro-antd/i18n';
 import vi from '@angular/common/locales/vi';
 import { AuthService } from './admin/services';
-import { ShortenPipe } from './_helper/shorten-pipe';
-import { ProgressSpinnerComponent } from './_sharings/components/progress-spinner/progress-spinner.component';
 import { AuthEffects } from './authentication/store/auth.affects';
 import { AuthInterceptorService } from './_helper/auth-interceptor.service';
 import { MaterialModule } from './_sharings/shared.module';
 import { UserEffects } from './user/store/user.effects';
 import { SafeUrlPipe } from './_helper/safe-url-pipe';
 import { SubmitDialogComponent } from './major-suggestion-stepper/exam-page/submit-dialog/submit-dialog.component';
-import { DetailUniversityDialogComponent } from './major-suggestion-stepper/stepper/detail-university-dialog/detail-university-dialog.component';
 import { HomeEffects } from './home/store/home.effects';
 import { FinishTestDialogComponent } from './major-suggestion-stepper/exam-page/finish-test-dialog/finish-test-dialog.component';
-
+import { GlobalErrorHandler } from './_helper/global-error-handler';
+import { MessagingService } from './_services/messaging.service';
+import { CusUniversityComponent } from './cus-university/cus-university.component';
+import { CusMajorComponent } from './cus-major/cus-major.component';
+import { CusTestComponent } from './cus-test/cus-test.component';
+import { CanDeactivateGuard } from './_helper/can-deactivate-guard.service';
 
 
 registerLocaleData(vi);
 @NgModule({
-  declarations: [									
+  declarations: [												
     AppComponent,
     StepperComponent,
     ExamPageComponent,
@@ -49,10 +52,10 @@ registerLocaleData(vi);
     FinishTestDialogComponent,
     TestCardComponent,
     HomeComponent,
-    SafeUrlPipe,
-    ShortenPipe,
     SubmitDialogComponent,
-    DetailUniversityDialogComponent,
+    CusUniversityComponent,
+    CusMajorComponent,
+    CusTestComponent
    ],
   imports: [
     BrowserModule,
@@ -67,18 +70,25 @@ registerLocaleData(vi);
     CountdownModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
+    AngularFireMessagingModule,
 
     FormsModule,
     ReactiveFormsModule,
     CommonModule,  
     MaterialModule,
+
   ],  
-  providers: [AuthService, { provide: NZ_I18N, useValue: vi_VN },    
+  providers: [AuthService, MessagingService, { provide: NZ_I18N, useValue: vi_VN },    
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptorService,
       multi: true
-    }
+    },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    },
+    CanDeactivateGuard
   ],
   bootstrap: [AppComponent]
 })

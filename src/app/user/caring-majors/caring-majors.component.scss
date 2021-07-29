@@ -46,7 +46,7 @@
 .name-bar {
   width: auto;
   height: 40px;
-  background: #ebebeb;
+  background: #cff7fd;
   clip-path: polygon(0% 0, 91% 0, 100% 50%, 91% 100%, 0 100%);
   color: #2f4cab;
   font-size: 1.1em;
@@ -73,4 +73,13 @@
 {
 	border-radius: 10px;
   background-color:  rgb(73,125,189);
+}
+
+.page-title {
+  width: 100%;
+  height: 15%;
+  background-color: rgb(57, 199, 235);
+  font-size: 1.5em;
+  font-weight: 600;
+  border-radius: 5px;
 }

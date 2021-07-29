@@ -1,0 +1,43 @@
+<div class="center-all">
+  <h1 class="title">DANH SÁCH CÁC NGÀNH HỌC</h1>
+</div>
+<div class="host-frame center-all">
+    <form (ngSubmit)="onSubmit()" class="search-frame">
+      <input class="text-field" type="text" id="fullname" [(ngModel)]="searchTerm" name="searchTerm"/>
+      <button class="search-btn">Tìm kiếm</button>
+    </form>
+</div>
+<div *ngIf="majorPageResponse && majorPageResponse.data.length > 0" class="host-frame">
+  <div class="total">Hệ thống ghi nhận có {{majorPageResponse.totalRecords}} ngành học.</div>
+  <div class="major-frame" *ngFor="let major of majorPageResponse.data" gdAreas="name name | major-detail detail" gdRows="30px 20px" gdColumns="85% 15%"
+    gdRows.lt-md="auto auto" gdColumns.lt-md="75% 25%" >
+  
+    <div class="name" gdArea="name">
+      <p class="major-name">{{major.name | uppercase}}</p>
+    </div>
+  
+    <div class="code" gdArea="major-detail">
+      <p class="major-detail">Mã ngành: {{major.code}} - Hiện có {{major.numberOfUniversity}} trường đại học đang dạy ngành này</p>
+    </div>
+
+    <div class="detail" gdArea="detail">
+      <p class="detail-link" [routerLinkActiveOptions]="{exact: true}" routerLink="./{{major.id}}">>>> Xem chi tiết</p>
+    </div> 
+  </div>
+
+  <div class="page-button-section center-all">
+    <div *ngIf="firstButtonValue > 0" (click)="pageClick(firstButtonValue)" class="page-button center-all">{{firstButtonValue}}</div>
+    <div *ngIf="firstButtonValue > 0" class="center-all three-dot">...</div>
+    <div *ngIf="secondButtonValue > 0" (click)="pageClick(secondButtonValue)" [ngClass]="{'page-button-selected': secondButtonValue == majorPageResponse.pageNumber}" class="page-button center-all">{{secondButtonValue}}</div>
+    <div *ngIf="thirdButtonValue > 0" (click)="pageClick(thirdButtonValue)" [ngClass]="{'page-button-selected': thirdButtonValue == majorPageResponse.pageNumber}" class="page-button center-all ">{{thirdButtonValue}}</div>
+    <div *ngIf="fourthButtonValue > 0" (click)="pageClick(fourthButtonValue)" [ngClass]="{'page-button-selected': fourthButtonValue == majorPageResponse.pageNumber}" class="page-button center-all">{{fourthButtonValue}}</div>
+    <div *ngIf="lastButtonValue > 0" class="center-all three-dot">...</div>
+    <div *ngIf="lastButtonValue > 0" (click)="pageClick(lastButtonValue)" class="page-button center-all">{{lastButtonValue}}</div>
+  </div>
+</div>
+
+<div *ngIf="(!majorPageResponse || majorPageResponse.data.length <= 0) && (!homeActionQueue || homeActionQueue.length <= 0)" class="host-frame">
+  <h1>Hiện tại không có ngành học nào!</h1>
+</div>
+
+<app-progress-spinner [actions]="homeActionQueue" *ngIf="homeActionQueue && homeActionQueue.length > 0"></app-progress-spinner>

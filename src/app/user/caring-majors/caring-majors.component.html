@@ -1,6 +1,6 @@
 <div style="width: 100%; height: auto;">
   <div style="width: 100%; background-color: rgb(218, 235, 240);border-radius: 15px;">
-    <div style="width: 100%; height: 15%; background-color: rgb(57, 199, 235); font-size: 1.5em; font-weight: 600; border-radius: 15px;" class="center-all">DANH SÁCH CÁC NGÀNH HỌC QUAN TÂM</div>
+    <div class="center-all page-title">DANH SÁCH CÁC NGÀNH HỌC QUAN TÂM</div>
   </div>
   <div *ngIf="majorBasedFollowingDetails" style="width: 100%; padding: 5px 5px 0 5px;">
     <mat-accordion>
@@ -21,8 +21,8 @@
                         {{universityGroupByTrainingProgramDataSet.name}}</div>
                       <div style=" padding: 15px;">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
-                          <div>Chỉ tiêu năm 2021:</div>
-                          <div class="information-value">{{universityGroupByTrainingProgramDataSet.seasonDataSet.numberOfStudents}}</div>
+                          <div>Chỉ tiêu năm {{universityGroupByTrainingProgramDataSet.seasonDataSets[1].name}}:</div>
+                          <div class="information-value">{{universityGroupByTrainingProgramDataSet.seasonDataSets[1].numberOfStudents || "Đang cập nhật"}}</div>
                         </div>
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -31,8 +31,8 @@
                         </div>
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
-                          <div>Điểm chuẩn năm 2021: </div>
-                          <div class="information-value">{{universityGroupByTrainingProgramDataSet.seasonDataSet.entryMark}}</div>
+                          <div>Điểm chuẩn năm {{universityGroupByTrainingProgramDataSet.seasonDataSets[0].name}}: </div>
+                          <div class="information-value">{{universityGroupByTrainingProgramDataSet.seasonDataSets[0].entryMark || "Đang cập nhật"}}</div>
                         </div>
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -41,8 +41,10 @@
                         </div>        
                         <mat-divider class="devider"></mat-divider>
                         <div class="center-all button-frame">
-                          <button (click)="onDetailClick(majorBasedFollowingDetail, trainingProgramGroupByMajorDataSet, universityGroupByTrainingProgramDataSet)" class="detail-button" routerLink="./detail" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" mat-stroked-button color="primary">Chi tiết</button>
-                          <button (click)="onUncaringClick(1, 1, 1)" class="uncaring-button" mat-stroked-button>Bỏ quan tâm</button>
+                          <button class="detail-button" routerLink="./{{universityGroupByTrainingProgramDataSet.followingDetailId}}"
+                          routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                           mat-flat-button color="primary">Chi tiết</button>
+                          <button (click)="onUncaringClick(universityGroupByTrainingProgramDataSet.followingDetailId, universityGroupByTrainingProgramDataSet.name)" mat-flat-button color="warn">Bỏ theo dõi</button>
                         </div>
                       </div>
                     </div>
@@ -56,6 +58,6 @@
       
     </mat-accordion>
   </div>
-
- 
 </div>
+
+<app-progress-spinner  [actions]="userActionQueue" *ngIf="userActionQueue && userActionQueue.length > 0"></app-progress-spinner>

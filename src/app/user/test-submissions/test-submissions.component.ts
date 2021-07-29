@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import * as fromApp from '../../_store/app.reducer';
@@ -13,23 +13,45 @@ import Swal from 'sweetalert2';
   styleUrls: ['./test-submissions.component.scss']
 })
 export class TestSubmissionsComponent implements OnInit, OnDestroy {
-  dateStart = new FormControl(new Date((new Date().getTime() - 3888000000)))
-  dateEnd = new FormControl(new Date())
-  constructor(private store: Store<fromApp.AppState>) { }
+  form: FormGroup;
+  subjectControl: FormControl;
+  testTypeControl: FormControl;
+  isSuggestControl: FormControl;
+  constructor(private store: Store<fromApp.AppState>) { 
+    this.form = new FormGroup({
+    });
+    this.subjectControl = new FormControl(0);
+    this.form.addControl(
+      'subject-select', this.subjectControl
+    );
+    this.testTypeControl = new FormControl(0);
+    this.form.addControl(
+      'test-type', this.testTypeControl
+    );
+    this.isSuggestControl = new FormControl(0);
+    this.form.addControl(
+      'is-suggest-test', this.isSuggestControl
+    );
+  }
   subscription: Subscription;
   testSubmissions: UserTestSubmission[];
   errors: string[];
-  isLoading: boolean;
+  userActionQueue: UserActions.UserActions[] = [];
 
   ngOnInit() {
-    this.store.dispatch(new UserActions.LoadSubmissions());
+    this.store.dispatch(new UserActions.LoadSubmissions({isSuggestedTest: null, order: 1, subjectId: null, testTypeId: null}));
     this.subscription = this.store
       .select('user')
       .subscribe(
         (userState) => {
-          this.testSubmissions = userState.testSubmissions;
+          if (this.testSubmissions != userState.testSubmissions) {
+            this.testSubmissions = userState.testSubmissions;
+            if (this.testSubmissions != null && this.testSubmissions.length > 0) {
+              
+            }
+          }
           this.errors = userState.errors;
-          this.isLoading = userState.isLoading;
+          this.userActionQueue = userState.actionsQueue;
           if (this.errors) {
             Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
             .then(() => {
@@ -44,6 +66,13 @@ export class TestSubmissionsComponent implements OnInit, OnDestroy {
 
   testReviewClick(id: number) {
     this.store.dispatch(new UserActions.LoadDetailSubmission(id));
+  }
+
+  onSubmit() {
+    console.log(this.subjectControl.value);
+    console.log(this.testTypeControl.value);
+    console.log(this.isSuggestControl.value);
+    this.store.dispatch(new UserActions.LoadSubmissions({isSuggestedTest: this.isSuggestControl.value, order: 1, subjectId: this.subjectControl.value, testTypeId: this.testTypeControl.value}));
   }
 
   

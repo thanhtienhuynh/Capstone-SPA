@@ -19,3 +19,32 @@
   overflow-x: hidden;
   height: 600px;
 }
+
+.right-answer {
+  color: green;
+}
+
+.wrong-answer {
+  color: red;
+}
+
+.marked-answer {
+  width: 30px;
+}
+
+::ng-deep .mat-radio-button.mat-radio-disabled .mat-radio-label-content {   /*click effect color change*/
+  // background-color: blue;
+  color: black  !important;
+}
+
+::ng-deep .mat-radio-button.mat-radio-disabled .mat-radio-inner-circle {
+  background-color: #ff4081 !important;
+}
+::ng-deep .mat-radio-button.mat-radio-disabled.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #ff4081 !important;
+}
+
+.anotate-question {
+  font-weight: bold;
+  font-size: 1.2em;
+}
