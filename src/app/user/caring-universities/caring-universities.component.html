@@ -22,8 +22,8 @@
                         {{majorGroupByTrainingProgramDataSet.name}}</div>
                       <div class="information-frame">
                         <div fxLayout="row" fxLayoutAlign="space-between center">
-                          <div>Chỉ tiêu năm 2021:</div>
-                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.seasonDataSet.numberOfStudents}}</div>
+                          <div>Chỉ tiêu năm {{majorGroupByTrainingProgramDataSet.seasonDataSets[1].numberOfStudents}}:</div>
+                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.seasonDataSets[1].numberOfStudents}}</div>
                         </div>
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -32,8 +32,8 @@
                         </div>
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
-                          <div>Điểm chuẩn năm 2021: </div>
-                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.seasonDataSet.entryMark}}</div>
+                          <div>Điểm chuẩn năm {{majorGroupByTrainingProgramDataSet.seasonDataSets[0].entryMark}}: </div>
+                          <div class="information-value">{{majorGroupByTrainingProgramDataSet.seasonDataSets[0].entryMark}}</div>
                         </div>
                         <mat-divider class="devider"></mat-divider>
                         <div fxLayout="row" fxLayoutAlign="space-between center">
@@ -41,6 +41,12 @@
                           <div class="information-value">{{majorGroupByTrainingProgramDataSet.subjectGroupCode}}</div>
                         </div>
                         <mat-divider class="devider"></mat-divider>
+                        <div class="center-all button-frame">
+                          <button class="detail-button" routerLink="./{{majorGroupByTrainingProgramDataSet.followingDetailId}}"
+                          routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                           mat-flat-button color="primary">Chi tiết</button>
+                          <button (click)="onUncaringClick(universityGroupByTrainingProgramDataSet.followingDetailId, universityGroupByTrainingProgramDataSet.name)" mat-flat-button color="warn">Bỏ theo dõi</button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -53,6 +59,6 @@
       
     </mat-accordion>
   </div>
-
- 
 </div>
+
+<app-progress-spinner [actions]="userActionQueue" *ngIf="userActionQueue && userActionQueue.length > 0"></app-progress-spinner>

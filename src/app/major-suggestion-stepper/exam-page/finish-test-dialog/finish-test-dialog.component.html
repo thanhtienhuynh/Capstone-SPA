@@ -3,60 +3,26 @@
       <div *ngIf="testSubmissionReponse">
         <h1 mat-dialog-title class="test-title">{{test.name}}</h1>
         <div mat-dialog-content>
-          <div>Môn thi: {{getSubjectName(test.subjectId)}}</div>
+          <div>Môn thi: <span class="result">{{getSubjectName(test.subjectId)}}</span></div>
           <div>Số câu trả lời đúng: <span class="result">{{testSubmissionReponse.numberOfRightAnswers}}/{{testSubmissionReponse.numberOfQuestion}}</span></div>
           <div>Thời gian làm bài: <span class="result">{{testSubmissionReponse.spentTime}}/{{test.timeLimit}}</span></div>
           <div>Điểm:</div>
           <div class="mark">{{testSubmissionReponse.mark | number : '1.2-2'}}</div>
-          <div *ngIf="doneTestIds.length < tests.length">
-            <p>Bạn đã làm được {{doneTestIds.length}}/{{tests.length}} môn học của tổ hợp môn {{selectedSubjectGroup.name}}, làm tiếp các bài còn lại để nhận được kết quả chính xác hơn.</p>
+          <div *ngIf="needDoneTestIds.length > 0">
+            <p>Bạn đã có điểm thi thử <span class="result">{{tests.length - needDoneTestIds.length}}/{{tests.length}}</span> môn học của tổ hợp môn <span class="result">{{selectedSubjectGroup.name}}</span>, làm tiếp các bài còn lại để nhận được kết quả chính xác hơn.</p>
             <div class="button-frame">
               <div *ngFor="let subjectBasedTests of tests">
-                <div *ngFor="let test of subjectBasedTests.tests">
-                  <button class="subject-button" *ngIf="getSubjectName(subjectBasedTests.subjectId) && !doneTestIds.includes(test.id)" mat-raised-button color="primary" (click)="loadTest(test.id)">{{getSubjectName(subjectBasedTests.subjectId)}}</button>
-                </div>
+                <button class="subject-button" *ngIf="needDoneTestIds.includes(subjectBasedTests.test.id) && (subjectBasedTests.daysRemaining == null || subjectBasedTests.daysRemaining <= 0)" mat-raised-button color="primary" (click)="loadTest(subjectBasedTests.test.id)">{{getSubjectName(subjectBasedTests.subjectId)}}</button>
               </div>
             </div>
           </div>
-          <div class="login-frame" *ngIf="unsaveTestSubmissions.length > 0 && !user">
-            Bạn đã làm bài thi thử môn: <i><strong>{{getListSubjectNameOfDoneTest()}}</strong></i> . Để lưu kết quả các bài thi, vui lòng bấm <span (click)="onLogin()" class="button-login">Đăng nhập</span>
+          <div *ngIf="needDoneTestIds.length <= 0">
+            <p>Bạn đã có điểm thi thử <span class="result">{{tests.length}}/{{tests.length}}</span> môn học của tổ hợp môn <span class="result">{{selectedSubjectGroup.name}}.</span></p>
+            <div class="center-all">
+              <button class="subject-button" mat-raised-button color="primary" (click)="reloadSuggest()">Xem kết quả gợi ý mới</button>
+            </div>
           </div>
-          <div class="login-frame" *ngIf="unsaveTestSubmissions.length > 0 && user">
-            Bạn đã làm bài thi thử môn: <i><strong>{{getListSubjectNameOfDoneTest()}}</strong></i> . Để lưu kết quả các bài thi, vui lòng bấm <span (click)="onSave()" class="button-login">Lưu</span>
-          </div>
-          <div *ngIf="isSaved && isSaving" class="button-login">Lưu kết quả thi thành công!</div>
         </div>
       </div> 
     </div>
-    <!-- <div fxFlex="0 1 calc(50%)" fxFlex.lt-md="0 1 calc(50%)">
-      <p class="table-title">Bảng thống kê điểm các môn trong tổ hợp môn {{getSubjectGroupName()}}</p>
-      <div *ngIf="dataSource" class="mat-elevation-z8">
-        <table mat-table [dataSource]="dataSource">
-      
-          <ng-container matColumnDef="mon">
-            <th mat-header-cell *matHeaderCellDef> Môn </th>
-            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-          </ng-container>
-      
-          <ng-container matColumnDef="hocba">
-            <th mat-header-cell *matHeaderCellDef> Điểm học bạ </th>
-            <td mat-cell *matCellDef="let element"> {{element.hocbaMark}} </td>
-          </ng-container>
-      
-          <ng-container matColumnDef="thithu">
-            <th mat-header-cell *matHeaderCellDef> Điểm thi thử </th>
-            <td mat-cell *matCellDef="let element"> {{element.thithuMark}} </td>
-          </ng-container>
-      
-          <ng-container matColumnDef="tinhtoan">
-            <th mat-header-cell *matHeaderCellDef> Điểm gợi ý mới </th>
-            <td mat-cell *matCellDef="let element"> {{element.tinhtoanMark}} </td>
-          </ng-container>
-      
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-      </div>
-    </div> -->
-    
 </div>

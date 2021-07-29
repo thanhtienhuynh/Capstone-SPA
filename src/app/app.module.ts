@@ -32,7 +32,6 @@ import { MaterialModule } from './_sharings/shared.module';
 import { UserEffects } from './user/store/user.effects';
 import { SafeUrlPipe } from './_helper/safe-url-pipe';
 import { SubmitDialogComponent } from './major-suggestion-stepper/exam-page/submit-dialog/submit-dialog.component';
-import { DetailUniversityDialogComponent } from './major-suggestion-stepper/stepper/detail-university-dialog/detail-university-dialog.component';
 import { HomeEffects } from './home/store/home.effects';
 import { FinishTestDialogComponent } from './major-suggestion-stepper/exam-page/finish-test-dialog/finish-test-dialog.component';
 import { GlobalErrorHandler } from './_helper/global-error-handler';
@@ -40,6 +39,7 @@ import { MessagingService } from './_services/messaging.service';
 import { CusUniversityComponent } from './cus-university/cus-university.component';
 import { CusMajorComponent } from './cus-major/cus-major.component';
 import { CusTestComponent } from './cus-test/cus-test.component';
+import { CanDeactivateGuard } from './_helper/can-deactivate-guard.service';
 
 
 registerLocaleData(vi);
@@ -52,9 +52,7 @@ registerLocaleData(vi);
     FinishTestDialogComponent,
     TestCardComponent,
     HomeComponent,
-    SafeUrlPipe,
     SubmitDialogComponent,
-    DetailUniversityDialogComponent,
     CusUniversityComponent,
     CusMajorComponent,
     CusTestComponent
@@ -90,6 +88,7 @@ registerLocaleData(vi);
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
     },
+    CanDeactivateGuard
   ],
   bootstrap: [AppComponent]
 })

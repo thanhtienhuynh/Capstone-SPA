@@ -11,7 +11,6 @@ import * as fromApp from '../_store/app.reducer';
 export class HomeComponent implements OnInit, OnDestroy {
   
   subscription: Subscription;
-  isLoading: boolean = false;
   authSubscription: Subscription;
   isAuthLoading: boolean;
   constructor(private store: Store<fromApp.AppState>) { 
@@ -23,7 +22,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       .select('home')
       .subscribe(
         (homeState) => {
-          this.isLoading = homeState.isLoading;
         },
         (error) => {
         }
@@ -32,7 +30,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       .select('auth')
       .subscribe(
         (authState) => {
-          this.isAuthLoading = authState.isLoading;
         },
         (error) => {
         }

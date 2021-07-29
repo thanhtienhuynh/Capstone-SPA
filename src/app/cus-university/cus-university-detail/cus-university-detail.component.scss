@@ -43,8 +43,12 @@
   font-family: Roboto, "Helvetica Neue", Helvetica, sans-serif;
 }
 
+.uni-icon {
+  margin-right: 13px;
+}
+
 .info-cell {
-  vertical-align:top;
+  vertical-align: top;
 }
 
 .info-value {
@@ -54,6 +58,9 @@
 
 .basic-title {
   margin: 30px 0px 20px 0;
+  padding: 5px;
+  font-size: 1.4em;
+  background-color: rgb(85, 190, 238);
 }
 
 

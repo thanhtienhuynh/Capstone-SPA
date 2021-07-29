@@ -18,9 +18,9 @@ const routes: Routes = [
       { path: 'test-submissions/detail', component: TestReviewComponent },
       { path: 'information', component: InformationComponent },
       { path: 'caring-majors', component: CaringMajorsComponent },
-      { path: 'caring-majors/detail', component: FollowingDetailComponent },
+      { path: 'caring-majors/:id', component: FollowingDetailComponent },
       { path: 'caring-universities', component: CaringUniversitiesComponent },
-      { path: 'caring-universities/detail', component: FollowingDetailComponent },
+      { path: 'caring-universities/:id', component: FollowingDetailComponent },
     ]
   }
 ];

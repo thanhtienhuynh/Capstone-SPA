@@ -79,42 +79,85 @@ export class AuthEffects {
   @Effect()
   autoLogin = this.actions$.pipe(
     ofType(AuthActions.AUTO_LOGIN),
-    map(() => {
+    switchMap(() => {
       const token = localStorage.getItem('token');
-      const user = this.helper.decodeToken(token);
-      if (!user) {
-        return { type: 'DUMMY' };
-      }      
-      const loadedUser: User = {
-        avatarUrl: user[Consts.JWT_AVATAR],
-        email: user[Consts.JWT_EMAIL],
-        id: user["sub"],
-        isAdmin: user[Consts.JWT_ROLE] == Consts.JWT_ADMIN_ROLE,
-        fullname: user[Consts.JWT_NAME],
-        phone: user[Consts.JWT_PHONE]
-      };
-
-      if (token) {
-        const expirationDuration =
-        this.helper.getTokenExpirationDate(token).getTime() - new Date().getTime();        
-        this.authService.setLogoutTimer(expirationDuration);
-        return new AuthActions.SetUser({
-          user: loadedUser,
-          token: token
-        });
+      if (!token) {
+        this.router.navigate(['/']);
+        return of({type: "DUMMY"});
       }
-      return { type: 'DUMMY' };
+      return this.http.get<Response<User>>(
+        environment.apiUrl + 'api/v1/user/validation'
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            const expirationDuration = this.helper.getTokenExpirationDate(token).getTime() - new Date().getTime();
+            this.authService.setLogoutTimer(expirationDuration);
+            localStorage.setItem("token", token);
+            return new AuthActions.SetUser({token: token, user: response.data});
+          }
+          localStorage.removeItem('token');
+          this.router.navigate(['/']);
+          return of(new AuthActions.HasErrors(response.errors));
+        }),
+        catchError((error: HttpErrorResponse) => {
+          localStorage.removeItem('token');
+          this.router.navigate(['/']);
+          return of(new AuthActions.HasErrors([error.message]));
+        })
+      )
     })
   );
   
   @Effect({ dispatch: false })
   authLogout = this.actions$.pipe(
     ofType(AuthActions.LOGOUT),
-    tap(() => {
-      this.authService.clearLogoutTimer();
-      localStorage.removeItem('token');
-      this.router.navigate(['/']);
-    })
+    withLatestFrom(this.store.select('auth')),
+    switchMap(([actionData, authState]) => {
+      return this.http.post<Response<boolean>>(
+        environment.apiUrl + 'api/v1/user/unsubscribe',
+        { token: authState.registerToken }
+      ).pipe(
+        map((response) => {
+          this.authService.clearLogoutTimer();
+          localStorage.removeItem('token');
+          this.router.navigate(['/']);
+          if (response.succeeded) {
+            console.log("Unsubscribe success");
+            return { type: 'DUMMY' };
+          }
+          return new AuthActions.HasErrors(response.errors);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          this.authService.clearLogoutTimer();
+          localStorage.removeItem('token');
+          this.router.navigate(['/']);
+          return of(new AuthActions.HasErrors([error.message]));
+        })
+      );
+    }),
+  );
+
+  @Effect({ dispatch: false })
+  subscribeTopic = this.actions$.pipe(
+    ofType(AuthActions.SET_REGISTER_TOKEN),
+    withLatestFrom(this.store.select('auth')),
+    switchMap(([actionData, authState]) => {
+      return this.http.post<Response<boolean>>(
+        environment.apiUrl + 'api/v1/user/subscribe',
+        { token: authState.registerToken }
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            console.log("Subscribe success");
+            return { type: 'DUMMY' };
+          }
+          return new AuthActions.HasErrors(response.errors);
+        }),
+        catchError((error: HttpErrorResponse) => {
+          return of(new AuthActions.HasErrors([error.message]));
+        })
+      );
+    }),
   );
 
   @Effect({ dispatch: false })
@@ -122,7 +165,7 @@ export class AuthEffects {
     ofType(AuthActions.SET_USER),
     withLatestFrom(this.store.select('auth')),
     tap(([actionData, authState]) => {
-      if (authState.user.isAdmin) {
+      if (authState.user.roleId == 1) {
         this.router.navigate(['/admin']);
       } 
     })

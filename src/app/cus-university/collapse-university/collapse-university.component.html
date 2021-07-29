@@ -8,6 +8,7 @@
     </form>
 </div>
 <div *ngIf="universitiesPageResponse && universitiesPageResponse.data.length > 0" class="host-frame">
+  <div class="total">Hệ thống ghi nhận có {{universitiesPageResponse.totalRecords}} trường đại học.</div>
   <div class="uni-frame" *ngFor="let university of universitiesPageResponse.data" gdAreas="avatar name info | detail detail detail" gdRows="auto auto" gdColumns ="20% 50% 30%"
       gdAreas.lt-md="" gdRows.lt-md="auto auto auto auto">
     <div class="avatar" gdArea="avatar">
@@ -22,12 +23,19 @@
   
     <div class="info" gdArea="info">
       <p class="tuition-title">Học phí:</p>
-      <div class="tuition-value" *ngIf="university.tuitionTo == university.tuitionFrom">
-        Khoảng {{university.tuitionTo | number:'1.0':'en-US'}},000/{{university.tuitionType == 0 ? "kì" : "năm"}}</div>
+      <div class="tuition-value" *ngIf="!university.tuitionTo || !university.tuitionFrom ||
+                                        (university.tuitionTo == university.tuitionFrom && university.tuitionTo < 100)">
+        Đang cập nhật
+      </div>
+      <div class="tuition-value" *ngIf="university.tuitionTo == university.tuitionFrom  && university.tuitionTo >= 100">
+        Khoảng {{university.tuitionTo | number:'1.0':'en-US'}},000/
+        {{university.tuitionType == 0 ? "kì" : "năm"}}
+      </div>
       <div class="tuition-value" *ngIf="university.tuitionTo != university.tuitionFrom">
         Từ {{university.tuitionFrom | number:'1.0':'en-US'}},000
         đến {{university.tuitionTo | number:'1.0':'en-US'}},000/
-        {{university.tuitionType == 0 ? "kì" : "năm"}}</div>
+        {{university.tuitionType == 0 ? "kì" : "năm"}}
+      </div>
 
       <p class="tuition-title">Điện thoại:</p>
       <div class="tuition-value">{{university.phone}}</div>
@@ -51,8 +59,8 @@
   </div>
 </div>
 
-<div *ngIf="(!universitiesPageResponse || universitiesPageResponse.data.length <= 0) && !isLoading" class="host-frame">
+<div *ngIf="(!universitiesPageResponse || universitiesPageResponse.data.length <= 0) && (!homeActionQueue || homeActionQueue.length <= 0)" class="host-frame">
   <h1>Hiện tại không có trường đại học nào!</h1>
 </div>
 
-<app-progress-spinner *ngIf="isLoading"></app-progress-spinner>
+<app-progress-spinner [actions]="homeActionQueue" *ngIf="homeActionQueue && homeActionQueue.length > 0"></app-progress-spinner>

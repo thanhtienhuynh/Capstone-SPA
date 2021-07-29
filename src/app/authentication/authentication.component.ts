@@ -14,18 +14,27 @@ import * as AuthActions from './store/auth.actions';
 })
 export class AuthenticationComponent implements OnInit {
   subscription: Subscription;
+  stepperSubscription: Subscription;
   user: User;
   errors: string[];
-  message
+  message;
+  isDoingTest: boolean = false;
+  shouldLogout: boolean = false;
   constructor(private store: Store<fromApp.AppState>, private messagingService: MessagingService) { }
 
   ngOnInit() {
     this.subscription = this.store.select('auth').subscribe((authState) => {
-      this.user = authState.user;
-      if (this.user) {
-        this.messagingService.requestPermission(this.user.id.toString());
-        this.messagingService.receiveMessage();
-        this.message = this.messagingService.currentMessage;
+     
+      if (this.user != authState.user) {
+        this.user = authState.user;
+        if (this.user) {
+          this.messagingService.requestPermission(this.user.id.toString());
+          this.messagingService.receiveMessage();
+          this.message = this.messagingService.currentMessage;
+        }
+      }
+      if (this.shouldLogout != authState.shoudLogout) {
+        this.shouldLogout = authState.shoudLogout;
       }
       this.errors = authState.errors;
       if (this.errors) {
@@ -35,6 +44,15 @@ export class AuthenticationComponent implements OnInit {
         });
       }
     });
+
+    this.stepperSubscription = this.store.select('stepper').subscribe((stepperState) => {
+      if (this.isDoingTest != stepperState.isDoingTest) {
+        this.isDoingTest = stepperState.isDoingTest;
+        if (!this.isDoingTest && this.shouldLogout) {
+          this.store.dispatch(new AuthActions.Logout());
+        }
+      }
+    });
   }
   
   onGoogleLoginClick() {
@@ -42,6 +60,10 @@ export class AuthenticationComponent implements OnInit {
   }
 
   onLogout() {
-    this.store.dispatch(new AuthActions.Logout());
+    if (this.isDoingTest) {
+      this.store.dispatch(new AuthActions.ShouldLogout(true));
+    } else {
+      this.store.dispatch(new AuthActions.Logout());
+    }
   }
 }

@@ -32,6 +32,9 @@
 .test-frame {
   border-radius: 14px;
   box-shadow: 0 0 6px 3px #cac8c8;
+  width: 100%;
+  height: auto;
+  padding-top: 12px;
 }
 
 .test-value {
@@ -71,4 +74,101 @@
 {
 	border-radius: 10px;
   background-color:  rgb(73,125,189);
+}
+
+/* Remove IE arrow */
+select::-ms-expand {
+  display: none;
+}
+/* Custom Select */
+.select {
+  position: relative;
+  display: flex;
+  width: auto;
+  height: 2em;
+  line-height: 2;
+  background: #0d5982;
+  overflow: hidden;
+  border-radius: .25em;
+}
+select {
+  flex: 1;
+  padding: 0 .5em;
+  color: #fff;
+  cursor: pointer;
+}
+/* Arrow */
+.select::after {
+  // content: '\25BC';
+  content: url('../../../assets/img/ic/calendar-small-page.png');
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 1em ;
+  background: #0d5982;
+  cursor: pointer;
+  pointer-events: none;
+  -webkit-transition: .25s all ease;
+  -o-transition: .25s all ease;
+  transition: .25s all ease;
+}
+/* Transition */
+.select:hover::after {
+  color: #f39c12;
+}
+
+.filter-field {
+  margin-right: 30px;
+  margin-left: 8px;
+}
+
+.form-filter {
+  display: flex;
+  padding: 20px 0 10px 0;
+}
+
+.is-suggest-field {
+  margin-bottom: -3px;
+}
+
+.empty-title {
+  margin: 20px 0 0 20px;
+  font-weight: 600;
+  color: rgb(18 102 206);
+}
+
+.done-number-title {
+  margin: 20px 0 0 20px;
+  font-weight: 600;
+  color: rgb(103, 9, 226);
+}
+
+.test-list-frame {
+  width: 100%;
+  padding: 20px 5px 0px 5px;
+}
+
+.info-test-frame {
+  padding: 15px;
+}
+
+.search-btn {
+  background-color: #0d5982;
+  color: white;
+}
+
+.page-title {
+  width: 100%;
+  height: 15%;
+  background-color: rgb(57, 199, 235);
+  font-size: 1.5em;
+  font-weight: 600;
+  border-radius: 5px;
+  color: white;
+}
+
+.header-frame {
+  width: 100%;
+  background-color: rgb(218, 235, 240);
+  border-radius: 5px;
 }

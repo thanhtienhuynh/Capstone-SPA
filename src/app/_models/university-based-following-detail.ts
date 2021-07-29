@@ -28,7 +28,7 @@ export interface MajorGroupByTrainingProgramDataSet {
   majorCode: string;
   code: string;
   name: string;
-  seasonDataSet: Season;
+  seasonDataSets: Season[];
   positionOfUser: number;
   totalUserCared: number;
   subjectGroupId: number;

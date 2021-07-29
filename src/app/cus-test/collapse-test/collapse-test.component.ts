@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import * as fromApp from '../../_store/app.reducer';
@@ -8,6 +8,7 @@ import { PageParam } from 'src/app/_params/page-param';
 import { Subscription } from 'rxjs';
 import { Test } from 'src/app/_models/test';
 import { PagedResponse } from 'src/app/_models/paged-response';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-collapse-test',
@@ -39,7 +40,8 @@ export class CollapseTestComponent implements OnInit, OnDestroy {
   testsPagedResponse: PagedResponse<Test[]>;
   subject: string;
   subjectName: string;
-  isLoading: boolean;
+  homeActionQueue: HomeActions.HomeActions[] = [];
+  errors: string[];
     
   firstButtonValue: number;
   secondButtonValue: number;
@@ -54,12 +56,19 @@ export class CollapseTestComponent implements OnInit, OnDestroy {
     this.store.dispatch(new HomeActions.ResetState());
     this.store.dispatch(new HomeActions.LoadCollapseTests({pageParam: new PageParam(1, 10), searchTerm: null, subjectId:  this.subjecIdtMap.get(this.subject)}));
     this.subscription = this.store.select('home').subscribe(homeState => {
-      this.isLoading = homeState.isLoading;
+      this.homeActionQueue = homeState.actionsQueue;
       if (this.testsPagedResponse != homeState.collapseTestsPageResponse) {
         this.testsPagedResponse = homeState.collapseTestsPageResponse;
         if (this.testsPagedResponse) {
           this.generatePagingButton();
         }
+      }
+      this.errors = this.errors;
+      if (this.errors && this.errors.length > 0) {
+        Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
+          .then(() => {
+            this.store.dispatch(new HomeActions.ConfirmErrors());
+          });
       }
     });
   }

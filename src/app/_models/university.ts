@@ -4,6 +4,8 @@ export interface TrainingProgram {
   numberOfCaring: number;
   followingDetail: FollowingDetail;
   rank: number;
+  ratio: number;
+  dividedClass: number;
   seasonDataSets: Season[];
 }
 
