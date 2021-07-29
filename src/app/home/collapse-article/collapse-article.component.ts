@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { CollapseArticle } from 'src/app/_models/collapse-article';
+import { CollapseArticle, HomeArticle } from 'src/app/_models/collapse-article';
 import { PagedResponse } from 'src/app/_models/paged-response';
 import { PageParam } from 'src/app/_params/page-param';
 import Swal from 'sweetalert2';
@@ -14,11 +14,20 @@ import * as HomeActions from './../store/home.actions';
   styleUrls: ['./collapse-article.component.scss']
 })
 export class CollapseArticleComponent implements OnInit {
+  @ViewChild('viewAllEl', {static: false}) viewAllFrame: ElementRef;
+  @ViewChild('hotNewsFrame', {static: false}) hotNewsFrame: ElementRef;
+  @ViewChild('todayNewsFrame', {static: false}) todayNewsFrame: ElementRef;
+  @ViewChild('pastNewsFrame', {static: false}) pastNewsFrame: ElementRef;
+
   subscription: Subscription;
   collapseArticlesPageResponse: PagedResponse<CollapseArticle[]>;
-  topArticles: CollapseArticle[];
-  isLoading: boolean;
+  homeArticles: HomeArticle[];
+  isViewAll: boolean = false;
+  //check view khi chuyển từ tab view all sang các tab còn lại
+  type: number = 0;
+  homeActionQueue: HomeActions.HomeActions[] = [];
   errors: string[];
+  searchTerm: string;
   constructor(private store: Store<fromApp.AppState>) { 
     
   }
@@ -30,16 +39,20 @@ export class CollapseArticleComponent implements OnInit {
   lastButtonValue: number;
 
   ngOnInit() {
-    this.store.dispatch(new HomeActions.LoadCollapseArticles(new PageParam()));
     this.store.dispatch(new HomeActions.LoadTopArticles());
     this.subscription = this.store
       .select('home')
       .subscribe(
         (homeState) => {
-          this.collapseArticlesPageResponse = homeState.collapseArticlesPageResponse;
-          this.topArticles = homeState.topCollapseArticles;
-          this.isLoading = homeState.isLoading;
-          this.generatePagingButton();
+          if (this.collapseArticlesPageResponse != homeState.collapseArticlesPageResponse) {
+            this.collapseArticlesPageResponse = homeState.collapseArticlesPageResponse;
+            if (this.isViewAll) {
+              this.generatePagingButton()
+              // this.viewAllEl.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+            }
+          }
+          this.homeArticles = homeState.homeArticles;
+          this.homeActionQueue = homeState.actionsQueue;
           this.errors = homeState.errors;
           if (this.errors) {
             Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
@@ -51,10 +64,41 @@ export class CollapseArticleComponent implements OnInit {
         (error) => {
           Swal.fire({title: 'Lỗi', text: error.toString(), icon: 'error', allowOutsideClick: false})
           .then(() => {
-
           });
         }
       );
+  }
+
+  ngAfterViewChecked(){
+    if (this.isViewAll) {
+      this.viewAllFrame.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+    } else if (this.type == 1) {
+      this.hotNewsFrame.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+      this.type = 0;
+    } else if (this.type == 2) {
+      this.todayNewsFrame.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+      this.type = 0;
+    } else if (this.type == 3) {
+      this.pastNewsFrame.nativeElement.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+      this.type = 0;
+    }
+  }
+  
+  scrollToElement($element, type): void {
+    this.isViewAll = false;
+    this.type = type;
+    $element.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
+  }
+
+  viewAll() {
+    this.store.dispatch(new HomeActions.LoadCollapseArticles({pageParam: new PageParam(), searchTerm: this.searchTerm}));
+    this.isViewAll = true;
+  }
+
+  onSearch() {
+    console.log(this.searchTerm);
+    this.store.dispatch(new HomeActions.LoadCollapseArticles({pageParam: new PageParam(1, 10), searchTerm: this.searchTerm}));
+    this.isViewAll = true;
   }
 
   generatePagingButton() {
@@ -83,14 +127,14 @@ export class CollapseArticleComponent implements OnInit {
         this.lastButtonValue = this.collapseArticlesPageResponse.totalPages;
       }
 
-      if (this.secondButtonValue != 1) {
+      if (this.secondButtonValue != 1 && this.thirdButtonValue != 1 && this.fourthButtonValue != 1) {
         this.firstButtonValue = 1;
       }
     }
   }
 
   pageClick(pageNumber: number) {
-    this.store.dispatch(new HomeActions.LoadCollapseArticles(new PageParam(pageNumber)));
+    this.store.dispatch(new HomeActions.LoadCollapseArticles({pageParam: new PageParam(pageNumber), searchTerm: this.searchTerm}));
   }
 
 

@@ -13,40 +13,49 @@ import * as StepperActions from './stepper.actions';
 
 export interface State {
   subjects: Subject[];
+  //Điểm user submit
   marks: Mark[];
-  testMarks: Mark[];
-  isLoading: boolean;
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
   trainingProgramBasedUniversity: TrainingProgramBasedUniversity[];
+  //List trường ứng với điểm thi thử
   mockTestBasedUniversity: MockTestBasedUniversity;
   tests: ClassifiedTests[];
   test: Test;
+  //Type điểm lúc bấm suggest
   transcriptTypeId: number;
   followTranscriptTypeId: number;
   removeFollowingDetailId: number;
   gender: number;
   provinceId: number;
+  //Khối chọn sau khi suggest
   selectedSubjectGroup: SuggestedSubjectsGroup;
+  //Ngành chọn sau khi suggest
   selectedMajor: Major;
   selectedUniversityId: number;
   selectedTrainingProgramId: number;
   selectedTestId: number;
   unsaveTestSubmissions: UnsaveTestSubmission[];
+  //Param lúc chấm điểm
   testSubmissionParam: TestSubmissionParam;
   testSubmissionReponse: TestSubmission;
+  //Lưu bài thi thành công
   isSubmissionSaved: boolean;
-  isMarkSaved: boolean;
-  doneTestIds: number[];
+  //Bài thi cần phải làm
+  needDoneTestIds: number[];
+  //Tỉnh
   provinces: Province[];
+  //Khi nào cần load uni base on mocktest
+  shouldLoadMockTestUniversities: boolean;
+  testSubmissionId: number;
+  isDoingTest: boolean;
   userSuggestionSubjectGroup: UserSuggestionSubjectGroup;
+  actionsQueue: StepperActions.StepperActions[];
   errors: string[];
 }
 
 const initialState: State = {
   subjects: [],
-  isLoading: false,
   marks: [],
-  testMarks: [],
   suggestedSubjectsGroup: [],
   trainingProgramBasedUniversity: [],
   mockTestBasedUniversity: null,
@@ -66,10 +75,13 @@ const initialState: State = {
   testSubmissionReponse: null,
   unsaveTestSubmissions: [],
   isSubmissionSaved: false,
-  isMarkSaved: false,
+  shouldLoadMockTestUniversities: false,
+  isDoingTest: false,
   provinces: [],
-  doneTestIds: [],
+  needDoneTestIds: [],
+  testSubmissionId: null,
   userSuggestionSubjectGroup: null,
+  actionsQueue: [],
   errors: null
 };
 
@@ -77,17 +89,19 @@ export function stepReducer(
   state = initialState,
   action: StepperActions.StepperActions
 ) {
+  let tempActions = [...state.actionsQueue];
   switch (action.type) {
     case StepperActions.LOAD_SUBJECTS:
       return {
         ...state,
-        isLoading: true,
+        actionsQueue: [...state.actionsQueue, action],
       };
     case StepperActions.SET_SUBJECTS:
+      tempActions.splice( tempActions.findIndex(a => a.type == StepperActions.LOAD_SUBJECTS), 1);
       return {
         ...state,
         subjects: [...action.payload],
-        isLoading: false,
+        actionsQueue: [...tempActions],
       };
     case StepperActions.SET_MARKS:
       return {
@@ -96,191 +110,217 @@ export function stepReducer(
         trainingProgramBasedUniversity: [],
         tests: [],
         test: null,
-        isLoading: true,
         marks: [...action.payload.marks],
         transcriptTypeId: action.payload.transcriptTypeId,
         gender: action.payload.gender,
-        provinceId: action.payload.provinceId
+        provinceId: action.payload.provinceId,
+        actionsQueue: [...state.actionsQueue, action],
+      };
+    case StepperActions.SAVE_MARKS:
+      return {
+        ...state,
+        actionsQueue: [...state.actionsQueue, action],
       };
     case StepperActions.SET_SUGGESTED_SUBJECTS_GROUP:
+      tempActions.splice( tempActions.findIndex(a => a.type == StepperActions.SET_MARKS), 1);
       return {
         ...state,
         suggestedSubjectsGroup: action.payload,
-        isLoading: false,
+        actionsQueue: [...tempActions],
       };
     case StepperActions.LOAD_UNIVERSIIES:
       return {
         ...state,
-        isLoading: true,
         trainingProgramBasedUniversity: [],    
-        mockTestBasedUniversity: null,    
+        mockTestBasedUniversity: null,
+        shouldLoadMockTestUniversities: false,
         selectedSubjectGroup: action.payload.subjectGroup,
         selectedMajor: action.payload.major,
+        actionsQueue: [...state.actionsQueue, action],
       };
+    case StepperActions.RELOAD_UNIVERSIIES:
+        return {
+          ...state,
+          actionsQueue: [...state.actionsQueue, action],
+        };
     case StepperActions.SET_UNIVERSIIES:
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.LOAD_UNIVERSIIES
+                                                                || a.type == StepperActions.RELOAD_UNIVERSIIES), 1);
       return {
         ...state,
         trainingProgramBasedUniversity: action.payload,
-        isLoading: false,
-        // tests: [],
         test: null,
+        actionsQueue: [...tempActions],
       };
     case StepperActions.LOAD_TESTS:
       return {
         ...state,
-        isLoading: true,
         test: null,
+        actionsQueue: [...state.actionsQueue, action],
       };
     case StepperActions.SET_TESTS:
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.LOAD_TESTS), 1);
+      let needDoneTestIds = action.payload.filter(t => t.lastTranscript == null).map(t => t.test.id);
       return {
         ...state,
         tests: action.payload,
-        isLoading: false,
+        needDoneTestIds: needDoneTestIds,
+        actionsQueue: [...tempActions],
       };
     case StepperActions.LOAD_TEST:
       return {
         ...state,
+        test: null,
+        testSubmissionParam: null,
+        testSubmissionReponse: null,
+        testSubmissionId: null,
+        isSubmissionSaved: false,
         selectedTestId: action.payload,
-        isLoading: true,
+        actionsQueue: [...state.actionsQueue, action],
       };
     case StepperActions.SET_TEST:
-      const tempIds =  [...state.doneTestIds, action.payload.id];
+      const tempIds = state.needDoneTestIds.slice();
+      const dupIndex = tempIds.indexOf(action.payload.id);
+      tempIds.splice(dupIndex, 1);
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.LOAD_TEST), 1);
       return {
         ...state,
         test: action.payload,
-        doneTestIds: tempIds.filter((v,i) => tempIds.indexOf(v) === i),
-        isLoading: false,
+        isDoingTest: true,
+        needDoneTestIds: [...tempIds],
+        actionsQueue: [...tempActions, action],
       };
     case StepperActions.REFRESH_TEST:
       return {
         ...state,
         test: null,
         selectedTestId: null,
-        testSubmissionParam: null,
         testSubmissionReponse: null,
         isSubmissionSaved: false,
-        isLoading: false,
+        isDoingTest: false,
+        tests: []
       };
     case StepperActions.SCORING_TEST:
       return {
         ...state,
         testSubmissionParam: action.payload,
-        isLoading: true,
+        actionsQueue: [...state.actionsQueue, action],
       };
     case StepperActions.SET_TEST_MARK:
-      var testMarks = state.testMarks;
-      var testMark = testMarks.find(x => x.subjectId == action.payload.subjectId);
-      if (testMark) {
-        testMarks = testMarks.map(s => {
-          if (s.subjectId == action.payload.subjectId) {
-            s =  {...s, mark: action.payload.mark}
-          }
-          return s;
-        })
-      } else {
-        testMarks = [...testMarks, {subjectId: action.payload.subjectId, mark: action.payload.mark}];
-      }
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.SCORING_TEST), 1);
       let testParam = state.testSubmissionParam;
       var unsaveTestSubmission = new UnsaveTestSubmission(
         action.payload.testId,
         action.payload.spentTime,
         testParam.questions,
         action.payload.mark,
-        action.payload.numberOfRightAnswers
+        action.payload.numberOfRightAnswers,
+        state.testSubmissionId
       )
-      var unsaveTestSubmissions = state.unsaveTestSubmissions;
-      var temp = unsaveTestSubmissions.find(x => x.testId == action.payload.testId);
-      if (temp) {
-        unsaveTestSubmissions = unsaveTestSubmissions.map(s => {
-          if (s.testId == action.payload.testId) {
-            s =  unsaveTestSubmission;
-          }
-          return s;
-        })
-      } else {
-        unsaveTestSubmissions = [...unsaveTestSubmissions, unsaveTestSubmission];
-      }
+      var  unsaveTestSubmissions = [...state.unsaveTestSubmissions, unsaveTestSubmission];
       return {
         ...state,
         testSubmissionReponse: action.payload,
-        testMarks: [...testMarks],
         unsaveTestSubmissions: [...unsaveTestSubmissions],
-        isLoading: false,
+        actionsQueue: [...tempActions],
       };
     case StepperActions.SAVE_UNSAVE_TEST_SUBMISSIONS:
       return {
         ...state,
-        isLoading: true
+        actionsQueue: [...state.actionsQueue, action],
       };
     case StepperActions.SAVE_UNSAVE_TEST_SUBMISSIONS_SUCCESS:
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.SAVE_UNSAVE_TEST_SUBMISSIONS), 1);
       return {
         ...state,
         isSubmissionSaved: true,
-        isLoading: false,
-        unsaveTestSubmissions: []
+        isDoingTest: false,
+        unsaveTestSubmissions: [],
+        actionsQueue: [...tempActions],
       };
     case StepperActions.CARING_ACTION:
       return {
         ...state,
-        isLoading: true,
         selectedUniversityId: action.payload.universityId,
         selectedTrainingProgramId: action.payload.trainingProgramId,
-        followTranscriptTypeId: action.payload.followTranscriptTypeId
+        followTranscriptTypeId: action.payload.followTranscriptTypeId,
+        actionsQueue: [...state.actionsQueue, action],
       };
     case StepperActions.CARING_ACTION_SUCCESS:
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.CARING_ACTION), 1);
       return {
         ...state,
-        isLoading: false
+        actionsQueue: [...tempActions],
       };
     case StepperActions.UNCARING_ACTION:
       return {
         ...state,
-        isLoading: true,
-        removeFollowingDetailId: action.payload
+        removeFollowingDetailId: action.payload,
+        actionsQueue: [...state.actionsQueue, action],
       };
     case StepperActions.UNCARING_ACTION_SUCCESS:
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.UNCARING_ACTION), 1);
       return {
         ...state,
-        isLoading: false
+        actionsQueue: [...tempActions],
       };
     case StepperActions.LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS:
       return {
         ...state,
-        isLoading: true,
+        mockTestBasedUniversity: null,
+        actionsQueue: [...state.actionsQueue, action],
       };  
     case StepperActions.SET_UNIVERSIIES_AFTER_DOING_MOCK_TESTS:
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS), 1);
       return {
         ...state,
+        shouldLoadMockTestUniversities: true,
         mockTestBasedUniversity: action.payload,
-        isLoading: false,
+        actionsQueue: [...tempActions],
       };  
     case StepperActions.LOAD_USER_SUGGESTION:
       return {
         ...state,
-        isLoading: true,
+        actionsQueue: [...state.actionsQueue, action],
       };  
     case StepperActions.SET_USER_SUGGESTION:
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.LOAD_USER_SUGGESTION), 1);
       return {
         ...state,
         userSuggestionSubjectGroup: action.payload,
-        isLoading: false
+        actionsQueue: [...tempActions],
       };  
     case StepperActions.LOAD_PROVINCES:
       return {
         ...state,
-        isLoading: true,
+        actionsQueue: [...state.actionsQueue, action],
       };  
     case StepperActions.SET_PROVINCES:
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.LOAD_PROVINCES), 1);
       return {
         ...state,
         provinces: action.payload,
-        isLoading: false
-      };  
-    case StepperActions.HAS_ERRORS:
+        actionsQueue: [...tempActions],
+      };
+    case StepperActions.SET_TEST_SUBMISSION_ID:
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.SET_TEST), 1);
       return {
         ...state,
-        errors: action.payload,
-        isLoading: false
+        testSubmissionId: action.payload,
+        actionsQueue: [...tempActions],
+      };
+    case StepperActions.DONE_LOADING:
+      tempActions.splice(tempActions.findIndex(a => a.type == action.payload), 1);
+      return {
+        ...state,
+        actionsQueue: [...tempActions],
+      };
+    case StepperActions.HAS_ERRORS:
+      tempActions.splice(tempActions.findIndex(a => a.type == action.payload.action), 1);
+      return {
+        ...state,
+        errors: action.payload.messages,
+        actionsQueue: [...tempActions]
       };
     case StepperActions.CONFIRM_ERRORS:
       return {

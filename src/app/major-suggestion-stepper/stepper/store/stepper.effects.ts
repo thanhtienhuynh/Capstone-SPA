@@ -14,7 +14,7 @@ import { Subject } from '../../../_models/subject';
 import { Injectable } from '@angular/core';
 import { SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from 'src/app/_models/suggested-subjects-group';
 import * as fromApp from '../../../_store/app.reducer';
-import { Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { MockTestBasedUniversity, TrainingProgramBasedUniversity } from 'src/app/_models/university';
 import { Test } from 'src/app/_models/test';
 import { MarkParam } from 'src/app/_params/mark-param';
@@ -25,6 +25,8 @@ import { environment } from 'src/environments/environment';
 import { AddFollowingDetailParam } from 'src/app/_params/following-detail-param';
 import { Response } from 'src/app/_models/response';
 import { Province } from 'src/app/_models/province';
+import * as StepperStates from './stepper.reducer';
+import  * as AuthStates from '../../../authentication/store/auth.reducer';
 
 @Injectable()
 export class StepperEffects {
@@ -44,37 +46,66 @@ export class StepperEffects {
           if (response.succeeded) {
             return new StepperActions.SetSubjects(response.data);
           }
-          return new StepperActions.HasErrors(response.errors);
+          return new StepperActions.HasErrors({action: StepperActions.LOAD_SUBJECTS, messages: response.errors});
         }),
         catchError((error: HttpErrorResponse) => {
-          return of(new StepperActions.HasErrors([error.message]));
+          return of(new StepperActions.HasErrors({action: StepperActions.LOAD_SUBJECTS, messages: [error.message]}));
         })
       );
     }),
   );
 
   @Effect()
-  loadResult = this.actions$.pipe(
-    ofType(StepperActions.SET_MARKS),
-    withLatestFrom(this.store.select('stepper')),
-    switchMap(([actionData, stepperState]) => {
-      return this.http.post<Response<SuggestedSubjectsGroup[]>>(
-        environment.apiUrl + 'api/v1/subject-group/top-subject-group',
+  saveMarks = this.actions$.pipe(
+    ofType(StepperActions.SAVE_MARKS),
+    withLatestFrom(this.store.select('stepper'), this.store.select('auth')),
+    switchMap(([actionData, stepperState, authState]) => {
+      if (!authState.user) {
+        return of(new StepperActions.DoneLoading(StepperActions.SAVE_MARKS)); 
+      }
+      return this.http.post<Response<boolean>>(
+        environment.apiUrl + 'api/v1/transcript',
         new MarkParam(stepperState.marks, stepperState.transcriptTypeId, stepperState.gender, stepperState.provinceId),
-        {
-          withCredentials: true,
-        }
       ).pipe(
         map((response) => {
           if (response.succeeded) {
-            return new StepperActions.SetSuggestedSubjectsGroup(response.data);
+            return new StepperActions.DoneLoading(StepperActions.SAVE_MARKS);
           }
-          return new StepperActions.HasErrors(response.errors);
+          return new StepperActions.HasErrors({action: StepperActions.SAVE_MARKS, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new StepperActions.HasErrors([error.message]));
+          return of(new StepperActions.HasErrors({action: StepperActions.SAVE_MARKS, messages: [error.message]}));
         })
       );
+    })
+  );
+
+  @Effect()
+  loadResult = this.actions$.pipe(
+    ofType(StepperActions.SET_MARKS),
+    withLatestFrom(this.store.select('stepper'), this.store.select('auth')),
+    switchMap(([actionData, stepperState, authState]:[StepperActions.SetMarks, StepperStates.State, AuthStates.State]) => {
+      console.log(actionData);
+      if (authState.user && stepperState.transcriptTypeId != 3 && actionData.shouldSave) {
+        this.store.dispatch(new StepperActions.SaveMarks());
+      }
+      let markParam = new MarkParam(stepperState.marks, stepperState.transcriptTypeId, stepperState.gender, stepperState.provinceId);
+      return this.http.post<Response<SuggestedSubjectsGroup[]>>(environment.apiUrl + 'api/v1/subject-group/top-subject-group',
+        markParam,
+        {
+          withCredentials: true,
+        }
+        ).pipe(
+          map((response) => {
+            if (response.succeeded) {
+              return new StepperActions.SetSuggestedSubjectsGroup(response.data);
+            }
+            return new StepperActions.HasErrors({action: StepperActions.SET_MARKS, messages: response.errors});
+          }),
+          catchError((error) => {
+            return of(new StepperActions.HasErrors({action: StepperActions.SET_MARKS, messages: [error.message]}));
+          })
+        );
     })
   );
 
@@ -87,9 +118,9 @@ export class StepperEffects {
       queryParams = queryParams.append('subjectGroupId', stepperState.selectedSubjectGroup.id.toString());
       queryParams = queryParams.append('majorId', stepperState.selectedMajor.id.toString());
       queryParams = queryParams.append('totalMark', stepperState.selectedSubjectGroup.totalMark.toString());
-      queryParams = queryParams.append('transcriptTypeId', '2');
+      queryParams = queryParams.append('transcriptTypeId', stepperState.transcriptTypeId.toString());
       queryParams = queryParams.append('gender', stepperState.gender.toString());
-      if ( stepperState.provinceId) {
+      if (stepperState.provinceId) {
         queryParams = queryParams.append('provinceId', stepperState.provinceId.toString());
       }
       return this.http.get<Response<TrainingProgramBasedUniversity[]>>(
@@ -102,10 +133,10 @@ export class StepperEffects {
           if (response.succeeded) {
             return new StepperActions.SetUniversities(response.data);
           }
-          return new StepperActions.HasErrors(response.errors);
+          return new StepperActions.HasErrors({action: actionData, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new StepperActions.HasErrors([error.message]));
+          return of(new StepperActions.HasErrors({action: StepperActions.LOAD_UNIVERSIIES, messages: [error.message]}));
         })
       );
     })
@@ -116,28 +147,14 @@ export class StepperEffects {
     ofType(StepperActions.LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS),
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
-      var hbMarks = stepperState.marks.slice();
-      var mockTestMarks = stepperState.testMarks;
-      if (stepperState.tests == null || mockTestMarks == null || stepperState.tests.length == 0 || mockTestMarks.length != stepperState.tests.length) {
-        return of({type: 'DUMMY'});
+      if (stepperState.needDoneTestIds.length > 0) {
+        console.log("Hihi");
+        return of(new StepperActions.DoneLoading(StepperActions.LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS));
       }
-      for(var i = 0, l = hbMarks.length; i < l; i++) {
-        for(var j = 0, ll = mockTestMarks.length; j < ll; j++) {
-            if(hbMarks[i].subjectId === mockTestMarks[j].subjectId) {
-              hbMarks.splice(i, 1, mockTestMarks[j]);
-                  break;
-              }
-          }
-      }
-      hbMarks = hbMarks.filter(m => stepperState.selectedSubjectGroup.subjectDataSets.find(s =>  s.id == m.subjectId) != null
-                                  || stepperState.selectedSubjectGroup.specialSubjectGroups?.find(g => g.subjects.find(t => t.id ==  m.subjectId) != null) != null);
+      console.log("Hihi 1");
       let body = {
         subjectGroupId: stepperState.selectedSubjectGroup.id,
         majorId: stepperState.selectedMajor.id,
-        transcriptTypeId: 2,
-        gender: stepperState.gender,
-        provinceId: stepperState.provinceId,
-        marks: hbMarks
       }
       return this.http.post<Response<MockTestBasedUniversity>>(
         environment.apiUrl + 'api/v1/university/suggestion',
@@ -147,10 +164,10 @@ export class StepperEffects {
           if (response.succeeded) {
             return new StepperActions.SetAfterMockTestsUniversities(response.data);
           }
-          return new StepperActions.HasErrors(response.errors);
+          return new StepperActions.HasErrors({action: StepperActions.LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new StepperActions.HasErrors([error.message]));
+          return of(new StepperActions.HasErrors({action: StepperActions.LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS, messages: [error.message]}));
         })
       );
     })
@@ -173,10 +190,10 @@ export class StepperEffects {
           if (response.succeeded) {
             return new StepperActions.SetTests(response.data);
           }
-          return new StepperActions.HasErrors(response.errors);
+          return new StepperActions.HasErrors({action: StepperActions.LOAD_TESTS, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new StepperActions.HasErrors([error.message]));
+          return of(new StepperActions.HasErrors({action: StepperActions.LOAD_TESTS, messages: [error.message]}));
         })
       );
     })
@@ -194,10 +211,34 @@ export class StepperEffects {
           if (response.succeeded) {
             return new StepperActions.SetTest(response.data);
           }
-          return new StepperActions.HasErrors(response.errors);
+          return new StepperActions.HasErrors({action: StepperActions.LOAD_TEST, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new StepperActions.HasErrors([error.message]));
+          return of(new StepperActions.HasErrors({action: StepperActions.LOAD_TEST, messages: [error.message]}));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  saveTestSubmissionBeforeDoingTest = this.actions$.pipe(
+    ofType(StepperActions.SET_TEST),
+    withLatestFrom(this.store.select('stepper')),
+    switchMap(([actionData, stepperState]) => {
+      return this.http.post<Response<number>>(
+        environment.apiUrl + 'api/v1/test-submission/first-saving',
+        {
+          testId: stepperState.selectedTestId
+        }
+      ).pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new StepperActions.SetTestSubmissionId(response.data);
+          }
+          return new StepperActions.HasErrors({action: StepperActions.SET_TEST, messages: response.errors});
+        }),
+        catchError((error) => {
+          return of(new StepperActions.HasErrors({action: StepperActions.SET_TEST, messages: [error.message]}));
         })
       );
     })
@@ -215,10 +256,10 @@ export class StepperEffects {
           if (response.succeeded) {
             return new StepperActions.SetTestMark(response.data);
           }
-          return new StepperActions.HasErrors(response.errors);
+          return new StepperActions.HasErrors({action: StepperActions.SCORING_TEST, messages: response.errors});
         }),
         catchError((error) => {
-          return of(new StepperActions.HasErrors([error.message]));
+          return of(new StepperActions.HasErrors({action: StepperActions.SCORING_TEST, messages: [error.message]}));
         })
       );
     })
@@ -238,15 +279,15 @@ export class StepperEffects {
             if (response.succeeded) {
               return new StepperActions.SaveUnsaveTestSubmissionsSuccess(response.succeeded);
             }
-            return new StepperActions.HasErrors(response.errors);
+            return new StepperActions.HasErrors({action: StepperActions.SAVE_UNSAVE_TEST_SUBMISSIONS, messages: response.errors});
           }),
           catchError((error) => {
-            return of(new StepperActions.HasErrors([error.message]));
+            return of(new StepperActions.HasErrors({action: StepperActions.SAVE_UNSAVE_TEST_SUBMISSIONS, messages: [error.message]}));
           })
         );
       }
       else {
-        return of({type: 'DUMMY'});
+        return of(null);
       }
     })
   );
@@ -269,20 +310,18 @@ export class StepperEffects {
       ).pipe(
         switchMap((response) => {
           if (response.succeeded) {
-            return ([new StepperActions.LoadUniversities(
-                        { 
-                          subjectGroup: stepperState.selectedSubjectGroup,
-                          major: stepperState.selectedMajor,
-                          gender: stepperState.gender,
-                          provinceId: stepperState.provinceId
-                        }),
-                        new StepperActions.LoadAfterMockTestsUniversities()
-                      ]);
+            if (stepperState.shouldLoadMockTestUniversities) {
+              return ([new StepperActions.CaringActionSuccess(), new StepperActions.ReloadUniversities(),
+                new StepperActions.LoadAfterMockTestsUniversities()
+              ]);
+            } else {
+              return ([new StepperActions.CaringActionSuccess(), new StepperActions.ReloadUniversities()]);
+            }
           }
-          return of(new StepperActions.HasErrors(response.errors));
+          return of(new StepperActions.HasErrors({action: StepperActions.CARING_ACTION, messages: response.errors}));
         }),
         catchError((error) => {
-          return of(new StepperActions.HasErrors([error.message]));
+          return of(new StepperActions.HasErrors({action: StepperActions.CARING_ACTION, messages: [error.message]}));
         })
       );
     }),
@@ -298,18 +337,17 @@ export class StepperEffects {
       ).pipe(
         switchMap((response) => {
           if (response.succeeded) {
-            return [new StepperActions.LoadUniversities(
-              {subjectGroup: stepperState.selectedSubjectGroup,
-                major: stepperState.selectedMajor,
-                gender: stepperState.gender,
-                provinceId: stepperState.provinceId
-              }
-            ), new StepperActions.LoadAfterMockTestsUniversities()];
+            if (stepperState.shouldLoadMockTestUniversities) {
+              return [new StepperActions.UncaringActionSuccess(), new StepperActions.ReloadUniversities(),
+                new StepperActions.LoadAfterMockTestsUniversities()];
+            } else {
+              return [new StepperActions.UncaringActionSuccess(), new StepperActions.ReloadUniversities()];
+            }
           }
-          return of (new StepperActions.HasErrors(response.errors));
+          return of (new StepperActions.HasErrors({action: StepperActions.UNCARING_ACTION, messages: response.errors}));
         }),
         catchError((error) => {
-          return of(new StepperActions.HasErrors([error.message]));
+          return of(new StepperActions.HasErrors({action: StepperActions.UNCARING_ACTION, messages: [error.message]}));
         })
       );
     }),
@@ -325,10 +363,10 @@ export class StepperEffects {
           if (response.succeeded) {
             return new StepperActions.SetUserSuggestion(response.data);
           }
-          return new StepperActions.HasErrors(response.errors);
+          return new StepperActions.HasErrors({action: StepperActions.LOAD_USER_SUGGESTION, messages: response.errors});
         }),
         catchError((error: HttpErrorResponse) => {
-          return of(new StepperActions.HasErrors([error.message]));
+          return of(new StepperActions.HasErrors({action: StepperActions.LOAD_USER_SUGGESTION, messages: [error.message]}));
         })
       );
     }),
@@ -344,10 +382,10 @@ export class StepperEffects {
           if (response.succeeded) {
             return new StepperActions.SetProvinces(response.data);
           }
-          return new StepperActions.HasErrors(response.errors);
+          return new StepperActions.HasErrors({action: StepperActions.LOAD_PROVINCES, messages: response.errors});
         }),
         catchError((error: HttpErrorResponse) => {
-          return of(new StepperActions.HasErrors([error.message]));
+          return of(new StepperActions.HasErrors({action: StepperActions.LOAD_PROVINCES, messages: [error.message]}));
         })
       );
     }),

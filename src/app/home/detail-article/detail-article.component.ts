@@ -15,7 +15,7 @@ import * as HomeActions from './../store/home.actions';
 export class DetailArticleComponent implements OnInit {
   subscription: Subscription;
   detailAricle: DetailArticle;
-  isLoading: boolean;
+  homeActionQueue: HomeActions.HomeActions[] = [];
   errors: string[];
 
   constructor(private store: Store<fromApp.AppState>, private meta: Meta) { }
@@ -26,7 +26,7 @@ export class DetailArticleComponent implements OnInit {
       .subscribe(
         (homeState) => {
           this.detailAricle = homeState.detailSelectedArticle;
-          this.isLoading = homeState.isLoading;
+          this.homeActionQueue = homeState.actionsQueue;
           this.errors = homeState.errors;
           if (this.errors) {
             Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
@@ -38,7 +38,6 @@ export class DetailArticleComponent implements OnInit {
         (error) => {
           Swal.fire({title: 'Lỗi', text: error.toString(), icon: 'error', allowOutsideClick: false})
           .then(() => {
-
           });
         }
       );

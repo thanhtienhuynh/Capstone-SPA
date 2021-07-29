@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { UniversityBasedFollowingDetail } from 'src/app/_models/university-based-following-detail';
@@ -17,6 +18,7 @@ export class CaringUniversitiesComponent implements OnInit {
   subscription: Subscription;
   universityBasedFollowingDetails: UniversityBasedFollowingDetail[];
   errors: string[];
+  userActionQueue: UserActions.UserActions[] = [];
 
   ngOnInit() {
     this.store.dispatch(new UserActions.LoadUniversityBasedFollowingDetails());
@@ -24,6 +26,7 @@ export class CaringUniversitiesComponent implements OnInit {
       .select('user')
       .subscribe(
         (userState) => {
+          this.userActionQueue = userState.actionsQueue;
           this.universityBasedFollowingDetails = userState.universityBasedFollowingDetails;
           this.errors = userState.errors;
           if (this.errors) {

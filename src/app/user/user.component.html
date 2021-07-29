@@ -1,14 +1,13 @@
 <div class="center" >
   <div style="width: 100%; height: 100%;" fxLayout="row wrap" fxLayoutAlign="flex-start">
     <div fxFlex="0 1 calc(27% - 32px)" fxFlex.lt-sm="100%" style="margin-right: 32px;">
-      <div style="margin-bottom: 5%; width: 100%; height: 7%; background-color: rgb(129, 163, 236); font-weight: bold; font-size: 1.4em; border-radius: 7px;" class="center-all">
+      <div class="center-all personal-info-title">
         THÔNG TIN CÁ NHÂN
       </div>
-      <div style="height: 91%; background-color: rgb(240, 236, 236);">
+      <div class="menu-frame">
         <mat-list>
           <mat-list-item>
-            <div style=" border: 2px solid rgb(56, 97, 231);
-            border-radius: 15px; width: 100%; font-weight: 500; height: 70%;" class="center-vertical">
+            <div class="center-vertical title-menu">
             <mat-icon style="font-size: 100vi; margin-right: 4px;" aria-hidden="false" >account_circle</mat-icon>Tài khoản</div>
           </mat-list-item>
           <mat-list-item  routerLink="./information" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
@@ -17,8 +16,7 @@
             </div>
           </mat-list-item>
           <mat-list-item>
-            <div style=" border: 2px solid rgb(56, 97, 231);
-            border-radius: 15px; width: 100%; font-weight: 500; height: 70%;" class="center-vertical">
+            <div class="center-vertical title-menu">
             <mat-icon style="font-size: 100vi; margin-right: 4px;" aria-hidden="false" >assignment</mat-icon>Kết quả ghi nhận</div>
           </mat-list-item>
           <mat-list-item routerLink="./caring-majors" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">

@@ -29,7 +29,7 @@ export interface UniversityGroupByTrainingProgramDataSet {
   tuitionTo: number;
   rating: number;
   majorCode: string;
-  seasonDataSet: Season;
+  seasonDataSets: Season[];
   positionOfUser: number;
   totalUserCared: number;
   subjectGroupId: number;

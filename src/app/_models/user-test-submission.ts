@@ -34,7 +34,16 @@ export interface QuestionSubmission {
   content: string;
   numberOfOption: number;
   rightResult: string;
+  isAnnotate: boolean;
+  realOrder: number;
   type: number;
   testId: number;
   options: Option[];
+}
+
+export class TestSubmissionDetailParam {
+  subjectId: number;
+  testTypeId: number;
+  isSuggestedTest: boolean;
+  order: number;
 }

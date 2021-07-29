@@ -1,0 +1,117 @@
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  color: #0a36b1;
+}
+
+.total {
+  margin-bottom: 15px;
+  color: rgb(53, 117, 236);
+  font-style: italic;
+  font-weight: 500;
+}
+
+.major-name {
+  font-family: Montserrat, "Helvetica Neue", Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #033969;
+}
+
+// .major-name:hover {
+//   color: #2b8fe7;
+//   cursor: pointer;
+// }
+
+.host-frame {
+  width: 100%;
+  height: auto;
+}
+
+.text-field {
+  width: 80%;
+  border-radius: 5px;
+  padding: 9px;
+  font-size: 14px;
+  color: #262626;
+}
+
+.search-btn {
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px 20px;
+  border: 1px solid rgb(88, 153, 236);
+  color: rgb(53, 117, 236);
+  font-family: Roboto, sans-serif;
+}
+
+.search-btn:hover {
+  background-color: rgb(53, 117, 236);
+  color: white;
+}
+
+.search-frame {
+  width: 60%;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.major-frame {
+  margin-bottom: 30px;
+  padding: 10px;
+  box-shadow: rgb(17 17 17 / 30%) 0px 0px 6px;
+}
+
+
+.three-dot {
+  margin-right: 5px;
+  width: 20px;
+  height: 35px;
+}
+
+.page-button-section {
+  padding-bottom: 50px;
+}
+
+.page-button-selected {
+  background-color: rgb(152, 196, 233);
+}
+
+
+.page-button {
+  margin-right: 5px;
+  width: 35px;
+  height: 35px;
+  border: 1px solid rgb(152, 196, 233);
+  border-radius: 2px;
+}
+
+.page-button:hover {
+  background-color: rgb(152, 196, 233);
+  cursor: pointer;
+}
+
+.major-detail {
+  opacity: 0.9;
+  font-size: 0.9em;
+  // font-style: italic;
+}
+
+.detail-link {
+  opacity: 0.9;
+  font-size: 0.9em;
+  color: #2b8fe7;
+  font-style: italic;
+  float: right;
+}
+
+.detail-link:hover {
+  cursor: pointer;
+  color: #076ec9;
+  opacity: 1;
+}

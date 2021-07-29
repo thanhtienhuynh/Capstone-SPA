@@ -9,20 +9,13 @@ export class AuthInterceptorService implements HttpInterceptor {
   constructor( private store: Store<fromApp.AppState>) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    return this.store.select('auth').pipe(
-      take(1),
-      map(authState => {
-        return authState.token;
-      }),
-      exhaustMap(token => {
-        if (!token) {
-          return next.handle(req);
-        }
-        const modifiedReq = req.clone({
-          headers: req.headers.append('Authorization', 'Bearer ' + token)
-        });
-        return next.handle(modifiedReq);
-      })
-    );
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return next.handle(req);
+    }
+    const modifiedReq = req.clone({
+      headers: req.headers.append('Authorization', 'Bearer ' + token)
+    });
+    return next.handle(modifiedReq);
   }
 }

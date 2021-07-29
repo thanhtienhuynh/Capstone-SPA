@@ -12,18 +12,20 @@ export class TestSubmissionParam {
 
 export class UnsaveTestSubmission {
   testId: number;
+  testSubmissionId: number;
   spentTime: number;
   questions: QuestionParam[];
   mark: number;
   numberOfRightAnswers: number;
 
   constructor(testId: number, spentTime: number, questions: QuestionParam[], mark: number,
-              numberOfRightAnswers: number) {
+              numberOfRightAnswers: number, testSubmissionId: number) {
     this.testId = testId;
     this.spentTime = spentTime;
     this.questions = questions;
     this.mark = mark;
     this.numberOfRightAnswers = numberOfRightAnswers;
+    this.testSubmissionId = testSubmissionId;
   }
 }
 

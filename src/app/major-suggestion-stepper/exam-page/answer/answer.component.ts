@@ -9,6 +9,8 @@ export class AnswerComponent implements OnInit, OnChanges {
 
   @Input() numericalOrder: number;
   @Input() selectedIndex : number;  
+  @Input() isRight : boolean;  
+  @Input() isWrong : boolean;  
   isSelected: boolean = false;
   constructor() { }  
 
@@ -18,7 +20,7 @@ export class AnswerComponent implements OnInit, OnChanges {
 
   ngOnChanges(): void {
     if (this.numericalOrder === this.selectedIndex) {
-      this.isSelected = !this.isSelected;
+      this.isSelected = true;
     }           
   }  
 

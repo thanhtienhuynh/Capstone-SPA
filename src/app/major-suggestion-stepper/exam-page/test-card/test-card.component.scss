@@ -1,11 +1,11 @@
-:host {
+.do-test {
   display: block;
   padding: 12px;
   border: 1px solid black;
-  border-radius: 8px;
+  border-radius: 7px;
+  background-color: #f7fcff;
 }
 .header {
-  background-color: #e3e3e3;
   font-weight: 500;
 }
 .submit {
@@ -13,4 +13,34 @@
   justify-content: center;
   align-items: center;
   display: flex;
+}
+
+.test-title {
+  color: #1b3cde;
+}
+
+.expired-btn {
+  opacity: 0.6;
+}
+
+.pending-test {
+  height: 142px;
+  border: 1px solid black;
+  padding: 12px;
+  border-radius: 7px;
+  display: block;
+  box-sizing: border-box;
+  background-color: #f7fcff;
+}
+
+.line-icon {
+  font-size: 14px;
+}
+
+.info-icon {
+  color: #3f51b5;
+}
+
+.strong-text {
+  font-weight: 500;
 }

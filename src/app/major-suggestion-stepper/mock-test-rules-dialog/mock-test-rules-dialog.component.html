@@ -1,0 +1,8 @@
+<div>
+  <h4 class="caution-title">LƯU Ý</h4>
+  <p *ngIf="!user">- Bạn phải <span class="emphasized-title" (click)="onGoogleLoginClick()">Đăng nhập</span> mới có thể làm bài thi thử.</p>
+  <p>- Trong <span class="emphasized-title">3 tháng</span> , bạn chỉ có thể làm bài thi thử <span class="emphasized-title">1 lần</span>, hãy ôn luyện thật kĩ trước khi làm bài thi.</p>
+  <div class="center-all">
+    <button class="detail-btn" [disabled]="!user" [ngClass]="{'disabled-btn': !user}" (click)="doTest()">Vào thi</button>
+  </div>
+</div>

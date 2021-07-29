@@ -1,0 +1,139 @@
+<div class="root-frame">
+  <!-- Thong tin university -->
+  <div *ngIf="university" class="uni-frame" gdAreas="avatar name" gdRows="auto" gdColumns="30% 70%"
+  gdAreas.lt-md="avatar | name" gdRows.lt-md="auto auto" gdColumns.lt-md="100%">
+    <div class="avatar" gdArea="avatar">
+      <img class="img-frame" src="{{university.logoUrl || '../../../../../assets/img/ic/univeristy.jpg'}}" alt="" />
+    </div>
+
+    <div class="name" gdArea="name">
+      <h2 class="uni-name">{{university.name | uppercase}}</h2>
+      <div class="introduction">Giới thiệu: {{university.description || 'Đang cập nhật...'}}</div>
+    </div>
+  </div>
+  <!-- Thong tin co ban  -->
+  <h3 class="basic-title">1. THÔNG TIN CƠ BẢN</h3>
+  <div *ngIf="university" gdAreas="info contact" gdRows="auto"
+  gdAreas.lt-md="info | contact" gdRows.lt-md="auto auto">
+    <div class="info" gdArea="info">
+      <table>
+        <tbody>
+          <tr>
+            <td><mat-icon class="uni-icon">school</mat-icon></td>
+            <td>
+              <div class="info-title">Mã trường: </div>
+            </td>
+            <td class="info-value">
+              {{university.code}}
+            </td>
+          </tr>
+          <tr>
+            <td><mat-icon class="uni-icon"> local_atm</mat-icon></td>
+            <td>
+              <div class="info-title">
+                Học phí:
+              </div>
+            </td>
+            <td>
+              <div class="info-value" *ngIf="!university.tuitionTo || !university.tuitionFrom ||
+                                      (university.tuitionTo == university.tuitionFrom && university.tuitionTo < 100)">
+                Đang cập nhật
+              </div>
+              <div class="info-value" *ngIf="university.tuitionTo == university.tuitionFrom  && university.tuitionTo >= 100">
+                Khoảng {{university.tuitionTo | number:'1.0':'en-US'}},000/{{university.tuitionType == 0 ? "kì" : "năm"}}</div>
+              <div class="info-value" *ngIf="university.tuitionTo != university.tuitionFrom">
+                Từ {{university.tuitionFrom | number:'1.0':'en-US'}},000
+                đến {{university.tuitionTo | number:'1.0':'en-US'}},000/
+                {{university.tuitionType == 0 ? "kì" : "năm"}}</div>
+            </td>
+          </tr>
+          <tr>
+            <td><mat-icon class="uni-icon">stars</mat-icon></td>
+            <td>
+              <div class="info-title">Đánh giá: </div>
+            </td>
+            <td class="info-value">
+              {{university.rating}} sao
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="contact" gdArea="contact">
+      <table>
+        <tbody>
+          <tr>
+            <td><mat-icon class="uni-icon"> contact_phone</mat-icon></td>
+            <td>
+              <div class="info-title">Liên hệ:</div>
+            </td>
+            <td  class="info-value">
+              {{university.phone}}
+            </td>
+          </tr>
+          <tr>
+            <td><mat-icon class="uni-icon">link</mat-icon></td>
+            <td>
+              <div class="info-title">Website: </div>
+            </td>
+            <td  class="info-value">
+              {{university.webUrl}}
+            </td>
+          </tr>
+          <tr>
+            <td><mat-icon class="uni-icon">location_city</mat-icon></td>
+            <td class="info-cell">
+              <div class="info-title">Địa chỉ:</div>
+            </td>
+            <td  class="info-value">
+              {{university.address}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Thong tin nganh -->
+  <h3 class="basic-title">2. THÔNG TIN NGÀNH HỌC</h3>
+  <form class="select" *ngIf="seasons != null && seasons.length > 0" [formGroup]="form">
+    <select [formControl]="seasonControl" name="season" >
+      <option *ngFor="let season of seasons" [value]="season.id">{{season.name}}</option>
+    </select>
+  </form>
+  <div *ngIf="rows.length > 0">
+    <table class="major-table">
+      <thead class="major-header">
+          <!-- <th>STT</th> -->
+          <th class="major-cell">TÊN NGÀNH</th>
+          <th class="major-cell">HỆ ĐÀO TẠO</th>
+          <th class="major-cell">CODE</th>
+          <th class="major-cell">CHỈ TIÊU TỔNG</th>
+          <th class="major-cell">CHỈ TIÊU PHỤ</th>
+          <th class="major-cell">SỐ LƯỢNG</th>
+          <th class="major-cell">KHỐI</th>
+          <th class="major-cell">ĐIỂM CHUẨN</th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of rows;" [ngClass]="row.isOdd ? 'odd-row' : 'non-odd-row'">
+            <td *ngFor="let cell of row.cells;" class="major-cell" [ngClass]="{'empty-mark': cell.data == null, 'number-cell': cell.isNumber}" [attr.rowspan]="cell.rowspan">{{cell.data || '&#8709;'}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="cusMajorDetailPageResponse" class="page-button-section center-all">
+      <div *ngIf="firstButtonValue > 0" (click)="pageClick(firstButtonValue)" class="page-button center-all">{{firstButtonValue}}</div>
+      <div *ngIf="firstButtonValue > 0" class="center-all three-dot">...</div>
+      <div *ngIf="secondButtonValue > 0" (click)="pageClick(secondButtonValue)" [ngClass]="{'page-button-selected': secondButtonValue == cusMajorDetailPageResponse.pageNumber}" class="page-button center-all">{{secondButtonValue}}</div>
+      <div *ngIf="thirdButtonValue > 0" (click)="pageClick(thirdButtonValue)" [ngClass]="{'page-button-selected': thirdButtonValue == cusMajorDetailPageResponse.pageNumber}" class="page-button center-all ">{{thirdButtonValue}}</div>
+      <div *ngIf="fourthButtonValue > 0" (click)="pageClick(fourthButtonValue)" [ngClass]="{'page-button-selected': fourthButtonValue == cusMajorDetailPageResponse.pageNumber}" class="page-button center-all">{{fourthButtonValue}}</div>
+      <div *ngIf="lastButtonValue > 0" class="center-all three-dot">...</div>
+      <div *ngIf="lastButtonValue > 0" (click)="pageClick(lastButtonValue)" class="page-button center-all">{{lastButtonValue}}</div>
+    </div>
+  </div>
+
+  <div *ngIf="(!cusMajorDetailPageResponse || cusMajorDetailPageResponse.data.length <= 0) && (!homeActionQueue || homeActionQueue.length <= 0)">
+    <h3>Thông tin ngành học đang trong quá trình cập nhật!</h3>
+  </div>  
+</div>
+
+<app-progress-spinner [actions]="homeActionQueue" *ngIf="homeActionQueue && homeActionQueue.length > 0"></app-progress-spinner>

@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { DetailUniversityDialogComponent } from './detail-university-dialog.component';
+import { CusMajorComponent } from './cus-major.component';
 
-describe('DetailUniversityDialogComponent', () => {
-  let component: DetailUniversityDialogComponent;
-  let fixture: ComponentFixture<DetailUniversityDialogComponent>;
+describe('CusMajorComponent', () => {
+  let component: CusMajorComponent;
+  let fixture: ComponentFixture<CusMajorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DetailUniversityDialogComponent ]
+      declarations: [ CusMajorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DetailUniversityDialogComponent);
+    fixture = TestBed.createComponent(CusMajorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

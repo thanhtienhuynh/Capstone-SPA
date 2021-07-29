@@ -1,6 +1,12 @@
 .result {
   font-style: italic;
-  font-weight: 600;
+  font-weight: 500;
+  color: #05098e;
+}
+
+.test-title {
+  color: #05098e;
+  font-weight: 500;
 }
 
 .mark {
@@ -32,30 +38,12 @@
   align-items: center;
 }
 
-.table-title {
-  font-style: italic;
-}
-
 .subject-button {
   margin-bottom: 10px;
 }
 
-table {
-  width: 100%;
-}
-
-.mat-row {
-  height: auto;
-}
-
-.mat-cell {
-  padding: 8px 0px 8px 0;
-}
-
-.mat-table-sticky-border-elem-right {
-  border-left: 1px solid #e0e0e0;
-}
-
-.mat-table-sticky-border-elem-left {
-  border-right: 1px solid #e0e0e0;
+.center-all {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

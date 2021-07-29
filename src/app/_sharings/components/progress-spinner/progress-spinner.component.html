@@ -1,1 +1,2 @@
 <div class="loading">Loading&#8230;</div>
+<div *ngFor="let action of actions, let i = index" class="text-loading" [style.top]="80 + 50*i +'px'">{{action.message || ''}}&#8230;</div>

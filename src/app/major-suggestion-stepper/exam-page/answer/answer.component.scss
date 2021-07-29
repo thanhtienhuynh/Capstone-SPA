@@ -4,7 +4,7 @@
     min-width: 30px; 
     text-align: center;
     border-radius: 50%;
-    background-color: hotpink;
+    background-color: #d6eef7;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,3 +15,12 @@
     color: #fff;
 }
 
+.isRight {
+    background-color: #1aee5a;
+    color: #fff;
+}
+
+.isWrong {
+    background-color: #d61b1b;
+    color: #fff;
+}
