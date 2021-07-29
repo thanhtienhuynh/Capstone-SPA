@@ -85,7 +85,6 @@ export class StepperEffects {
     ofType(StepperActions.SET_MARKS),
     withLatestFrom(this.store.select('stepper'), this.store.select('auth')),
     switchMap(([actionData, stepperState, authState]:[StepperActions.SetMarks, StepperStates.State, AuthStates.State]) => {
-      console.log(actionData);
       if (authState.user && stepperState.transcriptTypeId != 3 && actionData.shouldSave) {
         this.store.dispatch(new StepperActions.SaveMarks());
       }
@@ -148,10 +147,8 @@ export class StepperEffects {
     withLatestFrom(this.store.select('stepper')),
     switchMap(([actionData, stepperState]) => {
       if (stepperState.needDoneTestIds.length > 0) {
-        console.log("Hihi");
         return of(new StepperActions.DoneLoading(StepperActions.LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS));
       }
-      console.log("Hihi 1");
       let body = {
         subjectGroupId: stepperState.selectedSubjectGroup.id,
         majorId: stepperState.selectedMajor.id,

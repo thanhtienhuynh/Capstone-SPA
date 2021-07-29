@@ -52,7 +52,6 @@ export class CollapseUniversityComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.searchTerm);
     // if (this.searchTerm != null && this.searchTerm.trim().length > 0) {
       this.store.dispatch(new HomeActions.LoadUniversities({pageParam: new PageParam(1, 10), order: 3, searchTerm: this.searchTerm}));
     // }

@@ -115,10 +115,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   handler(e) {
     var endData = this.viewPort.getRenderedRange().end;
-    console.log("End Data: ", endData);
     const total = this.viewPort.getDataLength();
-    console.log("Data Length: ", total);
-    console.log(e);
     if (e == (total - 5) && this.pagedNotifications.pageNumber < this.pagedNotifications.totalPages ) {
       this.store.dispatch(new UserActions.LoadMoreNotifications());
     }

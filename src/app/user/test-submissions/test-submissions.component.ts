@@ -69,9 +69,6 @@ export class TestSubmissionsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log(this.subjectControl.value);
-    console.log(this.testTypeControl.value);
-    console.log(this.isSuggestControl.value);
     this.store.dispatch(new UserActions.LoadSubmissions({isSuggestedTest: this.isSuggestControl.value, order: 1, subjectId: this.subjectControl.value, testTypeId: this.testTypeControl.value}));
   }
 

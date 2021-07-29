@@ -216,7 +216,6 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
                   new FormControl(0, [ Validators.min(0), Validators.max(10)])
                 );
               }
-              console.log(this.secondFormGroup);
               this.secondFormGroup.valueChanges.subscribe(c => {
                 this.marksValidator();
               });
@@ -380,7 +379,6 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
           for (let mark of this.marks) {
             if (mark.subjectId == transcript.subjectId) {
               if (mark.mark != transcript.mark) {
-                console.log(mark.subjectId)
                 return 2;
               }
             }
@@ -468,7 +466,6 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
   }
 
   searchSubmit() {
-    console.log(this.searchTerm);
     if (!this.searchTerm || this.searchTerm.trim().length <= 0) {
       this.searchTerm = "";
     }
@@ -784,7 +781,6 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
         cancelButtonText: 'Tiếp tục'
       }).then((result) => {
         if (result.isConfirmed) {
-          console.log("vao confirm");
           this.isConfirmedOut = true;
         }
         return result.isConfirmed;
