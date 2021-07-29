@@ -20,7 +20,8 @@ export class IdentificationComponent implements OnInit {
 
   ngOnInit() {
     this.subscription = this.store.select('auth').subscribe((authState) => {
-      this.user = authState.user;          
+      this.user = authState.user;  
+              
     });
   }
 
