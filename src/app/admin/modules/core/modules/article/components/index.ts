@@ -4,3 +4,5 @@ export * from './article-grid-list/article-grid-list.component';
 export * from './top-article/top-article.component';
 export * from './search-by-condition/search-by-condition.component';
 export * from './modals/article-content-modal/article-content-modal.component';
+export * from './update-article/update-article.component';
+export * from './review-create-article-modal/review-create-article-modal.component';

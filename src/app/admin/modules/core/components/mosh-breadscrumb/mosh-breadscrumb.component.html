@@ -1,3 +1,11 @@
-<p>
-  mosh-breadscrumb works!
-</p>
+
+<div style="height: 100%; display: flex; justify-content: center; align-items: center; padding-left: 25px;">
+  <nz-breadcrumb [nzAutoGenerate]="true" nzSeparator=">">
+    <nz-breadcrumb-item>
+      <i nz-icon nzType="home"></i>
+    </nz-breadcrumb-item>
+  </nz-breadcrumb>
+</div>
+
+
+<ng-template #iconTemplate><i nz-icon nzType="arrow-right"></i></ng-template>

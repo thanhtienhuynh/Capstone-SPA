@@ -1,0 +1,81 @@
+<div class="exam-list-by-subject">
+  <div class="container-fluid">
+    <div nz-row>
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
+        <nb-card style="width: 100%; height: 100%; position: relative">
+          <nb-card-body style="width: 100%; padding-bottom: 0;">
+            <div style="width: 100%;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <label for="" style="margin-right: 15px;">Bộ lọc tìm kiếm: </label>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Loại đề thi" [ngModel]="selectedTestType" (ngModelChange)="searchByTestType($event)" style="min-width: 245px; margin-right: 10px;">
+                    <nz-option nzLabel="Trung Học Phổ Thông Quốc Gia" [nzValue]="1"></nz-option>
+                    <nz-option nzLabel="Đánh Giá Năng Lực" [nzValue]="0"></nz-option>                    
+                  </nz-select>
+                  <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Năm" [ngModel]="selectedYear" (ngModelChange)="searchByYear($event)" style="min-width: 150px;">
+                    <nz-option nzLabel="Năm 2017" [nzValue]="2017"></nz-option>
+                    <nz-option nzLabel="Năm 2018" [nzValue]="2018"></nz-option>
+                    <nz-option nzLabel="Năm 2019" [nzValue]="2019"></nz-option>
+                    <nz-option nzLabel="Năm 2020" [nzValue]="2020"></nz-option>
+                    <nz-option nzLabel="Năm 2021" [nzValue]="2021"></nz-option>
+                  </nz-select>
+                </div>
+                <div class="create-exam">
+                  <button nz-button nzSize="medium" nzType="primary">
+                    <span style="font-size: 12px;" (click)="redirectToCreateExam()">NHẬP ĐỀ THI</span>
+                  </button>
+                </div>
+              </div>
+              <nz-divider></nz-divider> 
+              <nz-table #basicTable nzBordered nzShowSizeChanger nzShowQuickJumper [nzFrontPagination]="false" [nzData]="listOfExamBySubject" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"  [nzPageSizeOptions]="[5, 10]" [nzShowPagination]="total > 5"  (nzQueryParams)="onQueryParamsChange($event)">
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>DANH SÁCH ĐỀ THI MÔN {{this.getSubjectName(this.subjectId)}}
+                      <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
+                        <i nz-icon nzType="search"></i>
+                      </nz-filter-trigger>
+                    </th>
+                    <th>THAO TÁC</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let exam of basicTable.data; let i = index" [style.backgroundColor]="i % 2 == 1 ? '#f6f6f6' : '#fff'">
+                    <td>
+                      <div style="display: flex; align-items: center; justify-content: center;">
+                        {{ exam.stt }}
+                      </div>
+                    </td>
+                    <td id="name">
+                      <div style="display: flex; justify-content: space-between; align-items: center;" [routerLink]="['subject/' + exam.id]" >
+                        <span>{{ exam. name}}</span>
+                        <button class="detail-btn">Xem chi tiết</button>
+                      </div>
+                    </td>
+                    <td class="action">
+                      <div style="display: flex; justify-content: center; align-items: center;">
+                        <nz-switch [formControl]="examSubjectForm.controls[i].get('isSuggestedTest')"  (ngModelChange)="chooseSuggestedTest(i, exam, $event)"></nz-switch>
+                      </div>                      
+                    </td>
+                  </tr>
+                </tbody>
+              </nz-table>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nz-dropdown-menu #searchMenu="nzDropdownMenu">
+  <div class="ant-table-filter-dropdown">
+    <div class="search-box">
+      <input type="text" nz-input placeholder="Tìm Kiếm Đề Thi" [(ngModel)]="searchValueName" />
+      <button nz-button nzSize="small" nzType="primary" class="search-button" (click)="searchByName()"> 
+        TÌM KIẾM
+      </button>
+      <button nz-button nzSize="small" (click)="resetSearchName()">TẠO LẠI</button>
+    </div>
+  </div>
+</nz-dropdown-menu>

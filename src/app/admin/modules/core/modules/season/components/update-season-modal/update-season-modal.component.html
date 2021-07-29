@@ -1,0 +1,35 @@
+<div *ngIf="action === 'edit'">
+  <div class="pt-2">
+    <span class="text-xl">SỬA THÔNG TIN MÙA {{season.name}} MỚI VÀO HỆ THỐNG</span>               
+  </div>
+  <nz-divider></nz-divider>
+  <div class="d-flex">
+    <div class="col-md-8">
+      <label for="">Tên mùa</label>
+      <input type="text" nz-input [formControl]="updateForm.get('name')">
+    </div>
+    <div class="col-md-4">
+      <label for="">Ngày bắt đầu</label>
+      <nz-date-picker        
+      [formControl]="updateForm.get('fromDate')"    
+      nzShowTime
+      nzFormat="yyyy-MM-dd HH:mm:ss"                                            
+    ></nz-date-picker>
+    </div>
+  </div>
+  <nz-divider></nz-divider>
+  <div class="footer">
+    <button nz-button nzType="primary" class="mr-2" [disabled]="updateForm.invalid" (click)="updateSeason()" [nzLoading]="isLoading">Sửa</button>
+    <button nz-button nzType="dashed" (click)="closeModal()">Thoát</button>
+  </div>
+</div>
+<div *ngIf="action === 'delete'">
+  <div class="pt-2">
+    <span class="text-xl">XÓA TOÀN BỘ THÔNG TIN MÙA {{season.name}}??</span>               
+  </div>
+  <nz-divider></nz-divider>
+  <div class="footer">
+    <button nz-button nzType="primary" class="mr-2" [disabled]="updateForm.invalid" (click)="updateSeason()" [nzLoading]="isLoading">Xác nhận</button>
+    <button nz-button nzType="dashed" (click)="closeModal()">Thoát</button>
+  </div>
+</div>

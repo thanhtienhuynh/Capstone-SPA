@@ -2,9 +2,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { MajorSubjectGroup, Season, UniversityRM } from '../../view-models';
+import { MajorSubjectGroup, Season } from '../../view-models';
 import { Response } from "src/app/_models/response";
 import { PagedResponse } from 'src/app/_models/paged-response';
+import { University } from 'src/app/_models/university';
 
 
 @Injectable({
@@ -20,8 +21,8 @@ export class UniversityService {
     return this._http.post<Response<any>>(this.baseUrl + 'api/v1/university', body);
   }
 
-  getAllUniversity(): Observable<PagedResponse<any>> {
-    return this._http.get<PagedResponse<any>>(this.baseUrl + 'api/v1/university/admin-non-paging');
+  getAllUniversity(): Observable<Response<University[]>> {
+    return this._http.get<Response<University[]>>(this.baseUrl + 'api/v1/university/admin-non-paging');
   }
 
   getListOfUniversity(pageNumber: number, pageSize: number, name: string, status: string): Observable<PagedResponse<any>> {

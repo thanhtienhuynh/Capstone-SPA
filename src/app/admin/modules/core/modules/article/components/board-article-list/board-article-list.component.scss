@@ -51,14 +51,45 @@ h5 {
     0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
-
-nz-pagination {
-  ::ng-deep {
-    .ant-pagination-item, .ant-pagination-total-text, .ant-pagination-item-ellipsis {
-      line-height: 30px;
-    }
-    a {
-      text-decoration: none;
-    }
-  }
+.search-box {
+  padding: 8px;
 }
+
+.search-box input {
+  width: 188px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.search-box button {
+  width: 90px;
+}
+
+.search-button {
+  margin-right: 8px;
+}
+
+nz-table th {
+  
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  font-weight: 600;     
+}
+
+nz-table thead {
+  background-color: #f4f5f7; 
+}
+
+nz-table .ant-pagination-item, .ant-pagination-total-text, .ant-pagination-item-ellipsis{
+  line-height: 30px;
+  a {
+    text-decoration: none;
+  } 
+}
+
+// nz-table a {
+//   text-decoration: none;
+// }
+
+

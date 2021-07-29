@@ -35,7 +35,7 @@
 }
 
 #status {
-  font-size: 11px !important;
+  font-size: 10px !important;
 }
 
 span {
@@ -47,7 +47,8 @@ nz-table th {
   font-weight: 600;
   // background-color: #87ceeb; 
   // background-color: #f1f1f1;
-  background-color: #e4e9f2;
+  // background-color: #e4e9f2;
+  background-color: 	#ADD8E6;
   text-align: center;
   font-size: 12px;
 }
@@ -55,10 +56,19 @@ nz-table th {
 nz-table {
   ::ng-deep {
     .ant-pagination-item, .ant-pagination-total-text, .ant-pagination-item-ellipsis {
-      line-height: 30px;
+      line-height: 30px;      
     }
     a {
       text-decoration: none;
+      // font-size: 12px;
+    }
+    nz-filter-trigger {
+      .ant-table-filter-trigger {
+        color: black;
+      }
+      .ant-table-filter-trigger.active {
+        color: #1890ff;
+      }     
     }
   }
 }
@@ -72,20 +82,61 @@ nz-table th:last-child {
 }
 
 nz-table td {
-  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  // font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   word-wrap: break-word;    
   font-size: 12px;
-  touch-action: manipulation;
-  cursor: -webkit-grab;
-  cursor: grab;  
+  // touch-action: manipulation;
+  // cursor: -webkit-grab;
+  // cursor: grab;  
 }
 
-nz-table tbody tr:hover {
-  // box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+.icon-edit {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  background-color: #fff;
+  cursor: pointer;
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+  margin: 5px;
+}
+.university-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+.none-action {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
 
-@media (max-width: 1360px) {
+.university-header h5 {
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  margin: 0 15px 0 0;
+  color: #ff3d71;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1384px) {
+  nz-table th {
+    font-size: 11px;
+  }
+  nz-table td {
+    font-size: 11px;
+  }
+  span {
+    font-size: 11px;
+  }
   nz-table th:last-child {
     width: 9%;
   }
@@ -94,9 +145,15 @@ nz-table tbody tr:hover {
   }
 }
 
-@media (min-width: 1360px) and (max-width: 1515px) {
+@media (min-width: 1384px) and (max-width: 1515px) {
   nz-table th {
-    font-size: 12px;
+    font-size: 11px;
+  }
+  nz-table td {
+    font-size: 11px;
+  }
+  span {
+    font-size: 11px;
   }
   nz-table th:first-child {
     width: 1%;
@@ -105,13 +162,40 @@ nz-table tbody tr:hover {
     width: 8%;
   }
   #tuition {
-    width: 19%;
+    width: 17%;
   }
 }
 
 @media (min-width: 1516px) and (max-width: 1669px){
+  nz-table th {
+    font-size: 11px;
+  }
+  nz-table td {
+    font-size: 11px;
+  }
+  span {
+    font-size: 11px;
+  }
   nz-table th:last-child {
-    width: 7%;
+    width: 8%;
+  }
+  #tuition {
+    width: 17%;
+  }
+}
+
+@media (min-width: 1669px){
+  nz-table th {
+    font-size: 11px;
+  }
+  nz-table td {
+    font-size: 11px;
+  }
+  span {
+    font-size: 11px;
+  }
+  nz-table th:last-child {
+    width: 8%;
   }
   #tuition {
     width: 17%;

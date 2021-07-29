@@ -1,16 +1,37 @@
 <nav class="admin-nav">  
-  <div class="admin-menu-item" (click)="useUpdate('university')">
-    <nb-icon [icon]="'home'" [pack]="'eva'"></nb-icon>
-    <a [nbTooltip]="'Trường'" [nbTooltipPlacement]="'end'" >  
-      <span>Trường Học</span>    
-    </a>
-  </div>  
-
-  <div class="admin-menu-item" (click)="useUpdate('article')">
-    <nb-icon [icon]="'book-open-outline'" [pack]="'eva'"></nb-icon>
-    <a [nbTooltip]="'Bải Viết'" [nbTooltipPlacement]="'end'" >    
-      <span>Bài Viết</span>    
-    </a>
-  </div> 
+  <nz-sider nzWidth="200px">
+    <ul nz-menu nzMode="inline" class="sider-menu" [nzTheme]="'dark'">
+      <li nz-submenu nzOpen nzTitle="Trường học">        
+        <ul>
+          <li nz-menu-item [nzSelected]="url === '/admin/core/university/university-list'" (click)="useUpdate('university-list')">Danh sách trường học</li>                   
+        </ul>
+      </li>
+      <li nz-submenu nzOpen nzTitle="Ngành học">        
+        <ul>          
+          <li nz-menu-item [nzSelected]="url === '/admin/core/major-configuration/major-list'" (click)="useUpdate('major-configuration')">Danh sách ngành học</li>          
+          <li nz-menu-item [nzSelected]="url === '/admin/core/major-configuration/major-list/new-major'" (click)="useUpdate('major-configuration/new-major')">Thêm ngành</li>     
+        </ul>
+      </li>
+      <li nz-submenu nzOpen nzTitle="Bài viết">
+        <ul>
+          <li nz-menu-item [nzSelected]="url === '/admin/core/article/article-list'" (click)="useUpdate('article')">Danh sách bài viết</li>
+          <li nz-menu-item [nzSelected]="url === '/admin/core/article/censor'" (click)="useUpdate('article/censor')">Duyệt bài hàng loạt</li>
+          <li nz-menu-item [nzSelected]="url === '/admin/core/article/published'" (click)="useUpdate('article/published')">Đăng bài hàng loạt</li>  
+          <li nz-menu-item  [nzSelected]="url === '/admin/core/article/create-article'" (click)="useUpdate('article/create-article')">Tạo bài viết</li>          
+        </ul>
+      </li> 
+      <li nz-submenu nzOpen nzTitle="Đề Thi">
+        <ul>
+          <li nz-menu-item [nzSelected]="url === '/admin/core/examination/examination-list'" (click)="useUpdate('examination')">Danh sách đề thi</li>
+          <li nz-menu-item [nzSelected]="url === '/admin/core/examination/create-exam'" (click)="useUpdate('examination/create-exam')">Nhập đề thi</li>                    
+        </ul>
+      </li>  
+      <li nz-submenu nzOpen nzTitle="Season">
+        <ul>
+          <li nz-menu-item [nzSelected]="url === '/admin/core/season/season-list'" (click)="useUpdate('season')">Danh sách các mùa</li>                             
+        </ul>
+      </li>   
+    </ul>
+  </nz-sider>
 </nav>
 
