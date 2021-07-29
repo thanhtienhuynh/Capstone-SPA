@@ -36,6 +36,13 @@ const routes: Routes = [
           breadcrumb: 'Đề Thi'
         }
       },
+      {
+        path: 'season',
+        loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.SeasonModule),
+        data: {
+          breadcrumb: 'Season'
+        }
+      },
     ]
   },
 ];

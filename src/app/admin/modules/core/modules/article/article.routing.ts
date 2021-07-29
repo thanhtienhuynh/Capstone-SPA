@@ -1,5 +1,5 @@
 import { Routes, RouterModule } from '@angular/router';
-import { ArticleDetailComponent, ArticleMainComponent, ArticleMainFatherComponent, PublishedComponent } from './pages';
+import { ArticleDetailComponent, ArticleMainComponent, ArticleMainFatherComponent, CreateArticleComponent, PublishedComponent } from './pages';
 import { CensorshipComponent } from './pages/censorship/censorship.component';
 
 const routes: Routes = [
@@ -30,6 +30,12 @@ const routes: Routes = [
     path: 'published', component: PublishedComponent,
     data: {
       breadcrumb: 'Đăng Bài Hàng Loạt'
+    }
+  },
+  {
+    path: 'create-article', component: CreateArticleComponent,
+    data: {
+      breadcrumb: 'Tạo bài viết'
     }
   },
 ];

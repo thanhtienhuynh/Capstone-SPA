@@ -78,26 +78,30 @@
                           <span id="status" *ngIf="university.status != 1">KHÔNG HOẠT ĐỘNG</span>  
                         </nz-tag>                          
                       </td>
-                      <td style="text-align: center;">
-                          <i style="cursor: pointer;" [nzDropdownMenu]="menu1" nz-icon nz-dropdown nzType="ellipsis"></i>
-                          <nz-dropdown-menu #menu1="nzDropdownMenu">
-                              <ul nz-menu>
-                                  <li nz-menu-item>
-                                      <a [routerLink]="['details/' + university.id]">
-                                        <i nz-icon nzType="eye" nzTheme="outline"></i>
-                                        <span class="p-3">Xem</span>
-                                      </a>                                    
-                                  </li>                                
-                                  <li nz-menu-divider></li>
-                                  <li nz-menu-item>
-                                      <a>
-                                        <nb-icon [icon]="university.status != 1 ? 'checkmark-outline' : 'close-outline'"></nb-icon>
-                                        <span class="p-3" *ngIf="university.status == 1">Ngưng kích hoạt</span>
-                                        <span class="p-3" *ngIf="university.status != 1">Kích hoạt</span>
-                                      </a>
-                                  </li>
-                              </ul>
-                          </nz-dropdown-menu>
+                      <td>
+                          <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
+                            <div class="icon-edit" [nzDropdownMenu]="menu1" nz-dropdown [nzTrigger]="'click'">
+                              <nb-icon icon="edit-2-outline"></nb-icon>
+                            </div>
+                            <nz-dropdown-menu #menu1="nzDropdownMenu">
+                                <ul nz-menu>
+                                    <li nz-menu-item>
+                                        <a [routerLink]="['details/' + university.id]">
+                                          <i nz-icon nzType="eye" nzTheme="outline"></i>
+                                          <span class="p-3">Xem</span>
+                                        </a>                                    
+                                    </li>                                
+                                    <li nz-menu-divider></li>
+                                    <li nz-menu-item>
+                                        <a>
+                                          <nb-icon [icon]="university.status != 1 ? 'checkmark-outline' : 'close-outline'"></nb-icon>
+                                          <span class="p-3" *ngIf="university.status == 1">Ngưng kích hoạt</span>
+                                          <span class="p-3" *ngIf="university.status != 1">Kích hoạt</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nz-dropdown-menu>
+                          </div>
                       </td>
                     </tr>
                   </tbody>

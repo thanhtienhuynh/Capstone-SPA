@@ -121,8 +121,7 @@ export class CreateExamComponent implements OnInit {
   addNewOption(numberOfOptions: number, questionIndex: number): void {
     const questions = this.examForm.get('questions') as FormArray;
     const options = questions.controls[questionIndex].get('options') as FormArray;  
-    const tmp = this.findValidOptionContent(options);
-    console.log(tmp);
+    const tmp = this.findValidOptionContent(options);    
     if (tmp === 1) {      
       Swal.fire({
         title: 'LƯU Ý',
@@ -203,7 +202,7 @@ export class CreateExamComponent implements OnInit {
     this.addNewOption(event, questionIndex);
   }
 
-  getListOfSubject(): void {
+  getListOfSubject(): void {    
     this.subjectResult = this._subjectService.getListOfSubject().pipe();
     this.listOfDisplaySubject = this.subjectResult.pipe(
       map(rs => rs.data)
@@ -220,11 +219,9 @@ export class CreateExamComponent implements OnInit {
   createExam(): void {          
     const universityId = this.examForm.get('universityId').value === null ? null : this.examForm.get('universityId').value?.id;
     const subjectId = this.examForm.get('subjectId').value === null ? null : this.examForm.get('subjectId').value?.id
-    const newValue = {...this.examForm.value, universityId: universityId, subjectId: subjectId}
-    console.log(newValue);
+    const newValue = {...this.examForm.value, universityId: universityId, subjectId: subjectId}    
     this._examinationService.createNewExam(newValue).pipe(
-      tap(rs => { 
-        console.log(rs);       
+      tap(rs => {       
         if (rs.succeeded === true) {
           this.isLoading = false;
         } else {
@@ -234,8 +231,7 @@ export class CreateExamComponent implements OnInit {
     ).subscribe();    
   }
 
-  correctRadioAnswer(event: string, questionIndex: number, optionIndex: number): void {
-    console.log(`Giá trị: ${event}`, `questionIndex: ${questionIndex}`, `optionIndex: ${optionIndex}`);
+  correctRadioAnswer(event: string, questionIndex: number, optionIndex: number): void {    
     const questions = this.examForm.get('questions') as FormArray;
     const options = questions.controls[questionIndex].get('options') as FormArray;        
     for (let i = 0; i < options.controls.length; i++) {
@@ -248,8 +244,7 @@ export class CreateExamComponent implements OnInit {
     }
   }  
 
-  correctCheckboxAnswer(event: string, questionIndex: number, optionIndex: number): void {
-    console.log(`Giá trị: ${event}`, `questionIndex: ${questionIndex}`, `optionIndex: ${optionIndex}`);
+  correctCheckboxAnswer(event: string, questionIndex: number, optionIndex: number): void {    
     const questions = this.examForm.get('questions') as FormArray;
     const options = questions.controls[questionIndex].get('options') as FormArray;  
     for (let i = 0; i < options.controls.length; i++) {

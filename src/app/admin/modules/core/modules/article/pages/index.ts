@@ -3,3 +3,4 @@ export * from './article-detail/article-detail.component';
 export * from './censorship/censorship.component';
 export * from './published/published.component';
 export * from './article-main-father/article-main-father.component';
+export * from './create-article/create-article.component';

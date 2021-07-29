@@ -51,8 +51,7 @@ export class UniversityMainComponent implements OnInit {
     this.isLoadingData = true;     
     this._universityService.getListOfUniversity(pageNumber, pageSize, name, status).pipe(
       tap((rs) => {
-        if (rs.succeeded === true) {  
-          console.log(rs);   
+        if (rs.succeeded === true) {            
           if (rs.data !== null) { 
             this.isLoadingData = false;                            
             this.listOfUniversity = rs.data.map((e, i) => ({
@@ -82,8 +81,7 @@ export class UniversityMainComponent implements OnInit {
 
   getAllUniversity(): void {
     this._universityService.getAllUniversity().pipe(
-      tap((rs) => {  
-        // console.log(rs);          
+      tap((rs) => {                
         if (rs.succeeded === true) {
           this.listOfUniversity = rs.data.map((e, i) => ({
             ...e,

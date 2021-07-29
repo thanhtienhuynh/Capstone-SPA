@@ -56,9 +56,7 @@
                     [formControl]="dateForm.get('publicFromDate')"
                     [nzSize]="'large'"
                     nzShowTime
-                    nzFormat="yyyy-MM-dd HH:mm:ss"
-                    ngModel
-                    (ngModelChange)="onChangeFromDate($event)"
+                    nzFormat="yyyy-MM-dd HH:mm:ss"                                        
                     (nzOnOk)="onOkFromDate($event)"
                   ></nz-date-picker>
                 </div>
@@ -70,9 +68,7 @@
                     [formControl]="dateForm.get('publicToDate')"
                     [nzSize]="'large'"
                     nzShowTime
-                    nzFormat="yyyy-MM-dd HH:mm:ss"
-                    ngModel
-                    (ngModelChange)="onChangeToDate($event)"
+                    nzFormat="yyyy-MM-dd HH:mm:ss"                                        
                     (nzOnOk)="onOkToDate($event)"
                   ></nz-date-picker>
                 </div>  
@@ -117,12 +113,12 @@
           <div class="action-button col-lg-6 pr-0 pl-0">            
             <button [disabled]="dateForm.invalid" fullWidth nbButton outline status="info" (click)="confirmArticle('published')">ĐĂNG BÀI</button>
           </div>           
-          <!-- <div class="action-button col-lg-6" style="padding-right: 0px;">            
-            <button fullWidth nbButton outline status="success" (click)="confirmArticle('deny')">BỎ DUYỆT</button>
-          </div> -->
           <div class="action-button col-lg-6" style="padding-right: 0px;">            
             <button fullWidth nbButton outline status="danger" (click)="confirmArticle('reject')">CHẶN BÀI VIẾT</button>
-          </div>     
+          </div>   
+          <div class="action-button col-lg-12" style="padding-right: 0px; padding-left: 0;">            
+            <button *ngIf="article?.rootUrl === null" fullWidth nbButton outline status="success" (click)="openUpdateModal()">CHỈNH SỬA</button>
+          </div>  
         </div>   
         <div *ngIf="article?.status === 0" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
           <div class="action-button col-lg-6" style="padding-left: 0px;">
@@ -140,10 +136,7 @@
         <div *ngIf="article?.status === 3" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
           <div class="action-button col-lg-12" style="padding-left: 0px; padding-right: 0;">
             <button  fullWidth nbButton  status="info" outline (click)="confirmArticle('unPublished')">HỦY ĐĂNG</button>
-          </div>  
-          <!-- <div class="action-button col-lg-6" style="padding-left: 0px;">
-            <button fullWidth nbButton outline  status="danger" (click)="confirmArticle('reject')">CHẶN BÀI</button>
-          </div>                                        -->
+          </div>            
         </div>
         <div *ngIf="article?.status === 4" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
           <div class="action-button col-lg-12" style="padding-left: 0px;">

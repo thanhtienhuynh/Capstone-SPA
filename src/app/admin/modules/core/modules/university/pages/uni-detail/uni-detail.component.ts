@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -7,8 +7,8 @@ import { of, Subscription } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { UniversityService } from 'src/app/admin/services';
 import { MajorUniversity, Season, UniversityRM } from 'src/app/admin/view-models';
-import { MediaObserver, MediaChange } from '@angular/flex-layout';
-import { ActionMajorModalComponent, CreateMajorModalComponent, DeleteMajorModalComponent } from '../../components';
+import { MediaObserver } from '@angular/flex-layout';
+import { ActionMajorModalComponent, DeleteMajorModalComponent } from '../../components';
 import Swal from 'sweetalert2';
 import { quillConfiguration } from 'src/app/admin/config';
 @Component({

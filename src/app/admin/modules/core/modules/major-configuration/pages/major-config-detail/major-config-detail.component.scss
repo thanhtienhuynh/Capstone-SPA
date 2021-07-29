@@ -32,14 +32,14 @@ label {
   padding: 0 1rem;
 }
 
-.isEdit {  
+.isEdit {
   position: relative;
   // background-color: red;
   &:hover {
     background-color: #f1f1f1;
     cursor: text;
     opacity: 1;
-    // .question-content {    
+    // .question-content {
     // .question-wrap {
     //     background-color: #f1f1f1;
     // }
@@ -49,7 +49,7 @@ label {
   }
 }
 
-.editIcon {  
+.editIcon {
   position: absolute;
   visibility: hidden;
   bottom: 0;
@@ -64,10 +64,37 @@ label {
   width: 100%;
 }
 
-:host ::ng-deep img { 
+:host ::ng-deep img {
   max-width: 100% !important;
   height: auto;
 }
 nz-collapse {
   width: 100%;
+  
+}
+
+nz-collapse-panel {
+  ::ng-deep {
+    .ant-collapse-header {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+      font-weight: 500;
+      font-size: 14px;
+    }
+  }
+}
+nb-form-field {
+  ::ng-deep {
+    [nbInput].size-small {
+      font-size: 11px !important;
+    }
+    [nbInput].size-large {
+      font-size: 11px !important;
+    }
+    [nbInput].size-medium {
+      font-size: 11px !important;
+    }
+  }
 }

@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { MajorSubjectGroup, Season, UniversityRM } from '../../view-models';
+import { MajorSubjectGroup, Season } from '../../view-models';
 import { Response } from "src/app/_models/response";
 import { PagedResponse } from 'src/app/_models/paged-response';
 import { University } from 'src/app/_models/university';

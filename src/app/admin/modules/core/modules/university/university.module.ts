@@ -5,8 +5,7 @@ import { ActionMajorModalComponent, CreateUniversityModalComponent, DeleteMajorM
 import { SharedModule } from 'src/app/admin/shared/shared.module';
 
 const COMPONENTS = [
-  CreateUniversityModalComponent,
-  // CreateMajorModalComponent,  
+  CreateUniversityModalComponent,  
   ActionMajorModalComponent,
   DeleteMajorModalComponent
 ];
@@ -14,8 +13,6 @@ const COMPONENTS = [
 const PAGES = [
   UniversityMainFatherComponent,
   UniversityMainComponent,
-  // UniversityDetailComponent,
-  // UniversityDetailModalComponent,
   UniDetailComponent
 ]
 @NgModule({

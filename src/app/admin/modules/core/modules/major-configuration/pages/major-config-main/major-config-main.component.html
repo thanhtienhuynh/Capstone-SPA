@@ -11,11 +11,7 @@
                 </div>             
               </div>
               <div class="add-major">
-                <button nz-button nzSize="medium" nzType="primary" (click)="openMajorConfigurationModal(undefined)" style="margin-right: 10px;">
-                  <!-- <span style="font-size: 12px;">THÊM NGÀNH</span> -->
-                  Thêm ngành
-                </button>
-                <button nz-button nzSize="medium" nzDanger (click)="openMajorConfigurationModal(undefined)" style="margin-right: 10px;">
+                <button nz-button nzSize="medium" nzType="primary" nz-dropdown nzTrigger="click" [nzDropdownMenu]="addMajor"  style="margin-right: 10px;">
                   <!-- <span style="font-size: 12px;">THÊM NGÀNH</span> -->
                   Thêm ngành
                 </button>
@@ -106,13 +102,20 @@
                     </div>
                   </td>
                   <td>
+                    <nz-dropdown-menu #edit="nzDropdownMenu">
+                      <ul nz-menu>
+                        <li nz-menu-item (click)="openMajorConfigurationModal(major)">Sửa nhanh</li>
+                        <li nz-menu-divider></li>
+                        <li nz-menu-item  [routerLink]="['detail/' + major.id]">Sửa chi tiết</li>    
+                      </ul>
+                    </nz-dropdown-menu>
                     <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-                      <div class="icon-edit" (click)="openMajorConfigurationModal(major)">
+                      <div class="icon-edit" nz-dropdown nzTrigger="click" [nzDropdownMenu]="edit">
                           <nb-icon icon="edit-outline"></nb-icon>
                       </div>
-                      <div class="icon-edit" [routerLink]="['detail/' + major.id]">
+                      <!-- <div class="icon-edit">
                         <nb-icon icon="trash-2-outline"></nb-icon>
-                      </div>
+                      </div> -->
                       <div class="icon-edit" (click)="openAddSubjectGroupToMajor(major)">
                         <nb-icon icon="plus-outline"></nb-icon>
                       </div>
@@ -146,3 +149,12 @@
     </div>
   </div>
 </nz-dropdown-menu>
+
+<nz-dropdown-menu #addMajor="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item (click)="openMajorConfigurationModal(undefined)">Thêm nhanh</li>
+    <li nz-menu-divider></li>
+    <li nz-menu-item (click)="createByDetail()">Thêm chi tiết</li>    
+  </ul>
+</nz-dropdown-menu>
+

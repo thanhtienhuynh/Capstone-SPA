@@ -196,7 +196,7 @@
           <div class="col-md-4" style="padding-left: 0;">
             <label for="">Tỉnh thành <span style="color: red;">*</span></label>
             <nb-form-field>        
-              <input  readonly nz-dropdown type="text" [value]="updatingUniSubAdmissionParams.controls[i].get('provinceId').value?.name" [nzDropdownMenu]="selectProvince" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
+              <input [disabled]="updatingUniSubAdmissionParams.controls[i]['isUpdate']"  readonly nz-dropdown type="text" [value]="updatingUniSubAdmissionParams.controls[i].get('provinceId').value?.name" [nzDropdownMenu]="selectProvince" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
             >        
             </nb-form-field>   
             <nz-dropdown-menu #selectProvince="nzDropdownMenu">        
@@ -205,13 +205,13 @@
           </div>
           <div class="col-md-3">
             <label for="">PT xét tuyển <span style="color: red;">*</span></label>
-            <nb-select [formControl]="updatingUniSubAdmissionParams.controls[i].get('admissionMethodId')" fullWidth>                                  
+            <nb-select [disabled]="updatingUniSubAdmissionParams.controls[i]['isUpdate']" [formControl]="updatingUniSubAdmissionParams.controls[i].get('admissionMethodId')" fullWidth>                                  
               <nb-option *ngFor="let item of listOfAdmissionMethod" [value]="item?.id">{{item.name}}</nb-option>
             </nb-select>           
           </div>
           <div class="col-md-3">
             <label for="">Giới tính <span style="color: red;">*</span></label>
-            <nb-select [formControl]="updatingUniSubAdmissionParams.controls[i].get('genderId')" fullWidth>    
+            <nb-select [disabled]="updatingUniSubAdmissionParams.controls[i]['isUpdate']" [formControl]="updatingUniSubAdmissionParams.controls[i].get('genderId')" fullWidth>    
               <nb-option [value]="1000">TẤT CẢ</nb-option>     
               <nb-option [value]="1">NAM</nb-option>
               <nb-option [value]="0">NỮ </nb-option>             
@@ -281,7 +281,7 @@
     </nb-card>
   </div>
   <div class="footer">    
-    <button [nzLoading]="isLoadingUpdate" [disabled]="updateMajorForm.invalid || updateMajorForm.dirty" (click)="updateMajor()" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
+    <button [nzLoading]="isLoadingUpdate" [disabled]="updateMajorForm.invalid" (click)="updateMajor()" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
       Lưu 
     </button>    
     <button [disabled]="isLoadingUpdate" (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="basic">

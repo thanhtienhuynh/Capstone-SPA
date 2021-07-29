@@ -3,10 +3,12 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Response } from 'src/app/_models/response';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { MajorConfigurationService, SubjectGroupService, SubjectService } from 'src/app/admin/services';
+import { MajorConfigurationService, SubjectGroupService } from 'src/app/admin/services';
 import { Subject, SubjectGroupVM } from 'src/app/admin/view-models';
 import { quillConfiguration } from 'src/app/admin/config';
 import Swal from 'sweetalert2';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { ReviewMajorConfigurationModalComponent } from '../../components';
 
 @Component({
   selector: 'app-major-config-create',
@@ -20,10 +22,10 @@ export class MajorConfigCreateComponent implements OnInit {
 
   subjectGroupResult: Observable<Response<SubjectGroupVM[]>> = new BehaviorSubject<Response<SubjectGroupVM[]>>({} as Response<SubjectGroupVM[]>);
   listOfDisplaySubjectGroup: Observable<SubjectGroupVM[]> = new BehaviorSubject<SubjectGroupVM[]>({} as SubjectGroupVM[]);
-  constructor(        
-    private _subjectService: SubjectService,
+  constructor(            
     private _subjectGroupService: SubjectGroupService,
     private _majorConfigService: MajorConfigurationService,
+    private _modalService: NzModalService,
     private _fb: FormBuilder
   ) { 
     this.initAddForm();
@@ -50,7 +52,7 @@ export class MajorConfigCreateComponent implements OnInit {
       'salaryDescription': [''],
       'subjectGroups': this._fb.array([
         this._fb.group({
-          'id': [undefined],
+          'id': [undefined, Validators.required],
           'subjectWeights': this._fb.array([])
         })
       ])
@@ -68,25 +70,45 @@ export class MajorConfigCreateComponent implements OnInit {
       return tmp
     });
     const newValue = { ...this.addMajorForm.value, subjectGroups: subjectGroups }
-    this._majorConfigService.addNewMajorToSystem(newValue).pipe(
-      tap(rs => {
-        if (rs.succeeded === true) {
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'THÊM NGÀNH VÀO HỆ THỐNG THÀNH CÔNG',
-            showConfirmButton: false,
-            timer: 1500
-          });         
-        } else {
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: rs.errors[0],
-            showConfirmButton: false,
-            timer: 1500
-          })
+    console.log(newValue);
+    this.openCreateModal(newValue);
+    // this._majorConfigService.addNewMajorToSystem(newValue).pipe(
+    //   tap(rs => {
+    //     if (rs.succeeded === true) {
+    //       Swal.fire({
+    //         position: 'center',
+    //         icon: 'success',
+    //         title: 'THÊM NGÀNH VÀO HỆ THỐNG THÀNH CÔNG',
+    //         showConfirmButton: false,
+    //         timer: 1500
+    //       });         
+    //     } else {
+    //       Swal.fire({
+    //         position: 'center',
+    //         icon: 'error',
+    //         title: rs.errors[0],
+    //         showConfirmButton: false,
+    //         timer: 1500
+    //       })
+    //     }
+    //   })
+    // ).subscribe();
+  }
+
+  openCreateModal(data: any): void {
+    const modal = this._modalService.create({
+      nzContent: ReviewMajorConfigurationModalComponent,
+      nzClosable: false,
+      nzFooter: null,
+      nzWidth: 800,
+      nzComponentParams: {
+        data: data, callPlace: 'create', update: () => {
+          this.resetForm();
         }
+      },
+    });
+    modal.afterClose.pipe(
+      tap((rs) => {
       })
     ).subscribe();
   }
@@ -98,7 +120,7 @@ export class MajorConfigCreateComponent implements OnInit {
   addSubjectGroup(): void {
     this.getSubjectGroups.push(
       this._fb.group({
-        'id': [undefined],
+        'id': [undefined, Validators.required],
         'status': [1],
         'subjectWeights': this._fb.array([])
       })
@@ -147,6 +169,10 @@ export class MajorConfigCreateComponent implements OnInit {
   }
   useSelectSubjectGroup(data: { id?: number, groupCode?: string }, index: number): void {
     this.getSubjectsPerSubjectGroup(data.id, index);
+  }
+
+  resetForm(): void {
+    this.addMajorForm.reset();
   }
   
 }

@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { SafeAdminHtmlPipe } from '../../shared/pipe/safe-admin-html.pipe';
 import { SharedModule } from '../../shared/shared.module';
 import { NavComponent, ContentComponent, IdentificationComponent, MohsLogoComponent, ResizerComponent, MoshBreadscrumbComponent } from './components';
 import { CoreRoutes } from './core.routing';

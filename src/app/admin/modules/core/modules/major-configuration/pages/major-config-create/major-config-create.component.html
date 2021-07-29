@@ -67,7 +67,7 @@
                   ></quill-editor> 
                   <div class="d-flex mb-2 mt-2">
                     <div class="col-md-4" style="display: flex; justify-content: start; align-items: center; padding-left: 0;">
-                      <label for="" style="margin-bottom: 0; margin-right: 10px;">Lương?? </label>
+                      <label for="" style="margin-bottom: 0; margin-right: 10px;">Mức lương </label>
                     </div>                                     
                   </div>
                   <quill-editor 
@@ -78,8 +78,8 @@
                   ></quill-editor> 
                 </nb-card-body>
               </nb-card>
-              <div class="footer">
-                <button (click)="addNewMajorToSystem()" nz-button nzType="primary">Thêm ngành</button>
+              <div class="footer" style="padding-right: 0;">
+                <button (click)="addNewMajorToSystem()" nz-button nzType="primary" [disabled]="addMajorForm.invalid">Thêm ngành</button>
               </div>
             </div>
           </nb-card-body>

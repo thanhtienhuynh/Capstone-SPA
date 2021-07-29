@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { quillConfiguration } from 'src/app/admin/config';
@@ -8,6 +9,7 @@ import { MajorConfigurationService, SubjectGroupService, SubjectService } from '
 import { MajorConfiguration, Subject, SubjectGroupVM } from 'src/app/admin/view-models';
 import { Response } from 'src/app/_models/response';
 import Swal from 'sweetalert2';
+import { ReviewMajorConfigurationModalComponent } from '../../components';
 
 @Component({
   selector: 'app-major-config-detail',
@@ -18,11 +20,11 @@ export class MajorConfigDetailComponent implements OnInit {
 
   subjectGroupResult: Observable<Response<SubjectGroupVM[]>> = new BehaviorSubject<Response<SubjectGroupVM[]>>({} as Response<SubjectGroupVM[]>);
   listOfDisplaySubjectGroup: Observable<SubjectGroupVM[]> = new BehaviorSubject<SubjectGroupVM[]>({} as SubjectGroupVM[]);
-  constructor(
-    private _subjectService: SubjectService,
+  constructor(    
     private _subjectGroupService: SubjectGroupService,
     private _majorConfigService: MajorConfigurationService,
     private _activatedRoute: ActivatedRoute,
+    private _modalService: NzModalService,
     private _fb: FormBuilder
   ) {
     this.initMajorForm();
@@ -32,6 +34,7 @@ export class MajorConfigDetailComponent implements OnInit {
   majorId: number;
   majorForm: FormGroup;
   majorDetail: MajorConfiguration;
+  majorDetailTmp: MajorConfiguration;
 
   ngOnInit() {
     this.getListOfSubjectGroup();
@@ -54,8 +57,9 @@ export class MajorConfigDetailComponent implements OnInit {
         console.log(rs.data);
         if (rs.succeeded === true) {
           if (rs.data !== null) {
-            this.majorDetail = rs.data;
-            this.setDataToMajorForm(rs.data);
+            this.majorDetail = { ...rs.data };
+            this.setDataToMajorForm(this.majorDetail);
+            this.majorDetailTmp = { ...rs.data, subjectGroups: rs.data.subjectGroups.slice() }
           }
         }
       })
@@ -122,6 +126,7 @@ export class MajorConfigDetailComponent implements OnInit {
   }
 
   setDataToMajorForm(data: MajorConfiguration): void {
+    this.majorForm.reset();
     this.majorForm.get('id').setValue(data.id);
     this.majorForm.get('name').setValue(data.name);
     this.majorForm.get('code').setValue(data.code);
@@ -137,7 +142,7 @@ export class MajorConfigDetailComponent implements OnInit {
           e.subjectWeights.forEach(el => {
             const subjectWeightsField = this._fb.group({
               'subjectId': [{ subjectId: el.id, subjectName: el.name }],
-              'weight': [el.weight],
+              'weight': [el.weight, Validators.required],
               'isSpecialSubjectGroup': [el.isSpecialSubjectGroup]
             })
             subjectWeightsField['isUpdate'] = true;
@@ -153,19 +158,18 @@ export class MajorConfigDetailComponent implements OnInit {
         this.getSubjectGroups.push(subjectGroupfield);
       });
     }
-    console.log(this.getSubjectGroups);
-    // (this.majorForm.get('subjectGroup') as FormGroup).controls.id.setValue(data.subjectGroups[index].id);
-    // this.removeFormArray(this.subjectWeightsUpdating);
-    // for (let i = 0; i < data.subjectGroups[index].subjectWeights.length; i++) {
-    //   const element = data.subjectGroups[index].subjectWeights[i];
-    //   this.subjectWeightsUpdating.push(
-    //     this._fb.group({
-    //       'subjectId': [{ subjectId: element.id, subjectName: element.name }],
-    //       'weight': [element.weight, Validators.required],
-    //       'isSpecialSubjectGroup': [element.isSpecialSubjectGroup]
-    //     })
-    //   )
-    // }
+  }
+
+  addSubjectGroupToFirstIndex(): void {
+    console.log(this.getSubjectGroups.controls.length);
+    console.log(this.majorDetail.subjectGroups.length);
+    this.majorDetailTmp.subjectGroups.unshift({ id: null, status: 1, subjectWeights: [] });
+    const newFbGroup = this._fb.group({
+      'id': [undefined],
+      'status': [1],
+      'subjectWeights': this._fb.array([])
+    })
+    this.getSubjectGroups.insert(0, newFbGroup);
   }
   addSubjectGroup(): void {
     this.getSubjectGroups.push(
@@ -175,6 +179,27 @@ export class MajorConfigDetailComponent implements OnInit {
         'subjectWeights': this._fb.array([])
       })
     );
+    console.log(this.getSubjectGroups.value);
+  }
+
+  resetSubjectGroupDataByIndex(sjIndex: number): void {
+    console.log(this.majorDetailTmp.subjectGroups[sjIndex].subjectWeights);
+    console.log(this.getSubjectGroups.controls[sjIndex].get('subjectWeights').value);
+    if (this.getSubjectGroups.controls[sjIndex]['isUpdate'] !== true) {
+      return;
+    }
+    const subjectWeightsTmp = this.getSubjectGroups.controls[sjIndex].get('subjectWeights') as FormArray;
+    this.removeFormArray(subjectWeightsTmp);
+    for (let i = 0; i < this.majorDetailTmp.subjectGroups[sjIndex].subjectWeights.length; i++) {
+      const element = this.majorDetailTmp.subjectGroups[sjIndex].subjectWeights[i];
+      subjectWeightsTmp.push(
+        this._fb.group({
+          'subjectId': [{ subjectId: element.id, subjectName: element.name }],
+          'weight': [element.weight, Validators.required],
+          'isSpecialSubjectGroup': [element.isSpecialSubjectGroup]
+        })
+      )
+    }
   }
 
   tmpSubjetGroupParam: any[] = [];
@@ -185,6 +210,7 @@ export class MajorConfigDetailComponent implements OnInit {
   removeSubjectGroup(index: number): void {
     const subjectName = this.getSubjectGroups.controls[index].get('id').value?.groupCode;
     if (this.getSubjectGroups.controls[index]['isUpdate'] !== true) {
+      this.majorDetailTmp.subjectGroups.splice(index, 1);
       this.getSubjectGroups.removeAt(index);
       return;
     }
@@ -199,6 +225,7 @@ export class MajorConfigDetailComponent implements OnInit {
       confirmButtonText: 'XÁC NHẬN'
     }).then((result) => {
       if (result.isConfirmed) {
+        this.majorDetailTmp.subjectGroups.splice(index, 1);
         const subjectGroupValue = this.getSubjectGroups.controls[index].value;
         const tmpSubjectGroupValue = { ...subjectGroupValue, 'status': 0 };
         this.handleSubjecGroupParam.push(tmpSubjectGroupValue);
@@ -253,30 +280,28 @@ export class MajorConfigDetailComponent implements OnInit {
     const curriculum = (this.majorForm.get('curriculum').value === '<h2 class=\"ql-align-justify\"><br></h2>' || this.majorForm.get('curriculum').value === '') ? null : this.majorForm.get('curriculum').value;
     const humanQuality = (this.majorForm.get('humanQuality').value === '<h2 class=\"ql-align-justify\"><br></h2>' || this.majorForm.get('humanQuality').value === '') ? null : this.majorForm.get('humanQuality').value;
     const salaryDescription = (this.majorForm.get('salaryDescription').value === '<h2 class=\"ql-align-justify\"><br></h2>' || this.majorForm.get('salaryDescription').value === '') ? null : this.majorForm.get('salaryDescription').value;
-    const newValue = { ...this.majorForm.value, curriculum: curriculum, humanQuality: humanQuality, salaryDescription: salaryDescription, description: description, subjectGroup: subjectGroupValue }
+    const newValue = { ...this.majorForm.value, status: 1, curriculum: curriculum, humanQuality: humanQuality, salaryDescription: salaryDescription, description: description, subjectGroup: subjectGroupValue }
     console.log(newValue);
-    this._majorConfigService.updateMajorToSystem(newValue).pipe(
-      tap(rs => {
-        if (rs.succeeded === true) {
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'THÀNH CÔNG',
-            showConfirmButton: false,
-            timer: 1500
-          });
-        } else {
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: `${rs.errors[0]}`,
-            showConfirmButton: false,
-            timer: 1500
-          });
-        }
+    this.openReviewModal(newValue, this.getSubjectGroups.controls.map(rs => rs.value));
+  }
 
+
+  openReviewModal(data: any, subjectGroups: any): void {
+    const modal = this._modalService.create({
+      nzContent: ReviewMajorConfigurationModalComponent,
+      nzClosable: false,
+      nzFooter: null,
+      nzWidth: 800,
+      nzComponentParams: {
+        data: data, subjectGroups: subjectGroups, update: () => {
+          this.getMajorById(this.majorId);
+        }, callPlace: 'update'
+      },
+    });
+    modal.afterClose.pipe(
+      tap((rs) => {
       })
-    ).subscribe()
+    ).subscribe();
   }
 
   saveData(controlName: string): void {
@@ -332,7 +357,7 @@ export class MajorConfigDetailComponent implements OnInit {
         } else {
           Swal.fire({
             title: 'LƯU Ý',
-            html: `Toàn bộ nội dung bạn vừa thay đổi sẽ quay lại trạng thái ban đầu ngay sau khi load lên. Bạn có muốn đặt lại không?`,
+            html: `Toàn bộ nội dung bạn vừa thay đổi Ở mục <b><i>Mô tả nghề nghiệp</i></b> sẽ quay lại trạng thái ban đầu ngay sau khi load lên. Bạn có muốn đặt lại không?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -353,7 +378,7 @@ export class MajorConfigDetailComponent implements OnInit {
         } else {
           Swal.fire({
             title: 'LƯU Ý',
-            html: `Toàn bộ nội dung bạn vừa thay đổi sẽ quay lại trạng thái ban đầu ngay sau khi load lên. Bạn có muốn đặt lại không?`,
+            html: `Toàn bộ nội dung bạn vừa thay đổi ở mục <b><i>Chương trình đào tạo</i></b> sẽ quay lại trạng thái ban đầu ngay sau khi load lên. Bạn có muốn đặt lại không?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -374,7 +399,7 @@ export class MajorConfigDetailComponent implements OnInit {
         } else {
           Swal.fire({
             title: 'LƯU Ý',
-            html: `Toàn bộ nội dung bạn vừa thay đổi sẽ quay lại trạng thái ban đầu ngay sau khi load lên. Bạn có muốn đặt lại không?`,
+            html: `Toàn bộ nội dung bạn vừa thay đổi ở mục <b><i>Tố chất nghề nghiệp</i></b> sẽ quay lại trạng thái ban đầu ngay sau khi load lên. Bạn có muốn đặt lại không?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -415,4 +440,104 @@ export class MajorConfigDetailComponent implements OnInit {
         break;
     }
   }
+
+  resetAll(): void {
+    Swal.fire({
+      title: 'LƯU Ý',
+      html: `Toàn bộ nội dung bạn vừa thay đổi sẽ quay lại trạng thái ban đầu ngay sau khi load lên. Bạn có muốn đặt lại không?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Thoát',
+      confirmButtonText: 'Xác nhận'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.getMajorById(this.majorId)
+      }
+    });
+  }
+
+  resetSubjectGroup(): void {
+    Swal.fire({
+      title: 'LƯU Ý',
+      html: `Toàn bộ các khối xét tuyển bạn vừa thêm vào danh sách sẽ biến mất và quay lại trạng thái ban đầu ngay sau khi load lên. Bạn có muốn đặt lại không?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Thoát',
+      confirmButtonText: 'Xác nhận'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.removeFormArray(this.getSubjectGroups);
+        this.majorDetailTmp = { ...this.majorDetail, subjectGroups: this.majorDetail.subjectGroups.slice() }
+        if (this.majorDetail.subjectGroups !== null) {
+          this.majorDetail.subjectGroups.forEach(e => {
+            const subjectWeights = this._fb.array([]);
+            if (e.subjectWeights !== null) {
+              e.subjectWeights.forEach(el => {
+                const subjectWeightsField = this._fb.group({
+                  'subjectId': [{ subjectId: el.id, subjectName: el.name }],
+                  'weight': [el.weight, Validators.required],
+                  'isSpecialSubjectGroup': [el.isSpecialSubjectGroup]
+                })
+                subjectWeightsField['isUpdate'] = true;
+                subjectWeights.push(subjectWeightsField);
+              });
+            }
+            const subjectGroupfield = this._fb.group({
+              'id': [{ id: e.id, groupCode: e.groupCode }],
+              'status': [1],
+              'subjectWeights': subjectWeights
+            });
+            subjectGroupfield['isUpdate'] = true;
+            this.getSubjectGroups.push(subjectGroupfield);
+          });
+        }
+      }
+    });
+  }
+
+  renderConditionSubjectGroup(): boolean {
+    if (this.majorDetail === undefined) {
+      return false;
+    }
+    if (this.getSubjectGroups.controls.length === this.majorDetail.subjectGroups.length) {
+      return false;
+    }
+    return true;
+  }
+  renderCondition(): boolean {
+    const code = this.majorForm.get('code')['isUpdateHtml']
+    const description = this.majorForm.get('description')['isUpdateHtml'];
+    const curriculum = this.majorForm.get('curriculum')['isUpdateHtml'];
+    const humanQuality = this.majorForm.get('humanQuality')['isUpdateHtml'];
+    const salaryDescription = this.majorForm.get('salaryDescription')['isUpdateHtml']
+
+    if (description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
+      (this.majorForm.get('description').value !== this.majorDetail?.description)
+    ) {
+      return true;
+    } else if (
+      description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
+      (this.majorForm.get('curriculum').value !== this.majorDetail?.curriculum)
+    ) {
+      return true;
+    } else if (
+      description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
+      (this.majorForm.get('humanQuality').value !== this.majorDetail?.humanQuality)
+
+    ) {
+      return true
+    } else if (description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
+      (this.majorForm.get('salaryDescription').value !== this.majorDetail?.salaryDescription)) {
+      return true;
+    } else if (description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
+      (this.majorForm.get('code').value !== this.majorDetail?.code)) {
+      return true;
+    }
+    return false;
+  }
+
 }

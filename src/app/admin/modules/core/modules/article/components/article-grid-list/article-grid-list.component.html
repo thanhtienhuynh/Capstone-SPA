@@ -1,30 +1,67 @@
-<!-- <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;">
-  <nb-form-field>
-    <input #searchByTitle type="text" placeholder="" fullWidth nbInput (change)="searchValueTitle.emit({title: searchByTitle.value, status: status})" />
-  </nb-form-field>
-  <button class="ml-1" nbButton status="info">TÌM KIẾM</button>
-  <div *ngIf="status === 1" style="display: flex; align-items: center">
-    <a nz-button nzType="text" [routerLink]="['published']" target="_blank">Đăng bài hàng loạt</a
-    >
-  </div>
-  <div *ngIf="status === 0" style="display: flex; align-items: center;">
-    <a nz-button nzType="text" [routerLink]="['censor']" target="_blank">Duyệt bài hàng loạt</a>
-  </div>
-</div> -->
-<nz-table
-  nzData="listOfArticle"
-  nzBordered
-  [nzShowPagination]="false"
+<button
+  class="mb-2"
+  *ngIf="status === 0"
+  nz-button
+  nzType="primary"
+  [nzLoading]="isCrawling"
+  (click)="crawlArticle()"
 >
+  Crawl bài viết
+</button>
+<nz-table nzData="listOfArticle" nzBordered [nzShowPagination]="false">
   <thead>
     <tr>
       <th>
-        <span *ngIf="status === 1" style="color: rgb(87, 165, 90);">DANH SÁCH CÁC BÀI VIẾT ĐÃ DUYỆT</span>
-        <span *ngIf="status === 0" style="color: rgb(233, 127, 51);">DANH SÁCH CÁC BÀI VIẾT CHỜ DUYỆT</span>
-        <span *ngIf="status === 2" style="color: #ff3d71;">DANH SÁCH CÁC BÀI VIẾT BỊ CHẶN</span>
-        <span *ngIf="status === 4" style="color: #ff3d71;">DANH SÁCH CÁC BÀI VIẾT QUÁ HẠN</span>
-        <span *ngIf="status === 5" style="color: #ff3d71;">DANH SÁCH CÁC BÀI VIẾT CẦN XEM XÉT LẠI</span>
-        <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
+        <span *ngIf="status === 1" style="color: rgb(87, 165, 90)"
+          >DANH SÁCH
+          <span style="font-size: 15px"
+            ><i
+              ><b>{{ totalRecods }}</b></i
+            ></span
+          >
+          BÀI VIẾT ĐÃ DUYỆT</span
+        >
+        <div *ngIf="status === 0" style="color: rgb(233, 127, 51)">
+          DANH SÁCH
+          <span style="font-size: 15px"
+            ><i
+              ><b>{{ totalRecods }}</b></i
+            ></span
+          >
+          BÀI VIẾT CHỜ DUYỆT
+        </div>
+        <span *ngIf="status === 2" style="color: #ff3d71"
+          >DANH SÁCH
+          <span style="font-size: 15px"
+            ><i
+              ><b>{{ totalRecods }}</b></i
+            ></span
+          >
+          BÀI VIẾT BỊ CHẶN</span
+        >
+        <span *ngIf="status === 4" style="color: #ff3d71"
+          >DANH SÁCH
+          <span style="font-size: 15px"
+            ><i
+              ><b>{{ totalRecods }}</b></i
+            ></span
+          >
+          BÀI VIẾT QUÁ HẠN</span
+        >
+        <span *ngIf="status === 5" style="color: #ff3d71"
+          >DANH SÁCH
+          <span style="font-size: 15px"
+            ><i
+              ><b>{{ totalRecods }}</b></i
+            ></span
+          >
+          BÀI VIẾT CẦN XEM XÉT LẠI</span
+        >
+        <nz-filter-trigger
+          [(nzVisible)]="visible"
+          [nzActive]="searchValueName.length > 0"
+          [nzDropdownMenu]="searchMenu"
+        >
           <i nz-icon nzType="search"></i>
         </nz-filter-trigger>
       </th>
@@ -36,18 +73,19 @@
         <div class="row" *ngIf="listOfArticle !== undefined">
           <div class="col-lg-11 mx-auto">
             <div class="row">
-              <div
-                class="col-md-3"
-                *ngFor="let item of listOfArticle"        
-              >
+              <div class="col-md-3" *ngFor="let item of listOfArticle">
                 <ng-template #coverTemplate>
                   <img
                     alt="example"
-                    [src]="item.postImageUrl"
+                    [src]="
+                      item.postImageUrl === null || item.postImageUrl === ''
+                        ? 'assets/img/no-image-800x600-768x576.png'
+                        : item.postImageUrl
+                    "
                     style="object-fit: contain"
                   />
                 </ng-template>
-                
+
                 <div (click)="openContentModal(item.id)" class="wrap-content">
                   <nz-card [nzCover]="coverTemplate">
                     <div style="min-height: 150px">
@@ -55,9 +93,12 @@
                         [routerLink]="['details/' + item.id]"
                         routerLinkActive="router-link-active"
                         class="mb-10"
-                        style="text-decoration: none"                        
+                        style="text-decoration: none"
                       >
-                        <span class="article-title" [innerHtml]="item.title"></span>
+                        <span
+                          class="article-title"
+                          [innerHtml]="item.title"
+                        ></span>
                       </a>
                     </div>
                   </nz-card>
@@ -69,10 +110,11 @@
                 *ngIf="listOfArticle?.length !== 0"
                 #paginationTemp
                 [nzPageSizeOptions]="[4, 8, 12]"
+                [nzShowTotal]="totalTemplate"
                 [nzPageIndex]="initPageNumber"
                 [nzTotal]="totalRecods"
                 nzShowSizeChanger
-                [nzPageSize]="initPageSize"                
+                [nzPageSize]="initPageSize"
                 (nzPageSizeChange)="onPageSizeChange($event)"
                 (nzPageIndexChange)="onPageIndexChange($event)"
               ></nz-pagination>
@@ -81,33 +123,51 @@
         </div>
         <div class="row" *ngIf="listOfArticle === undefined">
           <div
-          style="
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 550px;
-          "
-        >
-          <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
-        </div>
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 100%;
+              height: 550px;
+            "
+          >
+            <nz-spin nzSimple [nzSize]="'large'"></nz-spin>
+          </div>
         </div>
         <div class="row" *ngIf="listOfArticle?.length === 0">
-          <p><b><i>Không có bài viết nào được hiển thị</i></b></p>
+          <p>
+            <b><i>Không có bài viết nào được hiển thị</i></b>
+          </p>
         </div>
       </td>
     </tr>
   </tbody>
 </nz-table>
 
+<ng-template #totalTemplate>
+  <span> Hiện có {{ totalRecods }} bài viết </span>
+</ng-template>
 <nz-dropdown-menu #searchMenu="nzDropdownMenu">
   <div class="ant-table-filter-dropdown">
     <div class="search-box">
-      <input type="text" nz-input placeholder="Tìm Kiếm Bài Viết" [(ngModel)]="searchValueName"/>
-      <button  nz-button nzSize="small" nzType="primary" class="search-button" (click)="searchByTitle()"> 
+      <input
+        type="text"
+        nz-input
+        placeholder="Tìm Kiếm Bài Viết"
+        [(ngModel)]="searchValueName"
+      />
+      <button
+        nz-button
+        nzSize="small"
+        nzType="primary"
+        class="search-button"
+        (click)="searchByTitle()"
+      >
         TÌM KIẾM
       </button>
-      <button nz-button nzSize="small" (click)="resetSearchField()">TẠO LẠI</button>
+      <button nz-button nzSize="small" (click)="resetSearchField()">
+        TẠO LẠI
+      </button>
     </div>
   </div>
 </nz-dropdown-menu>

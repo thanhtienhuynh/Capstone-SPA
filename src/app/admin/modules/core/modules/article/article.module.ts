@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { ArticleRoutes } from './article.routing';
 import { SharedModule } from 'src/app/admin/shared/shared.module';
-import { ArticleDetailComponent, ArticleMainComponent, PublishedComponent, CensorshipComponent, ArticleMainFatherComponent } from './pages';
-import { ArticleCardComponent, ArticleContentModalComponent, ArticleGridListComponent, BoardArticleListComponent, SearchByConditionComponent, TopArticleComponent } from './components';
+import { ArticleDetailComponent, ArticleMainComponent, PublishedComponent, CensorshipComponent, ArticleMainFatherComponent, CreateArticleComponent } from './pages';
+import { ArticleCardComponent, ArticleContentModalComponent, ArticleGridListComponent, BoardArticleListComponent, ReviewCreateArticleModalComponent, SearchByConditionComponent, TopArticleComponent, UpdateArticleComponent } from './components';
 import { SliceWordPipe } from 'src/app/admin/shared/pipe/slice-word.pipe';
-import { SafeAdminHtmlPipe, SafeArticleHtmlPipe } from 'src/app/admin/shared/pipe';
+import { SafeArticleHtmlPipe } from 'src/app/admin/shared/pipe';
 
 
 const COMPONENTS = [
@@ -14,19 +14,21 @@ const COMPONENTS = [
   TopArticleComponent,
   SearchByConditionComponent,
   PublishedComponent,
-  ArticleContentModalComponent
+  ArticleContentModalComponent,
+  UpdateArticleComponent,
+  ReviewCreateArticleModalComponent
 ];
 
 const PAGES = [
   ArticleMainComponent,
   ArticleMainFatherComponent,
   ArticleDetailComponent,
-  CensorshipComponent
+  CensorshipComponent,
+  CreateArticleComponent
 ];
 
 const PIPE = [
-  SliceWordPipe, 
-  // SafeAdminHtmlPipe 
+  SliceWordPipe,   
   SafeArticleHtmlPipe
 ]
 

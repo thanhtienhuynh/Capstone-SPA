@@ -6,8 +6,12 @@ nb-select {
     .select-button {
       font-size: 12px !important;
     }
+    .select-button[disabled] {
+      color: #222b45;
+    }
   }
 }
+
 
 nb-form-field {
   ::ng-deep {
@@ -19,7 +23,10 @@ nb-form-field {
     }   
     [nbInput].size-medium {
       font-size: 12px !important;
-    }  
+    } 
+    [nbInput].status-basic:disabled {
+      color: #222b45;
+    }
   }
 }
 

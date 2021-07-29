@@ -86,3 +86,8 @@ nz-table th {
 .search-button {
   margin-right: 8px;
 }
+
+:host ::ng-deep img {
+  max-width: 100% !important;
+  height: auto;
+}

@@ -1,6 +1,7 @@
+import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { FormArray, FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { tap } from 'rxjs/operators';
 import { ExaminationService } from 'src/app/admin/services';
@@ -21,7 +22,7 @@ export class ExamListBySubjectComponent implements OnInit {
 
   selectedYear: number = null;
   selectedTestType: number = null;
-  searchValueName: string = '';  
+  searchValueName: string = '';
   visible: boolean = false;
 
   listOfExamBySubject: (TestBySubject & { stt?: number })[] = [];
@@ -31,6 +32,7 @@ export class ExamListBySubjectComponent implements OnInit {
     private _examService: ExaminationService,
     private _fb: FormBuilder,
     private _activatedRoute: ActivatedRoute,
+    private _router: Router
   ) {
     this.initExamSubjectForm();
   }
@@ -64,7 +66,6 @@ export class ExamListBySubjectComponent implements OnInit {
   getListOfExam(pageNumber: number, pageSize: number, name: string, year: number, testTypeId: number, subjectId: number, order: number): void {
     this._examService.getListOfExam(pageNumber, pageSize, name, year, testTypeId, subjectId, order).pipe(
       tap(rs => {
-        console.log(rs);
         if (rs.succeeded === true) {
           if (rs.data !== null) {
             this.listOfExamBySubject = rs.data.map((e, i) => ({
@@ -87,18 +88,40 @@ export class ExamListBySubjectComponent implements OnInit {
   onQueryParamsChange(params: NzTableQueryParams): void {
     this.pageIndex = params.pageIndex;
     this.pageSize = params.pageSize;
-    this._activatedRoute.params.subscribe((pr) => {      
-      this.subjectId = pr?.id;      
+    this._activatedRoute.params.subscribe((pr) => {
+      this.subjectId = pr?.id;
       this.getListOfExam(params.pageIndex, params.pageSize, null, null, null, this.subjectId, null)
-    });    
+    });
   }
 
-  chooseSuggestedTest(examIndex: number, exam: TestBySubject & { stt?: number}): void { 
-    console.log(examIndex, exam.isSuggestedTest, exam.id);
+  getSubjectName(subjectId: string): string {
+    switch (subjectId) {
+      case '1':
+        return 'TOÁN'        
+      case '2':
+        return 'Toán'        
+      case '3':
+        return 'VẬT LÝ'        
+      case '4':
+        return 'HÓA HỌC'        
+      case '5':
+        return 'TIẾNG ANH'        
+      case '6':
+        return 'SINH HỌC'        
+      case '7':
+        return 'ĐỊA LÝ'        
+      case '8':
+        return 'LỊCH SỬ'        
+      default:
+        break;
+    }
+  }
+
+  chooseSuggestedTest(examIndex: number, exam: TestBySubject & { stt?: number }, event: boolean): void {
     Swal.fire({
-      title: 'XÁC NHẬN',
-      html: `<p>Setup bài thi <b><i>${exam.name}</i></b> Làm bài thi gợi ý?</p>`,
-      icon: 'question',
+      title: event === true ? 'XÁC NHẬN' : 'LƯU Ý',
+      html: event === true ? `<p>Setup <b><i>${exam.name}</i></b> Làm bài thi gợi ý?</p>` : `<p>Xóa <b><i>${exam.name}</i></b> khỏi danh sách các bài viết được chọn làm bài thi gợi ý?</p>`,
+      icon: event === true ? 'question' : 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonText: 'HỦY',
@@ -107,35 +130,22 @@ export class ExamListBySubjectComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         const newValue = {
-          'testId': exam.id
+          'testId': exam.id,
+          'isSuggestTest': event,
         };
         this._examService.setUpSuggestedTest(newValue).pipe(
           tap(rs => {
-            console.log(rs);
             if (rs.succeeded === true) {
               this.getListOfExam(this.pageIndex, this.pageSize, null, null, null, this.subjectId, null);
-              Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Thành công',            
-                showConfirmButton: false,
-                timer: 3000
-              }) 
-              for (let i = 0; i < this.examSubjectForm.controls.length; i++) {
-                const isSuggestedTest = this.examSubjectForm.controls[i].get('isSuggestedTest');
-                if (i !== examIndex) {
-                  isSuggestedTest.setValue(false);
-                }
-              }
+              Swal.fire('Thành công', '', 'success');
+              // for (let i = 0; i < this.examSubjectForm.controls.length; i++) {
+              //   const isSuggestedTest = this.examSubjectForm.controls[i].get('isSuggestedTest');
+              //   if (i !== examIndex) {
+              //     isSuggestedTest.setValue(false);
+              //   }
+              // }
             } else {
-              Swal.fire({
-                position: 'center',
-                icon: 'error',
-                html: `<p>${rs.errors[0]}</p>`,            
-                showConfirmButton: false,
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'XÁC NHẬN'
-              }) 
+              Swal.fire('Lỗi', '', 'error');
               this.examSubjectForm.controls[examIndex].get('isSuggestedTest').patchValue(exam.isSuggestedTest)
             }
           })
@@ -148,14 +158,13 @@ export class ExamListBySubjectComponent implements OnInit {
   }
 
   switchSuggestedTest(event: boolean, examIndex: number, exam: TestBySubject & { stt?: number, isSuggestedTest?: boolean }): void {
-    console.log(event, examIndex, exam.isSuggestedTest);
     if (event === true) {
       for (let i = 0; i < this.examSubjectForm.controls.length; i++) {
         const isSuggestedTest = this.examSubjectForm.controls[i].get('isSuggestedTest');
         if (i !== examIndex) {
           isSuggestedTest.setValue(false);
         }
-      }      
+      }
       Swal.fire({
         title: 'XÁC NHẬN',
         text: "Nội dung câu trả lời bạn đang nhập sẽ được làm mới",
@@ -198,9 +207,13 @@ export class ExamListBySubjectComponent implements OnInit {
     this.getListOfExam(1, 10, searchValueNameTmp, this.selectedYear, this.selectedTestType, this.subjectId, null);
   }
 
-  searchByTestType(event: number): void {  
+  searchByTestType(event: number): void {
     this.selectedTestType = event;
     const searchValueNameTmp: string = this.searchValueName === '' ? null : this.searchValueName;
     this.getListOfExam(1, 10, searchValueNameTmp, this.selectedYear, this.selectedTestType, this.subjectId, null);
+  }
+
+  redirectToCreateExam(): void {
+    this._router.navigate(['admin/core/examination/create-exam']);
   }
 }

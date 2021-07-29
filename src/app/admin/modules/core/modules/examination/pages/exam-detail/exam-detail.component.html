@@ -12,13 +12,13 @@
                     <nz-divider></nz-divider>
                     <div *ngIf="exam !== undefined" >
                       <div *ngFor="let c of questions.controls; let i = index" class="mb-2 isEdit" [id]="i.toString()">
-                        <div >
+                        <div (click)="editQuestion(i)">
                           <div>
-                            <div class="editIcon" *ngIf="questions.controls[i].isUpdate === false">
+                            <!-- <div class="editIcon" *ngIf="questions.controls[i].isUpdate === false">
                               <button (click)="editQuestion(i)" nz-button nzType="primary" >Sửa</button>
-                              <!-- <nb-icon icon="edit-2-outline" [status]="questions.controls[i].isUpdate === true ? 'primary' : 'default'"></nb-icon> -->
+                              <nb-icon icon="edit-2-outline" [status]="questions.controls[i].isUpdate === true ? 'primary' : 'default'"></nb-icon>
                               <button (click)="addNewQuestion(i)" nz-button>Thêm</button>
-                            </div>
+                            </div> -->
                             <div *ngIf="questions.controls[i].isUpdate === false">
                               <div class="d-flex">
                                 <ng-container > 
@@ -125,7 +125,7 @@
                           <button (click)="removeQuestion(i)" nz-button [nzSize]="'medium'" nzDanger style="margin-right: 15px;">
                             Xóa
                           </button>  
-                          <button (click)="addNewQuestion(i)"  nz-button style="margin-right: 15px;" nzType="dashed">Thêm</button>     
+                          <button (click)="addNewQuestion(i)"  nz-button style="margin-right: 15px;" nzType="dashed">Bổ sung</button>     
                           <button (click)="cancelEdit(i)" nz-button [nzSize]="'medium'" nzType="default" style="margin-right: 15px;">
                             Thoát
                           </button>                                             
@@ -220,7 +220,8 @@
                                   </nb-select>
                                 </div>                
                               </div>   
-                              <div class="footer">    
+                              <nz-divider></nz-divider>
+                              <div style="display: flex; justify-content: flex-end; align-items: center;">    
                                 <button (click)="openViewExamModal()" [disabled]="examForm.invalid"  nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
                                   LƯU
                                 </button>                                                    

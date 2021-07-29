@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { tap } from 'rxjs/operators';
-import { MajorConfigurationService, UniversityService } from 'src/app/admin/services';
+import { MajorConfigurationService } from 'src/app/admin/services';
+import { SharedDataService } from 'src/app/admin/services/data/shared-data.service';
 import { MajorConfiguration } from 'src/app/admin/view-models';
+import { NavComponent } from '../../../../components';
 import { AddSubjectGroupModalComponent, MajorConfigurationModalComponent } from '../../components';
 
 @Component({
@@ -14,7 +15,7 @@ import { AddSubjectGroupModalComponent, MajorConfigurationModalComponent } from 
   styleUrls: ['./major-config-main.component.scss']
 })
 export class MajorConfigMainComponent implements OnInit {
-
+  
   isLoadingData: boolean = false;
   isVisibleHeader = 0;
   total = 100;
@@ -26,11 +27,10 @@ export class MajorConfigMainComponent implements OnInit {
   listOfSubjectWeight: MajorConfiguration[];
   listOfDisplaySubjectWeight: MajorConfiguration[];
   constructor(
-    private _modalService: NzModalService,
-    private _universityService: UniversityService,
-    private _activatedRoute: ActivatedRoute,
+    private _modalService: NzModalService,        
     private _majorConfigService: MajorConfigurationService,
-    private _fb: FormBuilder,
+    private _router: Router,
+    private _sharedDataService: SharedDataService    
   ) { }
 
   ngOnInit() {
@@ -137,5 +137,10 @@ export class MajorConfigMainComponent implements OnInit {
       tap((rs) => {
       })
     ).subscribe();
+  }
+
+  createByDetail(): void {
+    this._router.navigate(['admin/core/major-configuration/major-list/new-major']);    
+    this._sharedDataService.changeMessage('/admin/core/major-configuration/major-list/new-major');
   }
 }

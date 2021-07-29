@@ -22,7 +22,7 @@
                 </div>
                 <div class="create-exam">
                   <button nz-button nzSize="medium" nzType="primary">
-                    <span style="font-size: 12px;">TẠO ĐỀ THI</span>
+                    <span style="font-size: 12px;" (click)="redirectToCreateExam()">NHẬP ĐỀ THI</span>
                   </button>
                 </div>
               </div>
@@ -31,7 +31,7 @@
                 <thead>
                   <tr>
                     <th>STT</th>
-                    <th>DANH SÁCH ĐỀ THI MÔN TOÁN
+                    <th>DANH SÁCH ĐỀ THI MÔN {{this.getSubjectName(this.subjectId)}}
                       <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
                         <i nz-icon nzType="search"></i>
                       </nz-filter-trigger>
@@ -54,7 +54,7 @@
                     </td>
                     <td class="action">
                       <div style="display: flex; justify-content: center; align-items: center;">
-                        <nz-switch [formControl]="examSubjectForm.controls[i].get('isSuggestedTest')"  (click)="chooseSuggestedTest(i, exam)"></nz-switch>
+                        <nz-switch [formControl]="examSubjectForm.controls[i].get('isSuggestedTest')"  (ngModelChange)="chooseSuggestedTest(i, exam, $event)"></nz-switch>
                       </div>                      
                     </td>
                   </tr>

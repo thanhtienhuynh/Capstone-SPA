@@ -224,12 +224,10 @@ export class ExamDetailComponent implements OnInit {
     this._examService.getExamById(id).pipe(
       tap(rs => {
         if (rs.succeeded === true) {
-          if (rs.data !== null) {
-            console.log(rs.data);
+          if (rs.data !== null) {            
             this.exam = { ...rs.data };
             this.setDataToExamForm(this.exam);
-            this.examTmp = { ...rs.data, questions: rs.data.questions.slice() }; //list lưu lại data nguyên thủy           
-            console.log(this.exam.questions === this.examTmp.questions);
+            this.examTmp = { ...rs.data, questions: rs.data.questions.slice() }; //list lưu lại data nguyên thủy                       
           }
         } else {
 
@@ -261,8 +259,7 @@ export class ExamDetailComponent implements OnInit {
       const element = this.questions.controls[i];
       element.get('ordinal').patchValue(i);
     }   
-    // this.questions.controls.splice(currentQuestionIndex + 1, 0, newQuestionFormGroup);          
-    console.log(this.questions);
+    // this.questions.controls.splice(currentQuestionIndex + 1, 0, newQuestionFormGroup);              
   }
 
   removeQuestion(index: number) {
@@ -287,8 +284,7 @@ export class ExamDetailComponent implements OnInit {
       })
     } else {
       this.exam.questions.splice(index, 1);  
-      this.questions.removeAt(index);
-      console.log(this.questions)
+      this.questions.removeAt(index);      
     }
   }
 
@@ -383,8 +379,7 @@ export class ExamDetailComponent implements OnInit {
   addNewOption(numberOfOptions: number, questionIndex: number): void {
     const questions = this.examForm.get('questions') as FormArray;
     const options = questions.controls[questionIndex].get('options') as FormArray;
-    const tmp = this.findValidOptionContent(options);
-    console.log(tmp);
+    const tmp = this.findValidOptionContent(options);    
     if (tmp === 1) {
       Swal.fire({
         title: 'LƯU Ý',
@@ -527,8 +522,7 @@ export class ExamDetailComponent implements OnInit {
     const tmpOption = question.options.map(rs => rs.content);
     const listDataChanged = tmpOption.filter(rs => rs !== tmpOptionForm.find(rss => rss === rs));
     const listOfResult = options.controls.map(rs => rs.get('isResult').value);
-    const isResult = this.convertExamResultToString(listOfResult);
-    console.log(isResult);
+    const isResult = this.convertExamResultToString(listOfResult);    
     if ((question.content !== questions.controls[questionIndex].get('content').value) ||
       (question.type !== questions.controls[questionIndex].get('type').value) ||
       (isResult !== this.exam.questions[questionIndex].result) ||
@@ -564,8 +558,7 @@ export class ExamDetailComponent implements OnInit {
     }
   }
 
-  drop(event: CdkDragDrop<any[]>): void {
-    console.log(event);
+  drop(event: CdkDragDrop<any[]>): void {    
     let isMovingInsideTheSameList = event.previousContainer === event.container;
     if (isMovingInsideTheSameList) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

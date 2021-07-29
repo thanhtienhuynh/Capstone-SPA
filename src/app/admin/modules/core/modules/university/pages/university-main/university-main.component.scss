@@ -85,11 +85,25 @@ nz-table td {
   // font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
   word-wrap: break-word;    
   font-size: 12px;
-  touch-action: manipulation;
-  cursor: -webkit-grab;
-  cursor: grab;  
+  // touch-action: manipulation;
+  // cursor: -webkit-grab;
+  // cursor: grab;  
 }
 
+.icon-edit {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  background-color: #fff;
+  cursor: pointer;
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+  margin: 5px;
+}
 .university-header {
   display: flex;
   justify-content: space-between;
