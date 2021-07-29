@@ -1,24 +1,37 @@
-<div gdAreas="name name name | year year submit | time question submit" gdGap="10px" gdRows="auto auto auto"
-	gdAreas.lt-md="name name | year submit | time submit | question submit " gdRows.lt-md="auto auto auto auto">
+<div class="do-test" *ngIf="classifyTest.daysRemaining == null || classifyTest.daysRemaining <= 0" gdAreas="name name name | last-transcript last-transcript submit | time question submit"
+	gdGap="10px" gdRows="auto auto auto"
+	gdAreas.lt-md="name name | last-transcript submit | time submit | question submit " gdRows.lt-md="auto auto auto auto">
 
 	<div class="header" gdArea="name">
-		<span class="test-title">{{test.name}}</span>
+		<span class="test-title">{{classifyTest.test.name}}</span>
 	</div>
 
-	<div class="side" gdArea="year">
-		Năm: {{test.year ? test.year : "Đang cập nhật"}}
+	<div gdArea="last-transcript">
+		Điểm lần thi trước: {{classifyTest.lastTranscript != null ? classifyTest.lastTranscript : "Chưa có"}}
 	</div>
 
 	<div class="submit" gdArea="submit">
-		<button mat-raised-button color="primary" (click)="loadTest(test.id)">{{doneTestIds.includes(test.id) ? 'Thi lại' : 'Thi'}}</button>
+		<button mat-raised-button color="primary" (click)="loadTest(classifyTest.test.id)">
+			{{classifyTest.lastTranscript != null ? "Thử lại" : "Thi"}}
+		</button>
+		<!-- <button  mat-raised-button color="primary" class="expired-btn">
+			Còn {{classifyTest.daysRemaining}} ngày
+		</button> -->
 	</div>
 
-  <div class="side" gdArea="time">
-		Thời gian: {{test.timeLimit ? test.timeLimit : "Đang cập nhật"}}
+  <div gdArea="time">
+		Thời gian: {{classifyTest.test.timeLimit ? classifyTest.test.timeLimit : "Đang cập nhật"}}
 	</div>
 
 	<div class="content" gdArea="question">
-		Số câu hỏi: {{test.numberOfQuestion}}
+		Số câu hỏi: {{classifyTest.test.numberOfQuestion}}
 	</div>
 
+</div>
+
+<div *ngIf="classifyTest.daysRemaining != null && classifyTest.daysRemaining > 0" class="pending-test">
+	<mat-icon class="info-icon">info</mat-icon>
+	<div><mat-icon class="line-icon">chevron_right</mat-icon>Bạn đã làm bài thi môn này!</div>
+	<div><mat-icon class="line-icon">chevron_right</mat-icon>Điểm lần thi trước: <span class="strong-text">{{classifyTest.lastTranscript}}</span>.</div>
+	<div><mat-icon class="line-icon">chevron_right</mat-icon>Bạn có thể làm bài thi mới sau <span class="strong-text">{{classifyTest.daysRemaining}} ngày </span> nữa.</div>
 </div>

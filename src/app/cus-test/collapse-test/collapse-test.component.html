@@ -42,7 +42,7 @@
   </div>
 </div>
 
-<div *ngIf="testsPagedResponse == null || testsPagedResponse.data == null || testsPagedResponse.data.length <= 0">
+<div *ngIf="(testsPagedResponse == null || testsPagedResponse.data == null || testsPagedResponse.data.length <= 0) && (!homeActionQueue || homeActionQueue.length <= 0)">
   <h3 class="center-all">Đề thi đang được cập nhật. Vui lòng quay lại sau hoặc thi môn khác.</h3>
 </div>
-<app-progress-spinner *ngIf="isLoading"></app-progress-spinner>
+<app-progress-spinner [actions]="homeActionQueue" *ngIf="homeActionQueue && homeActionQueue.length > 0"></app-progress-spinner>

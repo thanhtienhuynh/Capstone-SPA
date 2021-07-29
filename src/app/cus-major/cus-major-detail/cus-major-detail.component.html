@@ -1,0 +1,62 @@
+<div class="root-frame">
+  <!-- Thong tin university -->
+  <div *ngIf="majorDetail" class="uni-frame" gdAreas="info article" gdGap="15px" gdRows="auto" gdColumns="70% 30%"
+  gdAreas.lt-md="info | article" gdRows.lt-md="auto auto" gdColumns.lt-md="100%">
+    <div class="info" gdArea="info" style="width: auto;">
+      <h2 class="major-title">Ngành {{majorDetail.name}}</h2>
+      <div>
+        <h4 class="content-title">1. Mô tả tổng quang ngành</h4>
+        <div [innerHtml]="majorDetail.description || '<i>- Đang cập nhật...</i>' | safeHtml"></div>
+      </div>
+      <div>
+        <h4 class="content-title">2. Khung chương trình học</h4>
+        <div [innerHtml]="majorDetail.curriculum || '<i>- Đang cập nhật...</i>' | safeHtml"></div>
+      </div>
+      <div style="width: auto;">
+        <h4 class="content-title">3. Các khối thi xét tuyển</h4>
+        <div>Ngành {{majorDetail.name}} tuyển sinh theo {{majorDetail.subjectGroups.length}} tổ hợp môn sau:</div>
+        <div *ngIf="!majorDetail.subjectGroups || majorDetail.subjectGroups.length <= 0"><i>- Đang cập nhật...</i></div>
+        <div *ngFor="let subjectGroup of majorDetail.subjectGroups">
+          <div>- Khối {{subjectGroup.name}}: {{getSubjects(subjectGroup.subjects)}}</div>
+        </div>
+      </div>
+      <div>
+        <h3 class="content-title">4. Các trường đại học đào tạo</h3>
+        <div>Hiện nay có {{majorDetail.universities.length}} trường Đại học tuyển ngành {{majorDetail.name}}:</div>
+        <div *ngFor="let university of majorDetail.universities">
+          <div class="uni-title" [routerLinkActiveOptions]="{exact: true}" routerLink="../../university/{{university.id}}">- Trường {{university.name}}</div>
+        </div>
+      </div>
+      <div>
+        <h4 class="content-title">5. Cơ hội việc làm, chức danh nghề nghiệp</h4>
+        <div>Các công việc, chức danh cụ thể khi tốt nghiệp ngành {{majorDetail.name}}:</div>
+        <div *ngIf="!majorDetail.careers || majorDetail.careers.length <= 0">- Đang cập nhật</div>
+        <div *ngFor="let career of majorDetail.careers">
+          <div>- {{career.name}}</div>
+        </div>
+      </div>
+      <div>
+        <h4 class="content-title">6. Mức lương của ngành</h4>
+        <div [innerHtml]="majorDetail.salaryDescription || '<i>- Đang cập nhật...</i>' | safeHtml"></div>
+      </div>
+      <div>
+        <h4 class="content-title">7. Tố chất để theo đuổi ngành</h4>
+        <div [innerHtml]="majorDetail.humanQuality || '<i>- Đang cập nhật...</i>' | safeHtml"></div>
+      </div>
+    </div>
+
+    <div class="article-frame" gdArea="article">
+      <h4 class="article-frame-title">Các bài báo liên quan</h4>
+      <div *ngIf="!majorDetail.articles || majorDetail.articles.length <= 0"><i>- Đang cập nhật...</i></div>
+      <div *ngFor="let article of majorDetail.articles">
+        <div [routerLinkActiveOptions]="{exact: true}" routerLink="../../home/{{article.id}}" class="article" [innerHtml]="article.title | safeHtml"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="!majorDetail && (!homeActionQueue || homeActionQueue.length <= 0)">
+    <h3>Thông tin ngành học đang trong quá trình cập nhật!</h3>
+  </div>  
+</div>
+
+<app-progress-spinner [actions]="homeActionQueue" *ngIf="homeActionQueue && homeActionQueue.length > 0"></app-progress-spinner>

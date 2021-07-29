@@ -2,7 +2,6 @@ import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { University } from 'src/app/_models/university';
 import * as fromApp from '../../../_store/app.reducer';
 import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import * as Consts from '../../../_common/constants';

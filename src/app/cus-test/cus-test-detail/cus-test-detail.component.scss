@@ -1,8 +1,14 @@
 .score-frame {
-  width: 100%;
+  width: 20%;
   border-radius: 5px;
   border: 1px solid rgb(218, 221, 231);
   padding: 0 10px;
+  position: fixed;
+}
+
+.score-frame-lt-md {
+  position: relative;
+  width: 100%;
 }
 
 .no-question-frame {
@@ -48,7 +54,7 @@
 .mark {
   color: #1814e0;
   font-family: "Rouge Script", cursive;
-  font-size: 6.5em;
+  font-size: 5.8em;
   font-weight: normal;
   margin: 0 0 30px;
   text-align: center;
@@ -68,10 +74,16 @@
 }
 
 .test-exam-scroll {
-  overflow-y: scroll;
   overflow-x: hidden;
-  height: 650px;
+  height: auto;
   margin-left: 32px;
+  border: 1px solid #dadde7;
+  border-radius: 5px;
+}
+
+.test-exam-scroll-lt-md {
+  margin-left: 0px;
+  overflow-x: scroll;
 }
 
 .center-vertical {
@@ -90,6 +102,7 @@
 #style-7::-webkit-scrollbar
 {
 	width: 6px;
+  height: 6px;
 }
 
 #style-7::-webkit-scrollbar-thumb
@@ -101,7 +114,6 @@
 .anotate-question {
   font-weight: bold;
   font-size: 1.2em;
-  
 }
 
 .right-answer {
@@ -114,4 +126,20 @@
 
 .marked-answer {
   width: 30px;
+}
+
+::ng-deep .mat-radio-button.mat-radio-disabled .mat-radio-label-content {   /*click effect color change*/
+  // background-color: blue;
+  color: black  !important;
+}
+
+::ng-deep .mat-radio-button.mat-radio-disabled .mat-radio-inner-circle {
+  background-color: #ff4081 !important;
+}
+::ng-deep .mat-radio-button.mat-radio-disabled.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #ff4081 !important;
+}
+
+.answer-item {
+  cursor: pointer;
 }

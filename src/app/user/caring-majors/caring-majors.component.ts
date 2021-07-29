@@ -3,12 +3,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { MajorBasedFollowingDetail, TrainingProgramGroupByMajorDataSet, UniversityGroupByTrainingProgramDataSet } from 'src/app/_models/major-based-following-detail';
-import { SelectedFollowingDetail } from 'src/app/_models/selected-following-detail';
 import { ConfirmDialogComponent } from 'src/app/_sharings/components/confirm-dialog/confirm-dialog.component';
 import Swal from 'sweetalert2';
 import * as fromApp from '../../_store/app.reducer';
 import * as UserActions from '../store/user.actions';
-import * as StepperActions from '../../major-suggestion-stepper/stepper/store/stepper.actions';
 
 @Component({
   selector: 'app-caring-majors',
@@ -22,6 +20,7 @@ export class CaringMajorsComponent implements OnInit {
   subscription: Subscription;
   majorBasedFollowingDetails: MajorBasedFollowingDetail[];
   errors: string[];
+  userActionQueue: UserActions.UserActions[] = [];
 
   ngOnInit() {
     this.store.dispatch(new UserActions.LoadMajorBasedFollowingDetails());
@@ -29,6 +28,7 @@ export class CaringMajorsComponent implements OnInit {
       .select('user')
       .subscribe(
         (userState) => {
+          this.userActionQueue = userState.actionsQueue;
           this.majorBasedFollowingDetails = userState.majorBasedFollowingDetails;
           this.errors = userState.errors;
           if (this.errors) {
@@ -56,16 +56,6 @@ export class CaringMajorsComponent implements OnInit {
         this.store.dispatch(new UserActions.UncaringAction({followingDetailId: followingDetailId, uncaringType: 0}));
       }
     });
-  }
-
-  onDetailClick( majorBasedFollowingDetail: MajorBasedFollowingDetail,
-                trainingProgramGroupByMajorDataSet: TrainingProgramGroupByMajorDataSet,
-                universityGroupByTrainingProgramDataSet: UniversityGroupByTrainingProgramDataSet) {
-    this.store.dispatch(new UserActions.SetDetailFollowingDetail(new SelectedFollowingDetail({
-      majorBasedFollowingDetail: majorBasedFollowingDetail,
-      trainingProgramGroupByMajorDataSet: trainingProgramGroupByMajorDataSet,
-      universityGroupByTrainingProgramDataSet: universityGroupByTrainingProgramDataSet
-    })))
   }
   
   ngOnDestroy() {

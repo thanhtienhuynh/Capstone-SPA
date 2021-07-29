@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { RankingUserInformationGroupByTranscriptType } from 'src/app/_models/ranking-user-information';
-import { SelectedFollowingDetail } from 'src/app/_models/selected-following-detail';
+import { RankingUserInformationGroupByTranscriptType, UserFollowingDetail } from 'src/app/_models/ranking-user-information';
 import Swal from 'sweetalert2';
 import * as fromApp from '../../_store/app.reducer';
 import * as UserActions from '../store/user.actions';
@@ -14,25 +14,31 @@ import * as UserActions from '../store/user.actions';
 })
 export class FollowingDetailComponent implements OnInit {
 
-  constructor(private store: Store<fromApp.AppState>) { }
+  constructor(private store: Store<fromApp.AppState>, private activatedRoute: ActivatedRoute) { }
   subscription: Subscription;
   authSubscription: Subscription;
-  selectedFollowingDetail: SelectedFollowingDetail;
-  rankingUserInformationGroupByRankTypes: RankingUserInformationGroupByTranscriptType[];
+  userFollowingDetail: UserFollowingDetail;
   errors: string[];
-  isLoading: boolean;
   userId: number;
+  followingDetailId: number;
+  userActionQueue: UserActions.UserActions[] = [];
 
   ngOnInit() {
-    this.store.dispatch(new UserActions.LoadRankingUserInformation());
+    this.followingDetailId = this.activatedRoute.snapshot.params['id'];
+    this.activatedRoute.params.subscribe((params: Params) => {
+      console.log("Hihi");
+      this.store.dispatch(new UserActions.LoadUserFollowingDetail(params['id']));
+    });
+    // this.store.dispatch(new UserActions.LoadUserFollowingDetail(this.followingDetailId));
     this.subscription = this.store
       .select('user')
       .subscribe(
         (userState) => {
-          this.selectedFollowingDetail = userState.selectedFollowingDetail;
-          this.rankingUserInformationGroupByRankTypes = userState.rankingUserInformationGroupByRankTypes;
+          this.userActionQueue = userState.actionsQueue;
+          if (this.userFollowingDetail != userState.userFollowingDetail) {
+            this.userFollowingDetail = userState.userFollowingDetail;
+          }
           this.errors = userState.errors;
-          this.isLoading = userState.isLoading;
           if (this.errors) {
             Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
             .then(() => {
@@ -72,11 +78,11 @@ export class FollowingDetailComponent implements OnInit {
   
   count(index: number) {
     let count = 0;
-    for (let i = 0; i < this.rankingUserInformationGroupByRankTypes.length; i++) {
+    for (let i = 0; i < this.userFollowingDetail.rankingUserInformationsGroupByTranscriptType.length; i++) {
       if (i == index) {
         break;
       }
-      count += this.rankingUserInformationGroupByRankTypes[i].rankingUserInformations.length;
+      count += this.userFollowingDetail.rankingUserInformationsGroupByTranscriptType[i].rankingUserInformations.length;
     }
     return count;
   }

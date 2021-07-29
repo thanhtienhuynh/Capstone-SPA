@@ -16,13 +16,12 @@ const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
   const channel = new BroadcastChannel('sw-messages');
-  channel.postMessage({msg: payload.data.id});
+  // channel.postMessage({msg: payload.data.id});
   const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: payload.notification.imageUrl
-  };
+  // const notificationOptions = {
+  //   body: payload.notification.body,
+  //   icon: payload.notification.imageUrl
+  // };
 
-  self.registration.showNotification(notificationTitle,
-    notificationOptions);
+  self.registration.showNotification(notificationTitle);
 });

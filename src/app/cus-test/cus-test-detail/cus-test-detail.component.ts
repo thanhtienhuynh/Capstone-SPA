@@ -1,42 +1,60 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import * as fromApp from '../../_store/app.reducer';
 import * as HomeActions from '../../home/store/home.actions';
-import { Subscription } from 'rxjs';
+import * as UserActions from '../../user/store/user.actions';
+import { Observable, Subscription } from 'rxjs';
 import { Test } from 'src/app/_models/test';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CountdownComponent, CountdownEvent } from 'ngx-countdown';
 import { QuestionParam, TestSubmissionParam } from 'src/app/_params/question-param';
 import { DEFAULT_SELECTED_ANSWER, DEFAULT_UNSELECTED_ANSWER } from 'src/app/_common/constants';
 import { TestSubmission } from 'src/app/_models/test-submission';
+import Swal from 'sweetalert2';
+import { CanComponentDeactivate } from 'src/app/_helper/can-deactivate-guard.service';
+import { User } from 'src/app/_models/user';
+import { ResultDialogComponent } from 'src/app/major-suggestion-stepper/exam-page/result-dialog/result-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-cus-test-detail',
   templateUrl: './cus-test-detail.component.html',
   styleUrls: ['./cus-test-detail.component.scss',]
 })
-export class CusTestDetailComponent implements OnInit, OnDestroy {
+export class CusTestDetailComponent extends CanComponentDeactivate implements OnInit, OnDestroy {
   @ViewChild('cd', { static: false }) private countdown: CountdownComponent;
   subscription: Subscription;
+  userSubscription: Subscription;
   examSubmissionFormGroup: FormGroup = null;
   testSubmissionReponse: TestSubmission;
   test: Test;
   testId: number;
-  isLoading: boolean;
-  selectedIndex: any;
+  homeActionQueue: HomeActions.HomeActions[] = [];
+  selectedIndex: number;
   isScored: boolean;
+  isSaved: boolean = false;
+  isSaving: boolean = false;
+  user: User;
+  errors: string[];
 
 
-  constructor(private store: Store<fromApp.AppState>, private activatedRoute: ActivatedRoute, private _formBuilder: FormBuilder) { }
+  constructor(private store: Store<fromApp.AppState>, private activatedRoute: ActivatedRoute, private _formBuilder: FormBuilder,
+    public dialog: MatDialog) {
+    super();  
+  }
 
   ngOnInit() {
     this.examSubmissionFormGroup = this._formBuilder.group({}); 
     this.testId = this.activatedRoute.snapshot.params['id'];
-    this.store.dispatch(new HomeActions.ResetState());
     this.store.dispatch(new HomeActions.LoadDetailTest(this.testId));
     this.subscription = this.store.select('home').subscribe(homeState => {
-      this.isLoading = homeState.isLoading;
+      this.homeActionQueue = homeState.actionsQueue;
+
+      if (this.isSaved != homeState.isSubmissionSaved) {
+        this.isSaved = homeState.isSubmissionSaved;
+      }
+
       if (this.test != homeState.selectedTest) {
         this.test = homeState.selectedTest;
         if (this.test) {
@@ -48,7 +66,7 @@ export class CusTestDetailComponent implements OnInit, OnDestroy {
             );
             this.examSubmissionFormGroup.controls[question.id.toString()].valueChanges.subscribe(
               v => {
-                this.getOrderOfQuestion(question.realOrder);
+                this.selectedIndex = question.realOrder;
               }
             )
           }
@@ -65,11 +83,25 @@ export class CusTestDetailComponent implements OnInit, OnDestroy {
           // this.openFinishTestDialog();
         }
       }
-    });
-  }
 
-  getOrderOfQuestion(index: number): void {
-    this.selectedIndex = index;
+      this.errors = this.errors;
+      if (this.errors && this.errors.length > 0) {
+        Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
+          .then(() => {
+            this.store.dispatch(new HomeActions.ConfirmErrors());
+          });
+      }
+    });
+
+    this.userSubscription = this.store
+    .select('auth')
+    .subscribe(
+      (authState) => {
+        this.user = authState.user;
+      },
+      (error) => {
+      }
+    );
   }
 
   handleCoundown(event: CountdownEvent) {
@@ -135,7 +167,58 @@ export class CusTestDetailComponent implements OnInit, OnDestroy {
     return false;
   }
 
+  onSave() {
+    if (this.userSubscription) {
+      this.store.dispatch(new HomeActions.SaveUnsaveTestSubmissions());
+      this.isSaving = true;
+    } else {
+      this.isSaving = true;
+      this.openResultDialog();
+    }
+  }
+
+  openResultDialog(): void {
+    const dialogRef = this.dialog.open(ResultDialogComponent, {
+      width: '500px',
+      height: '210px',
+      disableClose: false
+    });
+  }
+
+  canDeactivate(): boolean | Observable<boolean> | Promise<boolean>{
+    if (this.testSubmissionReponse) {
+      return true;
+    } else {
+      return Swal.fire({
+        title: 'Bạn chưa hoàn thành bài thi!',
+        text: "Bạn có muốn tiếp tục làm bài?",
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Thoát',
+        cancelButtonText: 'Tiếp tục'
+      }).then((result) => {
+        return result.isConfirmed;
+      });
+    } 
+  }
+
+  answerClick(quesId: number) {
+    const itemToScrollTo = document.getElementById(quesId.toString());
+    console.log("ques: ", quesId);
+    if (itemToScrollTo) {
+      itemToScrollTo.scrollIntoView(true);
+    }
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    $event.returnValue = true;
+  }
+
   ngOnDestroy() {
+    this.store.dispatch(new HomeActions.ResetState());
     if (this.subscription) {
       this.subscription.unsubscribe();
     }

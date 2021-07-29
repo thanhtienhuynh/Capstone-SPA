@@ -2,7 +2,7 @@
   <div class="header-frame">
     <div class="center-all header-content">THÔNG TIN TÀI KHOẢN</div>
   </div>
-  <div class="body-frame">
+  <div *ngIf="user" class="body-frame">
     <div gdAreas="information information avatar" gdGap="10px" gdRows="auto auto" gdAreas.lt-md="avatar | information"
       gdRows.lt-md="auto">
       <div style="height: 300px;" gdArea="information">

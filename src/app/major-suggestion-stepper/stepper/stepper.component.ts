@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, DoCheck, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, DoCheck, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -29,6 +29,9 @@ import { Province } from 'src/app/_models/province';
 import { Major } from 'src/app/_models/major';
 import { UnsaveTestSubmission } from 'src/app/_params/question-param';
 import { TranscriptType } from 'src/app/_models/transcript';
+import { Router } from '@angular/router';
+import { MockTestRulesDialogComponent } from '../mock-test-rules-dialog/mock-test-rules-dialog.component';
+import { CanComponentDeactivate } from 'src/app/_helper/can-deactivate-guard.service';
 
 
 @Component({
@@ -36,7 +39,7 @@ import { TranscriptType } from 'src/app/_models/transcript';
   templateUrl: './stepper.component.html',
   styleUrls: ['./stepper.component.scss'],
 })
-export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
+export class StepperComponent extends CanComponentDeactivate implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('stepper') private myStepper: MatStepper;
   countStepperActionLoad: number = 0;
   typeScore: number = 2;
@@ -44,7 +47,7 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
   provinceId: number;
   transcripts: TranscriptType[];
   provinceOptions: Province[];
-  doneTestIds: number[] = [];
+  needDoneTestIds: number[] = [];
   filteredOptions: Observable<Province[]>;
   provinceError = false;
   isFollowing = false;
@@ -58,16 +61,21 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
   userSubscription: Subscription;
   combineSubscription: Subscription;
   unsaveTestSubmissions: UnsaveTestSubmission[];
+  stepperActionQueue: StepperActions.StepperActions[] = [];
+  userActionQueue: UserActions.UserActions[] = [];
+  
 
 
-  isLoading = true;
+  selectedSubjectGroup: SuggestedSubjectsGroup = null;
+
   isAuthLoading = false;
-  isUserLoading = false;
   subjects: Subject[] = [];
   marks: Mark[];
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
   trainingProgramBasedUniversity: TrainingProgramBasedUniversity[];
-  mockTestBasedUniversity: MockTestBasedUniversity;
+  trainingProgramBasedUniversityForCheck: TrainingProgramBasedUniversity[];
+  mockTestBasedUniversity: TrainingProgramBasedUniversity[];
+  mockTestBasedUniversityForCheck: MockTestBasedUniversity;
   tests: ClassifiedTests[];
   test: Test;
   selectedTestId: number;
@@ -77,14 +85,20 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
   isUniversityLoaded: boolean = false;
 
   subjectName = "";
+  searchTerm: string = null;
   user: User;
+
+  isDoingTest: boolean = false;
+  isConfirmedOut: boolean = false;
 
   constructor(
     private _formBuilder: FormBuilder,
     private store: Store<fromApp.AppState>,
     public _generalService: GenernalHelperService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router,
   ) {
+    super();
     this.secondFormGroup = this._formBuilder.group({});
     this.secondFormGroup.addControl(
       'transcriptTypeId', new FormControl(1)
@@ -93,7 +107,7 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
       'gender', new FormControl(1)
     );
     this.secondFormGroup.addControl(
-      'province', new FormControl()
+      'province', new FormControl(null, [Validators.required]), 
     );
   }
 
@@ -104,23 +118,38 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
     this.store.dispatch(new StepperActions.LoadSubjects());
     this.store.dispatch(new StepperActions.LoadProvinces());
     this.secondFormGroup.controls['transcriptTypeId'].valueChanges.subscribe(changeValue => {
-      if (this.transcripts) {
-        this.transcripts.forEach(transcriptType => {
-         if (transcriptType.id == changeValue) {
-          transcriptType.transcriptDetails.forEach(v => {
-            this.secondFormGroup.controls[v.subjectId].patchValue(v.mark);
-          })
-         }
-        });
+      if (this.transcripts != null && this.transcripts.length > 0) {
+        for (let transcriptType of this.transcripts) {
+          if (transcriptType.id == changeValue) {
+            this.subjects.forEach(subject => {
+              let transcript = transcriptType.transcriptDetails.find(t => t.subjectId == subject.id);
+              this.secondFormGroup.controls[subject.id].patchValue(transcript != null ? transcript.mark : 0);
+              if (changeValue == 3) {
+                this.secondFormGroup.controls[subject.id].disable();
+              } else {
+                this.secondFormGroup.controls[subject.id].enable();
+              }
+            });
+            break;
+          } else {
+            this.subjects.forEach(subject => {
+              this.secondFormGroup.controls[subject.id].patchValue(0);
+              if (changeValue == 3) {
+                this.secondFormGroup.controls[subject.id].disable();
+              } else {
+                this.secondFormGroup.controls[subject.id].enable();
+              }
+            });
+          }
+        }
       }
     })
 
     this.combineSubscription = combineLatest(this.store.select('stepper'),
       this.store.select('auth'), (stepperState, authState) => ({stepperState, authState}))
       .subscribe((state) => {
+        this.stepperActionQueue = state.stepperState.actionsQueue;
         this.isAuthLoading = state.authState.isLoading;
-        this.isLoading = state.stepperState.isLoading;
-        this.countStepperActionLoad = state.stepperState.actionCount;
         if (this.user != state.authState.user || this.provinceOptions != state.stepperState.provinces) {
           if (this.provinceOptions != state.stepperState.provinces) {
             this.provinceOptions = state.stepperState.provinces;
@@ -134,7 +163,7 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
           
           if (this.user != state.authState.user) {
             this.user = state.authState.user;
-            if (this.user && this.trainingProgramBasedUniversity && this.trainingProgramBasedUniversity.length > 0 && this.isFollowing) {
+            if (this.user && this.trainingProgramBasedUniversityForCheck && this.trainingProgramBasedUniversityForCheck.length > 0 && this.isFollowing) {
               this.store.dispatch(new StepperActions.ReloadUniversities());
               this.isFollowing = false;
             }
@@ -150,19 +179,32 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
       .select('stepper')
       .subscribe(
         (stepperState) => {
-          this.isLoading = stepperState.isLoading;
           if (this.suggestedSubjectsGroup != stepperState.suggestedSubjectsGroup) {
             this.suggestedSubjectsGroup = stepperState.suggestedSubjectsGroup;
-            if (this.suggestedSubjectsGroup && this.suggestedSubjectsGroup.length > 0) {
-              this.getAction(6);
+          }
+          this.needDoneTestIds = stepperState.needDoneTestIds;
+          this.trainingProgramBasedUniversity = stepperState.trainingProgramBasedUniversity;    
+          this.trainingProgramBasedUniversityForCheck = stepperState.trainingProgramBasedUniversity;
+          if (this.tests != stepperState.tests) {
+            this.tests = stepperState.tests;
+          }
+          this.test = stepperState.test;
+          if (this.mockTestBasedUniversityForCheck != stepperState.mockTestBasedUniversity) {
+            this.mockTestBasedUniversityForCheck = stepperState.mockTestBasedUniversity;
+            if (this.mockTestBasedUniversityForCheck) {
+              this.mockTestBasedUniversity = stepperState.mockTestBasedUniversity.trainingProgramBasedUniversityDataSets;
             }
           }
-          this.doneTestIds = stepperState.doneTestIds;
-          this.trainingProgramBasedUniversity = stepperState.trainingProgramBasedUniversity;         
-          this.tests = stepperState.tests;
-          this.test = stepperState.test;
-          this.mockTestBasedUniversity = stepperState.mockTestBasedUniversity;
+
           this.unsaveTestSubmissions = stepperState.unsaveTestSubmissions;
+
+          if (this.selectedSubjectGroup != stepperState.selectedSubjectGroup) {
+            this.selectedSubjectGroup = stepperState.selectedSubjectGroup;
+          }
+
+          if (this.isDoingTest != stepperState.isDoingTest) {
+            this.isDoingTest = stepperState.isDoingTest;
+          }
 
            //load subjects
           if (this.subjects != stepperState.subjects) {
@@ -174,6 +216,7 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
                   new FormControl(0, [ Validators.min(0), Validators.max(10)])
                 );
               }
+              console.log(this.secondFormGroup);
               this.secondFormGroup.valueChanges.subscribe(c => {
                 this.marksValidator();
               });
@@ -183,52 +226,115 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
           //load user suggestion
           if (this.userSuggestionSubjectGroup != stepperState.userSuggestionSubjectGroup) {
             this.userSuggestionSubjectGroup = stepperState.userSuggestionSubjectGroup;
-
-            if (stepperState.userSuggestionSubjectGroup) {
-              Swal.fire({
-                title: 'Hệ thống ghi nhận bạn đã có kết quả gợi ý từ lần đăng nhập trước',
-                text: "Bạn có muốn xem lại kết quả cũ?",
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Xem kết quả cũ',
-                cancelButtonText: 'Tiếp tục'
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  this.gender = this.userSuggestionSubjectGroup.gender;
-
-              this.typeScore = this.userSuggestionSubjectGroup.transcriptTypeId;
-              if (this.typeScore && this.typeScore > 0) {
-                this.secondFormGroup.controls['transcriptTypeId'].patchValue(this.typeScore);
-              }
-
-              this.provinceId = this.userSuggestionSubjectGroup.provinceId;
-              if (this.provinceId && this.provinceId > 0) {
-                this.secondFormGroup.controls['province'].patchValue(this.provinceId);
-              }
-
-              if (this.userSuggestionSubjectGroup.subjectGroupDataSets) {
-                this.store.dispatch(new StepperActions.UpdateUserSuggestion());
-              }
-
-              this.transcripts = stepperState.userSuggestionSubjectGroup.transcriptDetails;
-              if (this.transcripts) {
-                this.transcripts.forEach(transcriptType => {
-                  if (transcriptType.id == this.typeScore) {
-                    transcriptType.transcriptDetails.forEach(v => {
-                      this.secondFormGroup.controls[v.subjectId].patchValue(v.mark);
-                    });
-                  }
-                });
-              }
+            if (stepperState.userSuggestionSubjectGroup != null) {
+              // Đăng nhập ở giữa quá trình suggest
+              if (this.myStepper && this.myStepper.selectedIndex >= 1) {
+                // Người dùng có điểm trước đó
+                let typeDiff = this.checkIsDiffentUserInfo();
+                if (typeDiff > 0) {
+                  Swal.fire({
+                    title: '<div style=\"color: #033969\">Hệ thống ghi nhận bạn đã có thông tin gợi ý trước đó!</div>',
+                    html: "<p style=\"font-weight: 500\">Bạn có muốn xem lại thông tin cũ hay không?</p><p style=\"color: red\">Lưu ý: Nếu bạn chọn 'Tiếp tục', hệ thống sẽ lưu thông tin mới của bạn.</p>",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Xem điểm cũ',
+                    cancelButtonText: 'Tiếp tục'
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      this.gender = this.userSuggestionSubjectGroup.gender;   
+                      this.provinceId = this.userSuggestionSubjectGroup.provinceId;
+                      if (this.provinceId && this.provinceId > 0) {
+                        this.secondFormGroup.controls['province'].patchValue(this.provinceId);
+                      }
+    
+                      this.transcripts = stepperState.userSuggestionSubjectGroup.transcriptDetails;
+                      if (this.transcripts != null && this.transcripts.length > 0) {
+                        for (let transcriptType of this.transcripts) {
+                          if (transcriptType.id == this.typeScore) {
+                            this.subjects.forEach(subject => {
+                              let transcript = transcriptType.transcriptDetails.find(t => t.subjectId == subject.id);
+                              this.secondFormGroup.controls[subject.id].patchValue(transcript != null ? transcript.mark : 0);
+                              if (this.typeScore == 3) {
+                                this.secondFormGroup.controls[subject.id].disable();
+                              } else {
+                                this.secondFormGroup.controls[subject.id].enable();
+                              }
+                            });
+                            break;
+                          } else {
+                            this.subjects.forEach(subject => {
+                              this.secondFormGroup.controls[subject.id].patchValue(0);
+                              if (this.typeScore == 3) {
+                                this.secondFormGroup.controls[subject.id].disable();
+                              } else {
+                                this.secondFormGroup.controls[subject.id].enable();
+                              }
+                            });
+                          }
+                        }
+                      }
+                      this.getAction(6);
+                    } else {
+                      this.store.dispatch(new StepperActions.SaveMarks());
+                    }
+                  })
+                // Người dùng chưa có điểm trước đó
+                } else {
+                  this.store.dispatch(new StepperActions.SaveMarks());
                 }
-              })
+              // Đăng nhập trước quá trình suggest
+              } else {
+                if (this.userSuggestionSubjectGroup.gender != null) {
+                  this.gender = this.userSuggestionSubjectGroup.gender;
+                }
+                
+                if (this.userSuggestionSubjectGroup.provinceId != null) {
+                  this.provinceId = this.userSuggestionSubjectGroup.provinceId;
+                }
+
+                if (this.userSuggestionSubjectGroup.transcriptDetails != null && this.userSuggestionSubjectGroup.transcriptDetails.length > 0) {
+                  this.typeScore =  this.userSuggestionSubjectGroup.transcriptDetails[0].id;
+                }
+
+                if (this.provinceId && this.provinceId > 0) {
+                  this.secondFormGroup.controls['province'].patchValue(this.provinceId);
+                }
+
+                this.transcripts = stepperState.userSuggestionSubjectGroup.transcriptDetails;
+                if (this.transcripts != null && this.transcripts.length > 0) {
+                  for (let transcriptType of this.transcripts) {
+                    if (transcriptType.id == this.typeScore) {
+                      this.subjects.forEach(subject => {
+                        let transcript = transcriptType.transcriptDetails.find(t => t.subjectId == subject.id);
+                        this.secondFormGroup.controls[subject.id].patchValue(transcript != null ? transcript.mark : 0);
+                        if (this.typeScore == 3) {
+                          this.secondFormGroup.controls[subject.id].disable();
+                        } else {
+                          this.secondFormGroup.controls[subject.id].enable();
+                        }
+                      });
+                      break;
+                    } else {
+                      this.subjects.forEach(subject => {
+                        this.secondFormGroup.controls[subject.id].patchValue(0);
+                        if (this.typeScore == 3) {
+                          this.secondFormGroup.controls[subject.id].disable();
+                        } else {
+                          this.secondFormGroup.controls[subject.id].enable();
+                        }
+                      });
+                    }
+                  }
+                }
+              }
+              
             }
           }
           
           this.errors = stepperState.errors;
-          if (this.errors) {
+          if (this.errors && this.errors.length > 0) {
             Swal.fire({title: 'Lỗi', text: this.errors.toString(), icon: 'error', allowOutsideClick: false})
             .then(() => {
               this.store.dispatch(new StepperActions.ConfirmErrors());
@@ -239,31 +345,52 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       );
 
-    this.authSubscription = this.store
-      .select('auth')
-      .subscribe(
-        (authState) => {
-         
-        },
-        (error) => {
-        }
-      );
+    this.userSubscription = this.store
+    .select('user')
+    .subscribe(
+      (userState) => {
+        this.userActionQueue = userState.actionsQueue;
 
-      this.userSubscription = this.store
-      .select('user')
-      .subscribe(
-        (userState) => {
-          this.isUserLoading = userState.isLoading;
-        },
-        (error) => {
-        }
-      );
+      },
+      (error) => {
+      }
+    );
+
   }
 
   ngAfterViewInit() {
     if (this.suggestedSubjectsGroup && this.suggestedSubjectsGroup.length > 0) {
       this.getAction(6);
     }
+  }
+
+  checkIsDiffentUserInfo() {
+    if (!this.userSuggestionSubjectGroup) {
+      return 0;
+    }
+    if (this.userSuggestionSubjectGroup.gender != this.gender) {
+      return 1;
+    }
+    if (this.userSuggestionSubjectGroup.provinceId != this.provinceId) {
+      return 1;
+    }
+    if (this.userSuggestionSubjectGroup.transcriptDetails != null &&
+      this.userSuggestionSubjectGroup.transcriptDetails.find(u => u.id == this.typeScore) != null) {
+        for (let transcript of this.userSuggestionSubjectGroup.transcriptDetails.find(u => u.id == this.typeScore).transcriptDetails) {
+          for (let mark of this.marks) {
+            if (mark.subjectId == transcript.subjectId) {
+              if (mark.mark != transcript.mark) {
+                console.log(mark.subjectId)
+                return 2;
+              }
+            }
+          }
+        }
+    }
+    //0: no diff
+    //1: diff gender || province
+    //2: diff mark
+    return 0;
   }
 
   getAction(actionId: number, data?: any) {
@@ -278,22 +405,23 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
         this.getUniversity(data.suggestedSubjectsGroup, data.major);
         break;
       case 3: // Từ 2 => 3
-        this.myStepper.selectedIndex = 3;
-        this.loadTests();
+          this.openMockTestRulesDialog();
         break;
+      break;
       case 4: //Từ 3 => 4
         this.myStepper.selectedIndex = 4;
-        this.store.dispatch(new StepperActions.RefreshTest());
         this.store.dispatch(new StepperActions.LoadTest(data));
         break;
       case 5: //Xem lai ket qua goi y 4 => 2
         this.myStepper.selectedIndex = 2;
-        this.isFollowing = true;
         this.store.dispatch(new StepperActions.LoadAfterMockTestsUniversities());
         break;
-      case 6: //Xem ket qua goi y cũ khi đăng nhập 0 => 1
-        this.myStepper.selectedIndex = 1;
+      case 6: //Xem lại điểm cũ => từ mọi index => 0
+        this.myStepper.selectedIndex = 0;
         break;
+      case 7: // Từ 2 => 3
+        this.myStepper.selectedIndex = 3;
+        this.loadTests();
       default:
         break;
     }
@@ -306,8 +434,11 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   backAfterDoingMockTest() {
-    if (this.doneTestIds.length == this.tests.length && this.doneTestIds.length > 0) {
-      this.getAction(5);
+  }
+
+  reloadUserInfo() {
+    if (this.user != null) {
+      this.store.dispatch(new StepperActions.LoadUserSuggestion());
     }
   }
 
@@ -335,20 +466,108 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     return "Khối này gồm các môn: " + subjectNames;
   }
+
+  searchSubmit() {
+    console.log(this.searchTerm);
+    if (!this.searchTerm || this.searchTerm.trim().length <= 0) {
+      this.searchTerm = "";
+    }
+    const filterValue = this.searchTerm.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s/g, '');
+    if (this.mockTestBasedUniversityForCheck?.trainingProgramBasedUniversityDataSets?.length > 0) {
+      this.mockTestBasedUniversity = 
+      this.mockTestBasedUniversityForCheck.trainingProgramBasedUniversityDataSets.filter(uni => 
+        uni.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s/g, '').toLowerCase().includes(filterValue));
+    }
+
+    if (this.trainingProgramBasedUniversityForCheck?.length > 0) {
+      this.trainingProgramBasedUniversity = 
+      this.trainingProgramBasedUniversityForCheck.filter(uni => 
+        uni.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s/g, '').toLowerCase().includes(filterValue));
+    }
+  }
+
   
+  onSuggestSubmit() {
+    if (!this.secondFormGroup.valid) {
+     return;
+    }
+    this.marks = [];
+    for(let subject of this.subjects) {
+      this.marks.push({subjectId: subject.id, mark: this.secondFormGroup.getRawValue()[subject.id] ? this.secondFormGroup.getRawValue()[subject.id] : 0});
+    }
+    let typeDiff = this.checkIsDiffentUserInfo();
+    if (this.user &&  typeDiff > 0) {
+      Swal.fire({
+        title: '<div style=\"color: #033969\">Hệ thống ghi nhận bạn đã thay đổi thông tin gợi ý!</div>',
+        html: typeDiff == 1 ? `<p style=\"font-weight: 500; color: red\">Bạn đã thay đổi thông tin về Tỉnh/TP và Giới tính, điều này sẽ làm
+                              bạn không còn phù hợp với một số trường đại học bạn đã theo dõi trước đó.</p>
+                              <p style=\"font-weight: 500\">Bạn có chắc muốn thay đổi thông tin gợi ý hay không?</p>
+                              <p style=\"color: red\">Nếu bạn đồng ý, vui lòng bấm \"Tiếp tục\".</p>`
+                            : `<p style=\"font-weight: 500\">Bạn có chắc muốn thay đổi thông tin gợi ý hay không?</p>
+                            <p style=\"color: red\">Nếu bạn đồng ý, vui lòng bấm \"Tiếp tục\".</p>`,
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Tiếp tục',
+        cancelButtonText: 'Hủy'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.getAction(1);
+        } else {
+          this.gender = this.userSuggestionSubjectGroup.gender;   
+          this.provinceId = this.userSuggestionSubjectGroup.provinceId;
+          if (this.provinceId && this.provinceId > 0) {
+            this.secondFormGroup.controls['province'].patchValue(this.provinceId);
+          }
+
+          this.transcripts = this.userSuggestionSubjectGroup.transcriptDetails;
+          if (this.transcripts != null && this.transcripts.length > 0) {
+            for (let transcriptType of this.transcripts) {
+              if (transcriptType.id == this.typeScore) {
+                this.subjects.forEach(subject => {
+                  let transcript = transcriptType.transcriptDetails.find(t => t.subjectId == subject.id);
+                  this.secondFormGroup.controls[subject.id].patchValue(transcript != null ? transcript.mark : 0);
+                  if (this.typeScore == 3) {
+                    this.secondFormGroup.controls[subject.id].disable();
+                  } else {
+                    this.secondFormGroup.controls[subject.id].enable();
+                  }
+                });
+                break;
+              }
+              // else {
+              //   this.subjects.forEach(subject => {
+              //     this.secondFormGroup.controls[subject.id].patchValue(0);
+              //     if (this.typeScore == 3) {
+              //       this.secondFormGroup.controls[subject.id].disable();
+              //     } else {
+              //       this.secondFormGroup.controls[subject.id].enable();
+              //     }
+              //   });
+              // }
+            }
+          }
+        }
+      });
+    } else {
+      this.getAction(1);
+    }
+  }
 
   onScoreSubmit() {
-    this.marksValidator();
-    if (this.secondFormGroup.valid) {
-      this.marks = [];
-      for(let subject of this.subjects) {
-        this.marks.push({subjectId: subject.id, mark: this.secondFormGroup.value[subject.id] ? this.secondFormGroup.value[subject.id] : 0});
-      }
-      this.store.dispatch(new StepperActions.SetMarks({marks: this.marks, transcriptTypeId: this.typeScore, gender: this.gender, provinceId: this.provinceId}));
-      if (!this.isLoading) {
-        this.myStepper.selectedIndex = 1;
-      }
+    if (this.checkIsDiffentUserInfo() > 0) {
+      this.store.dispatch(new StepperActions.SetMarks({marks: this.marks, transcriptTypeId: this.typeScore, gender: this.gender, provinceId: this.provinceId}, true));
+    } else {
+      this.store.dispatch(new StepperActions.SetMarks({marks: this.marks, transcriptTypeId: this.typeScore, gender: this.gender, provinceId: this.provinceId}, false));
     }
+  }
+
+  getRatio(caring: number, admission: number) {
+    if (admission) {
+      return Math.round((caring / admission) * 100) / 100;
+    }
+    return null;
   }
 
   ngOnDestroy() {
@@ -371,14 +590,12 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
   getUniversity(suggestedGroup: SuggestedSubjectsGroup, major: Major) {
     this.suggestedMajorName = major.name;
     this.store.dispatch(new StepperActions.LoadUniversities({subjectGroup: suggestedGroup,
-      major: major, gender: this.gender, provinceId: null}));
+      major: major}));
   }
 
   loadTests() {
+    this.store.dispatch(new StepperActions.SetTests([]));
     this.store.dispatch(new StepperActions.LoadTests());
-    if (!this.isLoading) {
-      this.myStepper.selectedIndex = 1;
-    }
   }
   
   goBack(){
@@ -413,13 +630,10 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       )
     } else {
-      if (this.unsaveTestSubmissions && this.unsaveTestSubmissions.length > 0) {
-        this.store.dispatch(new StepperActions.SaveUnsaveTestSubmissions());
-      }
-      if (followTransciptTypeId == 3 || followTransciptTypeId == 2)  {
+      if (followTransciptTypeId == 3 || followTransciptTypeId == 1)  {
         this.store.dispatch(new StepperActions.CaringAction({trainingProgramId: trainingProgramId, universityId: universityId, followTranscriptTypeId: followTransciptTypeId}));
-      } else if (followTransciptTypeId == 1) {
-        let existInMockTestUni = this.mockTestBasedUniversity?.trainingProgramBasedUniversityDataSets?.find(t => t.id == universityId && t.trainingProgramSets.find(p => p.id == trainingProgramId) != null);
+      } else if (followTransciptTypeId == 2) {
+        let existInMockTestUni = this.mockTestBasedUniversityForCheck?.trainingProgramBasedUniversityDataSets?.find(t => t.id == universityId && t.trainingProgramSets.find(p => p.id == trainingProgramId) != null);
         if (existInMockTestUni) {
           followTransciptTypeId = 3;
         }
@@ -427,6 +641,23 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     } 
   }
+
+  openMockTestRulesDialog() {
+    const dialogRef = this.dialog.open(
+      MockTestRulesDialogComponent, {
+        width: 'auto',
+        height: 'auto',
+        disableClose: false
+      }
+    )
+
+    dialogRef.afterClosed().subscribe(v => {
+      if (v) {
+        this.getAction(7);
+      }
+    });
+  }
+
 
   onUncaringClick(followingDetailId: number, universityName: string) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -441,6 +672,10 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(new StepperActions.UncaringAction(followingDetailId));
       }
     });
+  }
+
+  getTotalActionQueues() {
+    return [...this.userActionQueue, ...this.stepperActionQueue];
   }
 
   private _filter(value: string): Province[] {
@@ -467,63 +702,114 @@ export class StepperComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.provinceError = false;
     }
-    if (scoreType.value === 2) {
-      if (math.value < 5 || physics.value < 5 || chemistry.value < 5 || englis.value < 5 || biology.value < 5 || 
-        geography.value < 5 || history.value < 5 || humanity.value < 5 || literaty.value < 5) {
-        this.secondFormGroup.setErrors({mustHigherThanFive: 'Điểm học bạ các môn của bạn bắt buộc phải lớn hơn hoặc bằng 5 thì mới có thể xét tuyển đại học!'});
-      } else {
-        if (!this.provinceError) {
-          this.secondFormGroup.setErrors(null);
-        }
-      }
+    // if (scoreType.value === 2) {
+    //   if (math.value < 5 || physics.value < 5 || chemistry.value < 5 || englis.value < 5 || biology.value < 5 || 
+    //     geography.value < 5 || history.value < 5 || humanity.value < 5 || literaty.value < 5) {
+    //     this.secondFormGroup.setErrors({mustHigherThanFive: 'Điểm học bạ các môn của bạn bắt buộc phải lớn hơn hoặc bằng 5 thì mới có thể xét tuyển đại học!'});
+    //   } else {
+    //     if (!this.provinceError) {
+    //       this.secondFormGroup.setErrors(null);
+    //     }
+    //   }
+    // } else if (scoreType.value === 1) {
+    //   let count = 0;
+    //   if (math.value != null && math.value > 0) {
+    //     count++;
+    //   }
+    //   if (physics.value != null && physics.value > 0) {
+    //     count++;
+    //   }
+    //   if (chemistry.value != null && chemistry.value > 0) {
+    //     count++;
+    //   }
+    //   if (englis.value != null && englis.value > 0) {
+    //     count++;
+    //   }
+    //   if (biology.value != null && biology.value > 0) {
+    //     count++;
+    //   }
+    //   if (geography.value != null && geography.value > 0) {
+    //     count++;
+    //   }
+    //   if (history.value != null && history.value > 0) {
+    //     count++;
+    //   }
+    //   if (humanity.value != null && humanity.value > 0) {
+    //     count++;
+    //   }
+    //   if (literaty.value != null && literaty.value > 0) {
+    //     count++;
+    //   }
+    //   if (count < 6) {
+    //     this.secondFormGroup.setErrors({atLeastSixSubjects: 'Bạn phải nhập tối thiểu 6 môn (bao gồm 3 môn bắt buộc và 1 tổ hợp môn là KHTN hoặc KHXH).'});
+    //   }  else if (!((math.value && math.value > 1 && literaty.value && literaty.value > 1 && englis.value && englis.value > 1)
+    //     && ((physics.value && physics.value > 1 && chemistry.value && chemistry.value > 1 && biology.value && biology.value > 1)
+    //         || (history.value && history.value > 1 && geography.value && geography.value > 1 && humanity.value && humanity.value > 1)))
+    //   ) {
+    //     this.secondFormGroup.setErrors({mustEnoughSubjects: 'Điểm các môn thi bắt buộc phải lớn hơn 1 thì mới đủ điều kiện xét tuyển!'});
+    //   } else if (
+    //   (!(physics.value && physics.value > 1 && chemistry.value && chemistry.value > 1 && biology.value && biology.value > 1)
+    //   && !((physics.value == null || physics.value == 0) &&  (chemistry.value == null || chemistry.value == 0) && (biology.value == null || biology.value == 0)))
+    //   || (!(history.value && history.value > 1 && geography.value && geography.value > 1 && humanity.value && humanity.value > 1)
+    //   && !((history.value == null || history.value == 0) &&  (geography.value == null || geography.value == 0) && (humanity.value == null || humanity.value == 0)))
+    //   ) {
+    //     this.secondFormGroup.setErrors({mustMatchGroup: 'Bạn phải nhập đủ điểm các môn trong tổ hợp môn KHTN hoặc KHXH!'});
+    //   } else {
+    //     if (!this.provinceError) {
+    //       this.secondFormGroup.setErrors(null);
+    //     }
+    //   }
+    // }
+  }
+
+  openUniversityNewWindow(id: number) {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`customer/university/${id}`])
+    );
+    window.open(url, '_blank');
+  }
+
+  canDeactivate(): boolean | Observable<boolean> | Promise<boolean>{
+    if (!this.isDoingTest) {
+      return true;
     } else {
-      let count = 0;
-      if (math.value != null && math.value > 0) {
-        count++;
-      }
-      if (physics.value != null && physics.value > 0) {
-        count++;
-      }
-      if (chemistry.value != null && chemistry.value > 0) {
-        count++;
-      }
-      if (englis.value != null && englis.value > 0) {
-        count++;
-      }
-      if (biology.value != null && biology.value > 0) {
-        count++;
-      }
-      if (geography.value != null && geography.value > 0) {
-        count++;
-      }
-      if (history.value != null && history.value > 0) {
-        count++;
-      }
-      if (humanity.value != null && humanity.value > 0) {
-        count++;
-      }
-      if (literaty.value != null && literaty.value > 0) {
-        count++;
-      }
-      if (count < 6) {
-        this.secondFormGroup.setErrors({atLeastSixSubjects: 'Bạn phải nhập tối thiểu 6 môn (bao gồm 3 môn bắt buộc và 1 tổ hợp môn là KHTN hoặc KHXH).'});
-      }  else if (!((math.value && math.value > 1 && literaty.value && literaty.value > 1 && englis.value && englis.value > 1)
-        && ((physics.value && physics.value > 1 && chemistry.value && chemistry.value > 1 && biology.value && biology.value > 1)
-            || (history.value && history.value > 1 && geography.value && geography.value > 1 && humanity.value && humanity.value > 1)))
-      ) {
-        this.secondFormGroup.setErrors({mustEnoughSubjects: 'Điểm các môn thi bắt buộc phải lớn hơn 1 thì mới đủ điều kiện xét tuyển!'});
-      } else if (
-      (!(physics.value && physics.value > 1 && chemistry.value && chemistry.value > 1 && biology.value && biology.value > 1)
-      && !((physics.value == null || physics.value == 0) &&  (chemistry.value == null || chemistry.value == 0) && (biology.value == null || biology.value == 0)))
-      || (!(history.value && history.value > 1 && geography.value && geography.value > 1 && humanity.value && humanity.value > 1)
-      && !((history.value == null || history.value == 0) &&  (geography.value == null || geography.value == 0) && (humanity.value == null || humanity.value == 0)))
-      ) {
-        this.secondFormGroup.setErrors({mustMatchGroup: 'Bạn phải nhập đủ điểm các môn trong tổ hợp môn KHTN hoặc KHXH!'});
-      } else {
-        if (!this.provinceError) {
-          this.secondFormGroup.setErrors(null);
+      return Swal.fire({
+        title: 'Bạn chưa hoàn thành bài thi!',
+        text: "Chú ý: Nếu bạn thoát, hệ thống sẽ ghi nhận điểm của bạn đến thời điểm này?",
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Thoát',
+        cancelButtonText: 'Tiếp tục'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log("vao confirm");
+          this.isConfirmedOut = true;
         }
-      }
+        return result.isConfirmed;
+      });
+    } 
+  }
+
+  getClass(classId: number) {
+    return "devided-class-" + classId;
+  }
+
+  getGender() {
+    return this.gender == 1 ? "Nữ" : "Nam";
+  }
+
+  getTypeScore() {
+    switch(this.typeScore) {
+      case 1:
+        return "THPT Quốc gia";
+      case 2:
+        return "Học bạ";
+      case 3:
+        return "Thi thử";
+      default:
+        return "";
     }
   }
   

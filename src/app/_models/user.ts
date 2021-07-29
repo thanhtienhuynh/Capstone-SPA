@@ -4,5 +4,5 @@ export interface User {
   email: string;
   phone: string;
   avatarUrl: string;
-  isAdmin: boolean;
+  roleId: number;
 }
