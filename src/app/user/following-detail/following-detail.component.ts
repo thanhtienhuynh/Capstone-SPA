@@ -75,6 +75,18 @@ export class FollowingDetailComponent implements OnInit {
     );
   }
 
+  getScoreType(typeId: number) {
+    switch (typeId) {
+      case 1:
+        return "THPT QG";
+      case 2:
+        return "Học bạ";
+      case 3:
+        return "Thi thử";
+      default:
+        return "Đang cập nhật";
+    }
+  }
   
   count(index: number) {
     let count = 0;

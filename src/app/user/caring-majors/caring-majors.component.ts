@@ -57,6 +57,16 @@ export class CaringMajorsComponent implements OnInit {
       }
     });
   }
+
+  getFollowingSubjectGroups(uni: UniversityGroupByTrainingProgramDataSet) {
+    let result = uni.subjectGroupCode;
+    if (uni.otherSubjectGroups) {
+      uni.otherSubjectGroups.forEach(subjectGroup => {
+        result += ", " + subjectGroup.name;
+      });
+    }
+    return result;
+  }
   
   ngOnDestroy() {
     if (this.subscription) {

@@ -472,7 +472,7 @@ animation: pulse-blue 2s infinite;
   font-family: "Great Vibes", 
   cursive; 
   justify-content: center;
-  font-size: 3.5em; 
+  font-size: 3em; 
   font-weight: normal; 
   text-align: center; 
   text-shadow: 0 1px 1px #fff; 
@@ -533,7 +533,7 @@ animation: pulse-blue 2s infinite;
   font-family: "Great Vibes", 
   cursive; 
   justify-content: center;
-  font-size: 3em; 
+  font-size: 2.7em; 
   font-weight: normal; 
   text-align: center; 
   text-shadow: 0 1px 1px #fff; 
@@ -593,7 +593,7 @@ animation: pulse-blue 2s infinite;
   font-family: "Great Vibes", 
   cursive; 
   justify-content: center;
-  font-size: 3em; 
+  font-size: 2.7em; 
   font-weight: normal; 
   text-align: center; 
   text-shadow: 0 1px 1px #fff; 
@@ -726,4 +726,24 @@ td {
 
 .host-frame {
   margin-top: 15px;
+}
+
+.more-group {
+  float: right;
+  cursor: pointer;
+  color: #1890ff;
+  text-align: right;
+  font-weight: 500;
+}
+
+.back-group {
+  float: left;
+  cursor: pointer;
+  color: #1890ff;
+  text-align: left;
+  font-weight: 500;
+}
+
+.back-group-frame {
+  width: 100%;
 }

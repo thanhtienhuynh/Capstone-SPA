@@ -3,67 +3,81 @@
     <div class="center-all header-content">THÔNG TIN CHI TIẾT</div>
   </div>
   <div *ngIf="userFollowingDetail" class="body-frame">
-    <div gdAreas="avatar title title | avatar description description" gdGap="10px" gdRows="auto auto"
+    <div gdAreas="avatar title title | avatar description description" gdGap="20px" gdRows="auto auto"
 gdAreas.lt-md="title | avatar | description" gdRows.lt-md="auto auto auto">
-      <div gdArea="avatar">
-        <img style="width: 100%; height: 100%;" src="{{userFollowingDetail.universityDataSet.logoUrl || '../../assets/img/news.png'}}" alt="">
+      <div gdArea="avatar" class="avatar-frame">
+        <img class="avatar" src="{{userFollowingDetail.universityDataSet.logoUrl || '../../assets/img/ic/univeristy.jpg'}}" alt="">
       </div>
       <div gdArea="title">
-        <h3 class="uni-title">Trường {{userFollowingDetail.universityDataSet.name}} - Ngành {{userFollowingDetail.majorDataSet.name}} - Hệ {{userFollowingDetail.trainingProgramDataSet.name}}</h3>
+        <h3 class="uni-title">TRƯỜNG {{userFollowingDetail.universityDataSet.name | uppercase}} - 
+          NGÀNH {{userFollowingDetail.majorDataSet.name | uppercase}} - HỆ {{userFollowingDetail.trainingProgramDataSet.name | uppercase}}</h3>
       </div>
       <div gdArea="description">
         <div class="description" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
-          {{userFollowingDetail.universityDataSet.description}}
+          {{userFollowingDetail.universityDataSet.description | shorten:300}}
         </div>
       </div>
     </div>
 
-    <div class="information" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
-      <div class="ranking-information" fxFlex="0 1 calc(40% - 16px)" fxFlex.lt-md="100%">
+    <div class="information" fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
+      <div class="ranking-information" fxFlex="0 1 calc(40%)" fxFlex.lt-md="100%">
         <div class="rank-information">
-          <h3>
+          <h3 class="center-vertical">
+            <mat-icon>turned_in</mat-icon>
             Thông tin xếp hạng
           </h3>
-          <div>Chỉ tiêu năm {{userFollowingDetail.rankingInformation.seasonDataSets[1].name}}: {{userFollowingDetail.rankingInformation.seasonDataSets[1].numberOfStudents}}</div>
-          <div>Điểm chuẩn năm  {{userFollowingDetail.rankingInformation.seasonDataSets[0].name}}: {{userFollowingDetail.rankingInformation.seasonDataSets[0].entryMark}}</div>
-          <div>Khối: {{userFollowingDetail.rankingInformation.subjectGroupCode}}</div>
-          <div>Loại điểm: </div>
-          <div>Xếp hạng:  {{userFollowingDetail.rankingInformation.positionOfUser}}</div>
+        <div class="detail-info">
+          <div><span class="label">Chỉ tiêu năm {{userFollowingDetail.rankingInformation.seasonDataSets[1].name}}:</span> {{userFollowingDetail.rankingInformation.seasonDataSets[1].numberOfStudents}}</div>
+          <div><span class="label">Điểm chuẩn năm {{userFollowingDetail.rankingInformation.seasonDataSets[0].name}}:</span> {{userFollowingDetail.rankingInformation.seasonDataSets[0].entryMark}}</div>
+          <div><span class="label">Khối thi ưu tiên:</span> {{userFollowingDetail.rankingInformation.subjectGroupCode}}</div>
+          <div><span class="label">Loại điểm:</span> {{getScoreType(userFollowingDetail.rankingInformation.rankTypeId)}}</div>
+          <div><span class="label">Xếp hạng:</span>  {{userFollowingDetail.rankingInformation.positionOfUser}}</div>
+          <div *ngIf="userFollowingDetail.rankingInformation.otherSubjectGroups && userFollowingDetail.rankingInformation.otherSubjectGroups.length > 0">
+            <div class="label">Các khối thi khác bạn đang theo dõi:</div>
+            <div *ngFor="let group of userFollowingDetail.rankingInformation.otherSubjectGroups">
+              <div>- {{group.name}}: {{group.mark}}, xét theo điểm {{getScoreType(group.rankTypeId)}}</div>
+            </div>
+          </div>
+        </div>
         </div>
         <div class="uni-information">
           <h3>
+            <mat-icon>turned_in</mat-icon>
             Thông tin trường
           </h3>
-          <div>Mã trường: {{userFollowingDetail.universityDataSet.code}}</div>
-          <div>Sđt: {{userFollowingDetail.universityDataSet.phone}}</div>
-          <div>Địa chỉ: {{userFollowingDetail.universityDataSet.address}}</div>
-          <div *ngIf="!userFollowingDetail.universityDataSet.tuitionTo ||
-                      !userFollowingDetail.universityDataSet.tuitionFrom ||
-                      (userFollowingDetail.universityDataSet.tuitionTo ==
-                        userFollowingDetail.universityDataSet.tuitionFrom &&
-                        userFollowingDetail.universityDataSet.tuitionTo < 100)">
-            Đang cập nhật
+          <div class="detail-info">
+            <div><span class="label">Mã trường:</span> {{userFollowingDetail.universityDataSet.code}}</div>
+            <div><span class="label">Sđt:</span> {{userFollowingDetail.universityDataSet.phone}}</div>
+            <div><span class="label">Địa chỉ:</span> {{userFollowingDetail.universityDataSet.address}}</div>
+            <div *ngIf="!userFollowingDetail.universityDataSet.tuitionTo ||
+                        !userFollowingDetail.universityDataSet.tuitionFrom ||
+                        (userFollowingDetail.universityDataSet.tuitionTo ==
+                          userFollowingDetail.universityDataSet.tuitionFrom &&
+                          userFollowingDetail.universityDataSet.tuitionTo < 100)">
+              <span class="label">Học phí:</span> Đang cập nhật
+            </div>
+            <div *ngIf="userFollowingDetail.universityDataSet.tuitionTo == 
+                userFollowingDetail.universityDataSet.tuitionFrom &&
+                userFollowingDetail.universityDataSet.tuitionTo >= 100">
+                <span class="label">Học phí:</span> khoảng {{userFollowingDetail.universityDataSet.tuitionTo | number:'1.0':'en-US'}},000/{{ userFollowingDetail.universityDataSet.tuitionType == 0 ? "kì" : "năm"}}
+            </div>
+            <div *ngIf="userFollowingDetail.universityDataSet.tuitionTo !=
+                    userFollowingDetail.universityDataSet.tuitionFrom">
+                    <span class="label">Học phí:</span> từ {{userFollowingDetail.universityDataSet.tuitionFrom | number:'1.0':'en-US'}},000
+              đến {{userFollowingDetail.universityDataSet.tuitionTo | number:'1.0':'en-US'}},000/{{ userFollowingDetail.universityDataSet.tuitionType == 0 ? "kì" : "năm"}}
+            </div>
+            <div><span class="label">Website: </span> <a href="{{userFollowingDetail.universityDataSet.webUrl}}" target="_blank">{{userFollowingDetail.universityDataSet.webUrl | lowercase}}</a></div>
           </div>
-          <div *ngIf="userFollowingDetail.universityDataSet.tuitionTo == 
-              userFollowingDetail.universityDataSet.tuitionFrom &&
-              userFollowingDetail.universityDataSet.tuitionTo >= 100">
-            Học phí: khoảng {{userFollowingDetail.universityDataSet.tuitionTo | number:'1.0':'en-US'}},000/
-            {{ userFollowingDetail.universityDataSet.tuitionType == 0 ? "kì" : "năm"}}
-          </div>
-          <div *ngIf="userFollowingDetail.universityDataSet.tuitionTo !=
-                  userFollowingDetail.universityDataSet.tuitionFrom">
-            Học phí: từ {{userFollowingDetail.universityDataSet.tuitionFrom | number:'1.0':'en-US'}},000
-            đến {{userFollowingDetail.universityDataSet.tuitionTo | number:'1.0':'en-US'}},000/
-            {{ userFollowingDetail.universityDataSet.tuitionType == 0 ? "kì" : "năm"}}
-          </div>
-          <div>Website: <a href="{{userFollowingDetail.universityDataSet.webUrl}}" target="_blank">{{userFollowingDetail.universityDataSet.webUrl}}</a></div>
         </div>
         <div class="major-information">
           <h3>
+            <mat-icon>turned_in</mat-icon>
             Thông tin ngành
           </h3>
-          <div>Mã ngành: {{userFollowingDetail.majorDataSet.code}}</div>
-          <div>Hệ: {{userFollowingDetail.trainingProgramDataSet.name}}</div>
+          <div class="detail-info">
+            <div><span class="label">Mã ngành: </span>{{userFollowingDetail.majorDataSet.code}}</div>
+            <div><span class="label">Hệ: </span>{{userFollowingDetail.trainingProgramDataSet.name}}</div>
+          </div>
         </div>
         <!-- <share-button [theme]="'default'"
           [button]="'facebook'"
@@ -72,29 +86,31 @@ gdAreas.lt-md="title | avatar | description" gdRows.lt-md="auto auto auto">
           [url]="'https://unilinks-41d0e.web.app/customer/home'"
         ></share-button> -->
       </div>
-      <div class="user-information" fxFlex="0 1 calc(60% - 16px)" fxFlex.lt-md="100%">
+      <div class="user-information" fxFlex="0 1 calc(60%)" fxFlex.lt-md="100%">
         <div>
-          <h3>Bảng xếp hạng</h3>
+          <h3><mat-icon>turned_in</mat-icon> Bảng xếp hạng</h3>
           <table>
-              <thead>
-                  <tr>
-                      <th>No.</th>
-                      <th>Họ tên</th>
-                      <th>Thứ hạng</th>
-                      <th>Tổng điểm</th>
-                      <th>Khối thi</th>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Họ tên</th>
+                    <th>Thứ hạng</th>
+                    <th>Tổng điểm</th>
+                    <th>Khối thi</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let rankType of userFollowingDetail.rankingUserInformationsGroupByTranscriptType; let i = index">
+                  <tr class="rank-type">
+                    <td colspan="5">Điểm {{getScoreType(rankType.id)}}</td>
                   </tr>
-              </thead>
-              <tbody *ngFor="let rankType of userFollowingDetail.rankingUserInformationsGroupByTranscriptType; let i = index">
-                    <tr class="rank-type">{{rankType.name}}</tr>
-                    <tr *ngFor="let userRanking of rankType.rankingUserInformations; let j = index">
-                      <td>{{count(i) + j + 1}}</td>
-                      <td [ngClass]="{'is-user': this.userId == userRanking.id}">{{userRanking.fullname}}</td>
-                      <td>{{userRanking.position}}</td>
-                      <td>{{userRanking.totalMark}}</td>
-                      <td>{{userRanking.groupCode}}</td>
-                    </tr>
-              </tbody>
+                  <tr [ngClass]="{'is-user': this.userId == userRanking.id}" *ngFor="let userRanking of rankType.rankingUserInformations; let j = index">
+                    <td>{{count(i) + j + 1}}</td>
+                    <td >{{userRanking.fullname}}</td>
+                    <td class="num-td">{{userRanking.position}}</td>
+                    <td class="num-td">{{userRanking.totalMark}}</td>
+                    <td class="code-td">{{userRanking.groupCode}}</td>
+                  </tr>
+            </tbody>
           </table>
       </div>
       </div>

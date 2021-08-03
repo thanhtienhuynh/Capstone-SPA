@@ -305,7 +305,7 @@ export class StepperEffects {
           stepperState.selectedMajor.id,
           stepperState.selectedSubjectGroup.id,
           new MarkParam(stepperState.marks, stepperState.followTranscriptTypeId, stepperState.gender, stepperState.provinceId),
-          stepperState.followTranscriptTypeId == 3 ? stepperState.mockTestBasedUniversity.totalMark : stepperState.selectedSubjectGroup.totalMark
+          stepperState.followTranscriptTypeId == 3 && stepperState.mockTestBasedUniversity ? stepperState.mockTestBasedUniversity.totalMark : stepperState.selectedSubjectGroup.totalMark
         )
       ).pipe(
         switchMap((response) => {

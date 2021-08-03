@@ -7,6 +7,7 @@ export interface SuggestedSubjectsGroup {
   id: number;
   name: string;
   totalMark: number;
+  top: number;
   subjectDataSets: Subject[];
   specialSubjectGroups: SpecialSubjectGroup[];
   suggestedMajors: Major[];
