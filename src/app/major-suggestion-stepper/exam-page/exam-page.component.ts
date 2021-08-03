@@ -103,7 +103,6 @@ export class ExamPageComponent implements OnInit, OnDestroy, OnChanges {
               this.store.dispatch(new StepperActions.ConfirmErrors());
             });
           }
-          console.log(this.isScored);
         },
         (error) => {
         }

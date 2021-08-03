@@ -245,7 +245,6 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
 
   answerClick(quesId: number) {
     const itemToScrollTo = document.getElementById(quesId.toString());
-    console.log("ques: ", quesId);
     if (itemToScrollTo) {
       itemToScrollTo.scrollIntoView(true);
     }
