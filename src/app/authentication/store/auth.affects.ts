@@ -46,7 +46,10 @@ export class AuthEffects {
     map((token: string) => {
       return new AuthActions.LoginServer(token);
     }),
-    catchError((error: HttpErrorResponse) => {
+    catchError((error: any) => {
+      if(error && error.code == "auth/popup-closed-by-user") {
+        return of({type: "DUMMY"});
+      }
       return of(new AuthActions.HasErrors([error.message]));
     })
   );

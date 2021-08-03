@@ -1,3 +1,14 @@
+.score-title {
+  padding-top: 10px;
+  width: 100%;
+  font-weight: 500;
+}
+
+.score {
+  font-weight: 700;
+  font-size: 40px;
+}
+
 .center-all {
   display: flex;
   justify-content: center;
@@ -15,9 +26,7 @@
 }
 
 .test-review-scroll {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  height: 600px;
+  height: auto;
 }
 
 .right-answer {
@@ -30,6 +39,10 @@
 
 .marked-answer {
   width: 30px;
+}
+
+.icon {
+  margin-right: 8px;
 }
 
 ::ng-deep .mat-radio-button.mat-radio-disabled .mat-radio-label-content {   /*click effect color change*/
@@ -47,4 +60,9 @@
 .anotate-question {
   font-weight: bold;
   font-size: 1.2em;
+}
+
+.score-frame {
+  border: solid 1px black;
+  height: 95%;
 }

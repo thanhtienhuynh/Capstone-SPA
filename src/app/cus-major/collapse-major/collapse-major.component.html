@@ -7,9 +7,9 @@
       <button class="search-btn">Tìm kiếm</button>
     </form>
 </div>
-<div *ngIf="majorPageResponse && majorPageResponse.data.length > 0" class="host-frame">
+<div *ngIf="majorPageResponse && majorPageResponse.data && majorPageResponse.data.length > 0" class="host-frame">
   <div class="total">Hệ thống ghi nhận có {{majorPageResponse.totalRecords}} ngành học.</div>
-  <div class="major-frame" *ngFor="let major of majorPageResponse.data" gdAreas="name name | major-detail detail" gdRows="30px 20px" gdColumns="85% 15%"
+  <div routerLink="./{{major.id}}" class="major-frame" *ngFor="let major of majorPageResponse.data" gdAreas="name name | major-detail detail" gdRows="30px 20px" gdColumns="85% 15%"
     gdRows.lt-md="auto auto" gdColumns.lt-md="75% 25%" >
   
     <div class="name" gdArea="name">
@@ -21,7 +21,7 @@
     </div>
 
     <div class="detail" gdArea="detail">
-      <p class="detail-link" [routerLinkActiveOptions]="{exact: true}" routerLink="./{{major.id}}">>>> Xem chi tiết</p>
+      <p class="detail-link" routerLink="./{{major.id}}">>>> Xem chi tiết</p>
     </div> 
   </div>
 
@@ -36,7 +36,7 @@
   </div>
 </div>
 
-<div *ngIf="(!majorPageResponse || majorPageResponse.data.length <= 0) && (!homeActionQueue || homeActionQueue.length <= 0)" class="host-frame">
+<div *ngIf="!(majorPageResponse && majorPageResponse.data && majorPageResponse.data.length > 0) && (!homeActionQueue || homeActionQueue.length <= 0)" class="host-frame">
   <h1>Hiện tại không có ngành học nào!</h1>
 </div>
 

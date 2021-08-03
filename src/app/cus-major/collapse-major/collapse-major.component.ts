@@ -35,7 +35,7 @@ export class CollapseMajorComponent implements OnInit, OnDestroy {
     this.subscription = this.store.select('home').subscribe(homeState => {
       if (this.majorPageResponse != homeState.cusMajorPageResponse) {
         this.majorPageResponse = homeState.cusMajorPageResponse;
-        if (this.majorPageResponse != null && this.majorPageResponse.data.length > 0) {
+        if (this.majorPageResponse != null && this.majorPageResponse.data != null && this.majorPageResponse.data.length > 0) {
           this.generatePagingButton();
         }
       }

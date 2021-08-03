@@ -146,6 +146,7 @@ export class Cell {
   rowspan: number;
   data: any;
   isNumber: boolean;
+  isTitle: boolean;
 }
 
 export class Row {

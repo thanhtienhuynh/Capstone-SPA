@@ -77,29 +77,29 @@
         
         <!-- Top 2 -->
         <div fxFlex.lg="0 1 calc(34% )" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="100%" >
-          <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[1]" class="top-2-group-frame">
+          <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[groupPage * 3 - 2]" class="top-2-group-frame">
             <div class="top-2-group-in-frame">  
               <div class="top-2-group-inner-frame">
                 <div class="top-2-title-frame">
-                  <div class="top-2-title">Top 2</div>
+                  <div class="top-2-title">Top {{suggestedSubjectsGroup[groupPage * 3 - 2].top}}</div>
                 </div>
                 <div class="low-level-subject-group-frame">
                   <div class="low-level-in-subject-group-frame">
                     <div class="top-2-out-circle-frame"
                     #tooltip="matTooltip"
-                    [matTooltip]="getSubjectNames(suggestedSubjectsGroup[1])"
+                    [matTooltip]="getSubjectNames(suggestedSubjectsGroup[groupPage * 3 - 2])"
                     matTooltipPosition="above"
                     matTooltipHideDelay="2000">
                       <div class="center-vertical top-2-circle-frame">
-                        <div class="group-top-2-name">{{suggestedSubjectsGroup[1].name}}</div>
+                        <div class="group-top-2-name">{{suggestedSubjectsGroup[groupPage * 3 - 2].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="top-2-major-frame">
                   <div style="height: 91%; width: 100%;" class="major-scroll" id="style-7">
-                    <button *ngFor="let major of suggestedSubjectsGroup[1].suggestedMajors" style="width: 100%;" mat-button 
-                    (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[1], major: major})">
+                    <button *ngFor="let major of suggestedSubjectsGroup[groupPage * 3 - 2].suggestedMajors" style="width: 100%;" mat-button 
+                    (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[groupPage * 3 - 2], major: major})">
                       {{major.name | shorten:22}} 
                       <!-- - {{major.highestEntryMark}} - {{major.weightMark}} -->
                     </button>
@@ -111,28 +111,28 @@
         </div>
         <!-- Top 1 -->
         <div fxFlex="0 1 calc(36%-32px)" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="0 1 calc(100%)" class="top-1-group-frame">
-            <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[0]" class="top-1-group-in-frame" >  
+            <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[groupPage * 3 - 3]" class="top-1-group-in-frame" >  
               <div style="height: 100%; background-color: azure; border-radius: 30px;">
                 <div class="top-1-title-frame">
-                  <div class="top-1-title">Top 1</div>
+                  <div class="top-1-title">Top {{suggestedSubjectsGroup[groupPage * 3 - 3].top}}</div>
                 </div>
                 <div style="height: 30%; background-color: rgb(231, 238, 240);">
                   <div style="height: 100%; padding-top: 12px;">
                     <div class="top-1-out-circle-frame"
                       #tooltip="matTooltip"
-                      [matTooltip]="getSubjectNames(suggestedSubjectsGroup[0])"
+                      [matTooltip]="getSubjectNames(suggestedSubjectsGroup[groupPage * 3 - 3])"
                       matTooltipPosition="above"
                       matTooltipHideDelay="10000">
                       <div class="center-vertical top-1-circle-frame">
-                        <div class="group-top-1-name">{{suggestedSubjectsGroup[0].name}}</div>
+                        <div class="group-top-1-name">{{suggestedSubjectsGroup[groupPage * 3 - 3].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="top-1-major-frame">
                   <div style="height: 91%; width: 100%;" class="major-scroll"  id="style-7">
-                    <button *ngFor="let major of suggestedSubjectsGroup[0].suggestedMajors" style="width: 100%;" mat-button 
-                      (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[0], major: major})">
+                    <button *ngFor="let major of suggestedSubjectsGroup[groupPage * 3 - 3].suggestedMajors" style="width: 100%;" mat-button 
+                      (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[groupPage * 3 - 3], major: major})">
                       {{major.name | shorten:30}}
                        <!-- - {{major.highestEntryMark}} - {{major.weightMark}} -->
                     </button>
@@ -142,31 +142,31 @@
             </div>
         </div>
         <!-- Top 3 -->
-        <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[2]" fxFlex="0 1 calc(30%)"
+        <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[groupPage * 3 - 1]" fxFlex="0 1 calc(30%)"
           fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="0 1 calc(100%)" class="top-3-group-frame">
           <div style="padding-top: 50px;">
             <div class="top-3-group-in-frame" >  
               <div style="height: 100%; background-color: azure; border-radius: 30px;">
                 <div class="top-3-title-frame">
-                  <div class="top-3-title">Top 3</div>
+                  <div class="top-3-title">Top {{suggestedSubjectsGroup[groupPage * 3 - 1].top}}</div>
                 </div>
                 <div class="low-level-subject-group-frame">
                   <div class="low-level-in-subject-group-frame">
                     <div class="top-3-out-circle-frame"
                       #tooltip="matTooltip"
-                      [matTooltip]="getSubjectNames(suggestedSubjectsGroup[2])"
+                      [matTooltip]="getSubjectNames(suggestedSubjectsGroup[groupPage * 3 - 1])"
                       matTooltipPosition="above"
                       matTooltipHideDelay="100000">
                       <div class="center-vertical top-3-circle-frame">
-                        <div class="group-top-3-name">{{suggestedSubjectsGroup[2].name}}</div>
+                        <div class="group-top-3-name">{{suggestedSubjectsGroup[groupPage * 3 - 1].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="top-3-major-frame">
                   <div style="height: 91%; border-radius: 0px 0px 30px 30px; width: 100%;"  class="major-scroll"  id="style-7" >
-                    <button *ngFor="let major of suggestedSubjectsGroup[2].suggestedMajors" style="width: 100%;" mat-button 
-                      (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[2], major: major})">
+                    <button *ngFor="let major of suggestedSubjectsGroup[groupPage * 3 - 1].suggestedMajors" style="width: 100%;" mat-button 
+                      (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[groupPage * 3 - 1], major: major})">
                       {{major.name  | shorten:22}} 
                       <!-- - {{major.highestEntryMark}}- {{major.weightMark}} -->
                     </button>
@@ -176,7 +176,12 @@
             </div>  
           </div>
         </div>
-
+        <div fxFlex.lg="0 1 calc(50%)" class="back-group-frame" (click)="onBackClick()">
+          <div *ngIf="suggestedSubjectsGroup.length > 3 && groupPage > 1" class="center-vertical back-group"><mat-icon>chevron_left</mat-icon> Quay lại</div>
+        </div>
+        <div fxFlex.lg="0 1 calc(50%)" (click)="onMoreClick()">
+          <div *ngIf="suggestedSubjectsGroup.length > 3 && groupPage < math.ceil(suggestedSubjectsGroup.length / 3)" class="more-group center-vertical">Xem thêm <mat-icon>chevron_right</mat-icon></div>
+        </div>
         <div fxFlex.lg="0 1 calc(100%)" class="suggest-title center-all">
           <mat-icon class="note-icon">info</mat-icon>Kết quả gợi ý đang được tính toán dựa trên những thông tin sau: Điểm {{getTypeScore()}} + Giới tính {{getGender()}} + Tỉnh/TP {{getProvinceName(provinceId)}}
         </div>
@@ -314,7 +319,7 @@
                           <tr>
                             <td><mat-icon class="uni-icon">link</mat-icon></td>
                             <td class="uni-des-title"><span class="uni-des-title">Web: </span></td>
-                            <td><a [href]="university.webUrl | safeUrl" target="_blank">{{university.webUrl}}</a></td>
+                            <td><a [href]="university.webUrl | safeUrl" target="_blank">{{university.webUrl | lowercase}}</a></td>
                           </tr>
                         </tbody>
                       </table>
@@ -430,7 +435,7 @@
                         <tr>
                           <td><mat-icon class="uni-icon">link</mat-icon></td>
                           <td class="uni-des-title"><span class="uni-des-title">Web: </span></td>
-                          <td><a [href]="university.webUrl | safeUrl" target="_blank">{{university.webUrl}}</a></td>
+                          <td><a [href]="university.webUrl | safeUrl" target="_blank">{{university.webUrl | lowercase}}</a></td>
                         </tr>
                       </tbody>
                     </table>
