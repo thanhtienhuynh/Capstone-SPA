@@ -1,5 +1,5 @@
 <div class="center-all">
-  <h1 class="title">DANH SÁCH CÁC TRƯỜNG ĐẠI HỌC KHU VỰC PHÍA NAM</h1>
+  <h1 class="title">DANH SÁCH CÁC TRƯỜNG ĐẠI HỌC</h1>
 </div>
 <div class="host-frame center-all">
     <form (ngSubmit)="onSubmit()" class="search-frame">
@@ -41,7 +41,7 @@
       <div class="tuition-value">{{university.phone}}</div>
   
       <p class="tuition-title website-title">Website:</p>
-      <a class="tuition-value" href="{{university.webUrl}}" target="_blank">{{university.webUrl | shorten:27}}</a>
+      <a class="tuition-value" href="{{university.webUrl}}" target="_blank">{{university.webUrl | shorten:27 | lowercase}}</a>
     </div>
     <div class="detail" gdArea="detail">
         <button class="detail-btn" [routerLinkActiveOptions]="{exact: true}" routerLink="./{{university.id}}">Xem chi tiết</button>

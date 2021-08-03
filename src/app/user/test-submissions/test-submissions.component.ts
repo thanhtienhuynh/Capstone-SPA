@@ -15,8 +15,7 @@ import Swal from 'sweetalert2';
 export class TestSubmissionsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   subjectControl: FormControl;
-  testTypeControl: FormControl;
-  isSuggestControl: FormControl;
+  isSuggestedTestControl: FormControl;
   constructor(private store: Store<fromApp.AppState>) { 
     this.form = new FormGroup({
     });
@@ -24,14 +23,19 @@ export class TestSubmissionsComponent implements OnInit, OnDestroy {
     this.form.addControl(
       'subject-select', this.subjectControl
     );
-    this.testTypeControl = new FormControl(0);
+    this.isSuggestedTestControl = new FormControl(0);
     this.form.addControl(
-      'test-type', this.testTypeControl
+      'is-suggested-test', this.isSuggestedTestControl
     );
-    this.isSuggestControl = new FormControl(0);
-    this.form.addControl(
-      'is-suggest-test', this.isSuggestControl
-    );
+
+    this.subjectControl.valueChanges.subscribe(() => {
+      this.onSubmit();
+    }); {
+      
+    }
+    this.isSuggestedTestControl.valueChanges.subscribe(() => {
+      this.onSubmit();
+    });
   }
   subscription: Subscription;
   testSubmissions: UserTestSubmission[];
@@ -69,7 +73,15 @@ export class TestSubmissionsComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.store.dispatch(new UserActions.LoadSubmissions({isSuggestedTest: this.isSuggestControl.value, order: 1, subjectId: this.subjectControl.value, testTypeId: this.testTypeControl.value}));
+    let isSuggest = null;
+    let isSuggestValue = this.isSuggestedTestControl.value;
+    if (isSuggestValue == "1") {
+      isSuggest = true;
+    } else if (isSuggestValue == "2") {
+      isSuggest = false;
+    }
+    console.log(isSuggest);
+    this.store.dispatch(new UserActions.LoadSubmissions({isSuggestedTest: isSuggest, order: 1, subjectId: this.subjectControl.value, testTypeId: null}));
   }
 
   

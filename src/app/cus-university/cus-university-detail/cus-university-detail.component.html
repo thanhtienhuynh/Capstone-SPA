@@ -78,12 +78,12 @@
               <div class="info-title">Website: </div>
             </td>
             <td  class="info-value">
-              {{university.webUrl}}
+              <a href="{{university.webUrl}}">{{university.webUrl | lowercase}}</a>
             </td>
           </tr>
           <tr>
             <td><mat-icon class="uni-icon">location_city</mat-icon></td>
-            <td class="info-cell">
+            <td>
               <div class="info-title">Địa chỉ:</div>
             </td>
             <td  class="info-value">
@@ -116,7 +116,10 @@
       </thead>
       <tbody>
         <tr *ngFor="let row of rows;" [ngClass]="row.isOdd ? 'odd-row' : 'non-odd-row'">
-            <td *ngFor="let cell of row.cells;" class="major-cell" [ngClass]="{'empty-mark': cell.data == null, 'number-cell': cell.isNumber}" [attr.rowspan]="cell.rowspan">{{cell.data || '&#8709;'}}</td>
+            <td *ngFor="let cell of row.cells;" class="major-cell"
+            [ngClass]="{'empty-mark': cell.data == null, 'text-cell': !cell.isNumber, 'number-cell': cell.isNumber,
+                        'major-title': cell.isTitle}"
+            [attr.rowspan]="cell.rowspan">{{cell.data || '&#8709;'}}</td>
         </tr>
       </tbody>
     </table>

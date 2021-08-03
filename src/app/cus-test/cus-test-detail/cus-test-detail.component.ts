@@ -35,6 +35,7 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
   isScored: boolean;
   isSaved: boolean = false;
   isSaving: boolean = false;
+  numberOfCompletedQuestion: number = 0;
   user: User;
   errors: string[];
 
@@ -67,6 +68,7 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
             this.examSubmissionFormGroup.controls[question.id.toString()].valueChanges.subscribe(
               v => {
                 this.selectedIndex = question.realOrder;
+                this.calculateCompleted();
               }
             )
           }
@@ -104,10 +106,50 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
     );
   }
 
+  openSubmitDialog(questionRemaining: number, timeRemaining: number): void {
+    let caution = "";
+    if (questionRemaining > 0 && timeRemaining > 0) {
+      caution = "<p style=\"color: red\">Chú ý: Bạn còn " + questionRemaining + " câu hỏi chưa làm và "  + timeRemaining + " phút để làm bài.</p>"
+    } else if (questionRemaining > 0) {
+      caution = "<p style=\"color: red\">Chú ý: Bạn còn " + questionRemaining + " câu hỏi chưa làm.</p>"
+    } else if (timeRemaining > 0) {
+      caution = "<p style=\"color: red\">Chú ý: Bạn còn " + timeRemaining + " phút để làm bài, kiểm tra kĩ trước khi nộp bài.</p>"
+    }
+    Swal.fire({
+      title: 'Bạn có chắc muốn nộp bài thi?',
+      html: caution,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Nộp bài',
+      cancelButtonText: 'Tiếp tục làm bài'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.onSubmit();
+      }
+    });
+  }
+
+  calculateCompleted() {
+    let questions: QuestionParam[] = [];
+    for(let question of this.test.questions) {
+      if (!question.isAnnotate) {
+        questions.push(new QuestionParam(question.id, 
+          this.getResult(question.options.length, +this.examSubmissionFormGroup.controls[question.id.toString()].value)));
+      }
+    }
+    this.numberOfCompletedQuestion = questions.filter(q => q.options.indexOf(DEFAULT_SELECTED_ANSWER) >= 0).length;
+  }
+
   handleCoundown(event: CountdownEvent) {
     if (event.action === "done") {
      this.onSubmit();
     }
+  }
+
+  onSubmitClick() {
+    this.openSubmitDialog(this.test.numberOfQuestion - this.numberOfCompletedQuestion, Math.floor(this.countdown.left / 60000));
   }
 
   onSubmit() {
@@ -119,13 +161,10 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
       }
     }
     // if (questions.filter(q => q.options.indexOf(DEFAULT_SELECTED_ANSWER) >= 0).length >= this.test.numberOfQuestion / 2) {
-    if (questions.filter(q => q.options.indexOf(DEFAULT_SELECTED_ANSWER) >= 0).length >= 0) {
-      this.countdown.stop();
-      this.store.dispatch(new HomeActions.ScoringTest(
-        new TestSubmissionParam(this.test.id, Math.ceil(this.test.timeLimit - (this.countdown.left / 60000)), questions)));
-    } else {
-      // this.openSubmitDialog();
-    }
+    this.countdown.stop();
+    this.store.dispatch(new HomeActions.ScoringTest(
+      new TestSubmissionParam(this.test.id, Math.ceil(this.test.timeLimit - (this.countdown.left / 60000)), questions)));
+    
   }
 
   

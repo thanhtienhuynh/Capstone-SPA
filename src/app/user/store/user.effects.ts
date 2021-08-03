@@ -318,7 +318,7 @@ export class UserEffects {
     withLatestFrom(this.store.select('user')),
     switchMap(([actionData, userState]) => {
       return this.http.delete<Response<boolean>>(
-        environment.apiUrl + 'api/v1/following-detail/' + userState.uncaringFollowingDetailId.toString()
+        environment.apiUrl + 'api/v1/following-detail/all/' + userState.uncaringFollowingDetailId.toString()
       ).pipe(
         switchMap((response) => {
           if (response.succeeded) {

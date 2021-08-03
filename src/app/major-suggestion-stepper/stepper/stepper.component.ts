@@ -88,6 +88,9 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
   searchTerm: string = null;
   user: User;
 
+  groupPage = 1;
+  math = Math;
+
   isDoingTest: boolean = false;
   isConfirmedOut: boolean = false;
 
@@ -485,6 +488,7 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
 
   
   onSuggestSubmit() {
+    this.groupPage = 1;
     if (!this.secondFormGroup.valid) {
      return;
     }
@@ -669,6 +673,18 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
         this.store.dispatch(new StepperActions.UncaringAction(followingDetailId));
       }
     });
+  }
+
+  onMoreClick() {
+    if (this.groupPage < Math.ceil(this.suggestedSubjectsGroup.length / 3)) {
+      this.groupPage++;
+    }
+  }
+
+  onBackClick() {
+    if (this.groupPage > 1) {
+      this.groupPage--;
+    }
   }
 
   getTotalActionQueues() {
