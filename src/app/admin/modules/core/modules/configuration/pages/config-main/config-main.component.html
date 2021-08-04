@@ -1,0 +1,179 @@
+<div class="configuration">
+  <div class="container-fluid">
+    <div nz-row>
+      <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="24" [nzLg]="24" [nzXl]="24" [nzXXl]="24" class="mb-2">
+        <nb-card style="width: 100%;">
+          <nb-card-body style="width: 100%;">
+            <div class="configuration-header">
+              <div class="none-action">
+                <div class="configuration-header-title">
+                  <h5>BẢNG CẤU HÌNH THÔNG TIN CÁC NGÀNH CÓ TRONG HỆ THỐNG</h5>
+                </div>             
+              </div>
+              <div class="add-configuration">
+                <button nz-button nzSize="medium" nzType="dashed">
+                  <!-- <span style="font-size: 12px;">THÊM NGÀNH</span> -->
+                  Mặc định
+                </button>
+              </div> 
+            </div>
+            <nz-divider></nz-divider>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <!-- <div class="col-md-6">
+                <nb-card style="width: 100%;">
+                  <nb-card-body style="width: 100%;">
+                    <div class="part-title">
+                      <h5>CẤU HÌNH PHÂN TRANG</h5>                      
+                    </div>
+                    <nz-divider></nz-divider>
+                    <div class="col-md-12" >
+                      <nb-card style="width: 100%;">
+                        <nb-card-body style="width: 100%;">
+                          <div style="display: flex; justify-content: center; align-items: center;">
+                            <div class="col-md-4">
+                              <label for="">Trang đầu tiên</label>
+                              <input [disabled]="isUpdatePaging || isLoadingUpdatePaging" type="text" nz-input [(ngModel)]="firstPage">
+                            </div>
+                            <div class="col-md-7">
+                              <label for="">Số lượng tối đa</label>                              
+                              <nz-select style="width: 100%;" [ngModel]="highestQuantity" [nzDisabled]="isUpdatePaging || isLoadingUpdatePaging">
+                                <nz-option [nzValue]="5" nzLabel="5 Phần tử / 1 trang"></nz-option>
+                                <nz-option [nzValue]="10" nzLabel="10 Phần tử / 1 trang"></nz-option>                                
+                              </nz-select>
+                            </div>
+                          </div>
+                        </nb-card-body>
+                      </nb-card>
+                      <div style="display: flex; justify-content: flex-end; align-items: center;">
+                        <button *ngIf="isUpdatePaging === true" nz-button nzType="primary" (click)="editPagingConfig()">Chỉnh sửa</button>
+                        <button [nzLoading]="isLoadingUpdatePaging" *ngIf="isUpdatePaging === false" nz-button nzType="primary" (click)="updateConfigPaging()">Lưu</button>
+                        <button class="ml-2" [disabled]="isLoadingUpdatePaging" *ngIf="isUpdatePaging === false" nz-button nzType="dashed" (click)="cancelEditPagingConfig()">Hủy</button>
+                      </div>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </div> -->
+              <div class="col-md-12">
+                <nb-card style="width: 100%;">
+                  <nb-card-body style="width: 100%;">
+                    <div class="part-title">
+                      <h5>CẤU HÌNH NGÀY GIỜ</h5>                      
+                    </div>
+                    <nz-divider></nz-divider>
+                    <div class="col-md-12" >
+                      <div class="d-flex mb-2 align-items-center">
+                        <div class="col-md-8 pl-0">
+                          <label for="" class="mr-2">Chu kì thi thử</label>
+                          <input style="text-align: end; width: 50px;" [disabled]="isUpdateApp || isLoadingUpdateApp" type="number" nz-input [(ngModel)]="testMonths">
+                          <label for="" class="ml-2">tháng / lần</label> 
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end align-items-center pr-0">
+                          <button *ngIf="isUpdateApp === true" nz-button nzType="primary" (click)="editAppConfig()">Chỉnh sửa</button>
+                        <button [nzLoading]="isLoadingUpdateApp" *ngIf="isUpdateApp === false" nz-button nzType="primary" (click)="updateAppConfig()">Lưu</button>
+                        <button class="ml-2" [disabled]="isLoadingUpdateApp" *ngIf="isUpdateApp === false" nz-button nzType="dashed" (click)="cancelEditAppConfig()">Hủy</button>
+                        </div>                  
+                      </div>
+                      <nz-collapse>
+                        <nz-collapse-panel [nzHeader]="'Chu kì crawl bài viết'" [nzActive]="true">
+                          <nz-radio-group [(ngModel)]="crawlTimeType" [nzDisabled]="isUpdateApp === true">
+                            <label nz-radio [nzValue]="1">
+                              <span class="mr-1">Mỗi </span>
+                              <nz-select style="width: 60px;" [(ngModel)]="crawlTimeStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfTwelve" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">giờ</span>
+                              <nz-select style="width: 60px;" [(ngModel)]="crawlTimeMinStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">phút</span>
+
+                            </label>
+                            <label nz-radio [nzValue]="2">
+                              <span class="mr-1">Bắt đầu từ </span>
+                              <nz-select  style="width: 60px;" [(ngModel)]="crawlTimeStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfTwentyfour" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">giờ</span>
+                              <nz-select style="width: 60px;" [(ngModel)]="crawlTimeMinStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">phút</span>
+                            </label>                              
+                          </nz-radio-group>
+                        </nz-collapse-panel>
+                        <nz-collapse-panel [nzHeader]="'Chu kì cập nhật bảng xếp hạng'" [nzActive]="true">
+                          <nz-radio-group [(ngModel)]="updateRankTimeType" [nzDisabled]="isUpdateApp === true">
+                            <label nz-radio [nzValue]="1">
+                              <span class="mr-1">Mỗi </span>
+                              <nz-select style="width: 60px;" [(ngModel)]="updateRankTimeStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfTwelve" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">giờ</span>
+                              <nz-select style="width: 60px;" [(ngModel)]="updateRankMinStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">phút</span>
+
+                            </label>
+                            <label nz-radio [nzValue]="2">
+                              <span class="mr-1">Bắt đầu từ </span>
+                              <nz-select style="width: 60px;" [(ngModel)]="updateRankTimeStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfTwentyfour" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">giờ</span>
+                              <nz-select style="width: 60px;" [(ngModel)]="updateRankMinStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">phút</span>
+                            </label>                              
+                          </nz-radio-group>
+                        </nz-collapse-panel>
+                        <nz-collapse-panel [nzHeader]="'Chu kì cập nhật bài viết quá hạn'" [nzActive]="true">
+                          <nz-radio-group [(ngModel)]="expireArticleTimeType" [nzDisabled]="isUpdateApp === true">
+                            <label nz-radio [nzValue]="1">
+                              <span class="mr-1">Mỗi </span>
+                              <nz-select [(ngModel)]="expireArticleTimeStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfTwelve" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">giờ</span>
+                              <nz-select style="width: 60px;" [(ngModel)]="expireArticleMinStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">phút</span>
+
+                            </label>
+                            <label nz-radio [nzValue]="2">
+                              <span class="mr-1">Bắt đầu từ </span>
+                              <nz-select [(ngModel)]="expireArticleTimeStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfTwentyfour" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">giờ</span>
+                              <nz-select style="width: 60px;" [(ngModel)]="expireArticleMinStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
+                                <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>                                                               
+                              </nz-select>
+                              <span class="ml-1 mr-1">phút</span>
+                            </label>                              
+                          </nz-radio-group>
+                        </nz-collapse-panel>
+                      </nz-collapse>
+                      <!-- <nb-card style="width: 100%;">
+                        <nb-card-body style="width: 100%;">
+
+                          <div style="display: flex; justify-content: center; align-items: center;">
+                            <label for="">Chu kì crawl bài viết</label>
+                            
+                          </div>
+                        </nb-card-body>
+                      </nb-card> -->
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </div>
+              <div></div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+  </div>
+</div>

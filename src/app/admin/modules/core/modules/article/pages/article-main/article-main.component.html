@@ -7,19 +7,19 @@
             <app-top-article #topArticle></app-top-article>
           </nb-tab>
           <nb-tab tabTitle="bài viết đã duyệt" tabIcon="checkmark-circle-outline" responsive>            
-            <app-article-grid-list #gridOne [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="1" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list>
+            <app-article-grid-list #gridOne [isLoadingArticle]="isLoadingArticle" [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="1" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list>
           </nb-tab>          
           <nb-tab tabTitle="bài viết chờ duyệt" tabIcon="loader-outline" responsive>           
-            <app-article-grid-list #gridTwo [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="0" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list>            
+            <app-article-grid-list #gridTwo [isLoadingArticle]="isLoadingArticle"  [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="0" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list>            
           </nb-tab>
-          <nb-tab tabTitle="bài viết bị chặn" tabIcon="close-circle-outline" responsive>
-            <app-article-grid-list #gridThree [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="2" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list> 
+          <nb-tab tabTitle="bài viết bị chặn"  tabIcon="close-circle-outline" responsive>
+            <app-article-grid-list #gridThree [isLoadingArticle]="isLoadingArticle" [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="2" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list> 
           </nb-tab>
           <nb-tab tabTitle="bài viết quá hạn" tabIcon="clock-outline" responsive>
-            <app-article-grid-list #gridFour [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="4" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list> 
+            <app-article-grid-list #gridFour [isLoadingArticle]="isLoadingArticle" [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="4" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list> 
           </nb-tab>
           <nb-tab tabTitle="xem xét" tabIcon="search-outline" responsive>
-            <app-article-grid-list #gridFive [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="5" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list> 
+            <app-article-grid-list #gridFive [isLoadingArticle]="isLoadingArticle" [listOfArticle]="listOfArticle" [totalRecods]="totalArticleRecords" [status]="5" (paging)="pagination($event)" (searchValueTitle)="searchByTitle($event)"></app-article-grid-list> 
           </nb-tab>
         </nb-tabset>
       </nb-card-body>

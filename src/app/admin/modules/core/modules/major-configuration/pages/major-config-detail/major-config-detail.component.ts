@@ -53,8 +53,7 @@ export class MajorConfigDetailComponent implements OnInit {
 
   getMajorById(id: number): void {
     this._majorConfigService.getMajorById(id).pipe(
-      tap(rs => {
-        console.log(rs.data);
+      tap(rs => {        
         if (rs.succeeded === true) {
           if (rs.data !== null) {
             this.majorDetail = { ...rs.data };
@@ -68,12 +67,10 @@ export class MajorConfigDetailComponent implements OnInit {
 
   getMajorFormControls(controlName: string): void {
     switch (controlName) {
-      case 'code':
-        console.log('đây là code')
+      case 'code':        
         this.majorForm.get('code')['isUpdateHtml'] = false;
         break;
-      case 'description':
-        console.log('đây là description')
+      case 'description':        
         this.majorForm.get('description')['isUpdateHtml'] = false;
         break;
       case 'curriculum':
@@ -161,8 +158,6 @@ export class MajorConfigDetailComponent implements OnInit {
   }
 
   addSubjectGroupToFirstIndex(): void {
-    console.log(this.getSubjectGroups.controls.length);
-    console.log(this.majorDetail.subjectGroups.length);
     this.majorDetailTmp.subjectGroups.unshift({ id: null, status: 1, subjectWeights: [] });
     const newFbGroup = this._fb.group({
       'id': [undefined],
@@ -178,13 +173,10 @@ export class MajorConfigDetailComponent implements OnInit {
         'status': [1],
         'subjectWeights': this._fb.array([])
       })
-    );
-    console.log(this.getSubjectGroups.value);
+    );    
   }
 
-  resetSubjectGroupDataByIndex(sjIndex: number): void {
-    console.log(this.majorDetailTmp.subjectGroups[sjIndex].subjectWeights);
-    console.log(this.getSubjectGroups.controls[sjIndex].get('subjectWeights').value);
+  resetSubjectGroupDataByIndex(sjIndex: number): void {        
     if (this.getSubjectGroups.controls[sjIndex]['isUpdate'] !== true) {
       return;
     }
@@ -280,8 +272,7 @@ export class MajorConfigDetailComponent implements OnInit {
     const curriculum = (this.majorForm.get('curriculum').value === '<h2 class=\"ql-align-justify\"><br></h2>' || this.majorForm.get('curriculum').value === '') ? null : this.majorForm.get('curriculum').value;
     const humanQuality = (this.majorForm.get('humanQuality').value === '<h2 class=\"ql-align-justify\"><br></h2>' || this.majorForm.get('humanQuality').value === '') ? null : this.majorForm.get('humanQuality').value;
     const salaryDescription = (this.majorForm.get('salaryDescription').value === '<h2 class=\"ql-align-justify\"><br></h2>' || this.majorForm.get('salaryDescription').value === '') ? null : this.majorForm.get('salaryDescription').value;
-    const newValue = { ...this.majorForm.value, status: 1, curriculum: curriculum, humanQuality: humanQuality, salaryDescription: salaryDescription, description: description, subjectGroup: subjectGroupValue }
-    console.log(newValue);
+    const newValue = { ...this.majorForm.value, status: 1, curriculum: curriculum, humanQuality: humanQuality, salaryDescription: salaryDescription, description: description, subjectGroup: subjectGroupValue }    
     this.openReviewModal(newValue, this.getSubjectGroups.controls.map(rs => rs.value));
   }
 
@@ -330,8 +321,7 @@ export class MajorConfigDetailComponent implements OnInit {
   cancelData(controlName: string): void {
     switch (controlName) {
       case 'code':
-        if (this.majorForm.get('code').value === this.majorDetail.code) {
-          console.log('ddungs')
+        if (this.majorForm.get('code').value === this.majorDetail.code) {          
           this.majorForm.get('code')['isUpdateHtml'] = true;
         } else {
           Swal.fire({

@@ -1,4 +1,5 @@
 import { Routes, RouterModule } from '@angular/router';
+import { IsAdminGuard } from '../../guards/is-admin.guard';
 import { LayoutComponent } from './pages';
 
 const routes: Routes = [
@@ -10,6 +11,7 @@ const routes: Routes = [
       }, 
       {
         path: 'university',
+        canActivate: [IsAdminGuard],
         loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.UniversityModule),
         data: {
           breadcrumb: 'Trường Học'
@@ -41,6 +43,20 @@ const routes: Routes = [
         loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.SeasonModule),
         data: {
           breadcrumb: 'Season'
+        }
+      },
+      {
+        path: 'configuration',
+        loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.ConfigurationModule),
+        data: {
+          breadcrumb: 'Cấu hình'
+        }
+      },
+      {
+        path: 'users',
+        loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.UsersModule),
+        data: {
+          breadcrumb: 'Người dùng'
         }
       },
     ]

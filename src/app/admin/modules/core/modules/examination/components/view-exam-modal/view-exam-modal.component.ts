@@ -21,8 +21,7 @@ export class ViewExamModalComponent implements OnInit {
     private _modalRef: NzModalRef,
   ) { }
 
-  ngOnInit() {
-    console.log(this.data);
+  ngOnInit() {    
   }
 
 
@@ -30,11 +29,9 @@ export class ViewExamModalComponent implements OnInit {
     this.isLoading = true;        
     const universityId = this.data.universityId === null ? null : this.data.universityId.id;
     const subjectId = this.data.subjectId === null ? null : this.data.subjectId.id
-    const newValue = {...this.data, universityId: universityId, subjectId: subjectId}
-    console.log(newValue);
+    const newValue = {...this.data, universityId: universityId, subjectId: subjectId}    
     this._examinationService.createNewExam(newValue).pipe(
-      tap(rs => { 
-        console.log(rs);       
+      tap(rs => {                
         if (rs.succeeded === true) {
           this.isLoading = false;
           this.closeModal();
@@ -64,11 +61,9 @@ export class ViewExamModalComponent implements OnInit {
     this.isLoading = true;            
     const universityId = this.data.universityId === undefined ? null : this.data.universityId.id;
     const subjectId = this.data.subjectId === undefined ? null : this.data.subjectId;
-    const newValue = {...this.data, universityId: universityId, subjectId: subjectId}
-    console.log(newValue);
+    const newValue = {...this.data, universityId: universityId, subjectId: subjectId}    
     this._examinationService.updateExam(newValue).pipe(
-      tap(rs => { 
-        console.log(rs);       
+      tap(rs => {                
         if (rs.succeeded === true) {
           this.isLoading = false;
           this.callBack(this.examId);

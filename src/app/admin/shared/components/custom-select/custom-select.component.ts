@@ -48,8 +48,7 @@ export class CustomSelectComponent implements OnInit, OnChanges {
     this.searchControl = new FormControl('');
   }
 
-  ngOnInit() {  
-    // console.log(this.data);  
+  ngOnInit() {       
     this.filter('');
     this.searchControl.valueChanges.subscribe((value) => this.filter(value));    
   }

@@ -1,0 +1,250 @@
+nb-select {
+  ::ng-deep {
+    button {
+      min-width: 4rem !important;
+    }
+  }
+}
+
+nb-icon {
+  ::ng-deep {
+    font-size: 14px !important;
+  }
+}
+
+::ng-deep {
+  .row {
+    margin-left: 0;
+  }
+}
+
+.search-box {
+  padding: 8px;
+}
+
+.search-box input {
+  width: 188px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.search-box button {
+  width: 90px;
+}
+
+.search-button {
+  margin-right: 8px;
+}
+label {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 500;
+  margin: 0;
+}
+
+.user-configuration {
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  overflow: auto;
+  position: relative;
+  // max-height: 50rem;
+}
+.user-configuration .page-header {
+  margin-left: -1rem;
+  margin-right: -1rem;
+  margin-top: -1rem;
+  margin-bottom: 25px;
+  background-color: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 1rem 3rem;
+}
+
+.flex-container-custom {
+  display: flex;
+  flex-direction: column;
+}
+
+.td-border-children {
+  border-bottom: 1px solid black;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.td-border-children:last-child {
+  border-bottom: none;
+}
+
+.td-border-children-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid black;
+  text-align: center;
+  height: 2.5rem;
+}
+
+.td-border-children-row:last-child {
+  border-bottom: none;
+}
+
+.td-border-item {
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid black;
+}
+.td-border-item:last-child {
+  border-right: none;
+}
+
+.missInfomation {
+  cursor: pointer;
+  nb-icon:hover {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+}
+
+.icon-edit {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  // border: 2px solid #f2f2f2;
+  background-color: #fff;
+  cursor: pointer;
+  &:hover {
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
+  margin: 5px;
+}
+
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.none-action {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.user-header-title h5 {
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  margin: 0 15px 0 0;
+  color: #ff3d71;
+  text-transform: uppercase;
+}
+
+.add-user {
+  float: right;
+}
+nz-table th {
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  // background-color: #f0f0f0;
+  background-color: #add8e6;
+  text-align: center;
+  font-size: 12px; //
+}
+
+nz-table td {
+  font-size: 11px;
+}
+
+nz-table {
+  ::ng-deep {
+    .ant-pagination-item,
+    .ant-pagination-total-text,
+    .ant-pagination-item-ellipsis {
+      line-height: 30px;
+    }
+    a {
+      text-decoration: none;
+    }
+    nz-filter-trigger {
+      .ant-table-filter-trigger {
+        color: black;
+      }
+      .ant-table-filter-trigger.active {
+        color: #1890ff;
+      }
+    }
+    th {
+      border-right: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      border-top: 1px solid black !important;
+      &:first-child {
+        border-left: 1px solid black !important;
+      }
+    }
+    td {
+      border-right: 1px solid black !important;
+      border-bottom: 1px solid black !important;
+      &:first-child {
+        border-left: 1px solid black !important;
+      }
+    }
+  }
+}
+
+nz-table span {
+  font-size: 11px;
+}
+
+nz-table {
+  #stt {
+    width: 1%;
+  }
+  #action {
+    width: 9%;
+  }
+  #name {
+    width: 20%;
+  }
+  #email {
+    width: 9%;
+  }
+  #status {
+    width: 9%;
+  }
+  #role {
+    width: 9%;
+  }
+}
+
+.sticky-table-header {
+  // background-color: #fff;
+  border: none;
+  border-radius: 0;
+  // border-top: 1px solid #eee;
+  // border-bottom: 1px solid #eee;
+  position: absolute;
+  top: 90px;
+  // visibility: visible;
+  // visibility: hidden;
+  z-index: 990;
+  overflow: hidden;
+  min-width: 100%;
+  padding-right: 72px;
+}
+
+.sticky-table-header.fixed-solution {
+  min-width: 0;
+  position: fixed;
+}

@@ -55,8 +55,8 @@ export class MajorConfigMainComponent implements OnInit {
   getListOfSubjectWeight(pageNumber: number, pageSize: number, majorName: string): void {
     this.isLoadingData = true;
     this._majorConfigService.getListOfSubjectWeight(pageNumber, pageSize, majorName).pipe(
-      tap(rs => {        
-        if (rs.succeeded === true) {
+      tap(rs => {               
+        if (rs.succeeded === true) {          
           this.isLoadingData = false;
           if (rs.data !== null) {            
             this.listOfSubjectWeight = rs.data;          
@@ -68,6 +68,7 @@ export class MajorConfigMainComponent implements OnInit {
             this.total = rs.totalRecords;
           } else {
             this.listOfSubjectWeight = [];
+            this.listOfDisplaySubjectWeight = [...this.listOfSubjectWeight]
           }       
         } else {
           this.isLoadingData = false;
@@ -101,7 +102,7 @@ export class MajorConfigMainComponent implements OnInit {
           nzClosable: false,
           nzFooter: null,
           nzWidth: data !== undefined ? 600 : 600,
-          nzComponentParams: { data: data, callBack: (pageNumber: number, pageSize: number, majorName: string) => { this.getListOfSubjectWeight(pageNumber, pageSize, majorName) } },
+          nzComponentParams: { data: data, callBack: (pageNumber: number, pageSize: number, majorName: string) => { this.getListOfSubjectWeight(this.pageIndex, this.pageSize, '') } },
         });
         modal.afterClose.pipe(
           tap((rs) => {

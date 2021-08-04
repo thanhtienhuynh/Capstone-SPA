@@ -24,16 +24,13 @@ export class ExaminationService {
     return this._http.put<Response<any>>(this.baseUrl + 'api/v1/test/admin', body);
   }
 
-  getListOfExam(pageNumber: number, pageSize: number, name: string, year: number, testTypeId: number, subjectId: number, order: number): Observable<PagedResponse<TestBySubject[]>> {
-    console.log(pageSize, pageNumber, name, subjectId, order, testTypeId, year)
+  getListOfExam(pageNumber: number, pageSize: number, name: string, year: number, testTypeId: number, subjectId: number, order: number): Observable<PagedResponse<TestBySubject[]>> {    
     let params = new HttpParams().append('PageSize', `${pageSize}`).append('PageNumber', `${pageNumber}`)
-    if (year !== null) {
-      console.log(params);
+    if (year !== null) {      
       params = params.append('Year', `${year}`);      
     }    
     if (name !== null) {
-      params = params.append('Name', `${name}`);
-      console.log(params);
+      params = params.append('Name', `${name}`);      
     } 
     if (testTypeId !== null) {
       params = params.append('TestTypeId', `${testTypeId}`);

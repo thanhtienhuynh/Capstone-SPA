@@ -1,0 +1,28 @@
+<div>
+  <div class="pt-2">
+    <span class="text-xl">Chỉnh sửa thông tin người dùng {{data.fullname}}</span>               
+  </div>
+  <nz-divider nzDashed ></nz-divider> 
+  <div class="d-flex">
+    <div class="col-md-4">
+      <label for="">Chức danh</label>
+      <nz-select [formControl]="userForm.get('role')" style="width: 100%;">
+        <nz-option [nzValue]="1" [nzLabel]="'Nhân viên'"></nz-option> 
+        <nz-option [nzValue]="2" [nzLabel]="'Người dùng'"></nz-option>         
+        <nz-option [nzValue]="3" [nzLabel]="'Admin'"></nz-option>   
+      </nz-select>      
+    </div>
+    <div class="col-md-4">
+      <label for="">Trạng thái hoạt động</label>
+      <nz-select [formControl]="userForm.get('isActive')" style="width: 100%;">
+        <nz-option [nzValue]="true" [nzLabel]="'Đang hoạt động'"></nz-option> 
+        <nz-option [nzValue]="false" [nzLabel]="'Không hoạt động'"></nz-option>         
+      </nz-select>
+    </div>
+  </div>
+  <nz-divider></nz-divider>
+  <div class="footer">
+    <button nz-button nzType="primary" class="mr-2" [disabled]="userForm.invalid" (click)="update()" [nzLoading]="isLoading">Sửa</button>
+    <button nz-button nzType="dashed" (click)="closeModal()" [disabled]="isLoading">Thoát</button>
+  </div>
+</div>

@@ -88,8 +88,7 @@ export class ArticleDetailComponent implements OnInit {
           if (rs.succeeded === true) {
             this.listOfSelectedUniversity = rs.data.universityIds;
             this.listOfSelectedMajor = rs.data.majorIds;
-            this.article = rs.data;
-            console.log(this.article);
+            this.article = rs.data;            
             this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
           } else {
             this.article = null;

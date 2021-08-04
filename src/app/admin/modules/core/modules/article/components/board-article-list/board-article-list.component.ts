@@ -1,7 +1,7 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
-import { ArticleVM, BoardData, PageModel } from 'src/app/admin/view-models';
+import { ArticleVM, BoardData } from 'src/app/admin/view-models';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -118,8 +118,7 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
   //   }
   // }
 
-  drop(event: CdkDragDrop<any[]>) {
-    console.log(event);
+  drop(event: CdkDragDrop<any[]>) {    
     const newArticle = { ...event.item.data };
     const newArticles = [...event.container.data];
     let isMovingInsideTheSameList = event.previousContainer === event.container;
@@ -153,8 +152,7 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
 
 
 
-  articleFilter(event: string): void {
-    console.log(event);
+  articleFilter(event: string): void {    
     if (this.laneId !== 'published') {
       return;
     };
