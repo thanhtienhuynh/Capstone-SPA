@@ -183,10 +183,10 @@
                                       <div style="width:68px; display: flex; justify-content: start; text-align: center; align-items: center;">                                                                                                                       
                                       </div>
                                       <div class="col-lg-10 pr-0" style="display: flex; justify-content: flex-end;">
-                                        <button [nzLoading]="isLoadingSaving" [disabled]="updateUniForm?.invalid || !updateUniForm?.dirty" nz-button nzType="primary" (click)="updateUni()" style="margin-right: 10px;">                                          
+                                        <button [nzLoading]="isLoadingSaving" [disabled]="(updateUniForm?.invalid || !updateUniForm?.dirty) && validImage" nz-button nzType="primary" (click)="updateUni()" style="margin-right: 10px;">                                          
                                           Lưu
                                         </button>
-                                        <button [disabled]="!updateUniForm?.dirty || isLoadingSaving" nz-button nzType="default" (click)="getDefaultInfo()">                                          
+                                        <button [disabled]="(!updateUniForm?.dirty || isLoadingSaving) && validImage" nz-button nzType="default" (click)="getDefaultInfo()">                                          
                                           Mặc định
                                         </button>
                                       </div>

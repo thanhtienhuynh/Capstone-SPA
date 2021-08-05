@@ -13,22 +13,22 @@
                   <nz-skeleton [nzActive]="true"></nz-skeleton>
                 </div>     
                 <ng-template #articleContent>
-                  <h3 [innerHtml]="article.title"></h3>
+                  <h3 [innerHtml]="article?.title"></h3>
                   <div style="margin-bottom: 15px;">
                     <div class="d-flex align-items-center">
                       <div class="d-flex align-items-center">
                         <i nz-icon nzType="link" nzTheme="outline"></i>
                         <div style="margin-left: 5px;">
-                          <a [href]="article.rootUrl"><span>Link bài gốc</span></a>                    
+                          <a [href]="article?.rootUrl"><span>Link bài gốc</span></a>                    
                         </div>
                       </div>
                       <div class="text-gray">
                         <nz-divider nzType="vertical"></nz-divider>
-                        <span>{{article.postedDate | date: 'HH:mm dd/MM/yyyy'}}</span>
+                        <span>{{article?.postedDate | date: 'HH:mm dd/MM/yyyy'}}</span>
                       </div>
                     </div>
                   </div>
-                  <div [innerHtml]="article.content | safeArticleHtml"></div>
+                  <div [innerHtml]="article?.content | safeArticleHtml"></div>
                 </ng-template>                                        
               </div>
             </div>
@@ -51,11 +51,11 @@
               <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
                 <label for="" class="mb-0 mr-5">Trạng thái bài viết : </label>
                 <!-- <label style="color: #0052cc;" class="mb-0">ĐÃ ĐƯỢC ĐĂNG</label> -->
-                <label *ngIf="article.status === 1" style="color: rgb(87, 165, 90);" class="mb-0">ĐÃ DUYỆT</label>
+                <label *ngIf="article?.status === 1" style="color: rgb(87, 165, 90);" class="mb-0">ĐÃ DUYỆT</label>
                 <label *ngIf="article?.status === 3" style="color: #0052cc;" class="mb-0">ĐÃ ĐƯỢC ĐĂNG</label>
-                <label *ngIf="article.status === 0" style="color: rgb(233, 127, 51);" class="mb-0">CHỜ DUYỆT</label>
-                <label *ngIf="article.status === 2" style="color: rgb(205, 19, 23);" class="mb-0">BỊ CHẶN</label>                
-                <label *ngIf="article.status === 5" style="color: rgb(205, 19, 23);" class="mb-0">CẦN XEM XÉT</label>  
+                <label *ngIf="article?.status === 0" style="color: rgb(233, 127, 51);" class="mb-0">CHỜ DUYỆT</label>
+                <label *ngIf="article?.status === 2" style="color: rgb(205, 19, 23);" class="mb-0">BỊ CHẶN</label>                
+                <label *ngIf="article?.status === 5" style="color: rgb(205, 19, 23);" class="mb-0">CẦN XEM XÉT</label>  
               </div>
               <nz-divider></nz-divider>  
               <div style="display: flex; justify-content: center;">                
@@ -102,7 +102,7 @@
                 <div class="col-lg-12" style="margin-bottom: 20px; padding-left: 0; padding-right: 0;">
                   <label for="">Các ngành học liên quan</label>
                   <nz-select
-                    [nzDisabled]="article.status !== 0"
+                    [nzDisabled]="article?.status !== 0"
                     [nzSize]="'large'"
                     [nzMaxTagCount]="3"
                     [nzMaxTagPlaceholder]="tagPlaceHolder"

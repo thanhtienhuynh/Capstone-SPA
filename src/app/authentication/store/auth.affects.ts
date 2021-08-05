@@ -168,7 +168,7 @@ export class AuthEffects {
     ofType(AuthActions.SET_USER),
     withLatestFrom(this.store.select('auth')),
     tap(([actionData, authState]) => {
-      if (authState.user.roleId == 1) {
+      if (authState.user.roleId == 1 || authState.user.roleId == 3) {
         this.router.navigate(['/admin']);
       } 
     })

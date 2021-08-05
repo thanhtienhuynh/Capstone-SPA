@@ -16,9 +16,11 @@ export class ArticleGridListComponent implements OnInit, OnChanges, AfterViewIni
   @Input() listOfArticle: ArticleVM[];
   @Input() status: number;
   @Input() totalRecods: number = 0;
+  @Input() isLoadingArticle: boolean;
   @Output() paging = new EventEmitter();
   @Output() searchValueTitle: EventEmitter<any> = new EventEmitter<any>();
 
+  
   initPageSize: number = 8;
   initPageNumber: number = 1;
   isCrawling: boolean = false;

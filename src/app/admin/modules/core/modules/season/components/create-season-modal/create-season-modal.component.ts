@@ -4,6 +4,7 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { tap } from 'rxjs/operators';
 import { SeasonService } from 'src/app/admin/services/season/season.service';
 import { Season } from 'src/app/admin/view-models';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-season-modal',
@@ -50,9 +51,11 @@ export class CreateSeasonModalComponent implements OnInit {
       tap(rs => {
         if (rs.succeeded === true) {
           this.isLoading = false;
+          Swal.fire('Thành công', `${rs.data}`, 'success');
           this.callBack();
           this.closeModal();
         } else {
+          Swal.fire('Lỗi', `${rs.data}`, 'error');
           this.isLoading = false;
         }
       })

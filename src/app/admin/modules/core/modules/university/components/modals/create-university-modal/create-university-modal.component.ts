@@ -51,7 +51,7 @@ export class CreateUniversityModalComponent implements OnInit {
       'tuitionTo': ['', Validators.required],
       'description': [''],
       'rating': [5],
-      'status': [0]
+      'status': [1]
     })
   };
 

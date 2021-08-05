@@ -55,7 +55,7 @@
                       <td style="text-align: center;">{{ university.code }}</td>
                       <td>
                         <span *ngIf="university.address !== ''; else missaddress">
-                          {{ university.address.toUpperCase() }}
+                          {{ university.address?.toUpperCase() }}
                         </span>                        
                       </td>
                       <td style="text-align: center;">                      
@@ -95,7 +95,7 @@
                                     <li nz-menu-item>
                                         <a>
                                           <nb-icon [icon]="university.status != 1 ? 'checkmark-outline' : 'close-outline'"></nb-icon>
-                                          <span class="p-3" *ngIf="university.status == 1">Ngưng kích hoạt</span>
+                                          <span (click)="openDeactiveModal(university, 'deactive')" class="p-3" *ngIf="university.status == 1">Ngưng kích hoạt</span>
                                           <span class="p-3" *ngIf="university.status != 1">Kích hoạt</span>
                                         </a>
                                     </li>
