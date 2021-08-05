@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { quillConfiguration } from 'src/app/admin/config';
 import { MajorConfigurationService, SubjectGroupService, SubjectService } from 'src/app/admin/services';
-import { MajorConfiguration, Subject, SubjectGroupVM } from 'src/app/admin/view-models';
+import { MajorConfiguration, Subject, SubjectGroupFe, SubjectGroupVM } from 'src/app/admin/view-models';
 import { Response } from 'src/app/_models/response';
 import Swal from 'sweetalert2';
 import { ReviewMajorConfigurationModalComponent } from '../../components';
@@ -20,7 +20,7 @@ export class MajorConfigDetailComponent implements OnInit {
 
   subjectGroupResult: Observable<Response<SubjectGroupVM[]>> = new BehaviorSubject<Response<SubjectGroupVM[]>>({} as Response<SubjectGroupVM[]>);
   listOfDisplaySubjectGroup: Observable<SubjectGroupVM[]> = new BehaviorSubject<SubjectGroupVM[]>({} as SubjectGroupVM[]);
-  constructor(    
+  constructor(
     private _subjectGroupService: SubjectGroupService,
     private _majorConfigService: MajorConfigurationService,
     private _activatedRoute: ActivatedRoute,
@@ -53,12 +53,12 @@ export class MajorConfigDetailComponent implements OnInit {
 
   getMajorById(id: number): void {
     this._majorConfigService.getMajorById(id).pipe(
-      tap(rs => {        
+      tap(rs => {
         if (rs.succeeded === true) {
           if (rs.data !== null) {
             this.majorDetail = { ...rs.data };
             this.setDataToMajorForm(this.majorDetail);
-            this.majorDetailTmp = { ...rs.data, subjectGroups: rs.data.subjectGroups.slice() }
+            this.majorDetailTmp = { ...rs.data, subjectGroups: rs.data.subjectGroups?.slice() }
           }
         }
       })
@@ -67,10 +67,10 @@ export class MajorConfigDetailComponent implements OnInit {
 
   getMajorFormControls(controlName: string): void {
     switch (controlName) {
-      case 'code':        
+      case 'code':
         this.majorForm.get('code')['isUpdateHtml'] = false;
         break;
-      case 'description':        
+      case 'description':
         this.majorForm.get('description')['isUpdateHtml'] = false;
         break;
       case 'curriculum':
@@ -108,6 +108,10 @@ export class MajorConfigDetailComponent implements OnInit {
     this.majorForm.get('humanQuality')['isUpdateHtml'] = true
     this.majorForm.get('curriculum')['isUpdateHtml'] = true
     this.majorForm.get('salaryDescription')['isUpdateHtml'] = true
+    // this.majorForm.valueChanges.subscribe(rs => {
+    //   console.log('valuechanges', rs);
+    //   this.renderCondition()
+    // })
   }
   get getSubjectGroups(): FormArray {
     return this.majorForm.get('subjectGroup') as FormArray
@@ -138,7 +142,7 @@ export class MajorConfigDetailComponent implements OnInit {
         if (e.subjectWeights !== null) {
           e.subjectWeights.forEach(el => {
             const subjectWeightsField = this._fb.group({
-              'subjectId': [{ subjectId: el.id, subjectName: el.name }],
+              'subjectId': [{ subjectId: el.id, subjectName: el.name }, Validators.required],
               'weight': [el.weight, Validators.required],
               'isSpecialSubjectGroup': [el.isSpecialSubjectGroup]
             })
@@ -147,7 +151,7 @@ export class MajorConfigDetailComponent implements OnInit {
           });
         }
         const subjectGroupfield = this._fb.group({
-          'id': [{ id: e.id, groupCode: e.groupCode }],
+          'id': [{ id: e.id, groupCode: e.groupCode }, Validators.required],
           'status': [1],
           'subjectWeights': subjectWeights
         });
@@ -158,25 +162,37 @@ export class MajorConfigDetailComponent implements OnInit {
   }
 
   addSubjectGroupToFirstIndex(): void {
+    if (this.majorDetailTmp.subjectGroups === undefined) {
+      this.majorDetailTmp.subjectGroups = [];
+      this.majorDetailTmp.subjectGroups.unshift({ id: null, status: 1, subjectWeights: [] });
+      const newFbGroup = this._fb.group({
+        'id': [undefined, Validators.required],
+        'status': [1],
+        'subjectWeights': this._fb.array([])
+      })
+      this.getSubjectGroups.insert(0, newFbGroup);
+      return;
+    }
     this.majorDetailTmp.subjectGroups.unshift({ id: null, status: 1, subjectWeights: [] });
     const newFbGroup = this._fb.group({
-      'id': [undefined],
+      'id': [undefined, Validators.required],
       'status': [1],
       'subjectWeights': this._fb.array([])
     })
     this.getSubjectGroups.insert(0, newFbGroup);
+
   }
   addSubjectGroup(): void {
     this.getSubjectGroups.push(
       this._fb.group({
-        'id': [undefined],
+        'id': [undefined, Validators.required],
         'status': [1],
         'subjectWeights': this._fb.array([])
       })
-    );    
+    );
   }
 
-  resetSubjectGroupDataByIndex(sjIndex: number): void {        
+  resetSubjectGroupDataByIndex(sjIndex: number): void {
     if (this.getSubjectGroups.controls[sjIndex]['isUpdate'] !== true) {
       return;
     }
@@ -186,7 +202,7 @@ export class MajorConfigDetailComponent implements OnInit {
       const element = this.majorDetailTmp.subjectGroups[sjIndex].subjectWeights[i];
       subjectWeightsTmp.push(
         this._fb.group({
-          'subjectId': [{ subjectId: element.id, subjectName: element.name }],
+          'subjectId': [{ subjectId: element.id, subjectName: element.name }, Validators.required],
           'weight': [element.weight, Validators.required],
           'isSpecialSubjectGroup': [element.isSpecialSubjectGroup]
         })
@@ -234,7 +250,7 @@ export class MajorConfigDetailComponent implements OnInit {
       const tmp = { subjectId: data[i].id, subjectName: data[i].name }
       subjectWeights.push(
         this._fb.group({
-          'subjectId': [tmp],
+          'subjectId': [tmp, Validators.required],
           'weight': [1, Validators.required],
           'isSpecialSubjectGroup': [data[i].isSpecialSubjectGroup]
         })
@@ -260,7 +276,11 @@ export class MajorConfigDetailComponent implements OnInit {
   }
 
   updateMajorToSystem(): void {
-    const subjectGroupValue = this.getSubjectGroups.controls.map(rs => rs.value).concat(this.handleSubjecGroupParam).map(rs => {
+    const handleList = this.handleSubjecGroupParam as SubjectGroupFe[];
+    const subjectGroupList = this.getSubjectGroups.controls.map(rs => rs.value)as SubjectGroupFe[];
+    const latsList = handleList.filter(rs => rs?.id?.id !== subjectGroupList.find(rss => rss?.id?.id === rs?.id?.id)?.id.id);
+    const subjectGroupValue = subjectGroupList.concat(latsList);
+    const lastValue = subjectGroupValue.map(rs => {
       const subjectWeightValue = rs?.subjectWeights?.map(_ => {
         const tmp = { ..._, subjectId: _?.subjectId?.subjectId }
         return tmp;
@@ -272,7 +292,8 @@ export class MajorConfigDetailComponent implements OnInit {
     const curriculum = (this.majorForm.get('curriculum').value === '<h2 class=\"ql-align-justify\"><br></h2>' || this.majorForm.get('curriculum').value === '') ? null : this.majorForm.get('curriculum').value;
     const humanQuality = (this.majorForm.get('humanQuality').value === '<h2 class=\"ql-align-justify\"><br></h2>' || this.majorForm.get('humanQuality').value === '') ? null : this.majorForm.get('humanQuality').value;
     const salaryDescription = (this.majorForm.get('salaryDescription').value === '<h2 class=\"ql-align-justify\"><br></h2>' || this.majorForm.get('salaryDescription').value === '') ? null : this.majorForm.get('salaryDescription').value;
-    const newValue = { ...this.majorForm.value, status: 1, curriculum: curriculum, humanQuality: humanQuality, salaryDescription: salaryDescription, description: description, subjectGroup: subjectGroupValue }    
+    const newValue = { ...this.majorForm.value, status: 1, curriculum: curriculum, humanQuality: humanQuality, salaryDescription: salaryDescription, description: description, subjectGroup: lastValue }
+    console.log(newValue);
     this.openReviewModal(newValue, this.getSubjectGroups.controls.map(rs => rs.value));
   }
 
@@ -296,6 +317,7 @@ export class MajorConfigDetailComponent implements OnInit {
   }
 
   saveData(controlName: string): void {
+    this.renderConditionWeight();
     switch (controlName) {
       case 'code':
         this.majorForm.get('code')["isUpdateHtml"] = true
@@ -321,7 +343,7 @@ export class MajorConfigDetailComponent implements OnInit {
   cancelData(controlName: string): void {
     switch (controlName) {
       case 'code':
-        if (this.majorForm.get('code').value === this.majorDetail.code) {          
+        if (this.majorForm.get('code').value === this.majorDetail.code) {
           this.majorForm.get('code')['isUpdateHtml'] = true;
         } else {
           Swal.fire({
@@ -461,14 +483,14 @@ export class MajorConfigDetailComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.removeFormArray(this.getSubjectGroups);
-        this.majorDetailTmp = { ...this.majorDetail, subjectGroups: this.majorDetail.subjectGroups.slice() }
+        this.majorDetailTmp = { ...this.majorDetail, subjectGroups: this.majorDetail.subjectGroups?.slice() }
         if (this.majorDetail.subjectGroups !== null) {
           this.majorDetail.subjectGroups.forEach(e => {
             const subjectWeights = this._fb.array([]);
             if (e.subjectWeights !== null) {
               e.subjectWeights.forEach(el => {
                 const subjectWeightsField = this._fb.group({
-                  'subjectId': [{ subjectId: el.id, subjectName: el.name }],
+                  'subjectId': [{ subjectId: el.id, subjectName: el.name }, Validators.required],
                   'weight': [el.weight, Validators.required],
                   'isSpecialSubjectGroup': [el.isSpecialSubjectGroup]
                 })
@@ -477,7 +499,7 @@ export class MajorConfigDetailComponent implements OnInit {
               });
             }
             const subjectGroupfield = this._fb.group({
-              'id': [{ id: e.id, groupCode: e.groupCode }],
+              'id': [{ id: e.id, groupCode: e.groupCode }, Validators.required],
               'status': [1],
               'subjectWeights': subjectWeights
             });
@@ -493,41 +515,87 @@ export class MajorConfigDetailComponent implements OnInit {
     if (this.majorDetail === undefined) {
       return false;
     }
-    if (this.getSubjectGroups.controls.length === this.majorDetail.subjectGroups.length) {
-      return false;
+    if (this.majorDetail.subjectGroups !== null) {
+      if (this.getSubjectGroups.controls.length === this.majorDetail.subjectGroups.length) {
+        return false;
+      }
     }
     return true;
   }
+
+  renderConditionWeight(): boolean {
+    if (this.majorDetail === undefined) {
+      return false;
+    }
+    return false;
+  }
+
+  isDisplay: boolean = false;
   renderCondition(): boolean {
     const code = this.majorForm.get('code')['isUpdateHtml']
     const description = this.majorForm.get('description')['isUpdateHtml'];
     const curriculum = this.majorForm.get('curriculum')['isUpdateHtml'];
     const humanQuality = this.majorForm.get('humanQuality')['isUpdateHtml'];
     const salaryDescription = this.majorForm.get('salaryDescription')['isUpdateHtml']
+    console.log(this.getSubjectGroups.dirty);
 
     if (description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
-      (this.majorForm.get('description').value !== this.majorDetail?.description)
+      (this.majorForm.get('description').value !== this.majorDetail?.description) && this.getSubjectGroups?.valid
     ) {
+      this.isDisplay = true
       return true;
     } else if (
       description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
-      (this.majorForm.get('curriculum').value !== this.majorDetail?.curriculum)
+      (this.majorForm.get('curriculum').value !== this.majorDetail?.curriculum) && this.getSubjectGroups?.valid
     ) {
+      this.isDisplay = true
       return true;
     } else if (
       description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
-      (this.majorForm.get('humanQuality').value !== this.majorDetail?.humanQuality)
+      (this.majorForm.get('humanQuality').value !== this.majorDetail?.humanQuality) && this.getSubjectGroups?.valid
+    ) {
+      this.isDisplay = true
+      return true;
+    } else if (description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
+      (this.majorForm.get('salaryDescription').value !== this.majorDetail?.salaryDescription) && this.getSubjectGroups?.valid
+    )  {
+      this.isDisplay = true
+      return true;
+    } else if (description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
+      (this.majorForm.get('code').value !== this.majorDetail?.code) && this.getSubjectGroups?.valid
+    ) {
+      this.isDisplay = true
+      return true;
+    } else if (this.getSubjectGroups.length > 0) {
+      if ((this.getSubjectGroups?.controls.length !== this.majorDetail.subjectGroups?.length) && this.getSubjectGroups?.valid &&
+      description && curriculum && humanQuality && salaryDescription && code) {
+        this.isDisplay = true
+        return true;
+      }
+    }
+    // else if ((description && curriculum && humanQuality && salaryDescription && code) && this.getSubjectGroups.dirty) {
+    //   this.isDisplay = true
+    //   return true;
+    // }
+    // console.log('Chay gium con voi');
+    //     console.log(code, 'code');
+    // console.log(description, 'description');
+    // console.log(curriculum, 'curriculum');
+    // console.log(humanQuality, 'humanQuality');
+    // console.log(salaryDescription, 'salaryDescription');
+    this.isDisplay = false;
+    return false;
+  }
 
-    ) {
-      return true
-    } else if (description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
-      (this.majorForm.get('salaryDescription').value !== this.majorDetail?.salaryDescription)) {
-      return true;
-    } else if (description && curriculum && humanQuality && salaryDescription && code && this.majorForm.dirty &&
-      (this.majorForm.get('code').value !== this.majorDetail?.code)) {
+  changeWeight(): boolean {
+    if (this.getSubjectGroups.dirty) {
       return true;
     }
     return false;
   }
 
+  test(event: any): void {
+    console.log(event)
+    this.isDisplay = true;
+  }
 }

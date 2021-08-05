@@ -14,6 +14,8 @@ export class ConfigMainComponent implements OnInit {
 
   pagingForm: FormGroup;
   firstPage: number;
+
+  isLoadingRank: boolean = false;
   highestQuantity: number;
   isUpdatePaging: boolean = true;
   isUpdateApp: boolean = true;
@@ -49,7 +51,7 @@ export class ConfigMainComponent implements OnInit {
   ]
 
   getMinute(): void {
-    this.listOfMinute = [];        
+    this.listOfMinute = [];
     for (let i = 0; i <= 59; i++) {
       const obj = {label: i < 10 ? `0${i}` : `${i}`, value: i} as LabelValue
       this.listOfMinute.push(obj)
@@ -71,20 +73,35 @@ export class ConfigMainComponent implements OnInit {
       this.listOfTwelve.push(obj)
     }
   }
-  
+
   constructor(
     private _configService: ConfigurationService,
     private _fb: FormBuilder
-  ) {     
+  ) {
   }
 
   ngOnInit() {
-    this.getConfigApp();    
+    this.getConfigApp();
     this.getMinute();
     this.getListOfTwelve();
     this.getListOfTwentyfour();
   }
 
+  updateRank(): void {
+    this.isLoadingRank = true;
+    this._configService.updateRank({} as any).pipe(
+      tap(rs => {
+        if (rs.succeeded === true) {
+          this.isLoadingRank = false;
+          this.isUpdateApp = true
+          Swal.fire('Thành công', 'Cập nhật bảng xếp hạng thành công', 'success');
+        } else {
+          this.isLoadingRank = false;
+          Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
+        }
+      })
+    ).subscribe();
+  }
 
   editPagingConfig(): void {
     this.isUpdatePaging = false;
@@ -99,18 +116,18 @@ export class ConfigMainComponent implements OnInit {
     this.getConfigApp();
   }
 
-  updateConfigPaging(): void {    
+  updateConfigPaging(): void {
     this.isLoadingUpdatePaging = true;
     const newValue = {
       'firstPage': this.firstPage as number,
       'highestQuantity': this.highestQuantity
     }
     this._configService.updateConfigPaging(newValue).pipe(
-      tap(rs => {                
+      tap(rs => {
         if (rs.succeeded === true) {
           Swal.fire('Thành công', 'Thay đổi thông số thành công', 'success');
-          this.isUpdatePaging = true;  
-          this.isLoadingUpdatePaging = false;        
+          this.isUpdatePaging = true;
+          this.isLoadingUpdatePaging = false;
         } else {
           Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
           this.isLoadingUpdatePaging = false;
@@ -138,14 +155,14 @@ export class ConfigMainComponent implements OnInit {
         'type': this.expireArticleTimeType
       },
       'testMonths': this.testMonths
-    }    
+    }
     this._configService.updateConfigApp(newValue).pipe(
-      tap(rs => {                
+      tap(rs => {
         if (rs.succeeded === true) {
           Swal.fire('Thành công', 'Thay đổi thông số thành công', 'success');
-          this.isUpdateApp = true; 
-          this.getConfigApp();      
-          this.isLoadingUpdateApp = false;   
+          this.isUpdateApp = true;
+          this.getConfigApp();
+          this.isLoadingUpdateApp = false;
         } else {
           Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
           this.isLoadingUpdateApp = false;
@@ -156,9 +173,9 @@ export class ConfigMainComponent implements OnInit {
 
   getConfigPaging(): void {
     this._configService.getConfigPaging().pipe(
-      tap(rs => {        
+      tap(rs => {
         if (rs.succeeded === true) {
-          if (rs.data !== null) {            
+          if (rs.data !== null) {
             this.firstPage = rs.data.firstPage,
             this.highestQuantity = rs.data.highestQuantity
           }
@@ -168,7 +185,7 @@ export class ConfigMainComponent implements OnInit {
   }
   getConfigApp(): void {
     this._configService.getConfigApp().pipe(
-      tap(rs => {        
+      tap(rs => {
         if (rs.succeeded === true) {
           if (rs.data !== null) {
             this.crawlTimeType = rs.data.crawlTime.type;

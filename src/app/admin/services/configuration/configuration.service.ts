@@ -20,7 +20,7 @@ export class ConfigurationService {
 
   getConfigPaging(): Observable<Response<PagingConfiguration>> {
     return this._http.get<Response<PagingConfiguration>>(this.baseUrl + 'api/v1/configuration/pagination');
-  }  
+  }
 
   updateConfigPaging(body: PagingConfiguration): Observable<Response<any>> {
     return this._http.put<Response<any>>(this.baseUrl + 'api/v1/configuration/pagination', body);
@@ -28,5 +28,9 @@ export class ConfigurationService {
 
   updateConfigApp(body: ConfigurationRM): Observable<Response<any>> {
     return this._http.put<Response<any>>(this.baseUrl + 'api/v1/configuration/app', body);
+  }
+
+  updateRank(body: {}): Observable<Response<any>> {
+    return this._http.put<Response<any>>(this.baseUrl + 'api/v1/rank/updation', body);
   }
 }
