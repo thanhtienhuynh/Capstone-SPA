@@ -1,8 +1,8 @@
 <div class="major-config-detail">
   <div class="container-fluid">
     <div class="d-flex justify-content-end mb-2">
-      <button nz-button nzType="primary" (click)="updateMajorToSystem()" style="margin-right: 2px;" *ngIf="renderCondition()">Lưu</button>
-      <button nz-button nzType="dashed" (click)="resetAll()" *ngIf="renderCondition()
+      <button nz-button nzType="primary" (click)="updateMajorToSystem()" style="margin-right: 2px;" *ngIf="(renderCondition() || isDisplay) && isCatchEditWeight">Lưu</button>
+      <button nz-button nzType="dashed" (click)="resetAll()" *ngIf="(renderCondition() || isDisplay) && isCatchEditWeight
       ">Mặc định</button>
     </div>
     <div nz-row style="display: flex; justify-content: space-between;">
@@ -50,7 +50,8 @@
                 </div>
                 <div class="col-md-6 pr-0" style="display: flex; justify-content: flex-end; align-items: center;">
                   <button nz-button nzType="primary" class="mr-2" (click)="addSubjectGroupToFirstIndex()">Thêm khối</button>
-                  <button nz-button nzType="dashed" (click)="resetSubjectGroup()" *ngIf="renderConditionSubjectGroup() && majorDetailTmp.subjectGroups !== undefined">Mặc định</button>
+                  <!-- <button nz-button nzType="dashed" (click)="resetSubjectGroup()" *ngIf="renderConditionSubjectGroup() && majorDetailTmp.subjectGroups !== undefined">Mặc định</button> -->
+                  <button nz-button nzType="dashed" (click)="resetSubjectGroup()" *ngIf="isCatchDisplay">Mặc định</button>
                 </div>
               </div>
               <nz-collapse>
@@ -91,7 +92,8 @@
                             </div>
                             <div class="col-md-4">
                               <nb-form-field>
-                                <input style="text-align: right;" type="number" [formControl]="getSubjectGroups.controls[i].get('subjectWeights').controls[si].get('weight')" fullWidth nbInput>
+                                <input [readonly]="getSubjectGroups.controls[i]['isUpdateHtml']" style="text-align: right;"
+                                [style.color]="getSubjectGroups.controls[i]['isUpdateHtml'] ? 'rgba(143, 155, 179, 0.48)' : '#222b45'" type="number" [formControl]="getSubjectGroups.controls[i].get('subjectWeights').controls[si].get('weight')" fullWidth nbInput>
                               </nb-form-field>
                             </div>
                           </div>
@@ -103,11 +105,13 @@
                     <nb-icon icon="plus"></nb-icon>
                   </button> -->
                   <div class="d-flex justify-content-end align-items-center">
-                    <button (click)="removeSubjectGroup(i)" style="margin-right: 2px;" *ngIf="this.getSubjectGroups?.controls.length > 1" nzDanger nz-button nz-tooltip>
+                    <button nz-button nzType="primary" *ngIf="getSubjectGroups.controls[i]['isUpdateHtml']" (click)="getMajorFormControls('weight', i)">Chỉnh sửa</button>
+                    <button nz-button nzType="primary" *ngIf="getSubjectGroups.controls[i]['isUpdateHtml'] === false" (click)="saveData('weight', i)">Lưu</button>
+                    <button (click)="removeSubjectGroup(i)" style="margin-right: 2px; margin-left: 2px;" *ngIf="this.getSubjectGroups?.controls.length > 1" nzDanger nz-button nz-tooltip>
                       <!-- <nb-icon icon="minus"></nb-icon> -->
                       Xóa
                     </button>
-                    <button *ngIf="getSubjectGroups.controls[i]['isUpdate'] === true" (click)="resetSubjectGroupDataByIndex(i)" nz-button nz-tooltip nzType="dashed">
+                    <button *ngIf="getSubjectGroups.controls[i]['isUpdate'] === true && getSubjectGroups.controls[i]['isUpdateHtml'] === false" (click)="resetSubjectGroupDataByIndex(i)" nz-button nz-tooltip nzType="dashed">
                       Mặc định
                     </button>
                   </div>
