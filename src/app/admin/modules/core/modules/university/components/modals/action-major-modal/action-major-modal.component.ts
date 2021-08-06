@@ -18,13 +18,13 @@ import { MajorConfigurationModalComponent } from '../../../../major-configuratio
 
 
 export class ActionMajorModalComponent implements OnInit, OnChanges {
- 
-  
+
+
   //DECORATOR
   @Input() data: MajorUniversity | undefined;
   @Input() listOfMajor: MajorUniversity[] = []
   @Input() universityName: string;
-  @Input() universityId: any;  
+  @Input() universityId: any;
   @Input() changeSeasonId: (seasonId: number) => void;
 
   @Output() seasonId = new EventEmitter<any>();
@@ -48,7 +48,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
   provinceResult: Observable<Province[]> = new BehaviorSubject<Province[]>({} as Province[]);
 
   listOfDisplaySubjectGroup: Observable<MajorSubjectGroup[]> = new BehaviorSubject<MajorSubjectGroup[]>({} as MajorSubjectGroup[]);
-  
+
   tmpUpdatingUniSubAdmissionParams: any[] = [];
   tmpSubjectGroup: any[] = [];
 
@@ -69,12 +69,12 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
   get updatingUniSubAdmissionParams(): FormArray {
     return this.updateMajorForm.get('updatingUniSubAdmissionParams') as FormArray
   }
-  
+
   get handleTmpSubjectGroup(): any[] {
     return this.tmpSubjectGroup;
   };
 
-  
+
   constructor(
     private _fb: FormBuilder,
     private _modalRef: NzModalRef,
@@ -88,7 +88,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     this.initUpdateFormMajor();
   }
   ngOnChanges(changes: SimpleChanges): void {
-    
+
   }
 
   ngOnInit() {
@@ -96,7 +96,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     this.getListOfTrainingProgram([]);
     this.getAddmissionMethod();
     this.getProvince();
-    this.getListOfSeason();    
+    this.getListOfSeason();
     this.getMajorOfUniversityNonePaging(this.universityId, this.majorForm.get('seasonId').value);
     if (this.data === undefined) {
       this.modalTitle = 'THÊM NGÀNH CỦA ' + `${this.universityName.toUpperCase()}`;
@@ -107,7 +107,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     this._universityService.getListOfSeason().pipe(
       tap(rs => {
         if (rs.succeeded === true) {
-          this.listOfSeason = [...rs.data];                     
+          this.listOfSeason = [...rs.data];
         } else {
 
         }
@@ -121,12 +121,12 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
   getMajorOfUniversityNonePaging(uniId: string, seasonId: string): void {
     this._universityService.getMajorOfUniversityNonePaging(uniId, seasonId).pipe(
       tap(rs => {
-        if (rs.succeeded === true) {                    
-          this.listOfMajors = [...rs.data];          
+        if (rs.succeeded === true) {
+          this.listOfMajors = [...rs.data];
           if (this.majorName === undefined) {
             return;
-          }                  
-          const a = this.listOfMajors?.find(rs => rs.majorId === this.majorName.id) !== undefined ? this.listOfMajors.find(rs => rs.majorId === this.majorName.id).majorDetailUnies.map(rs => rs.trainingProgramId) : [];          
+          }
+          const a = this.listOfMajors?.find(rs => rs.majorId === this.majorName.id) !== undefined ? this.listOfMajors.find(rs => rs.majorId === this.majorName.id).majorDetailUnies.map(rs => rs.trainingProgramId) : [];
           this.getListOfTrainingProgram(a as number[]);
         } else {
 
@@ -170,23 +170,23 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
       return subAdmissionsTmp;
     }
     );
-    const newValue = { ...this.majorForm.value, 'majorId': majorId, 'trainingProgramId': trainingProgramId, 'subAdmissions': subAdmissions, 'universityId': parseInt(this.universityId) }    
+    const newValue = { ...this.majorForm.value, 'majorId': majorId, 'trainingProgramId': trainingProgramId, 'subAdmissions': subAdmissions, 'universityId': parseInt(this.universityId) }
     this._universityService.majorAddition(newValue).pipe(
-      tap(rs => {        
+      tap(rs => {
         if (rs.succeeded === true) {
           this.isLoadingAdd = false;
           Swal.fire({ position: 'center', icon: 'success', title: 'Thành Công', showConfirmButton: false, timer: 1500 });
-          this.changeSeasonId(this.majorForm.get('seasonId').value);          
-          this.closeModal();                    
+          this.changeSeasonId(this.majorForm.get('seasonId').value);
+          this.closeModal();
         } else {
           this.isLoadingAdd = false;
           Swal.fire({ position: 'center', icon: 'error', title: 'Thất Bại', text: rs.errors[0], showConfirmButton: false, timer: 1500 });
         }
       })
-    ).subscribe();      
-    
-    this.closeModal();                  
-  }  
+    ).subscribe();
+
+    this.closeModal();
+  }
 
   addSubAddmissions(): void {
     this.getSubAddmissions.push(
@@ -230,7 +230,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
       formArray.removeAt(0);
     }
   }
-  
+
 
   getProvince(): void {
     this._addmissionMethodService.getProvince().pipe(
@@ -271,8 +271,8 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     this._addmissionMethodService.getAddmissionMethod().pipe(
       tap(rs => {
         if (rs.succeeded === true) {
-          this.listOfAdmissionMethod = rs.data;          
-        } else {          
+          this.listOfAdmissionMethod = rs.data;
+        } else {
         }
       }),
       catchError(err => {
@@ -286,7 +286,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     if (id) {
       const majorDetailUni = this.data.majorDetailUnies.find(rs => rs.trainingProgramId === id)
       this.setData(majorDetailUni);
-    }    
+    }
   }
 
   initUpdateFormMajor(): void {
@@ -331,7 +331,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
           'provinceId': [e.provinceId === null ? this.nation : this.listOfProvince.find(rs => rs.id === e.provinceId), Validators.required],
           'majorDetailEntryMarkParams': majorDetailEntryMarkParams
         });
-        field['isUpdate'] = true;        
+        field['isUpdate'] = true;
         this.updatingUniSubAdmissionParams.push(field);
       });
     }
@@ -389,12 +389,12 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     const subjectGroup = subAddmission.get('majorDetailEntryMarkParams') as FormArray;
     const field = this._fb.group({
       'entryMarkId': [null],
-      'mark': [0],
+      'mark': [''],
       'majorSubjectGroupId': [data, Validators.required],
       'status': [1],
     });
     subjectGroup.push(field);
-  }  
+  }
 
   removeSubjectGroupUpdating(submissionIndex: number, subjectGroupIndex: number) {
     const subAddmission = this.updatingUniSubAdmissionParams.controls[submissionIndex];
@@ -430,39 +430,39 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
 
   updateMajor(): void {
     this.isLoadingUpdate = true;
-    const tmpUpdatingUniSubAdmissionParams = this.updatingUniSubAdmissionParams.controls.map(rs => rs.value).concat(this.handleUpdatingUniSubAdmissionParams);    
+    const tmpUpdatingUniSubAdmissionParams = this.updatingUniSubAdmissionParams.controls.map(rs => rs.value).concat(this.handleUpdatingUniSubAdmissionParams);
     const subAddmission = tmpUpdatingUniSubAdmissionParams.map(rs => {
       const sjGroups = this.handleTmpSubjectGroup !== [] ? this.handleTmpSubjectGroup.filter(_ => _.subAdmissionId === rs.subAdmissionId).map(__ => {
         const eachSjGroup = { 'entryMarkId': __.entryMarkId, 'mark': __.mark, 'majorSubjectGroupId': __.majorSubjectGroupId, 'status': __.status }
         return eachSjGroup;
-      }) as subjectGroupTmp[] : [];                 
+      }) as subjectGroupTmp[] : [];
       const tmpMajorDetailEntryMarkParams = rs.majorDetailEntryMarkParams.map(rss => {
         const tmp = { ...rss, 'majorSubjectGroupId': rss.majorSubjectGroupId.id }
         return tmp;
       }) as subjectGroupTmp[]
-      const newList = (tmpMajorDetailEntryMarkParams.map(rs => {                      
-        const tmp = rs.majorSubjectGroupId === sjGroups.find(rss => rss.majorSubjectGroupId === rs.majorSubjectGroupId)?.majorSubjectGroupId 
-        ? {'entryMarkId': sjGroups.find(id => id.majorSubjectGroupId === rs.majorSubjectGroupId)?.entryMarkId, 'mark': rs.mark, 'majorSubjectGroupId': rs.majorSubjectGroupId, 'status': 1} 
-        : {'entryMarkId': rs.entryMarkId, 'mark': rs.mark, 'majorSubjectGroupId': rs.majorSubjectGroupId, 'status': 1}        
+      const newList = (tmpMajorDetailEntryMarkParams.map(rs => {
+        const tmp = rs.majorSubjectGroupId === sjGroups.find(rss => rss.majorSubjectGroupId === rs.majorSubjectGroupId)?.majorSubjectGroupId
+        ? {'entryMarkId': sjGroups.find(id => id.majorSubjectGroupId === rs.majorSubjectGroupId)?.entryMarkId, 'mark': rs.mark, 'majorSubjectGroupId': rs.majorSubjectGroupId, 'status': 1}
+        : {'entryMarkId': rs.entryMarkId, 'mark': rs.mark, 'majorSubjectGroupId': rs.majorSubjectGroupId, 'status': 1}
         return tmp;
-      }) as subjectGroupTmp[]).concat(sjGroups.filter(rs => rs.majorSubjectGroupId !== tmpMajorDetailEntryMarkParams.find(rss => rss.majorSubjectGroupId === rs.majorSubjectGroupId)?.majorSubjectGroupId));                 
+      }) as subjectGroupTmp[]).concat(sjGroups.filter(rs => rs.majorSubjectGroupId !== tmpMajorDetailEntryMarkParams.find(rss => rss.majorSubjectGroupId === rs.majorSubjectGroupId)?.majorSubjectGroupId));
       const tmp = { ...rs, 'genderId': rs.genderId !== 1000 ? rs.genderId : null, 'provinceId': rs.provinceId.id !== 1000 ? rs.provinceId.id : null, 'majorDetailEntryMarkParams': newList }
       return tmp;
     });
-    const newValue = { ...this.updateMajorForm.value, updatingUniSubAdmissionParams: subAddmission };      
+    const newValue = { ...this.updateMajorForm.value, updatingUniSubAdmissionParams: subAddmission };
     this._universityService.majorUpdation(newValue).pipe(
-      tap(rs => {        
+      tap(rs => {
         if (rs.succeeded === true) {
           this.isLoadingUpdate = false;
           Swal.fire({ position: 'center', icon: 'success', title: 'Thành Công', showConfirmButton: false, timer: 1500 });
-          this.changeSeasonId(this.data.majorDetailUnies[0].seasonId);   
+          this.changeSeasonId(this.data.majorDetailUnies[0].seasonId);
           this.closeModal();
         } else {
           this.isLoadingUpdate = false;
           Swal.fire({ position: 'center', icon: 'error', title: 'Thất Bại', text: rs.errors[0], showConfirmButton: false, timer: 1500 });
         }
       }),
-      catchError(err => {        
+      catchError(err => {
         return of(undefined);
       })
     ).subscribe();
@@ -482,7 +482,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
       this.listOfDisplaySubjectGroup = this.subjectGroupResult.pipe(
         map(rs => {
           const list = (this.updatingUniSubAdmissionParams.controls[0].get('majorDetailEntryMarkParams') as FormArray).controls.filter(e => e['isUpdate']).map(rs => rs.value.majorSubjectGroupId) as MajorSubjectGroup[];
-          const a = rs.data.filter(rss => rss.id !== list.find(rsss => rsss.id === rss.id)?.id);          
+          const a = rs.data.filter(rss => rss.id !== list.find(rsss => rsss.id === rss.id)?.id);
           return rs.data;
         })
       )
@@ -515,33 +515,33 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
     )
   }
 
-  useSelectSubjectGroup(item: MajorSubjectGroup, subAdmissionIndex: number, subjectGroupIndex: number): void {    
-    const list = (this.updatingUniSubAdmissionParams.controls[subAdmissionIndex].get('majorDetailEntryMarkParams') as FormArray).controls.filter(e => !e['isUpdate']).map(rs => rs.value.majorSubjectGroupId);    
+  useSelectSubjectGroup(item: MajorSubjectGroup, subAdmissionIndex: number, subjectGroupIndex: number): void {
+    const list = (this.updatingUniSubAdmissionParams.controls[subAdmissionIndex].get('majorDetailEntryMarkParams') as FormArray).controls.filter(e => !e['isUpdate']).map(rs => rs.value.majorSubjectGroupId);
   }
 
-  selectedSeason(event: number): void {    
-    this.getMajorOfUniversityNonePaging(this.universityId, event.toString());       
-  }  
+  selectedSeason(event: number): void {
+    this.getMajorOfUniversityNonePaging(this.universityId, event.toString());
+  }
 
-  useSelectMajor(item) {    
+  useSelectMajor(item) {
     this.majorName = item;
     this.getMajorSubjectGroup(item.id);
     this.majorForm.get('majorCode').setValue(item?.code);
-    const a = this.listOfMajors?.find(rs => rs.majorId === item.id) !== undefined ? this.listOfMajors.find(rs => rs.majorId === item.id).majorDetailUnies.map(rs => rs.trainingProgramId) : [];    
+    const a = this.listOfMajors?.find(rs => rs.majorId === item.id) !== undefined ? this.listOfMajors.find(rs => rs.majorId === item.id).majorDetailUnies.map(rs => rs.trainingProgramId) : [];
     this.getListOfTrainingProgram(a as number[]);
   };
 
-  closeModal(): void {  
-    this._modalRef.close();          
+  closeModal(): void {
+    this._modalRef.close();
   }
 
-  openAddMajorToSystemModal(event: any): void {    
+  openAddMajorToSystemModal(event: any): void {
     this.closeModal();
     this.openMajorConfigurationModal(undefined);
   }
 
-  openMajorConfigurationModal(data: MajorConfiguration | undefined): void {    
-    if (data === undefined) { 
+  openMajorConfigurationModal(data: MajorConfiguration | undefined): void {
+    if (data === undefined) {
       const modal = this._modalService.create({
         nzContent: MajorConfigurationModalComponent,
         nzClosable: false,
@@ -553,7 +553,7 @@ export class ActionMajorModalComponent implements OnInit, OnChanges {
         tap((rs) => {
         })
       ).subscribe();
-    }      
+    }
 
   }
 }

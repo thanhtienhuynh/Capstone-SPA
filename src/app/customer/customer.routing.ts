@@ -7,7 +7,7 @@ import { CustomerComponent } from './customer.component';
 
 const routes: Routes = [
   { path: '', component: CustomerComponent, children: [
-      { path: '', pathMatch: 'full' ,redirectTo: 'home' },
+      { path: '', pathMatch: 'full', redirectTo: 'home' },
       { path: 'home', loadChildren: () => import('../home/home.module').then((m) => m.HomeModule)},
       { path: 'university', loadChildren: () => import('../cus-university/cus-university.module').then((m) => m.CusUniversityModule)},
       { path: 'test', loadChildren: () => import('../cus-test/cus-test.module').then((m) => m.CusTestModule)},

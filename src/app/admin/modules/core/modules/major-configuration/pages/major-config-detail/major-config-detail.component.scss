@@ -70,7 +70,7 @@ label {
 }
 nz-collapse {
   width: 100%;
-  
+
 }
 
 nz-collapse-panel {
@@ -97,4 +97,10 @@ nb-form-field {
       font-size: 11px !important;
     }
   }
+}
+
+.isReadonly {
+  background-color: #f7f9fc;
+  border-color: #e4e9f2;
+  color: rgba(143, 155, 179, 0.48);
 }

@@ -69,8 +69,7 @@ export class MajorConfigCreateComponent implements OnInit {
       const tmp = { ...rs, id: rs.id?.id, subjectWeights: subjectWeightTmp };
       return tmp
     });
-    const newValue = { ...this.addMajorForm.value, subjectGroups: subjectGroups }
-    console.log(newValue);
+    const newValue = { ...this.addMajorForm.value, subjectGroups: subjectGroups }    
     this.openCreateModal(newValue);
     // this._majorConfigService.addNewMajorToSystem(newValue).pipe(
     //   tap(rs => {

@@ -238,15 +238,21 @@ export class CensorshipComponent implements OnInit {
 
   getArticleById(id: number): void {
     this._articleService.getArticleById(id).pipe(
-      tap((rs) => {
+      tap((rs) => {        
         if (rs.succeeded === true) {
-          this.listOfSelectedUniversity = rs.data.universityIds;
-          this.listOfSelectedMajor = rs.data.majorIds;
-          this.article = rs.data;
-          this.articleId = rs.data.id;
-          this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
+          if (rs.data !== null) {
+            this.listOfSelectedUniversity = rs.data.universityIds;
+            this.listOfSelectedMajor = rs.data.majorIds;
+            this.article = rs.data;
+            this.articleId = rs.data.id;
+            this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
+          } else {
+            this.article = null;
+            Swal.fire('Lỗi', `${rs.errors[0]}`, 'error')
+          }
         } else {
           this.article = null;
+          Swal.fire('Lỗi', `${rs.errors[0]}`, 'error')
         }
       }),
       catchError((err) => {
@@ -258,10 +264,17 @@ export class CensorshipComponent implements OnInit {
 
   getUnApprovedArticleIdList(): void {
     this._articleService.getUnApprovedArticleIdList().pipe(
-      tap((rs) => {
+      tap((rs) => {        
         if (rs.succeeded === true) {
-          this.unCensorshipList = rs.data
-          this.showElement(this.unCensorshipList, 0);
+          if (rs.data !== null) {
+            this.unCensorshipList = rs.data
+            this.showElement(this.unCensorshipList, 0);
+          } else {
+            this.unCensorshipList = undefined;
+            Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
+          }
+        } else {
+          Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
         }
       })
     ).subscribe();

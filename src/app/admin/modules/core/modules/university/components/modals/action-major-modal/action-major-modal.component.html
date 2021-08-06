@@ -5,22 +5,22 @@
   <nz-divider></nz-divider>
   <div class="d-flex">
     <div class="col-md-9">
-      <label for="">Tên ngành <span style="color: red;">*</span></label> 
+      <label for="">Tên ngành <span style="color: red;">*</span></label>
       <nb-form-field>
         <nb-icon nbPrefix icon="briefcase-outline"></nb-icon>
         <input  readonly nz-dropdown type="text" [value]="majorForm.get('majorId').value?.name" [placeholder]="'Chọn ngành'" [nzDropdownMenu]="selectMajorName" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
-      [status]="majorForm.get('majorId').invalid && (majorForm.get('majorId').touched || majorForm.get('majorId').dirty) ? 'danger' : 'basic'">        
-      </nb-form-field>   
-      <nz-dropdown-menu #selectMajorName="nzDropdownMenu">        
+      [status]="majorForm.get('majorId').invalid && (majorForm.get('majorId').touched || majorForm.get('majorId').dirty) ? 'danger' : 'basic'">
+      </nb-form-field>
+      <nz-dropdown-menu #selectMajorName="nzDropdownMenu">
         <app-custom-select (flagAction)="openAddMajorToSystemModal($event)" (useSelect)="useSelectMajor($event)" [control]="majorForm.get('majorId')" [data]="listOfDisplayMajorResult | async" [name]="'majorId'" [label]="'name'" [placeholder]="'Tìm kiếm theo tên ngành'" [titleNewItem]="'Ngành'"></app-custom-select>
       </nz-dropdown-menu>
     </div>
     <div class="col-md-3">
       <label for="">Code <span style="color: red;">*</span></label>
-      <nb-form-field>        
+      <nb-form-field>
         <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
-        <input style="text-align: right;" [formControl]="majorForm.get('majorCode')"  type="text" placeholder="Mã Ngành" fullWidth nbInput        
-        />        
+        <input style="text-align: right;" [formControl]="majorForm.get('majorCode')"  type="text" placeholder="Mã Ngành" fullWidth nbInput
+        />
       </nb-form-field>
     </div>
   </div>
@@ -41,52 +41,52 @@
       <nb-form-field>
         <nb-icon nbPrefix icon="layers-outline" pack="eva"></nb-icon>
         <input style="text-align: right;" [formControl]="majorForm.get('totalAdmissionQuantity')"  type="number" placeholder="Nhập chỉ tiêu" fullWidth nbInput
-        
-        /> 
+
+        />
       </nb-form-field>
     </div>
     <div class="col-md-3">
       <label for="">Mùa <span style="color: red;">*</span></label>
-      <nb-select [formControl]="majorForm.get('seasonId') " fullWidth (selectedChange)="selectedSeason($event)">                
+      <nb-select [formControl]="majorForm.get('seasonId') " fullWidth (selectedChange)="selectedSeason($event)">
         <nb-option *ngFor="let season of listOfSeason" [value]="season?.id">{{season?.name}}</nb-option>
       </nb-select>
-    </div>      
+    </div>
   </div>
-  <nz-divider nzDashed ></nz-divider>  
+  <nz-divider nzDashed ></nz-divider>
   <div *ngIf="majorForm.get('majorId').value !== null">
     <nb-card *ngFor="let c of getSubAddmissions.controls; let i = index">
       <nb-card-body >
         <div class="d-flex">
           <div class="col-md-4" style="padding-left: 0;">
             <label for="">Tỉnh thành <span style="color: red;">*</span></label>
-            <nb-form-field>        
+            <nb-form-field>
               <input  readonly nz-dropdown [disabled]="data!=undefined" type="text" [value]="getSubAddmissions.controls[i].get('provinceId').value?.name" [nzDropdownMenu]="selectProvince" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
-            >        
-            </nb-form-field>   
-            <nz-dropdown-menu #selectProvince="nzDropdownMenu">        
+            >
+            </nb-form-field>
+            <nz-dropdown-menu #selectProvince="nzDropdownMenu">
               <app-custom-select [control]="getSubAddmissions.controls[i].get('provinceId')" [data]="provinceResult | async" [name]="'id'" [label]="'name'" [placeholder]="'Tìm kiếm Tỉnh - Thành phố'"></app-custom-select>
             </nz-dropdown-menu>
           </div>
           <div class="col-md-3">
             <label for="">PT xét tuyển <span style="color: red;">*</span></label>
-            <nb-select [formControl]="getSubAddmissions.controls[i].get('admissionMethodId')" fullWidth>                   
+            <nb-select [formControl]="getSubAddmissions.controls[i].get('admissionMethodId')" fullWidth>
               <!-- <nb-option [value]="1">THPT QG</nb-option>
               <nb-option [value]="2">HỌC BẠ </nb-option>              -->
               <nb-option *ngFor="let item of listOfAdmissionMethod" [value]="item?.id">{{item.name}}</nb-option>
-            </nb-select>           
+            </nb-select>
           </div>
           <div class="col-md-3">
             <label for="">Giới tính <span style="color: red;">*</span></label>
             <nb-select [formControl]="getSubAddmissions.controls[i].get('genderId')" fullWidth>
-              <nb-option [value]="1000">TẤT CẢ</nb-option>        
+              <nb-option [value]="1000">TẤT CẢ</nb-option>
               <nb-option [value]="1">NAM</nb-option>
-              <nb-option [value]="0">NỮ </nb-option>             
-            </nb-select>           
-          </div>          
+              <nb-option [value]="0">NỮ </nb-option>
+            </nb-select>
+          </div>
           <div class="col-md-2" style="padding-right: 0;">
             <label for="">Số lượng</label>
-            <input style="text-align: right;" [formControl]="getSubAddmissions.controls[i].get('quantity')"  type="number" placeholder="Số Lượng" fullWidth nbInput/>           
-          </div>    
+            <input style="text-align: right;" [formControl]="getSubAddmissions.controls[i].get('quantity')"  type="number" placeholder="Số Lượng" fullWidth nbInput/>
+          </div>
         </div>
         <nb-card class="mt-2" style="margin-bottom: 0;">
           <nb-card-body>
@@ -99,22 +99,22 @@
               </div>
               <div class="col-md-3" style="justify-content: center; align-items: center; display: flex;">
                 <label for="">Thao tác</label>
-              </div>              
+              </div>
             </div>
             <div class="d-flex mt-2" style="justify-content: center; align-items: center;" *ngFor="let s of getSubAddmissions.controls[i].get('subjectGroups').controls; index as si">
               <div class="col-md-4" style="justify-content: center; align-items: center; display: flex;">
-                <nb-form-field>        
+                <nb-form-field>
                   <input [value]="getSubAddmissions.controls[i].get('subjectGroups').controls[si].get('majorSubjectGroupId').value?.subjectGroupName"  readonly nz-dropdown type="text"  [nzDropdownMenu]="selectGroupCode" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
-                >        
-                </nb-form-field>                   
+                >
+                </nb-form-field>
                 <nz-dropdown-menu #selectGroupCode="nzDropdownMenu">
                   <app-custom-select  [control]="getSubAddmissions.controls[i].get('subjectGroups').controls[si].get('majorSubjectGroupId')"  [data]="listOfDisplaySubjectGroup | async" [name]="'id'" [label]="'subjectGroupName'" [placeholder]="'Tìm kiếm theo tên khối'" [titleNewItem]="'Khối'"></app-custom-select>
-                </nz-dropdown-menu> 
+                </nz-dropdown-menu>
               </div>
               <div class="col-md-3" style="justify-content: center; align-items: center; display: flex;">
                 <nb-form-field>
-                  <input style="text-align: right;" type="number" [formControl]="getSubAddmissions.controls[i].get('subjectGroups').controls[si].get('entryMarkPerGroup')"  placeholder="Nhập Điểm" fullWidth nbInput/>           
-                </nb-form-field>                
+                  <input style="text-align: right;" type="number" [formControl]="getSubAddmissions.controls[i].get('subjectGroups').controls[si].get('entryMarkPerGroup')"  placeholder="Nhập Điểm" fullWidth nbInput/>
+                </nb-form-field>
               </div>
               <div class="col-md-3" style="justify-content: center; align-items: center; display: flex;">
                 <button (click)="addSubjectGroup(i, undefined)" nz-button nzType="default" nz-tooltip nzTooltipTitle="Thêm khối xét tuyển">
@@ -124,9 +124,9 @@
                   <nb-icon icon="minus"></nb-icon>
                 </button>
               </div>
-            </div> 
+            </div>
           </nb-card-body>
-        </nb-card>          
+        </nb-card>
       </nb-card-body>
       <button (click)="addSubAddmissions()" nz-button nzType="default" nz-tooltip nzTooltipTitle="Thêm chỉ tiêu phụ">
         <nb-icon icon="plus"></nb-icon>
@@ -134,14 +134,14 @@
       <button style="margin-top: 2px;" (click)="removeSubAddmission(i)" nz-button nz-tooltip nzTooltipTitle="Xóa chỉ tiêu phụ" *ngIf="getSubAddmissions.controls.length > 1">
         <nb-icon icon="minus"></nb-icon>
       </button>
-    </nb-card>    
-  </div>  
-   
-  <div class="footer">    
+    </nb-card>
+  </div>
+
+  <div class="footer">
     <button [nzLoading]="isLoadingAdd" [disabled]="majorForm.invalid" (click)="addMajor()" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
       <!-- <span style="font-size: 12px;">Thêm</span> -->
       Thêm
-    </button>    
+    </button>
     <button [disabled]="isLoadingAdd" (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="basic">
       <!-- <span style="font-size: 12px;">Thoát</span> -->
       Thoát
@@ -152,75 +152,75 @@
 <ng-template #update >
   <div class="pt-3">
     <div >
-      <span class="text-xl">SỬA THÔNG TIN NGÀNH {{data.majorName.toUpperCase()}} CỦA {{ universityName.toUpperCase() }}</span>           
+      <span class="text-xl">SỬA THÔNG TIN NGÀNH {{data.majorName.toUpperCase()}} CỦA {{ universityName.toUpperCase() }}</span>
     </div>
     <div style="display: flex; margin-top: 2;">
       <span class="text-xl">HỆ ĐÀO TẠO</span>
       <div style="min-width: 195px; margin-left: 2rem; margin-right: 2rem;">
-        <nb-select [selected]="data.majorDetailUnies[0].trainingProgramId" (selectedChange)="filterDataByTrainingProgramId($event)" fullWidth>        
-          <nb-option *ngFor="let pro of data.majorDetailUnies" [value]="pro.trainingProgramId"> {{pro.trainingProgramName.toUpperCase()}} </nb-option>                
+        <nb-select [selected]="data.majorDetailUnies[0].trainingProgramId" (selectedChange)="filterDataByTrainingProgramId($event)" fullWidth>
+          <nb-option *ngFor="let pro of data.majorDetailUnies" [value]="pro.trainingProgramId"> {{pro.trainingProgramName.toUpperCase()}} </nb-option>
         </nb-select>
-      </div> 
+      </div>
       <span class="text-xl">MÙA {{data.majorDetailUnies[0].seasonName.toUpperCase()}}</span>
     </div>
   </div>
-  <nz-divider nzDashed ></nz-divider> 
+  <nz-divider nzDashed ></nz-divider>
   <div class="d-flex" >
     <div class="col-md-6">
-      <label for="">Tên ngành <span style="color: red;">*</span></label> 
+      <label for="">Tên ngành <span style="color: red;">*</span></label>
       <nb-form-field>
         <nb-icon nbPrefix icon="briefcase-outline"></nb-icon>
-        <input disabled readonly type="text" [value]="data.majorName" fullWidth nbInput>        
-      </nb-form-field>         
+        <input disabled readonly type="text" [value]="data.majorName" fullWidth nbInput>
+      </nb-form-field>
     </div>
     <div class="col-md-3">
       <label for="">Code <span style="color: red;">*</span></label>
-      <nb-form-field>        
+      <nb-form-field>
         <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
-        <input style="text-align: right;" [formControl]="updateMajorForm.get('majorCode')"  type="text" placeholder="Mã Ngành" fullWidth nbInput />        
+        <input style="text-align: right;" [formControl]="updateMajorForm.get('majorCode')"  type="text" placeholder="Mã Ngành" fullWidth nbInput />
       </nb-form-field>
     </div>
     <div class="col-md-3">
       <label for="">Tổng chỉ tiêu <span style="color: red;">*</span></label>
-      <nb-form-field>        
+      <nb-form-field>
         <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
-        <input style="text-align: right;" [formControl]="updateMajorForm.get('totalAdmissionQuantity')"  type="number" placeholder="Chỉ Tiêu" fullWidth nbInput />        
+        <input style="text-align: right;" [formControl]="updateMajorForm.get('totalAdmissionQuantity')"  type="number" placeholder="Chỉ Tiêu" fullWidth nbInput />
       </nb-form-field>
     </div>
   </div>
-  <nz-divider nzDashed ></nz-divider>   
+  <nz-divider nzDashed ></nz-divider>
   <div>
     <nb-card *ngFor="let control of updatingUniSubAdmissionParams.controls; let i = index" style="max-height: 500px;">
       <nb-card-body>
         <div class="d-flex">
           <div class="col-md-4" style="padding-left: 0;">
             <label for="">Tỉnh thành <span style="color: red;">*</span></label>
-            <nb-form-field>        
+            <nb-form-field>
               <input [disabled]="updatingUniSubAdmissionParams.controls[i]['isUpdate']"  readonly nz-dropdown type="text" [value]="updatingUniSubAdmissionParams.controls[i].get('provinceId').value?.name" [nzDropdownMenu]="selectProvince" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
-            >        
-            </nb-form-field>   
-            <nz-dropdown-menu #selectProvince="nzDropdownMenu">        
+            >
+            </nb-form-field>
+            <nz-dropdown-menu #selectProvince="nzDropdownMenu">
               <app-custom-select [control]="updatingUniSubAdmissionParams.controls[i].get('provinceId')" [data]="provinceResult | async" [name]="'id'" [label]="'name'" [placeholder]="'Tìm kiếm Tỉnh - Thành phố'"></app-custom-select>
             </nz-dropdown-menu>
           </div>
           <div class="col-md-3">
             <label for="">PT xét tuyển <span style="color: red;">*</span></label>
-            <nb-select [disabled]="updatingUniSubAdmissionParams.controls[i]['isUpdate']" [formControl]="updatingUniSubAdmissionParams.controls[i].get('admissionMethodId')" fullWidth>                                  
+            <nb-select [disabled]="updatingUniSubAdmissionParams.controls[i]['isUpdate']" [formControl]="updatingUniSubAdmissionParams.controls[i].get('admissionMethodId')" fullWidth>
               <nb-option *ngFor="let item of listOfAdmissionMethod" [value]="item?.id">{{item.name}}</nb-option>
-            </nb-select>           
+            </nb-select>
           </div>
           <div class="col-md-3">
             <label for="">Giới tính <span style="color: red;">*</span></label>
-            <nb-select [disabled]="updatingUniSubAdmissionParams.controls[i]['isUpdate']" [formControl]="updatingUniSubAdmissionParams.controls[i].get('genderId')" fullWidth>    
-              <nb-option [value]="1000">TẤT CẢ</nb-option>     
+            <nb-select [disabled]="updatingUniSubAdmissionParams.controls[i]['isUpdate']" [formControl]="updatingUniSubAdmissionParams.controls[i].get('genderId')" fullWidth>
+              <nb-option [value]="1000">TẤT CẢ</nb-option>
               <nb-option [value]="1">NAM</nb-option>
-              <nb-option [value]="0">NỮ </nb-option>             
-            </nb-select>           
-          </div>          
+              <nb-option [value]="0">NỮ </nb-option>
+            </nb-select>
+          </div>
           <div class="col-md-2" style="padding-right: 0;">
             <label for="">Số lượng</label>
-            <input style="text-align: right;" [formControl]="updatingUniSubAdmissionParams.controls[i].get('quantity')"  type="number" placeholder="Số Lượng" fullWidth nbInput/>           
-          </div>    
+            <input style="text-align: right;" [formControl]="updatingUniSubAdmissionParams.controls[i].get('quantity')"  type="number" placeholder="Số Lượng" fullWidth nbInput/>
+          </div>
         </div>
         <nb-card class="mt-2" style="margin-bottom: 0;">
           <nb-card-body>
@@ -231,24 +231,24 @@
               <div class="col-md-3" style="justify-content: center; align-items: center; display: flex;">
                 <label for="">Điểm chuẩn <span style="color: red;">*</span></label>
               </div>
-              <div class="col-md-3" style="justify-content: center; align-items: center; display: flex;">    
-                <label for="">Thao tác</label>          
+              <div class="col-md-3" style="justify-content: center; align-items: center; display: flex;">
+                <label for="">Thao tác</label>
               </div>
             </div>
             <div class="d-flex mt-2" *ngFor="let s of updatingUniSubAdmissionParams.controls[i].get('majorDetailEntryMarkParams').controls; index as si" style="justify-content: center; align-items: center;">
               <div class="col-md-4">
-                <nb-form-field>        
+                <nb-form-field>
                   <input [disabled]="updatingUniSubAdmissionParams.controls[i].get('majorDetailEntryMarkParams').controls[si]['isUpdate']" [value]="updatingUniSubAdmissionParams.controls[i].get('majorDetailEntryMarkParams').controls[si].get('majorSubjectGroupId').value?.subjectGroupName"  readonly nz-dropdown type="text"  [nzDropdownMenu]="selectGroupCode" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
-                >        
-                </nb-form-field>                   
+                >
+                </nb-form-field>
                 <nz-dropdown-menu #selectGroupCode="nzDropdownMenu">
                   <app-custom-select (useSelect)="useSelectSubjectGroup($event, i, si)"  [control]="updatingUniSubAdmissionParams.controls[i].get('majorDetailEntryMarkParams').controls[si].get('majorSubjectGroupId')"  [data]="listOfDisplaySubjectGroup | async" [name]="'id'" [label]="'subjectGroupName'" [placeholder]="'Tìm kiếm theo tên khối'" [titleNewItem]="'Khối'"></app-custom-select>
-                </nz-dropdown-menu> 
+                </nz-dropdown-menu>
               </div>
               <div class="col-md-3">
                 <nb-form-field>
-                  <input style="text-align: right;" type="number" [formControl]="updatingUniSubAdmissionParams.controls[i].get('majorDetailEntryMarkParams').controls[si].get('mark')"  placeholder="Nhập Điểm" fullWidth nbInput/>           
-                </nb-form-field>                
+                  <input style="text-align: right;" type="number" [formControl]="updatingUniSubAdmissionParams.controls[i].get('majorDetailEntryMarkParams').controls[si].get('mark')"  placeholder="Nhập Điểm" fullWidth nbInput/>
+                </nb-form-field>
               </div>
               <div class="col-md-3" style="justify-content: center; align-items: center; display: flex;">
                 <button (click)="addSubjectGroupUpdating(i, undefined)" nz-button nzType="default" nz-tooltip nzTooltipTitle="Thêm khối xét tuyển">
@@ -258,14 +258,14 @@
                   <nb-icon icon="minus"></nb-icon>
                 </button>
               </div>
-            </div> 
-          </nb-card-body>          
+            </div>
+          </nb-card-body>
         </nb-card>
         <nb-card *ngIf="updatingUniSubAdmissionParams.controls[i].get('majorDetailEntryMarkParams').controls.length === 0">
           <button (click)="addSubjectGroupUpdating(i, undefined)" nz-button nzType="default" nz-tooltip >
             <nb-icon icon="plus"></nb-icon>
           </button>
-        </nb-card> 
+        </nb-card>
       </nb-card-body>
       <button (click)="addSubAddmissionsParams()" nz-button nzType="default" nz-tooltip nzTooltipTitle="Thêm chỉ tiêu phụ">
         <nb-icon icon="plus"></nb-icon>
@@ -274,18 +274,18 @@
         <nb-icon icon="minus"></nb-icon>
       </button>
     </nb-card>
-    <nb-card *ngIf="updatingUniSubAdmissionParams.controls.length === 0" nzTooltipTitle="Thêm chỉ tiêu phụ">      
+    <nb-card *ngIf="updatingUniSubAdmissionParams.controls.length === 0" nzTooltipTitle="Thêm chỉ tiêu phụ">
       <button (click)="addSubAddmissionsParams()" nz-button nzType="default" nz-tooltip>
         <nb-icon icon="plus"></nb-icon>
       </button>
     </nb-card>
   </div>
-  <div class="footer">    
+  <div class="footer">
     <button [nzLoading]="isLoadingUpdate" [disabled]="updateMajorForm.invalid" (click)="updateMajor()" nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
-      Lưu 
-    </button>    
+      Lưu
+    </button>
     <button [disabled]="isLoadingUpdate" (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="basic">
-      Thoát 
+      Thoát
     </button>
   </div>
 </ng-template>

@@ -34,6 +34,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ShareButtonModule } from 'ngx-sharebuttons/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { ShareButtonsConfig, SharerMethod, SHARE_BUTTONS_CONFIG } from 'ngx-sharebuttons';
 import { ShortenPipe } from '../_helper/shorten-pipe';
@@ -81,7 +82,8 @@ const materialModules = [
   MatBadgeModule,
   ScrollingModule,
   MatSnackBarModule,
-  NzNotificationModule
+  NzNotificationModule,
+  MatChipsModule
 ];
 
 @NgModule({

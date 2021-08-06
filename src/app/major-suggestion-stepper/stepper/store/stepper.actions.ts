@@ -3,7 +3,7 @@ import { ClassifiedTests } from "src/app/_models/classified-tests";
 import { Major } from "src/app/_models/major";
 import { Mark } from "src/app/_models/mark";
 import { Province } from "src/app/_models/province";
-import { SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from "src/app/_models/suggested-subjects-group";
+import { CusSubjectGroup, SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from "src/app/_models/suggested-subjects-group";
 import { Test } from "src/app/_models/test";
 import { TestSubmission } from "src/app/_models/test-submission";
 import { MockTestBasedUniversity, TrainingProgramBasedUniversity } from "src/app/_models/university";
@@ -13,9 +13,14 @@ import { Subject } from "../../../_models/subject";
 
 export const LOAD_SUBJECTS = '[Stepper] Load Subjects';
 export const SET_SUBJECTS = '[Stepper] Set Subjects';
+export const LOAD_SUBJECT_GROUPS = '[Stepper] Load Subject Groups';
+export const SET_SUBJECT_GROUPS = '[Stepper] Set Subject Groups';
 export const SET_MARKS = '[Stepper] Set Marks';
 export const SAVE_MARKS = '[Stepper] Save Marks';
-export const SET_SUGGESTED_SUBJECTS_GROUP = '[Stepper] Set Suggested Subjects Group';
+export const SET_SUGGESTED_SUBJECT_GROUPS = '[Stepper] Set Suggested Subjects Group';
+export const SET_SELECTED_SUGGESTED_SUBJECTGROUP = '[Stepper] Set Selected Suggested Subject Group';
+export const LOAD_MAJORS_SELECTED_SUBJECT_GROUP = '[Stepper] Load Majors Selected Subject Group';
+export const SET_MAJORS_SELECTED_SUBJECT_GROUP = '[Stepper] Set Majors Selected Subject Group';
 export const SET_UNIVERSIIES = '[Stepper] Set Universities';
 export const LOAD_UNIVERSIIES = '[Stepper] Load Universities';
 export const RELOAD_UNIVERSIIES = '[Stepper] Reload Universities';
@@ -46,6 +51,16 @@ export const RESET_STATE = '[Stepper] Reset State';
 export const HAS_ERRORS = '[Stepper] Has Errors';
 export const CONFIRM_ERRORS = '[Stepper] Confirm Errors';
 
+export class LoadSubjectGroups implements Action {
+  readonly type = LOAD_SUBJECT_GROUPS;
+  readonly message = "Đang nạp danh sách tổ hợp môn";
+}
+
+export class SetSubjectGroups implements Action {
+  readonly type = SET_SUBJECT_GROUPS;
+  constructor(public payload: CusSubjectGroup[]) {}
+}
+
 export class LoadSubjects implements Action {
   readonly type = LOAD_SUBJECTS;
   readonly message = "Đang nạp danh sách các môn học";
@@ -68,7 +83,22 @@ export class SaveMarks implements Action {
 }
 
 export class SetSuggestedSubjectsGroup implements Action {
-  readonly type = SET_SUGGESTED_SUBJECTS_GROUP;
+  readonly type = SET_SUGGESTED_SUBJECT_GROUPS;
+  constructor(public payload: SuggestedSubjectsGroup[]) {}
+}
+
+export class SetSelectedSuggestedSubjectgroup implements Action {
+  readonly type = SET_SELECTED_SUGGESTED_SUBJECTGROUP;
+  constructor(public payload: SuggestedSubjectsGroup) {}
+}
+
+export class LoadMajorsSelectedSubjectGroup implements Action {
+  readonly type = LOAD_MAJORS_SELECTED_SUBJECT_GROUP;
+  readonly message = "Đang tính toán kết quả gợi ý";
+}
+
+export class SetMajorsSelectedSubjectGroup implements Action {
+  readonly type = SET_MAJORS_SELECTED_SUBJECT_GROUP;
   constructor(public payload: SuggestedSubjectsGroup[]) {}
 }
 
@@ -213,4 +243,5 @@ export type StepperActions = ResetState | ScoringTest | SetTestMark | LoadTest |
             LoadTests | SetTests | SaveUnsaveTestSubmissions | SaveUnsaveTestSubmissionsSuccess | RefreshTest | CaringAction |
             CaringActionSuccess | UncaringAction | UncaringActionSuccess | LoadAfterMockTestsUniversities | SetAfterMockTestsUniversities |
             LoadUserSuggestion | SetUserSuggestion | LoadProvinces | SetProvinces | HasErrors | ConfirmErrors |
-            DoneLoading | SaveMarks | SetTestSubmissionId;
+            DoneLoading | SaveMarks | SetTestSubmissionId | LoadSubjectGroups | SetSubjectGroups | SetSelectedSuggestedSubjectgroup |
+            LoadMajorsSelectedSubjectGroup | SetMajorsSelectedSubjectGroup;

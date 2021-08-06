@@ -136,9 +136,22 @@ export class UpdateArticleComponent implements OnInit {
       'MajorIds': this.listOfSelectedMajor
     };    
     const formData = new FormData();
-    for (let key in newValue) {
-      formData.append(key, newValue[key]);
+    formData.append('Id', newValue.Id);
+    formData.append('Title', newValue.Title);
+    formData.append('ShortDescription', newValue.ShortDescription);
+    formData.append('Content', newValue.Content);
+    formData.append('PostImage', newValue.PostImage);
+    for (let i = 0; i < newValue.UniversityIds.length; i++) {
+      const element = newValue.UniversityIds[i];
+      formData.append('UniversityIds', element.toString())
     }
+    for (let i = 0; i < newValue.MajorIds.length; i++) {
+      const element = newValue.MajorIds[i];
+      formData.append('MajorIds', element.toString())
+    } 
+    // for (let key in newValue) {
+    //   formData.append(key, newValue[key]);
+    // }
     this._articleService.updateArticle(formData).pipe(
       tap(rs => {
         if (rs.succeeded === true) {

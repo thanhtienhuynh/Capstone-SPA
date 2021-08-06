@@ -2,6 +2,7 @@ import { Mark } from "../_models/mark";
 
 export class MarkParam {
   marks: Mark[];
+  subjectGroupIds: number[];
   transcriptTypeId: number;
   gender: number;
   provinceId: number;

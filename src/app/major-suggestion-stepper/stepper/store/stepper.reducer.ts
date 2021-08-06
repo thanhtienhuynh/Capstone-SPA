@@ -2,7 +2,7 @@ import { ClassifiedTests } from 'src/app/_models/classified-tests';
 import { Major } from 'src/app/_models/major';
 import { Mark } from 'src/app/_models/mark';
 import { Province } from 'src/app/_models/province';
-import { SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from 'src/app/_models/suggested-subjects-group';
+import { CusSubjectGroup, SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from 'src/app/_models/suggested-subjects-group';
 import { Test } from 'src/app/_models/test';
 import { TestSubmission } from 'src/app/_models/test-submission';
 import { TranscriptType } from 'src/app/_models/transcript';
@@ -12,21 +12,24 @@ import { Subject } from '../../../_models/subject';
 import * as StepperActions from './stepper.actions';
 
 export interface State {
+  subjectGroups: CusSubjectGroup[];
   subjects: Subject[];
-  //Điểm user submit
+
+  //Điểm user submit, MarkParam
   marks: Mark[];
+  transcriptTypeId: number; //Type điểm lúc bấm suggest
+  gender: number;
+  provinceId: number;
+  subjectGroupIds: number[];
+
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
   trainingProgramBasedUniversity: TrainingProgramBasedUniversity[];
   //List trường ứng với điểm thi thử
   mockTestBasedUniversity: MockTestBasedUniversity;
   tests: ClassifiedTests[];
   test: Test;
-  //Type điểm lúc bấm suggest
-  transcriptTypeId: number;
   followTranscriptTypeId: number;
   removeFollowingDetailId: number;
-  gender: number;
-  provinceId: number;
   //Khối chọn sau khi suggest
   selectedSubjectGroup: SuggestedSubjectsGroup;
   //Ngành chọn sau khi suggest
@@ -54,8 +57,10 @@ export interface State {
 }
 
 const initialState: State = {
+  subjectGroups: [],
   subjects: [],
   marks: [],
+  subjectGroupIds: [],
   suggestedSubjectsGroup: [],
   trainingProgramBasedUniversity: [],
   mockTestBasedUniversity: null,
@@ -91,6 +96,18 @@ export function stepReducer(
 ) {
   let tempActions = [...state.actionsQueue];
   switch (action.type) {
+    case StepperActions.LOAD_SUBJECT_GROUPS:
+      return {
+        ...state,
+        actionsQueue: [...state.actionsQueue, action],
+      };
+    case StepperActions.SET_SUBJECT_GROUPS:
+      tempActions.splice( tempActions.findIndex(a => a.type == StepperActions.LOAD_SUBJECT_GROUPS), 1);
+      return {
+        ...state,
+        subjectGroups: [...action.payload],
+        actionsQueue: [...tempActions],
+      };
     case StepperActions.LOAD_SUBJECTS:
       return {
         ...state,
@@ -111,6 +128,7 @@ export function stepReducer(
         tests: [],
         test: null,
         marks: [...action.payload.marks],
+        subjectGroupIds: [...action.payload.subjectGroupIds],
         transcriptTypeId: action.payload.transcriptTypeId,
         gender: action.payload.gender,
         provinceId: action.payload.provinceId,
@@ -121,8 +139,27 @@ export function stepReducer(
         ...state,
         actionsQueue: [...state.actionsQueue, action],
       };
-    case StepperActions.SET_SUGGESTED_SUBJECTS_GROUP:
+    case StepperActions.SET_SUGGESTED_SUBJECT_GROUPS:
       tempActions.splice( tempActions.findIndex(a => a.type == StepperActions.SET_MARKS), 1);
+      return {
+        ...state,
+        suggestedSubjectsGroup: action.payload,
+        actionsQueue: [...tempActions],
+      };
+    case StepperActions.SET_SELECTED_SUGGESTED_SUBJECTGROUP:
+      return {
+        ...state,
+
+        selectedSubjectGroup: action.payload,
+      };
+    case StepperActions.LOAD_MAJORS_SELECTED_SUBJECT_GROUP:
+      return {
+        ...state,
+        transcriptTypeId: 3,
+        actionsQueue: [...state.actionsQueue, action],
+      };
+    case StepperActions.SET_MAJORS_SELECTED_SUBJECT_GROUP:
+      tempActions.splice( tempActions.findIndex(a => a.type == StepperActions.LOAD_MAJORS_SELECTED_SUBJECT_GROUP), 1);
       return {
         ...state,
         suggestedSubjectsGroup: action.payload,

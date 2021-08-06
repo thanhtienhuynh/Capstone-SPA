@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { PagedResponse } from '../_models/paged-response';
 import { NotificationDataSet } from '../_models/notification';
 import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { ROLE_STUDENT } from '../_common/constants';
 
 @Component({
   selector: 'app-header',
@@ -45,7 +46,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
           // if (this.user) {
           //   this.store.dispatch(new UserActions.LoadCaringArticles());
           // }
-          if (this.user) {
+          if (this.user && this.user.roleId == ROLE_STUDENT) {
             this.store.dispatch(new UserActions.LoadNumberOfUnreadNotifications());
           }
         }

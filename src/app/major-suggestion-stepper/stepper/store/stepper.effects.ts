@@ -12,7 +12,7 @@ import {
 import { of } from 'rxjs';
 import { Subject } from '../../../_models/subject';
 import { Injectable } from '@angular/core';
-import { SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from 'src/app/_models/suggested-subjects-group';
+import { CusSubjectGroup, SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from 'src/app/_models/suggested-subjects-group';
 import * as fromApp from '../../../_store/app.reducer';
 import { Action, Store } from '@ngrx/store';
 import { MockTestBasedUniversity, TrainingProgramBasedUniversity } from 'src/app/_models/university';
@@ -56,6 +56,25 @@ export class StepperEffects {
   );
 
   @Effect()
+  loadSubjectGroups = this.actions$.pipe(
+    ofType(StepperActions.LOAD_SUBJECT_GROUPS),
+    switchMap(() => {
+      return this.http.get<Response<CusSubjectGroup[]>>(environment.apiUrl + 'api/v1/subject-group')
+      .pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new StepperActions.SetSubjectGroups(response.data);
+          }
+          return new StepperActions.HasErrors({action: StepperActions.LOAD_SUBJECT_GROUPS, messages: response.errors});
+        }),
+        catchError((error: HttpErrorResponse) => {
+          return of(new StepperActions.HasErrors({action: StepperActions.LOAD_SUBJECT_GROUPS, messages: [error.message]}));
+        })
+      );
+    }),
+  );
+
+  @Effect()
   saveMarks = this.actions$.pipe(
     ofType(StepperActions.SAVE_MARKS),
     withLatestFrom(this.store.select('stepper'), this.store.select('auth')),
@@ -89,6 +108,7 @@ export class StepperEffects {
         this.store.dispatch(new StepperActions.SaveMarks());
       }
       let markParam = new MarkParam(stepperState.marks, stepperState.transcriptTypeId, stepperState.gender, stepperState.provinceId);
+      markParam.subjectGroupIds = stepperState.subjectGroupIds;
       return this.http.post<Response<SuggestedSubjectsGroup[]>>(environment.apiUrl + 'api/v1/subject-group/top-subject-group',
         markParam,
         {
@@ -103,6 +123,27 @@ export class StepperEffects {
           }),
           catchError((error) => {
             return of(new StepperActions.HasErrors({action: StepperActions.SET_MARKS, messages: [error.message]}));
+          })
+        );
+    })
+  );
+
+  @Effect()
+  loadMajorsSelectedSubjectGroup = this.actions$.pipe(
+    ofType(StepperActions.LOAD_MAJORS_SELECTED_SUBJECT_GROUP),
+    withLatestFrom(this.store.select('stepper')),
+    switchMap(([actionData, stepperState]) => {
+      return this.http.get<Response<SuggestedSubjectsGroup[]>>(environment.apiUrl + 'api/v1/subject-group/top-subject-group/'
+                    + stepperState.selectedSubjectGroup.id.toString()
+        ).pipe(
+          map((response) => {
+            if (response.succeeded) {
+              return new StepperActions.SetMajorsSelectedSubjectGroup(response.data);
+            }
+            return new StepperActions.HasErrors({action: StepperActions.LOAD_MAJORS_SELECTED_SUBJECT_GROUP, messages: response.errors});
+          }),
+          catchError((error) => {
+            return of(new StepperActions.HasErrors({action: StepperActions.LOAD_MAJORS_SELECTED_SUBJECT_GROUP, messages: [error.message]}));
           })
         );
     })

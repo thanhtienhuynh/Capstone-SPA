@@ -11,3 +11,4 @@ export * from './admission-method.vm';
 export * from './major-configuration.vm';
 export * from './subject.vm';
 export * from './examination';
+export * from './configuration.vm';

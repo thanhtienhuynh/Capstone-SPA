@@ -25,9 +25,9 @@ export class PublishedComponent implements OnInit {
     private _universityService: UniversityService,
     private _majorService: MajorService,
     private notification: NzNotificationService,
-  ) { 
+  ) {
     this.initDateForm();
-  }  
+  }
 
   article: ArticleVM = {
     content: '<nz-skeleton [nzActive]="true"></nz-skeleton>'
@@ -63,17 +63,38 @@ export class PublishedComponent implements OnInit {
   getListOfUniversity(): void {
     this._universityService.getAllUniversity().pipe(
       tap((rs) => {
-        this.listOfUniversity = rs.data;
-        this.listOfDisplayUniversity = rs.data;
+        if (rs.succeeded === true) {
+          if (rs.data !== null) {
+            this.listOfUniversity = rs.data;
+            this.listOfDisplayUniversity = rs.data;
+          } else {
+            Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
+          }
+        } else {
+          this.listOfUniversity = [];
+          this.listOfDisplayUniversity = [];
+          Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
+        }
       })
     ).subscribe();
   }
 
+
   getListOfMajor(): void {
     this._majorService.getAllMajor().pipe(
       tap((rs) => {
-        this.listOfMajor = rs.data;
-        this.listOfDisplayMajor = rs.data;
+        if (rs.succeeded === true) {
+          if (rs.data !== null) {
+            this.listOfMajor = rs.data;
+            this.listOfDisplayMajor = rs.data;
+          } else {
+            Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
+          }
+        } else {
+          this.listOfMajor = [];
+          this.listOfDisplayMajor = [];
+          Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
+        }
       })
     ).subscribe();
   }
@@ -102,9 +123,9 @@ export class PublishedComponent implements OnInit {
           cancelButtonColor: '#d33',
           cancelButtonText: 'HỦY'
         }).then((result) => {
-          if (result.isConfirmed) {            
+          if (result.isConfirmed) {
             this._articleService.confirmArticle(newValue).pipe(
-              tap((rs) => {                
+              tap((rs) => {
                 if (rs.succeeded === true) {
                   this.createNotification('success', 'ĐĂNG BÀI', 'Đăng bài viết thành công', 'bottomRight');
                   this.nextElement();
@@ -119,7 +140,7 @@ export class PublishedComponent implements OnInit {
           }
         })
         break;
-      case 'accept':        
+      case 'accept':
         newValue = {
           'id': this.articleId,
           'publicFromDate': null,
@@ -264,47 +285,47 @@ export class PublishedComponent implements OnInit {
           }
         })
         break;
-        case 'unPublished':
-          newValue = {
-            'id': this.articleId,
-            'publicFromDate': null,
-            'publicToDate': null,
-            'status': 5,
-            // 'university': this.listOfSelectedUniversity,
-            // 'major': this.listOfSelectedMajor
-            'university': [],
-            'major': []
-          };
-          Swal.fire({
-            title: 'HỦY ĐĂNG BÀI',
-            text: "Bài viết sẽ được chuyển tiếp về danh sách cần được xem xét.",
-            icon: 'warning',
-            showCancelButton: true,
-            showLoaderOnConfirm: true,
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'XÁC NHẬN',
-            denyButtonColor: '#00d68f',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'HỦY'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this._articleService.confirmArticle(newValue).pipe(
-                tap((rs) => {
-                  if (rs.succeeded === true) {
-                    this.createNotification('success', 'ĐĂNG BÀI', 'Đăng bài viết thành công', 'bottomRight');
-                    this.showElement(this.unPublishedList, this.currentIndex);
-                  } else {
-                    this.createNotification('error', 'ĐĂNG BÀI', 'Đăng bài viết thất bại', 'bottomRight');
-                  }
-                }),
-                catchError(err => {
-                  return of(err);
-                })
-              ).subscribe();
-            }
-          });
-          break;
-        default:
+      case 'unPublished':
+        newValue = {
+          'id': this.articleId,
+          'publicFromDate': null,
+          'publicToDate': null,
+          'status': 5,
+          // 'university': this.listOfSelectedUniversity,
+          // 'major': this.listOfSelectedMajor
+          'university': [],
+          'major': []
+        };
+        Swal.fire({
+          title: 'HỦY ĐĂNG BÀI',
+          text: "Bài viết sẽ được chuyển tiếp về danh sách cần được xem xét.",
+          icon: 'warning',
+          showCancelButton: true,
+          showLoaderOnConfirm: true,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'XÁC NHẬN',
+          denyButtonColor: '#00d68f',
+          cancelButtonColor: '#d33',
+          cancelButtonText: 'HỦY'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this._articleService.confirmArticle(newValue).pipe(
+              tap((rs) => {
+                if (rs.succeeded === true) {
+                  this.createNotification('success', 'ĐĂNG BÀI', 'Đăng bài viết thành công', 'bottomRight');
+                  this.showElement(this.unPublishedList, this.currentIndex);
+                } else {
+                  this.createNotification('error', 'ĐĂNG BÀI', 'Đăng bài viết thất bại', 'bottomRight');
+                }
+              }),
+              catchError(err => {
+                return of(err);
+              })
+            ).subscribe();
+          }
+        });
+        break;
+      default:
         break;
     }
   }
@@ -319,13 +340,18 @@ export class PublishedComponent implements OnInit {
     this._articleService.getArticleById(id).pipe(
       tap((rs) => {
         if (rs.succeeded === true) {
-          this.listOfSelectedUniversity = rs.data.universityIds;
-          this.listOfSelectedMajor = rs.data.majorIds;
-          this.article = rs.data;
-          this.articleId = rs.data.id;
-          this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
+          if (rs.data !== null) {
+            this.listOfSelectedUniversity = rs.data.universityIds;
+            this.listOfSelectedMajor = rs.data.majorIds;
+            this.article = rs.data;
+            this.articleId = rs.data.id;
+            this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
+          } else {
+            this.article = null;
+          }
         } else {
           this.article = null;
+          Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
         }
       }),
       catchError((err) => {

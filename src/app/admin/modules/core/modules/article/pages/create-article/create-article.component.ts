@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
 import { quillConfiguration } from 'src/app/admin/config';
 import { MajorService, UniversityService } from 'src/app/admin/services';
 import { ArticleService } from 'src/app/admin/services/article';
-import { MajorRM } from 'src/app/admin/view-models';
+import { ArticleCM, MajorRM } from 'src/app/admin/view-models';
 import { University } from 'src/app/_models/university';
 import Swal from 'sweetalert2';
 import { ReviewCreateArticleModalComponent } from '../../components';
@@ -110,8 +110,10 @@ export class CreateArticleComponent implements OnInit {
       'Content': this.articleForm.get('Content').value,
       'PostImage': this.image ? this.image : null,
       'UniversityIds': this.listOfSelectedUniversity,
-      'MajorIds': this.listOfSelectedUniversity
-    };    
+      'MajorIds': this.listOfSelectedMajor
+      // 'UniversityIds': null,
+      // 'MajorIds': null
+    } as ArticleCM;        
     this.openUpdateModal(newValue);
     // const formData = new FormData();
     // for (let key in newValue) {

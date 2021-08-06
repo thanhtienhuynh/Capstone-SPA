@@ -45,8 +45,7 @@ export class MajorConfigurationModalComponent implements OnInit {
 
   ngOnInit() {
     this.getListSubject();
-    this.getListOfSubjectGroup();
-    console.log(this.data);
+    this.getListOfSubjectGroup();    
     if (this.data !== undefined) {
       this.setDataToMajorForm(this.data, 0);
       this.setDataToSubjectWeightForm(this.data.subjectGroups[0].subjectWeights);
@@ -161,8 +160,7 @@ export class MajorConfigurationModalComponent implements OnInit {
     });
     const subjectGroupStatus = action === 'delete' ? 0 : 1;
     const subjectGroups = [{ ...this.majorForm.value.subjectGroup, subjectWeights: subjectWeights, status: subjectGroupStatus }];
-    const newValue = { ...this.majorForm.value, subjectGroup: subjectGroups };   
-    console.log(newValue);
+    const newValue = { ...this.majorForm.value, subjectGroup: subjectGroups };       
     if (action === 'delete') {
       this.deletetionLoading = true;
       Swal.fire({

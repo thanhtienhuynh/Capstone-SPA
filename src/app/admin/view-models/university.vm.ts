@@ -15,7 +15,8 @@ export interface UniversityRM {
     majorDetail?: unknown[],
     tests?: unknown[],
     rating?: unknown, 
-    status?: unknown   
+    status?: unknown ,
+    file?: File  
 }
 
 export interface UniversityCM {    
