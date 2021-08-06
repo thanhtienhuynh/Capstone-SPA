@@ -115,10 +115,7 @@
           </div>           
           <div class="action-button col-lg-6" style="padding-right: 0px;">            
             <button fullWidth nbButton outline status="danger" (click)="confirmArticle('reject')">CHẶN BÀI VIẾT</button>
-          </div>   
-          <div class="action-button col-lg-12" style="padding-right: 0px; padding-left: 0;">            
-            <button *ngIf="article?.rootUrl === null" fullWidth nbButton outline status="success" (click)="openUpdateModal()">CHỈNH SỬA</button>
-          </div>  
+          </div>     
         </div>   
         <div *ngIf="article?.status === 0" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
           <div class="action-button col-lg-6" style="padding-left: 0px;">
@@ -126,7 +123,10 @@
           </div>                     
           <div class="action-button col-lg-6" style="padding-right: 0px;">            
             <button fullWidth  nbButton outline status="danger" (click)="confirmArticle('reject')">CHẶN BÀI VIẾT</button>
-          </div>          
+          </div> 
+          <div class="action-button col-lg-12" style="padding-right: 0px; padding-left: 0;">            
+            <button *ngIf="article?.rootUrl === null && article?.status === 0" fullWidth nbButton outline status="primary" (click)="openUpdateModal()">CHỈNH SỬA</button>
+          </div>         
         </div>   
         <div *ngIf="article?.status === 2" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
           <div class="action-button col-lg-12" style="padding-left: 0px;">
@@ -144,9 +144,15 @@
           </div>                                        
         </div>
         <div *ngIf="article?.status === 5" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
-          <div class="action-button col-lg-12" style="padding-left: 0px;">
+          <div class="action-button col-lg-6" style="padding-left: 0px;">
             <button fullWidth nbButton  status="success" outline (click)="confirmArticle('accept')">DUYỆT LẠI</button>
-          </div>                                       
+          </div>  
+          <div class="action-button col-lg-6" style="padding-right: 0px;">            
+            <button fullWidth  nbButton outline status="danger" (click)="confirmArticle('reject')">CHẶN BÀI VIẾT</button>
+          </div> 
+          <div class="action-button col-lg-12" style="padding-right: 0px; padding-left: 0;">            
+            <button *ngIf="article?.rootUrl === null && article?.status === 5" fullWidth nbButton outline status="primary" (click)="openUpdateModal()">CHỈNH SỬA</button>
+          </div>                                      
         </div>
       </div>
     </div>    

@@ -85,7 +85,7 @@ export class AuthEffects {
     switchMap(() => {
       const token = localStorage.getItem('token');
       if (!token) {
-        this.router.navigate(['/']);
+        // this.router.navigate(['/']);
         return of({type: "DUMMY"});
       }
       return this.http.get<Response<User>>(
@@ -124,17 +124,13 @@ export class AuthEffects {
           this.authService.clearLogoutTimer();
           localStorage.removeItem('token');
           this.router.navigate(['/']);
-          if (response.succeeded) {
-            console.log("Unsubscribe success");
-            return { type: 'DUMMY' };
-          }
-          return new AuthActions.HasErrors(response.errors);
+          return { type: 'DUMMY' };
         }),
         catchError((error: HttpErrorResponse) => {
           this.authService.clearLogoutTimer();
           localStorage.removeItem('token');
           this.router.navigate(['/']);
-          return of(new AuthActions.HasErrors([error.message]));
+          return of({ type: 'DUMMY' });
         })
       );
     }),
@@ -150,11 +146,7 @@ export class AuthEffects {
         { token: authState.registerToken }
       ).pipe(
         map((response) => {
-          if (response.succeeded) {
-            console.log("Subscribe success");
-            return { type: 'DUMMY' };
-          }
-          return new AuthActions.HasErrors(response.errors);
+          return { type: 'DUMMY' };
         }),
         catchError((error: HttpErrorResponse) => {
           return of(new AuthActions.HasErrors([error.message]));
@@ -168,7 +160,7 @@ export class AuthEffects {
     ofType(AuthActions.SET_USER),
     withLatestFrom(this.store.select('auth')),
     tap(([actionData, authState]) => {
-      if (authState.user.roleId == 1) {
+      if (authState.user.roleId == 1 || authState.user.roleId == 3) {
         this.router.navigate(['/admin']);
       } 
     })

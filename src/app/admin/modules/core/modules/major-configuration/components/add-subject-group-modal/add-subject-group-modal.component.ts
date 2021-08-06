@@ -34,8 +34,7 @@ export class AddSubjectGroupModalComponent implements OnInit {
     this.initAddSubjectGroupForm();
   }
 
-  ngOnInit() {
-    console.log(this.data.subjectGroups);
+  ngOnInit() {    
     this.getListOfSubjectGroup();
     this.setDataToForm(this.data);
   }
@@ -145,8 +144,7 @@ export class AddSubjectGroupModalComponent implements OnInit {
       const tmp = {...rs, id: rs.id?.id, subjectWeights: subjectWeightTmp};
       return tmp
     });    
-    const newValue = {...this.addSubjectGroupForm.value, subjectGroup: subjectGroups}  
-    console.log(newValue, "newValue");
+    const newValue = {...this.addSubjectGroupForm.value, subjectGroup: subjectGroups}      
     this._majorConfigService.updateMajorToSystem(newValue).pipe(
       tap(rs => {
         if (rs.succeeded === true) {

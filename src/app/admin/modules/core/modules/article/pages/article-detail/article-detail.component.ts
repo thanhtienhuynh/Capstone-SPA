@@ -72,7 +72,7 @@ export class ArticleDetailComponent implements OnInit {
     this.dateForm = this._fb.group({
       'publicFromDate': [new Date, Validators.required],
       'publicToDate': [new Date, Validators.required]
-    })
+    })    
   }
 
   setDataToDateForm(publicFromDate: Date, publicToDate: Date): void {
@@ -88,7 +88,7 @@ export class ArticleDetailComponent implements OnInit {
           if (rs.succeeded === true) {
             this.listOfSelectedUniversity = rs.data.universityIds;
             this.listOfSelectedMajor = rs.data.majorIds;
-            this.article = rs.data;
+            this.article = rs.data;            
             this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
           } else {
             this.article = null;

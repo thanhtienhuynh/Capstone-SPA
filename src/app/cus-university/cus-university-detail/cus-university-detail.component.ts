@@ -23,6 +23,7 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
   subsription: Subscription;
   majors: CusUniversityMajorDetail[] = [];
   cusMajorDetailPageResponse: PagedResponse<CusUniversityMajorDetail[]>;
+  cusMajorDetailPageResponseForDisplay: PagedResponse<CusUniversityMajorDetail[]>;
   homeActionQueue: HomeActions.HomeActions[] = [];
   seasons: UniSeason[];
   selectedSeasonId: number;
@@ -73,10 +74,11 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
       
       if (this.cusMajorDetailPageResponse != homeState.cusMajorDetailPageResponse) {
         this.cusMajorDetailPageResponse = homeState.cusMajorDetailPageResponse;
+        this.cusMajorDetailPageResponseForDisplay = JSON.parse(JSON.stringify(homeState.cusMajorDetailPageResponse));
         this.rows = [];
         this.majors = [];
-        if (this.cusMajorDetailPageResponse && this.cusMajorDetailPageResponse.data && this.cusMajorDetailPageResponse.data.length > 0) {
-          this.cusMajorDetailPageResponse.data.map(major => {
+        if (this.cusMajorDetailPageResponseForDisplay && this.cusMajorDetailPageResponseForDisplay.data && this.cusMajorDetailPageResponseForDisplay.data.length > 0) {
+          this.cusMajorDetailPageResponseForDisplay.data.map(major => {
             let countChild2 = 0;
             let programs: CusMajorDetail[] = [];
             major.majorDetailUnies.map(program => {

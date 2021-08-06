@@ -7,7 +7,7 @@ export interface MajorConfiguration {
     humanQuality?: string,
     salaryDescription?: string,
     subjectGroups?: SubjetGroup[],
-    status?: number  
+    status?: number
 }
 
 export interface SingleMajorConfiguration {
@@ -15,7 +15,7 @@ export interface SingleMajorConfiguration {
     name?: string,
     code?: string,
     subjectGroups?: SubjetGroup,
-    status?: number  
+    status?: number
 }
 
 export interface SubjetGroup {
@@ -31,4 +31,26 @@ export interface SubjectWeight{
     weight?: number,
     isSpecialSubjectGroup?: boolean
     status?: number
+}
+
+export interface SubjectGroupFe {
+  id?: GroupCodeFe,
+  status?: number,
+  subjectWeights?: SubjectWeightFe[]
+}
+
+export interface SubjectWeightFe {
+  subjectId?: SubectIdFe,
+  weight?: number,
+  isSpecialSubjectGroup?: boolean
+}
+
+export interface SubectIdFe {
+  subjectId?: number,
+  subjectName?: string
+}
+
+export interface GroupCodeFe {
+  id?: number,
+  groupCode?: string
 }

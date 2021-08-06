@@ -3,8 +3,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/_models/user'
 import * as fromApp from "./../../_store/app.reducer";
-import * as AuthActions from '../../authentication/store/auth.actions';import { Store } from '@ngrx/store';
-;
+import * as AuthActions from '../../authentication/store/auth.actions';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-mock-test-rules-dialog',
@@ -41,6 +41,5 @@ export class MockTestRulesDialogComponent implements OnInit {
       this.subscription.unsubscribe();
     }
   }
-
 
 }

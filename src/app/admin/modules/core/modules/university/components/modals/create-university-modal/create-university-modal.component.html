@@ -4,7 +4,7 @@
     <div class="flex-auto"></div>
     <!-- <button nbButton (click)="closeModal()"><nb-icon pack="eva" icon="close-outline"></nb-icon></button> -->
   </div>
-  
+  <nz-divider></nz-divider>
   <div class="flex">        
     <div class="col-md-7">
       <label for="">Tên Trường <span class="must-required">*</span></label>
@@ -155,15 +155,16 @@
   <div class="flex mt-3">
     <div class="col-md-12">
       <label for="">Miêu Tả</label>        
-      <quill-editor
+      <!-- <quill-editor
         [formControl]="createUniversityForm.get('description')"
         class="content-editor"        
         [modules]="editorOptions"
         [placeholder]="''"
-      ></quill-editor>
+      ></quill-editor> -->
+      <textarea rows="5" nz-input [formControl]="createUniversityForm.get('description')"></textarea>
     </div> 
   </div>
-  
+  <nz-divider></nz-divider>
   <div class="footer">
     <button (click)="submitForm()" [nzLoading]="isLoadingCreation" [disabled]="createUniversityForm?.invalid" nz-button [nzSize]="'medium'" nzType="primary">
       Thêm 

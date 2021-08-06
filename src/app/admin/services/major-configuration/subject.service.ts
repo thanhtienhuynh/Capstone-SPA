@@ -14,7 +14,7 @@ export class SubjectService {
   constructor(private _http: HttpClient) { }
 
   getListOfSubject(): Observable<Response<Subject[]>> {        
-    return this._http.get<PagedResponse<Subject[]>>(this.baseUrl + '/api/v1/subject');
+    return this._http.get<PagedResponse<Subject[]>>(this.baseUrl + 'api/v1/subject');
   }
 
 }

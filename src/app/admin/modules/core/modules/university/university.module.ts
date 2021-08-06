@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { UniversityRoutes } from './university.routing';
 import { UniDetailComponent, UniversityMainComponent, UniversityMainFatherComponent } from './pages';
-import { ActionMajorModalComponent, CreateUniversityModalComponent, DeleteMajorModalComponent } from './components/modals';
+import { ActionMajorModalComponent, CreateUniversityModalComponent, DeactiveUniversityModalComponent, DeleteMajorModalComponent } from './components/modals';
 import { SharedModule } from 'src/app/admin/shared/shared.module';
 
 const COMPONENTS = [
   CreateUniversityModalComponent,  
   ActionMajorModalComponent,
-  DeleteMajorModalComponent
+  DeleteMajorModalComponent,
+  DeactiveUniversityModalComponent
 ];
 
 const PAGES = [

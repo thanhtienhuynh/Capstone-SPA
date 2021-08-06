@@ -18,3 +18,8 @@ export interface UserSuggestionSubjectGroup {
   gender: number;
   transcriptDetails: TranscriptType[];
 }
+
+export interface CusSubjectGroup {
+  id: number;
+  groupCode: string;
+}

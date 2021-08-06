@@ -13,7 +13,7 @@ const routes: Routes = [
     path: '',
     component: UserComponent,
     children: [
-      { path: '', pathMatch: 'full', component:  InformationComponent},
+      { path: '', pathMatch: 'full', redirectTo: 'information'},
       { path: 'test-submissions', component: TestSubmissionsComponent },
       { path: 'test-submissions/detail', component: TestReviewComponent },
       { path: 'information', component: InformationComponent },

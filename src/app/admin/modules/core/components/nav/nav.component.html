@@ -1,4 +1,4 @@
-<nav class="admin-nav">  
+<nav class="admin-nav" *ngIf="user?.roleId === 1">  
   <nz-sider nzWidth="200px">
     <ul nz-menu nzMode="inline" class="sider-menu" [nzTheme]="'dark'">
       <li nz-submenu nzOpen nzTitle="Trường học">        
@@ -20,15 +20,38 @@
           <li nz-menu-item  [nzSelected]="url === '/admin/core/article/create-article'" (click)="useUpdate('article/create-article')">Tạo bài viết</li>          
         </ul>
       </li> 
-      <li nz-submenu nzOpen nzTitle="Đề Thi">
+      <li nz-submenu nzTitle="Đề Thi">
         <ul>
           <li nz-menu-item [nzSelected]="url === '/admin/core/examination/examination-list'" (click)="useUpdate('examination')">Danh sách đề thi</li>
           <li nz-menu-item [nzSelected]="url === '/admin/core/examination/create-exam'" (click)="useUpdate('examination/create-exam')">Nhập đề thi</li>                    
         </ul>
       </li>  
-      <li nz-submenu nzOpen nzTitle="Season">
+      <li nz-submenu nzTitle="Season">
         <ul>
           <li nz-menu-item [nzSelected]="url === '/admin/core/season/season-list'" (click)="useUpdate('season')">Danh sách các mùa</li>                             
+        </ul>
+      </li>   
+      <li nz-submenu nzTitle="Cấu hình">
+        <ul>
+          <li nz-menu-item [nzSelected]="url === '/admin/core/configuration/configuration-list'" (click)="useUpdate('configuration')">Các mục cấu hình</li>                             
+        </ul>
+      </li> 
+    </ul>
+  </nz-sider>
+  <!-- <nz-sider nzWidth="200px" *ngIf="user.roleId === 2">
+    <li nz-submenu nzOpen nzTitle="Người dùng">
+      <ul>
+        <li nz-menu-item [nzSelected]="url === '/admin/core/users/user-list'" (click)="useUpdate('users')">Danh sách người dùng</li>                             
+      </ul>
+    </li> 
+  </nz-sider> -->
+</nav>
+<nav class="admin-nav" *ngIf="user?.roleId === 3">  
+  <nz-sider nzWidth="200px">
+    <ul nz-menu nzMode="inline" class="sider-menu" [nzTheme]="'dark'"> 
+      <li nz-submenu nzOpen nzTitle="Người dùng">
+        <ul>
+          <li nz-menu-item [nzSelected]="url === '/admin/core/users/user-list'" (click)="useUpdate('users')">Danh sách người dùng</li>                            
         </ul>
       </li>   
     </ul>

@@ -109,7 +109,7 @@ export class UniDetailComponent implements OnInit {
     this._activatedRoute.params.subscribe((param) => {
       this.uniId = param.id;
       this._universityService.getUniversityById(param.id).pipe(
-        tap((rs) => {
+        tap((rs) => {          
           if (rs.succeeded === true) {
             this.university = rs.data;
             this.setDataToForm(this.university);
@@ -154,6 +154,9 @@ export class UniDetailComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {            
         this.setDataToForm(this.university);
+        this.logo = undefined;
+        this.image = undefined;
+        this.validImage = true;
       }
     })    
   }
@@ -252,10 +255,11 @@ export class UniDetailComponent implements OnInit {
     } else {
       const file = files[0];
       const extensions: string[] = ['image/png', 'image/jpeg', 'image/jpg'];
-      if (extensions.includes(file.type)) {
+      if (extensions.includes(file?.type)) {
         if (file.size < 1024 * 1204 * 2) {
           const reader = new FileReader();
           reader.onloadend = () => {
+            this.validImage = false
             this.logo = reader.result
           };
           reader.readAsDataURL(file);
@@ -269,9 +273,12 @@ export class UniDetailComponent implements OnInit {
     }
   }
 
+  validImage: boolean = true;
   removeFile(): void {
     this.logo = undefined;
-    this.image = null;
+    this.image = undefined;  
+    const reader = new FileReader();    
+    this.validImage = true; 
   }
 
   updateUni(): void {
@@ -290,7 +297,7 @@ export class UniDetailComponent implements OnInit {
       "tuitionTo": Number.parseInt(this.updateUniForm.get('tuitionTo').value),
       "rating": this.updateUniForm.get('rating').value,
       "status": this.updateUniForm.get('status').value
-    }
+    }    
     const formData = new FormData();
     for (let key in newValue) {
       formData.append(key, newValue[key]);
@@ -311,7 +318,10 @@ export class UniDetailComponent implements OnInit {
         this._universityService.updateUniversity(formData).pipe(
           tap((rs) => {
             if (rs.succeeded === true) {
-              this.isLoadingSaving = false;              
+              this.isLoadingSaving = false;  
+              this.logo = undefined;   
+              this.image = undefined; 
+              this.validImage = true;  
               Swal.fire('Thành Công', 'Cập nhật thành công', 'success');
               this.getUniversityById();
             } else {
@@ -343,4 +353,5 @@ export class UniDetailComponent implements OnInit {
       })
     ).subscribe();
   }
+
 }
