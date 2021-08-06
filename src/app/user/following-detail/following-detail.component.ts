@@ -26,7 +26,6 @@ export class FollowingDetailComponent implements OnInit {
   ngOnInit() {
     this.followingDetailId = this.activatedRoute.snapshot.params['id'];
     this.activatedRoute.params.subscribe((params: Params) => {
-      console.log("Hihi");
       this.store.dispatch(new UserActions.LoadUserFollowingDetail(params['id']));
     });
     // this.store.dispatch(new UserActions.LoadUserFollowingDetail(this.followingDetailId));

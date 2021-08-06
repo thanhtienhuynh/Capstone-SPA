@@ -190,7 +190,6 @@ export class StepperEffects {
       if (stepperState.needDoneTestIds.length > 0) {
         return of(new StepperActions.DoneLoading(StepperActions.LOAD_UNIVERSIIES_AFTER_DOING_MOCK_TESTS));
       }
-      console.log("Hihi 1");
       let body = {
         subjectGroupId: stepperState.selectedSubjectGroup.id,
         majorId: stepperState.selectedMajor.id,
