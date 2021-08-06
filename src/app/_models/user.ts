@@ -5,5 +5,7 @@ export interface User {
   phone?: string;
   avatarUrl?: string;
   roleId?: number;
+  provinceName: string;
+  gender: number;
   isActive?: boolean;
 }

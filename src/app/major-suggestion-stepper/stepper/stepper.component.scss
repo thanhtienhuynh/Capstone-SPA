@@ -42,7 +42,7 @@
 }
 
 .criteria-lable {
-  width: 25%;
+  width: 26%;
   font-weight: 500;
 }
 
@@ -92,10 +92,15 @@
 
 .suggest-title {
   color: #1f85c3;
-  font-style: italic;
-  padding: 5px;
   border-radius: 5px;
-  margin-top: 20px;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.sub-suggest-title {
+  margin-top: 10px;
+  color: #1f85c3;
+  border-radius: 5px;
   font-weight: 500;
 }
 
@@ -123,8 +128,6 @@
   background-color: azure;
   border-radius: 30px;
 }
-
-
 
 .center {
   margin: auto;
@@ -335,15 +338,15 @@
 .result-link {
   padding: 0 5px;
   border-radius: 5px;
-  border: 1px solid rgb(88, 153, 236);
-  background-color: rgb(88, 153, 236);
+  border: 1px solid #1f85c3;
+  background-color: #1f85c3;
   color: white;
   margin: 0 5px;
 }
 
 .result-note-frame {
   border-radius: 5px;
-  background-color: #cee3f0;
+  // background-color: #cee3f0;
   padding: 8px 5px;
   width: 100%;
   margin-bottom: 20px;
@@ -571,7 +574,10 @@ animation: pulse-blue 2s infinite;
   border-radius: 0px 0px 30px 30px;
 }
 
-
+.top-2-major-list-frame {
+  width: 100%;
+  height: 91%;
+}
 
 
 
@@ -713,6 +719,10 @@ animation: pulse-blue 2s infinite;
   font-size: 16px !important;
 }
 
+::ng-deep .mat-horizontal-stepper-header-container {
+  height: 50px !important;
+}
+
 td {
   vertical-align: top;
   padding: 10px;
@@ -746,4 +756,49 @@ td {
 
 .back-group-frame {
   width: 100%;
+}
+
+.priority-group-frame {
+  margin-top: 15px;
+  width: 100%;
+  display: flex;
+}
+
+.priority-group-note-frame {
+  font-weight: 500;
+  width: 70%;
+}
+
+.priority-group-input-frame {
+  width: 30%;
+}
+
+.group-form-field {
+  width: 85%;
+}
+
+.leave-empty-note {
+  padding-left: 28px;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: white !important;
+  border-radius: 5px !important;
+  border: 1px solid #c4ecf3;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0px;
+}
+
+::ng-deep .mat-form-field-underline {
+  display: none;
+}
+
+.empty-major {
+  text-align: center;
+  font-weight: 500;
+  font-size: 15px;
+  font-style: italic;
+  padding-top: 10px;
 }

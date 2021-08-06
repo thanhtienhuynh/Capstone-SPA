@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, DoCheck, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, DoCheck, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -11,7 +11,7 @@ import { combineLatest, Observable, Subscription } from 'rxjs';
 import { GenernalHelperService } from 'src/app/_services/genernal-helper.service';
 import { Mark } from 'src/app/_models/mark';
 import { Subject } from 'src/app/_models/subject';
-import { SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from 'src/app/_models/suggested-subjects-group';
+import { CusSubjectGroup, SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from 'src/app/_models/suggested-subjects-group';
 import { MockTestBasedUniversity, TrainingProgramBasedUniversity } from 'src/app/_models/university';
 import * as fromApp from '../../_store/app.reducer';
 import * as StepperActions from '../stepper/store/stepper.actions';
@@ -32,6 +32,8 @@ import { TranscriptType } from 'src/app/_models/transcript';
 import { Router } from '@angular/router';
 import { MockTestRulesDialogComponent } from '../mock-test-rules-dialog/mock-test-rules-dialog.component';
 import { CanComponentDeactivate } from 'src/app/_helper/can-deactivate-guard.service';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { GroupMockTestDialogComponent } from '../group-mock-test-dialog/group-mock-test-dialog.component';
 
 
 @Component({
@@ -41,6 +43,7 @@ import { CanComponentDeactivate } from 'src/app/_helper/can-deactivate-guard.ser
 })
 export class StepperComponent extends CanComponentDeactivate implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('stepper') private myStepper: MatStepper;
+  @ViewChild('subjectGroupsInput') subjectGroupsInput: ElementRef<HTMLInputElement>;
   countStepperActionLoad: number = 0;
   typeScore: number = 2;
   gender: number = 1;
@@ -48,12 +51,19 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
   transcripts: TranscriptType[];
   provinceOptions: Province[];
   needDoneTestIds: number[] = [];
+  shouldLoadAtUniListStep = true;
+  
   filteredOptions: Observable<Province[]>;
+
+  subjectGroupsControl = new FormControl();
+  subjecrGroupOptions: CusSubjectGroup[];
+  selectedChips: CusSubjectGroup[] = [];
+  filteredSubjectGroups: Observable<CusSubjectGroup[]>;
+
+
   provinceError = false;
   isFollowing = false;
   secondFormGroup: FormGroup = null;
-  thirdFormGroup: FormGroup;
-  inputFormControl: FormGroup = null;
   userSuggestionSubjectGroup: UserSuggestionSubjectGroup = null;
 
   subscription: Subscription;
@@ -63,8 +73,6 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
   unsaveTestSubmissions: UnsaveTestSubmission[];
   stepperActionQueue: StepperActions.StepperActions[] = [];
   userActionQueue: UserActions.UserActions[] = [];
-  
-
 
   selectedSubjectGroup: SuggestedSubjectsGroup = null;
 
@@ -115,10 +123,9 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
   }
 
   ngOnInit() {
-    this.inputFormControl = this._formBuilder.group({});
-    this.thirdFormGroup = this._formBuilder.group({});
     this.store.dispatch(new StepperActions.ResetState());
     this.store.dispatch(new StepperActions.LoadSubjects());
+    this.store.dispatch(new StepperActions.LoadSubjectGroups());
     this.store.dispatch(new StepperActions.LoadProvinces());
     this.secondFormGroup.controls['transcriptTypeId'].valueChanges.subscribe(changeValue => {
       if (this.transcripts != null && this.transcripts.length > 0) {
@@ -190,6 +197,15 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
           this.trainingProgramBasedUniversityForCheck = stepperState.trainingProgramBasedUniversity;
           if (this.tests != stepperState.tests) {
             this.tests = stepperState.tests;
+          }
+          if (this.subjecrGroupOptions != stepperState.subjectGroups) {
+            this.subjecrGroupOptions = stepperState.subjectGroups;
+            if (this.subjecrGroupOptions) {
+              this.filteredSubjectGroups = this.subjectGroupsControl.valueChanges.pipe(
+                startWith(''),
+                map(value => value ? this._filterSubjectGroup(value) : this.subjecrGroupOptions.slice())
+              );
+            }
           }
           this.test = stepperState.test;
           if (this.mockTestBasedUniversityForCheck != stepperState.mockTestBasedUniversity) {
@@ -367,6 +383,24 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
     }
   }
 
+  remove(group: CusSubjectGroup): void {
+    var index = this.selectedChips.indexOf(group);
+    if (index !== -1) {
+      this.selectedChips.splice(index, 1);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    let group = this.subjecrGroupOptions.find(s => s.id == event.option.value);
+    if (group) {
+      if (!this.selectedChips.find(g => group.id == g.id)) {
+        this.selectedChips.push(this.subjecrGroupOptions.find(s => s.id == event.option.value));
+      }
+      this.subjectGroupsInput.nativeElement.value = "";
+      this.subjectGroupsControl.setValue(null);
+    }
+  }
+
   checkIsDiffentUserInfo() {
     if (!this.userSuggestionSubjectGroup) {
       return 0;
@@ -379,16 +413,20 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
     }
     if (this.userSuggestionSubjectGroup.transcriptDetails != null &&
       this.userSuggestionSubjectGroup.transcriptDetails.find(u => u.id == this.typeScore) != null) {
+      for (let mark of this.marks) {
+        let isExisted = false;
         for (let transcript of this.userSuggestionSubjectGroup.transcriptDetails.find(u => u.id == this.typeScore).transcriptDetails) {
-          for (let mark of this.marks) {
-            if (mark.subjectId == transcript.subjectId) {
-              if (mark.mark != transcript.mark) {
-                console.log(mark.subjectId)
-                return 2;
-              }
+          if (mark.subjectId == transcript.subjectId) {
+            isExisted = true;
+            if (mark.mark != transcript.mark) {
+              return 2;
             }
           }
         }
+        if (!isExisted) {
+          return 2;
+        }
+      }
     }
     //0: no diff
     //1: diff gender || province
@@ -410,7 +448,6 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
       case 3: // Từ 2 => 3
           this.openMockTestRulesDialog();
         break;
-      break;
       case 4: //Từ 3 => 4
         this.myStepper.selectedIndex = 4;
         this.store.dispatch(new StepperActions.LoadTest(data));
@@ -425,6 +462,19 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
       case 7: // Từ 2 => 3
         this.myStepper.selectedIndex = 3;
         this.loadTests();
+        break;
+      case 8: // Từ 1 => 0, nhập điểm thpt qg
+        this.myStepper.selectedIndex = 0;
+        this.inputTHPTQGScroe();
+        break;
+      case 9: // Từ 1 => 3, thi thử dựa trên chọn khối
+        this.openGroupMockTestRulesDialog();
+        break;
+      case 10: //Sau khi thi thử => về lại xem khối của 1 ngành, 4 => 1
+        this.myStepper.selectedIndex = 1;
+        this.typeScore = 3;
+        this.store.dispatch(new StepperActions.LoadMajorsSelectedSubjectGroup());
+      break;
       default:
         break;
     }
@@ -432,7 +482,11 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
 
   reloadUni(event: boolean) {
     if (event) {
-      this.getAction(5);
+      if (this.shouldLoadAtUniListStep) {
+        this.getAction(5);
+      } else {
+        this.getAction(10);
+      }
     }
   }
 
@@ -560,11 +614,18 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
   }
 
   onScoreSubmit() {
+    let subjectGroupIds = this.selectedChips.map(s => s.id);
     if (this.checkIsDiffentUserInfo() > 0) {
-      this.store.dispatch(new StepperActions.SetMarks({marks: this.marks, transcriptTypeId: this.typeScore, gender: this.gender, provinceId: this.provinceId}, true));
+      this.store.dispatch(new StepperActions.SetMarks({marks: this.marks, transcriptTypeId: this.typeScore,
+        gender: this.gender, provinceId: this.provinceId, subjectGroupIds: subjectGroupIds}, true));
     } else {
-      this.store.dispatch(new StepperActions.SetMarks({marks: this.marks, transcriptTypeId: this.typeScore, gender: this.gender, provinceId: this.provinceId}, false));
+      this.store.dispatch(new StepperActions.SetMarks({marks: this.marks, transcriptTypeId: this.typeScore,
+        gender: this.gender, provinceId: this.provinceId, subjectGroupIds: subjectGroupIds}, false));
     }
+  }
+
+  inputTHPTQGScroe() {
+    this.secondFormGroup.controls['transcriptTypeId'].setValue(1);
   }
 
   getRatio(caring: number, admission: number) {
@@ -658,6 +719,27 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
     dialogRef.afterClosed().subscribe(v => {
       if (v) {
         this.getAction(7);
+        this.shouldLoadAtUniListStep = true;
+      }
+    });
+  }
+
+  openGroupMockTestRulesDialog() {
+    const dialogRef = this.dialog.open(
+      GroupMockTestDialogComponent, {
+        width: 'auto',
+        height: 'auto',
+        disableClose: false,
+        data: {
+          suggestedSubjectGroups: this.suggestedSubjectsGroup
+        }
+      }
+    )
+
+    dialogRef.afterClosed().subscribe(v => {
+      if (v) {
+        this.getAction(7);
+        this.shouldLoadAtUniListStep = false;
       }
     });
   }
@@ -698,6 +780,12 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
     const filterValue = value.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s/g, '');
     return this.provinceOptions.filter(option => 
       option.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s/g, '').toLowerCase().includes(filterValue));
+  }
+
+  private _filterSubjectGroup(value: string): CusSubjectGroup[] {
+    const filterValue = value.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s/g, '');
+    return this.subjecrGroupOptions.filter(option => 
+      option.groupCode.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s/g, '').toLowerCase().includes(filterValue));
   }
 
   marksValidator() {
