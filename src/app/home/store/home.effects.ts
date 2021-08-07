@@ -187,7 +187,7 @@ export class HomeEffects {
         );
       }
       else {
-        return of(null);
+        return of({type: "DUMMY"});
       }
     })
   );

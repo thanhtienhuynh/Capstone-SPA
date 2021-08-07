@@ -48,9 +48,9 @@ gdAreas.lt-md="score | test" gdRows.lt-md="auto" gdColumns.lt-md="100%">
             <p style="font-size: small; font-style: italic;">
               <span style="color: rgb(240, 30, 30);">Chú ý:</span> 
               Bạn có thể lưu lại kết quả bài thi bằng cách nhấn vào nút "Lưu".</p>     
-            <div mat-dialog-actions>
-              <button mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/" >Đóng</button>
-              <button mat-button color="primary" (click)="onSave()" cdkFocusInitial>Lưu</button>
+            <div class="result-btn-frame">
+              <button mat-button routerLink="/" >Đóng</button>
+              <button class="save-btn" mat-raised-button color="primary" (click)="onSave()" cdkFocusInitial>Lưu</button>
             </div>
           </div>
         </div>   

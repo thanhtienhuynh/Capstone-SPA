@@ -407,7 +407,7 @@
       <div *ngIf="this.trainingProgramBasedUniversityForCheck && this.trainingProgramBasedUniversityForCheck.length > 0" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
         <div class="university-frame" *ngFor="let university of trainingProgramBasedUniversity" fxFlex="0 1 calc(100%)" >
           <div gdAreas="name name | logo training-program | detail detail" gdRows="50px 220px auto" gdColumns="22% 78%"
-          gdAreas.lt-md="name name | logo training-program | detail detail" gdRows.lt-md="auto auto auto" gdColumns.lt-md="20% 80%">
+          gdAreas.lt-md="name name | training-program training-program | detail detail" gdRows.lt-md="auto auto auto" gdColumns.lt-md="20% 80%">
             <!-- logo -->
             <div gdArea="logo" class="logo" ngClass.lt-md="logo-md">
               <img class="img-frame" src="{{university.logoUrl || '../../../assets/img/ic/univeristy.jpg'}}" alt="">
@@ -421,7 +421,9 @@
             <!-- training-program -->
             <div  gdArea="training-program" class="training-program">
               <div class="training-program-list-frame" *ngIf="university.trainingProgramSets" fxLayout="20px wrap" fxLayoutAlign="center">
-                <div class="training-program-item-frame" [ngClass]="getClass(trainingProgramSet.dividedClass)" *ngFor="let trainingProgramSet of university.trainingProgramSets" fxFlex="0 1 calc(33% - 20px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+                <div class="training-program-item-frame" [ngClass]="getClass(trainingProgramSet.dividedClass)"
+                  *ngFor="let trainingProgramSet of university.trainingProgramSets"
+                  fxFlex="0 1 calc(33% - 20px)" fxFlex.lt-md="0 1 calc(33% - 20px)" fxFlex.lt-sm="100%">
                   <div class="center-all  training-program-name">Hệ {{trainingProgramSet.name}}</div>
                   <div class="training-title"><span class="uni-des-title">Điểm chuẩn {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[0].entryMark}}</div>
                   <div class="training-title"><span class="uni-des-title">Chỉ tiêu {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[0].numberOfStudents || "Đang cập..."}}</div>
