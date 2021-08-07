@@ -207,7 +207,7 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
   }
 
   onSave() {
-    if (this.userSubscription) {
+    if (this.user) {
       this.store.dispatch(new HomeActions.SaveUnsaveTestSubmissions());
       this.isSaving = true;
     } else {

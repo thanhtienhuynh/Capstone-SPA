@@ -1,11 +1,11 @@
 <mat-horizontal-stepper #stepper class="host-frame">
   <mat-step #stepOne [stepControl]="secondFormGroup" editable="true">
-    <div class="center step-1-frame">
+    <div class="center step-1-frame" ngClass.lt-lg="center-md">
       <form *ngIf="secondFormGroup != null; elseNull" [formGroup]="secondFormGroup" (ngSubmit)="onSuggestSubmit()" (keydown.enter)="$event.preventDefault()">
         <ng-template matStepLabel>Nhập điểm</ng-template>
         <h1 class="step-1-title">Nhập điểm trung bình học bạ hoặc điểm thi THPT Quốc gia</h1>
         <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="center" class="criteria-frame">
-          <div fxFlex.lg="0 1 calc(60%)" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="100%">
+          <div fxFlex.lg="0 1 calc(60%)" fxFlex.lt-md="0 1 calc(100%)">
 
             <div class="center-vertical province-frame">
               <div class="criteria-lable">Tỉnh đang sinh sống<span style="color: red;">*</span></div>
@@ -104,11 +104,11 @@
   </mat-step>
   <mat-step #stepTwo >
     <ng-template matStepLabel>Kết quả</ng-template>
-    <div class="center step-2-frame">
+    <div class="center step-2-frame" ngClass.lt-lg="center-md">
       <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup.length > 0" fxLayout="row wrap" fxLayoutAlign="flex-start" class="step-2-in-frame">
         
         <!-- Top 2 -->
-        <div fxFlex.lg="0 1 calc(34% )" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="100%" >
+        <div fxFlex.lg="0 1 calc(34% )" fxFlex.lt-lg="0 1 calc(34% )" fxFlex.lt-sm="0 1 calc(100%)" >
           <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[groupPage * 3 - 2]" class="top-2-group-frame">
             <div class="top-2-group-in-frame">  
               <div class="top-2-group-inner-frame">
@@ -147,7 +147,7 @@
           </div>
         </div>
         <!-- Top 1 -->
-        <div fxFlex="0 1 calc(36%-32px)" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="0 1 calc(100%)" class="top-1-group-frame">
+        <div fxFlex.lg="0 1 calc(36%-32px)" fxFlex.lt-lg="0 1 calc(36%-32px)" fxFlex.lt-sm="0 1 calc(100%)" class="top-1-group-frame">
             <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[groupPage * 3 - 3]" class="top-1-group-in-frame" >  
               <div style="height: 100%; background-color: azure; border-radius: 30px;">
                 <div class="top-1-title-frame">
@@ -185,9 +185,8 @@
             </div>
         </div>
         <!-- Top 3 -->
-        <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[groupPage * 3 - 1]" fxFlex="0 1 calc(30%)"
-          fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="0 1 calc(100%)" class="top-3-group-frame">
-          <div style="padding-top: 50px;">
+        <div fxFlex.lg="0 1 calc(30%)" fxFlex.lt-lg="0 1 calc(30%)" fxFlex.lt-sm="0 1 calc(100%)" class="top-3-group-frame">
+          <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[groupPage * 3 - 1]"  style="padding-top: 50px;">
             <div class="top-3-group-in-frame" >  
               <div style="height: 100%; background-color: azure; border-radius: 30px;">
                 <div class="top-3-title-frame">
@@ -253,7 +252,7 @@
   <!-- Danh sách trường step -->
   <mat-step  #stepThree >
     <ng-template matStepLabel>Danh sách trường</ng-template>
-    <div class="center">
+    <div class="center" ngClass.lt-lg="center-md">
       <div *ngIf="typeScore != 1" class="uni-list-header-frame" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
         
         <div fxFlex="0 1 calc(100%)" fxFlex.lt-sm="100%" class="center-horizontal">
@@ -292,9 +291,9 @@
         <div *ngIf="mockTestBasedUniversityForCheck.trainingProgramBasedUniversityDataSets?.length > 0" fxFlex="0 1 calc(100%)">
           <div class="university-frame" *ngFor="let university of mockTestBasedUniversity" >
             <div gdAreas="name name | logo training-program | detail detail" gdRows="50px 220px auto" gdColumns="22% 78%"
-              gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto auto auto">
+              gdAreas.lt-lg="name name | logo training-program | detail detail" gdRows.lt-lg="50px 220px auto" gdColumns.lt-lg="22% 78%">
               <!-- logo -->
-              <div gdArea="logo" class="logo">
+              <div gdArea="logo" class="logo" gdA>
                 <img class="img-frame" src="{{university.logoUrl || '../../../assets/img/ic/univeristy.jpg'}}" alt="">
               </div>
               <!-- name -->
@@ -408,9 +407,9 @@
       <div *ngIf="this.trainingProgramBasedUniversityForCheck && this.trainingProgramBasedUniversityForCheck.length > 0" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
         <div class="university-frame" *ngFor="let university of trainingProgramBasedUniversity" fxFlex="0 1 calc(100%)" >
           <div gdAreas="name name | logo training-program | detail detail" gdRows="50px 220px auto" gdColumns="22% 78%"
-          gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto auto auto">
+          gdAreas.lt-md="name name | logo training-program | detail detail" gdRows.lt-md="auto auto auto" gdColumns.lt-md="20% 80%">
             <!-- logo -->
-            <div gdArea="logo" class="logo">
+            <div gdArea="logo" class="logo" ngClass.lt-md="logo-md">
               <img class="img-frame" src="{{university.logoUrl || '../../../assets/img/ic/univeristy.jpg'}}" alt="">
             </div>
             <!-- name -->
