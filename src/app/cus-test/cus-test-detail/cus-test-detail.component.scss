@@ -73,6 +73,16 @@
   align-items: center;
 }
 
+.save-btn {
+  margin-left: 20px;
+}
+
+.result-btn-frame {
+  display: flex;
+  justify-content: start;
+  padding-bottom: 15px;
+}
+
 .test-exam-scroll {
   overflow-x: hidden;
   height: auto;

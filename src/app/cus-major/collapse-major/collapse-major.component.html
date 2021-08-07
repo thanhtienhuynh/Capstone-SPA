@@ -3,7 +3,7 @@
 </div>
 <div class="host-frame center-all">
     <form (ngSubmit)="onSubmit()" class="search-frame">
-      <input class="text-field" type="text" id="fullname" placeholder="Nhập tên ngành..." [(ngModel)]="searchTerm" name="searchTerm"/>
+      <input class="text-field" ngClass.lt-md="text-field-md" type="text" id="fullname" placeholder="Nhập tên ngành..." [(ngModel)]="searchTerm" name="searchTerm"/>
       <button class="search-btn">Tìm kiếm</button>
     </form>
 </div>
