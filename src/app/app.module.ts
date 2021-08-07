@@ -13,7 +13,6 @@ import { environment } from 'src/environments/environment';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
 import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-page.component';
-import { ResultDialogComponent } from './major-suggestion-stepper/exam-page/result-dialog/result-dialog.component';
 import { CountdownModule } from 'ngx-countdown';
 import { TestCardComponent } from './major-suggestion-stepper/exam-page/test-card/test-card.component';
 import { HomeComponent } from './home/home.component';
@@ -48,7 +47,6 @@ registerLocaleData(vi);
     AppComponent,
     StepperComponent,
     ExamPageComponent,
-    ResultDialogComponent,
     FinishTestDialogComponent,
     TestCardComponent,
     HomeComponent,

@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 
 import * as fromApp from '../../_store/app.reducer';
 import * as HomeActions from '../../home/store/home.actions';
-import * as UserActions from '../../user/store/user.actions';
 import { Observable, Subscription } from 'rxjs';
 import { Test } from 'src/app/_models/test';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -15,8 +14,8 @@ import { TestSubmission } from 'src/app/_models/test-submission';
 import Swal from 'sweetalert2';
 import { CanComponentDeactivate } from 'src/app/_helper/can-deactivate-guard.service';
 import { User } from 'src/app/_models/user';
-import { ResultDialogComponent } from 'src/app/major-suggestion-stepper/exam-page/result-dialog/result-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LoginDialogComponent } from 'src/app/_sharings/components/login-dialog/login-dialog.component';
 @Component({
   selector: 'app-cus-test-detail',
   templateUrl: './cus-test-detail.component.html',
@@ -54,6 +53,12 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
 
       if (this.isSaved != homeState.isSubmissionSaved) {
         this.isSaved = homeState.isSubmissionSaved;
+        if (this.isSaved) {
+          Swal.fire({title: 'Thành công', text: "Lưu thông tin bài thi thành công", icon: 'success', allowOutsideClick: true})
+          .then(() => {
+            
+          });
+        }
       }
 
       if (this.test != homeState.selectedTest) {
@@ -99,7 +104,14 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
     .select('auth')
     .subscribe(
       (authState) => {
-        this.user = authState.user;
+        if (this.user != authState.user) {
+          this.user = authState.user;
+          if (this.user && this.isSaving) {
+            this.store.dispatch(new HomeActions.SaveUnsaveTestSubmissions());
+            this.isSaving = false;
+          }
+        }
+        
       },
       (error) => {
       }
@@ -217,9 +229,9 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
   }
 
   openResultDialog(): void {
-    const dialogRef = this.dialog.open(ResultDialogComponent, {
-      width: '500px',
-      height: '210px',
+    const dialogRef = this.dialog.open(LoginDialogComponent, {
+      width: '350px',
+      height: '150px',
       disableClose: false
     });
   }
