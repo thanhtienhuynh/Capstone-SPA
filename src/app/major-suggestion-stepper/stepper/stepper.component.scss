@@ -135,6 +135,12 @@
   padding: 10px;
 }
 
+.center-md {
+  margin: auto;
+  width: 100%;
+  padding: 10px;
+}
+
 .center-exam {
   margin: auto;
   width: 90%;
@@ -666,6 +672,10 @@ animation: pulse-blue 2s infinite;
 
 .logo {
   // border: 1px solid #cccccc;
+}
+
+.logo-md {
+  max-height: 180px;
 }
 
 .uni-name {
