@@ -35,7 +35,9 @@ export interface State {
   //Ngành chọn sau khi suggest
   selectedMajor: Major;
   selectedUniversityId: number;
+  //param follow
   selectedTrainingProgramId: number;
+  position: number;
   selectedTestId: number;
   unsaveTestSubmissions: UnsaveTestSubmission[];
   //Param lúc chấm điểm
@@ -75,6 +77,7 @@ const initialState: State = {
   selectedMajor: null,
   selectedUniversityId: null,
   selectedTrainingProgramId: null,
+  position: null,
   selectedTestId: null,
   testSubmissionParam: null,
   testSubmissionReponse: null,
@@ -281,6 +284,7 @@ export function stepReducer(
         selectedUniversityId: action.payload.universityId,
         selectedTrainingProgramId: action.payload.trainingProgramId,
         followTranscriptTypeId: action.payload.followTranscriptTypeId,
+        position: action.payload.position,
         actionsQueue: [...state.actionsQueue, action],
       };
     case StepperActions.CARING_ACTION_SUCCESS:

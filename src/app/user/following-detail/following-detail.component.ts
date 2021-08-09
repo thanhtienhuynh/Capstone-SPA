@@ -77,13 +77,13 @@ export class FollowingDetailComponent implements OnInit {
   getScoreType(typeId: number) {
     switch (typeId) {
       case 1:
-        return "THPT QG";
+        return "Điểm THPT QG";
       case 2:
-        return "Học bạ";
+        return "Điểm học bạ";
       case 3:
-        return "Thi thử";
+        return "Điểm thi thử";
       default:
-        return "Đang cập nhật";
+        return "Không đủ điều kiện";
     }
   }
   
