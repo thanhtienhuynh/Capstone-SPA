@@ -105,8 +105,8 @@ export class PublishedComponent implements OnInit {
       case 'published':
         newValue = {
           'id': this.articleId,
-          'publicFromDate': this.dateForm.get('publicFromDate').value,
-          'publicToDate': this.dateForm.get('publicToDate').value,
+          'publicFromDate': (this.dateForm.get('publicFromDate').value as Date).toLocaleString(),
+          'publicToDate': (this.dateForm.get('publicToDate').value as Date).toLocaleString(),
           'status': 3,
           'university': this.listOfSelectedUniversity,
           'major': this.listOfSelectedMajor
@@ -166,7 +166,7 @@ export class PublishedComponent implements OnInit {
               tap((rs) => {
                 if (rs.succeeded === true) {
                   this.createNotification('success', 'DUYỆT BÀI VIẾT', 'Duyệt bài viết thành công', 'bottomRight');
-                  // this.showElement(this.unCensorshipList, this.currentIndex);                  
+                  // this.showElement(this.unCensorshipList, this.currentIndex);
                   this.nextElement();
                 } else {
                   this.createNotification('error', 'Duyệt Bài', 'Duyệt bài viết thất bại', 'bottomRight');

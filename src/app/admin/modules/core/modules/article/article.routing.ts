@@ -6,8 +6,8 @@ const routes: Routes = [
   { path: '', redirectTo: 'article-list'},
   { path: 'article-list', component: ArticleMainFatherComponent,
     data: {
-      breadcrumb: 'Danh Sách Bài Viết'
-    }, 
+      breadcrumb: 'Danh sách bài viết'
+    },
     children: [
       {
         path: '', component: ArticleMainComponent
@@ -15,21 +15,21 @@ const routes: Routes = [
       {
         path: 'details/:id', component: ArticleDetailComponent,
         data: {
-          breadcrumb: 'Chi Tiết Bài Viết'
+          breadcrumb: 'Chi tiết bài viết'
         }
       },
     ]
-  },  
+  },
   {
     path: 'censor', component: CensorshipComponent,
     data: {
-      breadcrumb: 'Duyệt Bài Hàng Loạt'
+      breadcrumb: 'Duyệt bài hàng loạt'
     }
   },
   {
     path: 'published', component: PublishedComponent,
     data: {
-      breadcrumb: 'Đăng Bài Hàng Loạt'
+      breadcrumb: 'Đăng bài hàng loạt'
     }
   },
   {

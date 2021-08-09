@@ -4,38 +4,38 @@ import { LayoutComponent } from './pages';
 
 const routes: Routes = [
   {
-    path: '', component: LayoutComponent, children: [     
-      {path: '', redirectTo: 'university'},
+    path: '', component: LayoutComponent, children: [
+      {path: '', redirectTo: 'university', pathMatch: 'full'},
       {
         path: 'dashboard', loadChildren: () => import('src/app/admin/modules/core/modules').then(m => m.DashboardModule),
-      }, 
+      },
       {
         path: 'university',
         canActivate: [IsAdminGuard],
         loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.UniversityModule),
         data: {
-          breadcrumb: 'Trường Học'
+          breadcrumb: 'Trường học'
         }
       },
       {
         path: 'article',
         loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.ArticleModule),
         data: {
-          breadcrumb: 'Bài Viết'
+          breadcrumb: 'Bài viết'
         }
       },
       {
         path: 'major-configuration',
         loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.MajorConfigurationModule),
         data: {
-          breadcrumb: 'Ngành Học'
+          breadcrumb: 'Ngành học'
         }
       },
       {
         path: 'examination',
         loadChildren: () => import('src/app/admin/modules/core/modules').then((m) => m.ExaminationModule),
         data: {
-          breadcrumb: 'Đề Thi'
+          breadcrumb: 'Đề thi'
         }
       },
       {

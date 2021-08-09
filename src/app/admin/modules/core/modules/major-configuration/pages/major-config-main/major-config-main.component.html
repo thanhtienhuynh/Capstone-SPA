@@ -8,7 +8,7 @@
               <div class="none-action">
                 <div class="major-header-title">
                   <h5>BẢNG CẤU HÌNH THÔNG TIN CÁC NGÀNH CÓ TRONG HỆ THỐNG</h5>
-                </div>             
+                </div>
               </div>
               <div class="add-major">
                 <button nz-button nzSize="medium" nzType="primary" nz-dropdown nzTrigger="click" [nzDropdownMenu]="addMajor"  style="margin-right: 10px;">
@@ -19,26 +19,26 @@
                   <!-- <span style="font-size: 12px;">THÊM NGÀNH</span> -->
                   Mặc định
                 </button>
-              </div> 
+              </div>
             </div>
-            <nz-divider style="margin-top: 5px; margin-bottom: 5px;"></nz-divider>   
-            <div class="sticky-table-header fixed-solution" [style.visibility]="isVisibleHeader > 200 ? 'visible' : 'hidden'">      
+            <nz-divider style="margin-top: 5px; margin-bottom: 5px;"></nz-divider>
+            <div class="sticky-table-header fixed-solution" [style.visibility]="isVisibleHeader > 200 ? 'visible' : 'hidden'">
               <nz-table>
                 <thead>
                   <tr>
-                      <th id="stt">STT</th>                                    
+                      <th id="stt">STT</th>
                       <th id="name">TÊN NGÀNH
                           <!-- <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchValueName.length > 0" [nzDropdownMenu]="searchMenu">
                               <i nz-icon nzType="search"></i>
                             </nz-filter-trigger> -->
-                      </th>                      
+                      </th>
                       <th id="code">CODE</th>
                       <th id="subject-group">KHỐI</th>
-                      <th>TRỌNG SỐ</th>                      
-                      <th id="action">TÁC VỤ</th>
+                      <th>TRỌNG SỐ</th>
+                      <th id="action">THAO TÁC</th>
                   </tr>
-                </thead>                            
-              </nz-table>                        
+                </thead>
+              </nz-table>
           </div>
           <nz-spin [nzSpinning]="isLoadingData">
             <nz-table
@@ -46,7 +46,7 @@
             nzBordered
             nzShowSizeChanger
             nzShowQuickJumper
-            [nzData]="listOfDisplaySubjectWeight" 
+            [nzData]="listOfDisplaySubjectWeight"
             [nzFrontPagination]="false"
             [nzShowPagination]="total > 4"
             [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex" [nzShowTotal]="totalTemplate" [nzPageSizeOptions]="[5, 10]" (nzQueryParams)="onQueryParamsChange($event)"
@@ -63,17 +63,17 @@
                 <th id="subject-group">KHỐI</th>
                 <th>TRỌNG SỐ</th>
                 <th id="action">THAO TÁC</th>
-              </tr>              
+              </tr>
             </thead>
             <tbody>
               <ng-container *ngFor="let major of majorConfigTable.data; let i = index">
                 <tr [style.backgroundColor]="i % 2 == 1 ? '#B0E0E6' : '#fff'">
                   <td>
-                    <div style="display: flex; justify-content: center; align-items: center;">{{major.stt}}</div>                      
+                    <div style="display: flex; justify-content: center; align-items: center;">{{major.stt}}</div>
                   </td>
                   <td>
-                    <div style="display: flex; justify-content: flex-start; align-items: center; min-height: 2rem;">  
-                      <span>{{major.name?.toUpperCase()}}</span>                                                                                                                        
+                    <div style="display: flex; justify-content: flex-start; align-items: center; min-height: 2rem;">
+                      <span>{{major.name?.toUpperCase()}}</span>
                     </div>
                   </td>
                   <td>
@@ -84,10 +84,10 @@
                   <td style="padding: 0;">
                     <div class="flex-container-custom">
                       <div class="td-border-children"  *ngFor="let subjectGroup of major.subjectGroups" style="height: 2.5rem;">
-                        <span *ngIf="subjectGroup !== null">{{subjectGroup.groupCode?.toUpperCase()}}</span>                          
+                        <span *ngIf="subjectGroup !== null">{{subjectGroup.groupCode?.toUpperCase()}}</span>
                       </div>
                       <div *ngIf="major.subjectGroups === null" class="td-border-children" (click)="openMajorConfigurationModal(major)">
-                        <span  style="position: absolute; word-break: break-word; padding: 10px" class="missInfomation" nbTooltip="Ngành này chưa tuyển khổi nào" nbTooltipStatus="danger"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>                                             
+                        <span  style="position: absolute; word-break: break-word; padding: 10px" class="missInfomation" nbTooltip="Ngành này chưa tuyển khổi nào" nbTooltipStatus="danger"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>
                       </div>
                     </div>
                   </td>
@@ -98,7 +98,7 @@
                       </div>
                     </div>
                     <div *ngIf="major.subjectGroups === null" class="td-border-children" (click)="openMajorConfigurationModal(major)">
-                      <span  style="position: absolute; word-break: break-word; padding: 10px" class="missInfomation" nbTooltip="Ngành này chưa tuyển khổi nào" nbTooltipStatus="danger"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>                                             
+                      <span  style="position: absolute; word-break: break-word; padding: 10px" class="missInfomation" nbTooltip="Ngành này chưa tuyển khổi nào" nbTooltipStatus="danger"><nb-icon icon="close-outline" status="danger" pack="eva"></nb-icon></span>
                     </div>
                   </td>
                   <td>
@@ -106,7 +106,7 @@
                       <ul nz-menu>
                         <li nz-menu-item (click)="openMajorConfigurationModal(major)">Sửa nhanh</li>
                         <li nz-menu-divider></li>
-                        <li nz-menu-item  [routerLink]="['detail/' + major.id]">Sửa chi tiết</li>    
+                        <li nz-menu-item  [routerLink]="['detail/' + major.id]">Sửa chi tiết</li>
                       </ul>
                     </nz-dropdown-menu>
                     <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
@@ -126,7 +126,7 @@
             </tbody>
           </nz-table>
           </nz-spin>
-          </nb-card-body>          
+          </nb-card-body>
         </nb-card>
       </div>
     </div>
@@ -136,13 +136,13 @@
 <ng-template #totalTemplate>
   <span>
     Hiện có{{ total }} ngành học
-  </span>  
+  </span>
 </ng-template>
 <nz-dropdown-menu #searchMenu="nzDropdownMenu">
   <div class="ant-table-filter-dropdown">
     <div class="search-box">
       <input type="text" nz-input placeholder="Tìm Ngành" [(ngModel)]="searchValueName" />
-      <button nz-button nzSize="small" nzType="primary" class="search-button" (click)="searchByName()"> 
+      <button nz-button nzSize="small" nzType="primary" class="search-button" (click)="searchByName()">
         TÌM KIẾM
       </button>
       <button nz-button nzSize="small" (click)="resetSearchName()">TẠO LẠI</button>
@@ -154,7 +154,7 @@
   <ul nz-menu>
     <li nz-menu-item (click)="openMajorConfigurationModal(undefined)">Thêm nhanh</li>
     <li nz-menu-divider></li>
-    <li nz-menu-item (click)="createByDetail()">Thêm chi tiết</li>    
+    <li nz-menu-item (click)="createByDetail()">Thêm chi tiết</li>
   </ul>
 </nz-dropdown-menu>
 

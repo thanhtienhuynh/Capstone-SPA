@@ -249,7 +249,7 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
               if (this.myStepper && this.myStepper.selectedIndex >= 1) {
                 // Người dùng có điểm trước đó
                 let typeDiff = this.checkIsDiffentUserInfo();
-                if (typeDiff > 0) {
+                if (typeDiff > 0 && typeDiff < 3) {
                   Swal.fire({
                     title: '<div style=\"color: #033969\">Hệ thống ghi nhận bạn đã có thông tin gợi ý trước đó!</div>',
                     html: "<p style=\"font-weight: 500\">Bạn có muốn xem lại thông tin cũ hay không?</p><p style=\"color: red\">Lưu ý: Nếu bạn chọn 'Tiếp tục', hệ thống sẽ lưu thông tin mới của bạn.</p>",
@@ -299,7 +299,7 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
                     }
                   })
                 // Người dùng chưa có điểm trước đó
-                } else {
+                } else if (typeDiff == 3) {
                   this.store.dispatch(new StepperActions.SaveMarks());
                 }
               // Đăng nhập trước quá trình suggest
@@ -402,7 +402,7 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
 
   checkIsDiffentUserInfo() {
     if (!this.userSuggestionSubjectGroup) {
-      return 0;
+      return 3;
     }
     if (this.userSuggestionSubjectGroup.gender != this.gender) {
       return 1;
@@ -415,6 +415,7 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
       for (let mark of this.marks) {
         let isExisted = false;
         for (let transcript of this.userSuggestionSubjectGroup.transcriptDetails.find(u => u.id == this.typeScore).transcriptDetails) {
+          //TH người dùng đã có điểm
           if (mark.subjectId == transcript.subjectId) {
             isExisted = true;
             if (mark.mark != transcript.mark) {
@@ -422,15 +423,19 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
             }
           }
         }
+        //TH người dùng chưa có điểm
         if (!isExisted) {
           return 2;
         }
       }
+      return 0;
+    } else {
+      return 3;
     }
     //0: no diff
-    //1: diff gender || province
-    //2: diff mark
-    return 0;
+    //1: diff gender || province: asking
+    //2: diff mark: asking
+    //3: chưa có điểm 1 type => no asking
   }
 
   getAction(actionId: number, data?: any) {
@@ -552,7 +557,7 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
       this.marks.push({subjectId: subject.id, mark: this.secondFormGroup.getRawValue()[subject.id] ? this.secondFormGroup.getRawValue()[subject.id] : 0});
     }
     let typeDiff = this.checkIsDiffentUserInfo();
-    if (this.user &&  typeDiff > 0) {
+    if (this.user &&  typeDiff > 0 && typeDiff < 3) {
       Swal.fire({
         title: '<div style=\"color: #033969\">Hệ thống ghi nhận bạn đã thay đổi thông tin gợi ý!</div>',
         html: typeDiff == 1 ? `<p style=\"font-weight: 500; color: red\">Bạn đã thay đổi thông tin về Tỉnh/TP và Giới tính, điều này sẽ làm
@@ -682,7 +687,7 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
     this.getAction(4, id);
   }
 
-  onCaringClick(universityId: number, trainingProgramId: number, followTransciptTypeId: number) {
+  onCaringClick(universityId: number, trainingProgramId: number, followTransciptTypeId: number, position: number) {
     if (this.user == null) {
       this.isFollowing = true;
       this.dialog.open(
@@ -694,13 +699,15 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
       )
     } else {
       if (followTransciptTypeId == 3 || followTransciptTypeId == 1)  {
-        this.store.dispatch(new StepperActions.CaringAction({trainingProgramId: trainingProgramId, universityId: universityId, followTranscriptTypeId: followTransciptTypeId}));
+        this.store.dispatch(new StepperActions.CaringAction({trainingProgramId: trainingProgramId, universityId: universityId,
+          followTranscriptTypeId: followTransciptTypeId, position: position}));
       } else if (followTransciptTypeId == 2) {
         let existInMockTestUni = this.mockTestBasedUniversityForCheck?.trainingProgramBasedUniversityDataSets?.find(t => t.id == universityId && t.trainingProgramSets.find(p => p.id == trainingProgramId) != null);
         if (existInMockTestUni) {
           followTransciptTypeId = 3;
         }
-        this.store.dispatch(new StepperActions.CaringAction({trainingProgramId: trainingProgramId, universityId: universityId, followTranscriptTypeId: followTransciptTypeId}));
+        this.store.dispatch(new StepperActions.CaringAction({trainingProgramId: trainingProgramId, universityId: universityId,
+          followTranscriptTypeId: followTransciptTypeId, position: position}));
       }
     } 
   }

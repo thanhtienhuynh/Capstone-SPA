@@ -366,7 +366,6 @@ export class MajorConfigDetailComponent implements OnInit {
       description: description,
       subjectGroup: lastValue,
     };
-    console.log(newValue);
     this.openReviewModal(
       newValue,
       this.getSubjectGroups.controls.map((rs) => rs.value)
@@ -497,7 +496,6 @@ export class MajorConfigDetailComponent implements OnInit {
   isCatchEditWeight: boolean = true;
 
   testCondition(index?: number): void {
-    console.log(index);
     const subjectGroup = this.getSubjectGroups.controls[index].get('subjectWeights') as FormArray;
     const tmpSubjectGroup = this.majorDetail.subjectGroups[index];
     for (let y = 0; y < subjectGroup.controls.length; y++) {

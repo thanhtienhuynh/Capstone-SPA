@@ -26,12 +26,12 @@ export class CreateExamComponent implements OnInit {
   subscription: Subscription;
   user: User;
   isLoading = false;
-  optionSelected: number = 0;  
+  optionSelected: number = 0;
   switchCorrectAns: boolean = false;
 
   examForm: FormGroup;
 
-  universityResult: Observable<Response<University[]>> = new BehaviorSubject<Response<University[]>>({} as Response<University[]>); 
+  universityResult: Observable<Response<University[]>> = new BehaviorSubject<Response<University[]>>({} as Response<University[]>);
   listOfDisplayUniversity: Observable<University[]> = new BehaviorSubject<University[]>({} as University[]);
   subjectResult: Observable<Response<Subject[]>> = new BehaviorSubject<Response<Subject[]>>({} as Response<Subject[]>);
   listOfDisplaySubject: Observable<Subject[]> = new BehaviorSubject<Subject[]>({} as Subject[]);
@@ -52,10 +52,10 @@ export class CreateExamComponent implements OnInit {
     this.getListOfSubject();
     this.getListOfUniversity();
     this.subscription = this.store.select('auth').subscribe((authState) => {
-      this.user = authState.user; 
-      const userId: number = this.user.id;  
-      this.examForm.get('userId').setValue(userId as number);   
-    });    
+      this.user = authState.user;
+      const userId: number = this.user.id;
+      this.examForm.get('userId').setValue(userId as number);
+    });
   }
 
   makeAlphabet(index: number) {
@@ -64,7 +64,7 @@ export class CreateExamComponent implements OnInit {
     text += possible.charAt(Math.floor(index));
     return text;
   }
-     
+
 
   initExamForm(): void {
     this.examForm = this._fb.group({
@@ -72,14 +72,14 @@ export class CreateExamComponent implements OnInit {
       'level': [1],
       'year': [2021],
       'subjectId': [undefined],
-      'userId': [0],      
+      'userId': [0],
       'testTypeId': [1],
       'universityId': [undefined],
       'timeLimit': ['', Validators.required],
       'isSuggestedTest': [true],
       'questions': this._fb.array([
         this._fb.group({
-          'content': ['', Validators.required],
+          'content': [''],
           'type': [1],
           'isAnnotate': [false],
           'ordinal': [0],
@@ -91,15 +91,15 @@ export class CreateExamComponent implements OnInit {
 
   get questions(): FormArray {
     return this.examForm.get('questions') as FormArray
-  }  
+  }
 
   addNewQuestion(quesionIndex: number): void {
     this.questions.push(
       this._fb.group({
-        'content': ['', Validators.required],
+        'content': [''],
         'type': [1],
         'isAnnotate': [false],
-        'ordinal': [quesionIndex],
+        'ordinal': [quesionIndex + 1],
         'options': this._fb.array([])
       })
     )
@@ -114,15 +114,15 @@ export class CreateExamComponent implements OnInit {
       if (element.get('content').valid) {
         return 1;
       }
-    }  
-    return 0;  
+    }
+    return 0;
   }
 
   addNewOption(numberOfOptions: number, questionIndex: number): void {
     const questions = this.examForm.get('questions') as FormArray;
-    const options = questions.controls[questionIndex].get('options') as FormArray;  
-    const tmp = this.findValidOptionContent(options);    
-    if (tmp === 1) {      
+    const options = questions.controls[questionIndex].get('options') as FormArray;
+    const tmp = this.findValidOptionContent(options);
+    if (tmp === 1) {
       Swal.fire({
         title: 'LƯU Ý',
         text: "Nội dung câu trả lời bạn đang nhập sẽ được làm mới",
@@ -136,35 +136,35 @@ export class CreateExamComponent implements OnInit {
         if (result.isConfirmed) {
           this.removeFormArray(options);
           for (let i = 0; i < numberOfOptions; i++) {
-            const element = numberOfOptions; 
+            const element = numberOfOptions;
             options.push(
               this._fb.group({
-                'content': ['', Validators.required],
+                'content': [''],
                 'ordinal': [i],
                 'isResult': [false]
               })
-            )  
-          } 
+            )
+          }
         }
       })
-    } else {         
+    } else {
       this.removeFormArray(options);
       for (let i = 0; i < numberOfOptions; i++) {
-        const element = numberOfOptions; 
+        const element = numberOfOptions;
         options.push(
           this._fb.group({
-            'content': ['', Validators.required],
+            'content': [''],
             'ordinal': [i],
             'isResult': [false]
           })
-        )  
+        )
       }
-    }    
+    }
   }
 
   removeQuestion(index: number) {
     const questions = this.examForm.get('questions') as FormArray;
-    const options = questions.controls[index].get('options') as FormArray;  
+    const options = questions.controls[index].get('options') as FormArray;
     const tmp = this.findValidOptionContent(options);
     if (questions.controls[index].get('content').valid || tmp === 1) {
       Swal.fire({
@@ -180,15 +180,15 @@ export class CreateExamComponent implements OnInit {
         if (result.isConfirmed) {
           this.questions.removeAt(index);
         }
-      })      
-    } else {  
-      this.questions.removeAt(index);          
-    }    
+      })
+    } else {
+      this.questions.removeAt(index);
+    }
   }
 
   test(): void {
-    
-      
+
+
   }
 
 
@@ -202,7 +202,7 @@ export class CreateExamComponent implements OnInit {
     this.addNewOption(event, questionIndex);
   }
 
-  getListOfSubject(): void {    
+  getListOfSubject(): void {
     this.subjectResult = this._subjectService.getListOfSubject().pipe();
     this.listOfDisplaySubject = this.subjectResult.pipe(
       map(rs => rs.data)
@@ -213,55 +213,55 @@ export class CreateExamComponent implements OnInit {
     this.universityResult = this._universityService.getAllUniversity().pipe();
     this.listOfDisplayUniversity = this.universityResult.pipe(
       map(rs => rs.data)
-    ); 
+    );
   }
 
-  createExam(): void {          
+  createExam(): void {
     const universityId = this.examForm.get('universityId').value === null ? null : this.examForm.get('universityId').value?.id;
     const subjectId = this.examForm.get('subjectId').value === null ? null : this.examForm.get('subjectId').value?.id
-    const newValue = {...this.examForm.value, universityId: universityId, subjectId: subjectId}    
+    const newValue = {...this.examForm.value, universityId: universityId, subjectId: subjectId}
     this._examinationService.createNewExam(newValue).pipe(
-      tap(rs => {       
+      tap(rs => {
         if (rs.succeeded === true) {
           this.isLoading = false;
         } else {
-          
-        }        
+
+        }
       })
-    ).subscribe();    
+    ).subscribe();
   }
 
-  correctRadioAnswer(event: string, questionIndex: number, optionIndex: number): void {    
+  correctRadioAnswer(event: string, questionIndex: number, optionIndex: number): void {
     const questions = this.examForm.get('questions') as FormArray;
-    const options = questions.controls[questionIndex].get('options') as FormArray;        
+    const options = questions.controls[questionIndex].get('options') as FormArray;
     for (let i = 0; i < options.controls.length; i++) {
       const element = options.controls[i];
       if (optionIndex === i) {
         element.get('isResult').setValue(true);
       } else {
         element.get('isResult').setValue(false);
-      }      
+      }
     }
-  }  
+  }
 
-  correctCheckboxAnswer(event: string, questionIndex: number, optionIndex: number): void {    
+  correctCheckboxAnswer(event: string, questionIndex: number, optionIndex: number): void {
     const questions = this.examForm.get('questions') as FormArray;
-    const options = questions.controls[questionIndex].get('options') as FormArray;  
+    const options = questions.controls[questionIndex].get('options') as FormArray;
     for (let i = 0; i < options.controls.length; i++) {
       const element = options.controls[i];
       if (optionIndex === i) {
         element.get('isResult').setValue(event);
-      }    
-    }  
+      }
+    }
   }
-  
+
   questionTypeChange(event, questionIndex: number): void {
     const questions = this.examForm.get('questions') as FormArray;
-    const options = questions.controls[questionIndex].get('options') as FormArray;   
+    const options = questions.controls[questionIndex].get('options') as FormArray;
     for (let i = 0; i < options.controls.length; i++) {
       const element = options.controls[i];
-      element.get('isResult').setValue(false);     
-    }    
+      element.get('isResult').setValue(false);
+    }
   }
 
   examinationType(event: any): void{
@@ -269,29 +269,52 @@ export class CreateExamComponent implements OnInit {
   }
 
   openViewExamModal(): void {
+    console.log(this.examForm.value.questions);
+    const questions = this.examForm.value.questions.map((rs => {
+      const tmp = {...rs, 'isAnnotate': rs?.options?.length === 0 ? true : false}
+      return tmp;
+    }));
+    const newData = {...this.examForm.value, questions: questions}
     this._modalService.create({
       nzContent: ViewExamModalComponent,
       nzClosable: false,
       nzFooter: null,
-      nzWidth: 800,  
-      nzComponentParams: { data: this.examForm.value, isLoading: this.isLoading}    
+      nzWidth: 800,
+      nzComponentParams: { data: newData, isLoading: this.isLoading}
     });
-  } 
-  
-  switchCorrectAnswer(event: boolean, answerIndex: number, questionIndex: number, questionType: number): void {    
+  }
+
+  switchCorrectAnswer(event: boolean, answerIndex: number, questionIndex: number, questionType: number): void {
     const questions = this.examForm.get('questions') as FormArray;
-    const options = questions.controls[questionIndex].get('options') as FormArray; 
-    if (questionType === 1) { 
+    const options = questions.controls[questionIndex].get('options') as FormArray;
+    if (questionType === 1) {
       const isResult = options.controls[answerIndex].get('isResult');
       if (isResult.value === true) {
         for (let i = 0; i < options.controls.length; i++) {
           if (i !== answerIndex) {
             options.controls[i].get('isResult').setValue(false);
-          }          
-        }        
-      }      
+          }
+        }
+      }
     } else {
 
     }
+  }
+
+  getDefault(): void {
+    Swal.fire({
+      title: 'LƯU Ý',
+      text: "Nội dung bạn đang nhập sẽ được làm mới, bạn có muốn tiếp không không?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonText: 'HỦY',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'XÁC NHẬN'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.examForm.reset();
+      }
+    })
   }
 }
