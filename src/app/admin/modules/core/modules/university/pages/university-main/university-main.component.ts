@@ -45,7 +45,7 @@ export class UniversityMainComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.getAllUniversity(); 
+    // this.getAllUniversity();
     this.getListOfUniversity(1, 10, '', '');
   }
 
@@ -53,7 +53,7 @@ export class UniversityMainComponent implements OnInit {
     this.isLoadingData = true;
     this._universityService.getListOfUniversity(pageNumber, pageSize, name, status).pipe(
       tap((rs) => {
-        if (rs.succeeded === true) {          
+        if (rs.succeeded === true) {
           if (rs.data !== null) {
             this.isLoadingData = false;
             this.listOfUniversity = rs.data.map((e, i) => ({
@@ -144,7 +144,7 @@ export class UniversityMainComponent implements OnInit {
 
 
 
-  // searchByName(searchValue: string): void {         
+  // searchByName(searchValue: string): void {
   //   this.listOfDisplayUniversity = this.listOfUniversity.filter((item: UniversityRM & {stt?:number, phones?:string[]}) => item?.name.toLowerCase().indexOf(searchValue.toLowerCase()) !== -1);
   // }
   filterStatusFn = (status: number, item: UniversityRM) => item.status === status;
@@ -165,7 +165,7 @@ export class UniversityMainComponent implements OnInit {
   // openDetailUniversityModal(uniId: number): void {
   //   this._modalService.create({
   //     nzContent: UniversityDetailModalComponent,
-  //     nzClosable: false,      
+  //     nzClosable: false,
   //     nzFooter: null,
   //     nzWidth: 1024,
   //     nzComponentParams: { universityId: uniId },

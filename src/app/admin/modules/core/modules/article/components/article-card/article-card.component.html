@@ -1,19 +1,19 @@
 <div class="article-wrap" >
   <div class="article">
     <nz-card *ngIf="article === undefined; else articleData">
-      <nz-skeleton nzLoading="true"></nz-skeleton>  
+      <nz-skeleton nzLoading="true"></nz-skeleton>
     </nz-card>
     <ng-template #articleData>
       <div>
         <nz-card class="article-card-content">
           <div class="row">
-            <div class="col-lg-4" [style.background-size]="'cover'" [style.background-repeat]="'no-repeat'" [style.background-image]="'url(' + article.postImageUrl + ')'">              
+            <div class="col-lg-4" [style.background-size]="'cover'" [style.background-repeat]="'no-repeat'" [style.background-image]="'url(' + article.postImageUrl + ')'">
             </div>
             <div class="col-lg-8">
               <a
                 [routerLink]="['details/' + article.id]"
-                routerLinkActive="router-link-active"                
-                style="text-decoration: none"                
+                routerLinkActive="router-link-active"
+                style="text-decoration: none"
               >
                 <span class="article-title" [innerHtml]="article.title"></span>
               </a>
@@ -39,7 +39,7 @@
               </p>
               <div *ngIf="topNumber !== undefined" style="display: flex; justify-content: flex-end; align-items: center;">
                 <nz-tag nzColor="success" style="width: 85px; height: 25px; display: flex; justify-content: center; align-items: center;">
-                  <span style="font-size: 12px;">TOP {{topNumber + 1}}</span>
+                  <span style="font-size: 12px;">TOP {{topNumber}}</span>
                 </nz-tag>
               </div>
             </div>

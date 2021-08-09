@@ -6,17 +6,17 @@ const routes: Routes = [
   {
     path: 'university-list', component: UniversityMainFatherComponent,
     data: {
-      breadcrumb: 'Danh Sách Trường Đại Học'
+      breadcrumb: 'Danh sách trường đại học'
     }, children: [
-      { path: '', component: UniversityMainComponent, },            
+      { path: '', component: UniversityMainComponent, },
       {
         path: 'details/:id', component: UniDetailComponent,
         data: {
-          breadcrumb: 'Chi Tiết'
+          breadcrumb: 'Chi tiết'
         }
       },
     ]
-  },  
+  },
 ];
 
 export const UniversityRoutes = RouterModule.forChild(routes);

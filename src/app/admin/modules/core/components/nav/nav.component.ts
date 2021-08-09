@@ -25,17 +25,17 @@ export class NavComponent implements OnInit {
   url: string;
 
   ngOnInit() {
-    this.url = this.router.url;        
+    this.url = this.router.url;
     // this._sharedDataService.currentMessage.subscribe(message => this.url = message)
     this.subscription = this.store.select('auth').subscribe((authState) => {
-      this.user = authState.user;        
+      this.user = authState.user;
     });
   }
 
 
   useUpdate(link?: string): void {
     if(link){
-      this.router.navigate(['admin/core/' + link]);    
-    }    
+      this.router.navigate(['admin/core/' + link]);
+    }
   }
 }
