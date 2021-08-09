@@ -101,7 +101,7 @@ gdAreas.lt-md="title | avatar | description" gdRows.lt-md="auto auto auto">
             </thead>
             <tbody *ngFor="let rankType of userFollowingDetail.rankingUserInformationsGroupByTranscriptType; let i = index">
                   <tr class="rank-type">
-                    <td colspan="5">Điểm {{getScoreType(rankType.id)}}</td>
+                    <td colspan="5">{{getScoreType(rankType.id)}}</td>
                   </tr>
                   <tr [ngClass]="{'is-user': this.userId == userRanking.id}" *ngFor="let userRanking of rankType.rankingUserInformations; let j = index">
                     <td>{{count(i) + j + 1}}</td>

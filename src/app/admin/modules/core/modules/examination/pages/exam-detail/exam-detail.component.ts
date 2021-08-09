@@ -62,7 +62,7 @@ export class ExamDetailComponent implements OnInit {
     });
   }
 
-  resetExamDetail(): void {    
+  resetExamDetail(): void {
     Swal.fire({
       title: 'LƯU Ý',
       html: "<p>Toàn bộ nội dung đã được thay đổi sẽ bị xóa, nội dung câu hỏi sẽ được trở về trạng thái ban đầu ngay sau khi load lên.</p><p>Bạn có muốn đặt lại không?</p>",
@@ -127,7 +127,7 @@ export class ExamDetailComponent implements OnInit {
   }
 
   getExamResult(result: string, optionIndex: number): boolean {
-    // const tmp = result.split('0') as string[];  
+    // const tmp = result.split('0') as string[];
 
     let tmp = [];
     for (let i = 0; i < result.length; i++) {
@@ -192,6 +192,7 @@ export class ExamDetailComponent implements OnInit {
         'ordinal': [questionIndex],
         'type': [questionTmp.type],
         'numberOfOption': [questionTmp.numberOfOption],
+        'realOrder': [questionTmp.realOrder],
         'options': this._fb.array([]),
       })
       questionFormGroup["isUpdate"] = false;
@@ -200,7 +201,7 @@ export class ExamDetailComponent implements OnInit {
       for (let optionIndex = 0; optionIndex < questionTmp.options.length; optionIndex++) {
         const optionTmp = questionTmp.options[optionIndex];
         const result = this.getExamResult(questionTmp.result, optionIndex);
-        // const result = questionTmp.type === 1 ? this.getExamResult(questionTmp.result, optionIndex) : this.getMultipleExamResult(questionTmp.result, optionIndex);        
+        // const result = questionTmp.type === 1 ? this.getExamResult(questionTmp.result, optionIndex) : this.getMultipleExamResult(questionTmp.result, optionIndex);
         options.push(
           this._fb.group({
             'id': [optionTmp.id],
@@ -224,10 +225,11 @@ export class ExamDetailComponent implements OnInit {
     this._examService.getExamById(id).pipe(
       tap(rs => {
         if (rs.succeeded === true) {
-          if (rs.data !== null) {            
+          if (rs.data !== null) {
+            console.log(rs.data);
             this.exam = { ...rs.data };
             this.setDataToExamForm(this.exam);
-            this.examTmp = { ...rs.data, questions: rs.data.questions.slice() }; //list lưu lại data nguyên thủy                       
+            this.examTmp = { ...rs.data, questions: rs.data.questions.slice() }; //list lưu lại data nguyên thủy
           }
         } else {
 
@@ -237,29 +239,29 @@ export class ExamDetailComponent implements OnInit {
   }
 
   addNewQuestion(currentQuestionIndex: number): void {
-    const newQuestion = {      
+    const newQuestion = {
       options: [],
       content: '',
-      result: '',    
+      result: '',
       numberOfOption: 0,
-      type: 1,  
+      type: 1,
     } as TestQuestion;
     this.exam.questions.splice(currentQuestionIndex + 1, 0, newQuestion);
-    const newQuestionFormGroup = this._fb.group({      
+    const newQuestionFormGroup = this._fb.group({
       'content': ['', Validators.required],
       'isAnnotate': [false],
       'ordinal': [currentQuestionIndex],
       'type': [1],
       'numberOfOption': [0],
       'options': this._fb.array([]),
-    })    
-    newQuestionFormGroup["isUpdate"] = true;  
+    })
+    newQuestionFormGroup["isUpdate"] = true;
     this.questions.insert(currentQuestionIndex + 1, newQuestionFormGroup);
     for (let i = currentQuestionIndex + 1; i < this.questions.controls.length; i++) {
       const element = this.questions.controls[i];
       element.get('ordinal').patchValue(i);
-    }   
-    // this.questions.controls.splice(currentQuestionIndex + 1, 0, newQuestionFormGroup);              
+    }
+    // this.questions.controls.splice(currentQuestionIndex + 1, 0, newQuestionFormGroup);
   }
 
   removeQuestion(index: number) {
@@ -277,14 +279,14 @@ export class ExamDetailComponent implements OnInit {
         cancelButtonColor: '#d33',
         confirmButtonText: 'XÁC NHẬN'
       }).then((result) => {
-        if (result.isConfirmed) {                    
-          this.exam.questions.splice(index, 1);                    
+        if (result.isConfirmed) {
+          this.exam.questions.splice(index, 1);
           this.questions.removeAt(index);
         }
       })
     } else {
-      this.exam.questions.splice(index, 1);  
-      this.questions.removeAt(index);      
+      this.exam.questions.splice(index, 1);
+      this.questions.removeAt(index);
     }
   }
 
@@ -329,7 +331,7 @@ export class ExamDetailComponent implements OnInit {
         return { content: rss.content, ordinal: rss.ordinal, isResult: rss.isResult }
       })
       const isAnnotate = rs.value.options?.length > 0 ? false : true;
-      return { content: rs.value.content, isAnnotate: isAnnotate, ordinal: rs.value.ordinal, type: rs.value.type, options: options }
+      return { content: rs.value.content, isAnnotate: isAnnotate, ordinal: rs.value.ordinal, type: rs.value.type, options: options, realOrder: rs.value.realOrder }
     }) as TestQuestion[];
     const universityId = this.examForm.get('universityId').value === null ? null : this.examForm.get('universityId').value?.id;
     const subjectId = this.examForm.get('subjectId').value === null ? null : this.examForm.get('subjectId').value.id
@@ -353,7 +355,7 @@ export class ExamDetailComponent implements OnInit {
     const options = questions.controls[questionIndex].get('options') as FormArray;
     for (let i = 0; i < options.controls.length; i++) {
       const result = this.getExamResult(question.result, i);
-      // const result = question.type === 1 ? this.getExamResult(question.result, i) : this.getMultipleExamResult(question.result, i); 
+      // const result = question.type === 1 ? this.getExamResult(question.result, i) : this.getMultipleExamResult(question.result, i);
       const element = options.controls[i];
       element.get('isResult').setValue(result);
     }
@@ -379,7 +381,7 @@ export class ExamDetailComponent implements OnInit {
   addNewOption(numberOfOptions: number, questionIndex: number): void {
     const questions = this.examForm.get('questions') as FormArray;
     const options = questions.controls[questionIndex].get('options') as FormArray;
-    const tmp = this.findValidOptionContent(options);    
+    const tmp = this.findValidOptionContent(options);
     if (tmp === 1) {
       Swal.fire({
         title: 'LƯU Ý',
@@ -479,7 +481,7 @@ export class ExamDetailComponent implements OnInit {
           this.removeFormArray(options);
           for (let i = 0; i < question.options.length; i++) {
             const result = this.getExamResult(question.result, i);
-            // const result = question.type === 1 ? this.getExamResult(question.result, i) : this.getMultipleExamResult(question.result, i); 
+            // const result = question.type === 1 ? this.getExamResult(question.result, i) : this.getMultipleExamResult(question.result, i);
             options.push(
               this._fb.group({
                 'content': [question.options[i].content, Validators.required],
@@ -503,7 +505,7 @@ export class ExamDetailComponent implements OnInit {
     this.removeFormArray(options);
     for (let i = 0; i < question.options.length; i++) {
       const result = this.getExamResult(question.result, i);
-      // const result = question.type === 1 ? this.getExamResult(question.result, i) : this.getMultipleExamResult(question.result, i); 
+      // const result = question.type === 1 ? this.getExamResult(question.result, i) : this.getMultipleExamResult(question.result, i);
       options.push(
         this._fb.group({
           'content': [question.options[i].content, Validators.required],
@@ -522,7 +524,7 @@ export class ExamDetailComponent implements OnInit {
     const tmpOption = question.options.map(rs => rs.content);
     const listDataChanged = tmpOption.filter(rs => rs !== tmpOptionForm.find(rss => rss === rs));
     const listOfResult = options.controls.map(rs => rs.get('isResult').value);
-    const isResult = this.convertExamResultToString(listOfResult);    
+    const isResult = this.convertExamResultToString(listOfResult);
     if ((question.content !== questions.controls[questionIndex].get('content').value) ||
       (question.type !== questions.controls[questionIndex].get('type').value) ||
       (isResult !== this.exam.questions[questionIndex].result) ||
@@ -558,7 +560,7 @@ export class ExamDetailComponent implements OnInit {
     }
   }
 
-  drop(event: CdkDragDrop<any[]>): void {    
+  drop(event: CdkDragDrop<any[]>): void {
     let isMovingInsideTheSameList = event.previousContainer === event.container;
     if (isMovingInsideTheSameList) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

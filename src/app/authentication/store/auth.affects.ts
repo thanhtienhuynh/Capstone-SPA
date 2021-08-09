@@ -124,6 +124,11 @@ export class AuthEffects {
           this.authService.clearLogoutTimer();
           localStorage.removeItem('token');
           this.router.navigate(['/']);
+          if (response.succeeded) {
+            console.log("unsubscribe success!");
+          } else {
+            console.log("unsubscribe fail!");
+          }
           return { type: 'DUMMY' };
         }),
         catchError((error: HttpErrorResponse) => {
@@ -146,6 +151,11 @@ export class AuthEffects {
         { token: authState.registerToken }
       ).pipe(
         map((response) => {
+          if (response.succeeded) {
+            console.log("subscribe success!");
+          } else {
+            console.log("subscribe fail!");
+          }
           return { type: 'DUMMY' };
         }),
         catchError((error: HttpErrorResponse) => {

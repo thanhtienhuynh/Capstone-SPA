@@ -224,10 +224,10 @@
             </div>  
           </div>
         </div>
-        <div fxFlex.lg="0 1 calc(50%)" class="back-group-frame" (click)="onBackClick()">
+        <div fxFlex.lg="0 1 calc(50%)" fxFlex.lt-lg="0 1 calc(50%)" class="back-group-frame" (click)="onBackClick()">
           <div *ngIf="suggestedSubjectsGroup.length > 3 && groupPage > 1" class="center-vertical back-group"><mat-icon>chevron_left</mat-icon> Quay lại</div>
         </div>
-        <div fxFlex.lg="0 1 calc(50%)" (click)="onMoreClick()">
+        <div fxFlex.lg="0 1 calc(50%)" fxFlex.lt-lg="0 1 calc(50%)" (click)="onMoreClick()">
           <div *ngIf="suggestedSubjectsGroup.length > 3 && groupPage < math.ceil(suggestedSubjectsGroup.length / 3)" class="more-group center-vertical">Xem thêm <mat-icon>chevron_right</mat-icon></div>
         </div>
         <div fxFlex.lg="0 1 calc(100%)" class="suggest-title center-all">
@@ -313,7 +313,7 @@
                     <div class="training-title"><span class="uni-des-title">Bạn đang đứng top:&nbsp;</span>{{trainingProgramSet.rank}}/{{trainingProgramSet.numberOfCaring}}</div>
                     <div class="training-title"><span class="uni-des-title">Tỉ lệ chọi:&nbsp;</span>{{getRatio(trainingProgramSet.numberOfCaring, trainingProgramSet.seasonDataSets[1].numberOfStudents) || 'Đang cập nhật'}}</div>
                     <div class="center-all follow-button-frame">
-                    <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, 3)" mat-flat-button color="accent">Theo dõi</button>
+                    <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, 3, trainingProgramSet.rank)" mat-flat-button color="accent">Theo dõi</button>
                     <button *ngIf="trainingProgramSet.followingDetail" (click)="onUncaringClick(trainingProgramSet.followingDetail.id, university.name)" style="background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ theo dõi</button>
                     </div>
                   </div>
@@ -431,7 +431,7 @@
                   <div class="training-title"><span class="uni-des-title">Bạn đang đứng top:&nbsp;</span>{{trainingProgramSet.rank}}/{{trainingProgramSet.numberOfCaring}}</div>
                   <div class="training-title"><span class="uni-des-title">Tỉ lệ chọi:&nbsp;</span>{{getRatio(trainingProgramSet.numberOfCaring, trainingProgramSet.seasonDataSets[1].numberOfStudents) || 'Đang cập nhật'}}</div>
                   <div class="center-all follow-button-frame">
-                  <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, this.typeScore)" mat-flat-button color="accent">Theo dõi</button>
+                  <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, this.typeScore, trainingProgramSet.rank)" mat-flat-button color="accent">Theo dõi</button>
                   <button *ngIf="trainingProgramSet.followingDetail" (click)="onUncaringClick(trainingProgramSet.followingDetail.id, university.name)" style="background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ theo dõi</button>
                   </div>
                 </div>
@@ -514,13 +514,13 @@
   </mat-step>
   <mat-step *ngIf="typeScore === 3 || typeScore === 2"  #stepFour >
     <ng-template matStepLabel>Danh sách bài thi</ng-template>
-    <div class="center" >
+    <div class="center" ngClass.lt-lg="center-md">
       <div *ngIf="needDoneTestIds.length <= 0 && selectedSubjectGroup" class="result-note-frame center-vertical">
         <mat-icon class="note-icon">info</mat-icon>Bạn đã hoàn thành các đề thi của khối {{selectedSubjectGroup.name}}, bạn có thể
         <span (click)="reloadUni(true)" class="result-link">Xem kết quả gợi ý mới</span> dựa trên điểm thi thử.
       </div>
       <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
-        <div *ngFor="let subjectBasedTests of tests" fxFlex="0 1 calc(50%)" fxFlex.lt-md = "100%">
+        <div *ngFor="let subjectBasedTests of tests" fxFlex="0 1 calc(50%)" fxFlex.lt-sm = "100%">
           <h2 class="test-subject-title" *ngIf="getSubjectName(subjectBasedTests.subjectId)">Môn {{subjectName}}</h2>
           <!-- <h2 *ngIf="subjectBasedTests.universityId">{{getUniversityName(subjectBasedTests.universityId)}}</h2> -->
           <div>

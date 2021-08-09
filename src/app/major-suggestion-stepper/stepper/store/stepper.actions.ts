@@ -168,7 +168,7 @@ export class SaveUnsaveTestSubmissionsSuccess implements Action {
 export class CaringAction implements Action {
   readonly type = CARING_ACTION;
   readonly message = "Đang theo dõi";
-  constructor(public payload: {trainingProgramId: number, universityId: number, followTranscriptTypeId: number}) {}
+  constructor(public payload: {trainingProgramId: number, universityId: number, followTranscriptTypeId: number, position: number}) {}
 }
 
 export class CaringActionSuccess implements Action {
