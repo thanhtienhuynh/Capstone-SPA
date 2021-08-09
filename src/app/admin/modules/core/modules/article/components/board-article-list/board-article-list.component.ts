@@ -29,10 +29,10 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
   pageIndex: number = 1;
   total = 1;
   listOfDisplayArticle: ArticleVM[] = [];
-  constructor(    
-  ) { }  
+  constructor(
+  ) { }
 
-  ngOnChanges(changes: SimpleChanges): void {    
+  ngOnChanges(changes: SimpleChanges): void {
     // console.log(this.listOfArticle, this.laneTitle, 'onChange');
     this.listOfDisplayArticle = [...this.listOfArticle];
     this.total = this.listOfDisplayArticle.length;
@@ -43,21 +43,19 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
     // console.log(this.listOfDisplayArticle);
   }
 
-  onQueryParamsChange(params: NzTableQueryParams): void {        
+  onQueryParamsChange(params: NzTableQueryParams): void {
     this.pageIndex = params.pageIndex;
-    this.pageSize = params.pageSize;                 
+    this.pageSize = params.pageSize;
   }
 
   getTopNumber(currentIndex: number): number {
-    this.listOfArticle.map((rs, index) => {
-
-    })
-    return 1;
+    const topNumber = (this.pageIndex * this.pageSize) - (this.pageSize - (currentIndex + 1))
+    return topNumber;
   }
 
 
-  // drop(event: CdkDragDrop<any[]>) {     
-  //   console.log(event);  
+  // drop(event: CdkDragDrop<any[]>) {
+  //   console.log(event);
   //   let isMovingInsideTheSameList = event.previousContainer === event.container;
   //   if (isMovingInsideTheSameList) {
   //     if (event.container.id === "search") {
@@ -75,21 +73,21 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
   //           cancelButtonText: 'BỎ QUA',
   //           confirmButtonText: 'XÁC NHẬN'
   //         }).then((result) => {
-  //           if (result.isConfirmed) {            
-  //             moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);   
-  //             const data = event.container.data.map(rs => rs?.id);                      
-  //             this.callParent.emit(data);           
+  //           if (result.isConfirmed) {
+  //             moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+  //             const data = event.container.data.map(rs => rs?.id);
+  //             this.callParent.emit(data);
   //           }
-  //         }) 
-  //       }        
-  //       // moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);  
-  //     }           
+  //         })
+  //       }
+  //       // moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+  //     }
   //   }
   //   else {
   //     Swal.fire({
   //       title: event.previousContainer.id === "search" ? 'CHÚ Ý' : 'CẢNH BÁO',
-  //       html: event.previousContainer.id === "search" 
-  //       ? `Thiết lập bài viết <b>"${event.previousContainer.data[event.previousIndex]?.title}"</b> làm TOP ${event.currentIndex + 1} bài viết HOT nhất!?` 
+  //       html: event.previousContainer.id === "search"
+  //       ? `Thiết lập bài viết <b>"${event.previousContainer.data[event.previousIndex]?.title}"</b> làm TOP ${event.currentIndex + 1} bài viết HOT nhất!?`
   //       : `Điều chỉnh bài viết <b>"${event.previousContainer.data[event.previousIndex]?.title}"</b> ra khỏi vị trí TOP ${event.previousIndex + 1} bài viết HOT nhất!?`,
   //       icon: event.previousContainer.id === "search" ? 'question' : 'warning',
   //       showCancelButton: true,
@@ -100,25 +98,25 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
   //     }).then((result) => {
   //       if (result.isConfirmed) {
   //         // console.log(event.previousContainer.data[event.previousIndex]?.id);
-  //         if (event.previousContainer.id === "search") {            
+  //         if (event.previousContainer.id === "search") {
   //           transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
-  //           const data = event.container.data.map(rs => rs?.id);                
-  //           this.callParent.emit(data);                     
-  //         }       
+  //           const data = event.container.data.map(rs => rs?.id);
+  //           this.callParent.emit(data);
+  //         }
   //         if (event.previousContainer.id === "save") {
   //           //Remove from top list
   //           transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
-  //           const data = event.previousContainer.data.map(rs => rs?.id);             
-  //           this.callParent.emit(data);             
-  //         }   
+  //           const data = event.previousContainer.data.map(rs => rs?.id);
+  //           this.callParent.emit(data);
+  //         }
   //       }
-  //     })      
+  //     })
   //     // console.log(event.container.data);
   //     // console.log(event.previousContainer);
   //   }
   // }
 
-  drop(event: CdkDragDrop<any[]>) {    
+  drop(event: CdkDragDrop<any[]>) {
     const newArticle = { ...event.item.data };
     const newArticles = [...event.container.data];
     let isMovingInsideTheSameList = event.previousContainer === event.container;
@@ -130,7 +128,7 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
         moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         // const publishedData = undefined;
         const topData = event.container.data;
-        this.callParent.emit({ topData: topData } as BoardData);        
+        this.callParent.emit({ topData: topData } as BoardData);
       };
     } else {
       if (event.previousContainer.id === "top") {
@@ -145,23 +143,23 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
         const topData = event.container.data;
         this.callParent.emit({ publisedData: publishedData, topData: topData } as BoardData);
       }
-    }    
+    }
   }
- 
 
 
 
 
-  articleFilter(event: string): void {    
+
+  articleFilter(event: string): void {
     if (this.laneId !== 'published') {
       return;
     };
     if (event.toLocaleLowerCase() !== "") {
-      const publishedData = this.unFilterArticles.filter(rs => rs.title.toLocaleLowerCase().includes(event.toLocaleLowerCase()));           
+      const publishedData = this.unFilterArticles.filter(rs => rs.title.toLocaleLowerCase().includes(event.toLocaleLowerCase()));
       this.search.emit({ publisedData: publishedData });
       return;
-    };    
-    this.search.emit({publisedData: undefined});    
+    };
+    this.search.emit({publisedData: undefined});
   }
 
   resetSearchField(): void {

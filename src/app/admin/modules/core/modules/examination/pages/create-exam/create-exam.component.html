@@ -6,91 +6,91 @@
           <nb-card-body style="width: 100%;">
             <div style="width: 100%;">
               <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
-                <label for="" class="mb-0 mr-5" style="color: #ff3d71;">THÊM CÂU HỎI CHO ĐỀ THI TẠI ĐÂY</label>                
+                <label for="" class="mb-0 mr-5" style="color: #ff3d71;">THÊM CÂU HỎI CHO ĐỀ THI TẠI ĐÂY</label>
               </div>
               <nz-divider></nz-divider>
-              <nb-card *ngFor="let c of questions.controls; let i = index">                
+              <nb-card *ngFor="let c of questions.controls; let i = index">
                 <nb-card-body>
                   <div class="d-flex">
                     <div class="col-md-6" style="display: flex; justify-content: flex-start; align-items: center; padding-left: 0; padding-right: 0;">
                       <label for="" style="margin-bottom: 0; margin-right: 10px; color: #ff3d71;">Loại câu hỏi: </label>
-                      <nb-select [formControl]="questions.controls[i].get('type')" (selectedChange)="questionTypeChange($event, i)">        
+                      <nb-select [formControl]="questions.controls[i].get('type')" (selectedChange)="questionTypeChange($event, i)">
                         <nb-option [value]="1">Một đáp án đúng</nb-option>
-                        <nb-option [value]="0">Nhiều đáp án đúng </nb-option>        
+                        <nb-option [value]="0">Nhiều đáp án đúng </nb-option>
                       </nb-select>
-                    </div> 
+                    </div>
                     <div class="col-md-6" style="display: flex; justify-content: flex-end; align-items: center; padding-left: 0; padding-right: 0;">
                       <label for="" style="margin-bottom: 0; margin-right: 10px; color: #ff3d71;">Số lượng đáp án: </label>
-                      <nb-select [selected]="optionSelected" style="min-width: 100px;" (selectedChange)="selectNumberOfOption($event, i)">        
-                        <nb-option [value]="0">Không có đáp án</nb-option> 
-                        <nb-option [value]="2">2 Câu</nb-option> 
-                        <nb-option [value]="3">3 Câu</nb-option> 
-                        <nb-option [value]="4">4 Câu</nb-option> 
-                        <nb-option [value]="5">5 Câu</nb-option>                                
+                      <nb-select [selected]="optionSelected" style="min-width: 100px;" (selectedChange)="selectNumberOfOption($event, i)">
+                        <nb-option [value]="0">Không có đáp án</nb-option>
+                        <nb-option [value]="2">2 Câu</nb-option>
+                        <nb-option [value]="3">3 Câu</nb-option>
+                        <nb-option [value]="4">4 Câu</nb-option>
+                        <nb-option [value]="5">5 Câu</nb-option>
                       </nb-select>
-                    </div>  
+                    </div>
                   </div>
                   <nz-divider style="margin-top: 10px; margin-bottom: 10px;"></nz-divider>
                   <div class="d-flex mb-2">
                     <div class="col-md-4" style="display: flex; justify-content: start; align-items: center; padding-left: 0;">
                       <label for="" style="margin-bottom: 0; margin-right: 10px;">Nội dung câu hỏi số {{i + 1}} </label>
-                    </div>                                     
+                    </div>
                   </div>
-                  <quill-editor 
-                  class="content-editor" 
-                  [formControl]="questions.controls[i].get('content')"  
-                  [modules]="editorOptions"                                                     
-                  [placeholder]="'Nhập nội dung câu hỏi..'"                  
-                  ></quill-editor>  
+                  <quill-editor
+                  class="content-editor"
+                  [formControl]="questions.controls[i].get('content')"
+                  [modules]="editorOptions"
+                  [placeholder]="'Nhập nội dung câu hỏi..'"
+                  ></quill-editor>
                   <nb-card class="mt-2" style="margin-bottom: 0;" *ngIf="questions.controls[i].get('options').controls.length > 0">
                     <nb-card-body>
                       <div *ngFor="let o of questions.controls[i].get('options').controls; let oi = index">
                         <div class="d-flex mb-2" >
                           <div class="col-md-6" style="display: flex; justify-content: flex-start; align-items: center; padding-left: 0; margin-top: 10px;">
                             <label for="" style="margin-bottom: 0;">Nội dung đáp án {{ makeAlphabet(oi) }}</label>
-                          </div> 
+                          </div>
                           <div class="col-md-6" style="display: flex; justify-content: flex-end; align-items: center; padding-right: 0; margin-top: 10px;">
                             <label for="" style="margin-bottom: 0; margin-right: 10px;">Đáp án đúng</label>
                             <nz-switch [formControl]="questions.controls[i].get('options').controls[oi].get('isResult')" (ngModelChange)="switchCorrectAnswer($event, oi, i, questions.controls[i].get('type').value)"></nz-switch>
-                          </div>                       
+                          </div>
                         </div>
-                        <quill-editor                         
+                        <quill-editor
                         class="content-editor"
-                        [formControl]="questions.controls[i].get('options').controls[oi].get('content')"  
-                        [placeholder]="'Nhập nội dung câu trả lời..'" 
+                        [formControl]="questions.controls[i].get('options').controls[oi].get('content')"
+                        [placeholder]="'Nhập nội dung câu trả lời..'"
                         [modules]="editorOptions"
-                        ></quill-editor>                         
-                      </div>             
-                      <nz-divider></nz-divider>  
-                      <!-- <div class="d-flex" *ngIf="questions.controls[i].get('type').value === 1">                         
+                        ></quill-editor>
+                      </div>
+                      <nz-divider></nz-divider>
+                      <!-- <div class="d-flex" *ngIf="questions.controls[i].get('type').value === 1">
                         <div class="col-md-12" style="display: flex; justify-content: flex-start; align-items: center; padding-left: 0; padding-right: 0;">
-                          <label for="" style="margin-bottom: 0; margin-right: 10px;">Chọn đáp án đúng: </label> 
-                          <nz-radio-group style="padding-top: 10px;"> 
-                            <label *ngFor="let item of let o of questions.controls[i].get('options').controls; let radioIndex = index" 
+                          <label for="" style="margin-bottom: 0; margin-right: 10px;">Chọn đáp án đúng: </label>
+                          <nz-radio-group style="padding-top: 10px;">
+                            <label *ngFor="let item of let o of questions.controls[i].get('options').controls; let radioIndex = index"
                             nz-radio [nzValue]="radioIndex"
-                            [ngModel]="false"                            
+                            [ngModel]="false"
                             (ngModelChange)="correctRadioAnswer($event, i, radioIndex)"
                             style="margin-right: 10px;"
-                            >Câu {{ makeAlphabet(radioIndex) }}</label>                                                        
-                          </nz-radio-group> 
+                            >Câu {{ makeAlphabet(radioIndex) }}</label>
+                          </nz-radio-group>
                         </div>
-                      </div> 
-                      <div class="d-flex" *ngIf="questions.controls[i].get('type').value === 0">                         
+                      </div>
+                      <div class="d-flex" *ngIf="questions.controls[i].get('type').value === 0">
                         <div class="col-md-12" style="display: flex; justify-content: flex-start; align-items: center; padding-left: 0; padding-right: 0;">
-                          <label for="" style="margin-bottom: 0; margin-right: 10px;">Chọn đáp án đúng: </label> 
-                          <label 
+                          <label for="" style="margin-bottom: 0; margin-right: 10px;">Chọn đáp án đúng: </label>
+                          <label
                           style="padding-top: 10px; margin-right: 10px;"
-                          *ngFor="let item of let o of questions.controls[i].get('options').controls; let checkBoxIndex = index" 
-                          nz-checkbox 
-                          [ngModel]="false" (ngModelChange)="correctCheckboxAnswer($event, i, checkBoxIndex)"                          
+                          *ngFor="let item of let o of questions.controls[i].get('options').controls; let checkBoxIndex = index"
+                          nz-checkbox
+                          [ngModel]="false" (ngModelChange)="correctCheckboxAnswer($event, i, checkBoxIndex)"
                           >Câu {{makeAlphabet(checkBoxIndex)}}
                           </label>
                         </div>
                       </div>                                                                                  -->
-                    </nb-card-body>                    
-                  </nb-card>              
+                    </nb-card-body>
+                  </nb-card>
                 </nb-card-body>
-                <div style="width: 100%;">                  
+                <div style="width: 100%;">
                   <button fullWidth nbTooltip="Thêm câu hỏi" nbButton outline status="success" (click)="addNewQuestion(i)" size="small">
                     <nb-icon icon="plus"></nb-icon>
                   </button>
@@ -102,35 +102,35 @@
             </div>
           </nb-card-body>
         </nb-card>
-      </div>   
-      
+      </div>
+
       <div [class]="'action'" nz-col  class="mb-2">
         <nb-card style="width: 100%; position: relative;">
           <nb-card-body style="width: 100%;">
             <div style="width: 100%;">
               <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
-                <label for="" class="mb-0 mr-5" style="color: #ff3d71;">THÔNG TIN CHI TIẾT ĐỀ THI</label>                
+                <label for="" class="mb-0 mr-5" style="color: #ff3d71;">THÔNG TIN CHI TIẾT ĐỀ THI</label>
               </div>
-              <nz-divider></nz-divider> 
+              <nz-divider></nz-divider>
               <div style="display: flex; justify-content: flex-start;">
                 <div class="col-lg-3" style="display: flex; justify-content: flex-start; align-items: center;">
                   <label for="" style="margin-bottom: 0;">Loại đề thi: </label>
                 </div>
-                <div class="col-lg-9">                  
-                  <nb-select [formControl]="examForm.get('testTypeId')" fullWidth (selectedChange)="examinationType($event)">  
-                    <nb-option [value]="1">Trung Học Phổ Thông Quốc Gia </nb-option>         
-                    <nb-option [value]="2">Đánh Giá Năng Lực</nb-option>                         
+                <div class="col-lg-9">
+                  <nb-select [formControl]="examForm.get('testTypeId')" fullWidth (selectedChange)="examinationType($event)">
+                    <nb-option [value]="1">Trung Học Phổ Thông Quốc Gia </nb-option>
+                    <nb-option [value]="2">Đánh Giá Năng Lực</nb-option>
                   </nb-select>
-                </div>              
+                </div>
               </div>
               <nz-divider nzDashed></nz-divider>
               <div class="d-flex" *ngIf="examForm.get('testTypeId').value === 2">
                 <div class="col-md-12">
                   <label for="">Trường Học</label>
                   <nb-form-field>
-                    <input  readonly nz-dropdown type="text" [value]="examForm.get('universityId').value?.name" [placeholder]="'Chọn trường học liên quan'" [nzDropdownMenu]="selectUniversity" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput>   
-                  </nb-form-field>                  
-                  <nz-dropdown-menu #selectUniversity="nzDropdownMenu">        
+                    <input  readonly nz-dropdown type="text" [value]="examForm.get('universityId').value?.name" [placeholder]="'Chọn trường học liên quan'" [nzDropdownMenu]="selectUniversity" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput>
+                  </nb-form-field>
+                  <nz-dropdown-menu #selectUniversity="nzDropdownMenu">
                     <app-custom-select [control]="examForm.get('universityId')" [data]="listOfDisplayUniversity | async" [name]="'id'" [label]="'name'" [placeholder]="'Tìm kiếm theo tên trường'"></app-custom-select>
                   </nz-dropdown-menu>
                 </div>
@@ -138,35 +138,35 @@
               <div class="d-flex mt-2">
                 <div class="col-md-6">
                   <label for="">Độ Khó</label>
-                  <nb-select [formControl]="examForm.get('level')" fullWidth>  
-                    <nb-option [value]="0">Dễ </nb-option>       
-                    <nb-option [value]="1">Trung Bình</nb-option>                     
-                    <nb-option [value]="2">Khó </nb-option>        
+                  <nb-select [formControl]="examForm.get('level')" fullWidth>
+                    <nb-option [value]="0">Dễ </nb-option>
+                    <nb-option [value]="1">Trung Bình</nb-option>
+                    <nb-option [value]="2">Khó </nb-option>
                   </nb-select>
                 </div>
                 <div class="col-md-6">
                   <label for="">Môn Học <span style="color: red;">*</span></label>
                   <nb-form-field>
-                    <input  readonly nz-dropdown type="text" [value]="examForm.get('subjectId').value?.name" [nzDropdownMenu]="selectSubjectName" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput>   
-                  </nb-form-field>                  
-                  <nz-dropdown-menu #selectSubjectName="nzDropdownMenu">        
+                    <input  readonly nz-dropdown type="text" [value]="examForm.get('subjectId').value?.name" [nzDropdownMenu]="selectSubjectName" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput>
+                  </nb-form-field>
+                  <nz-dropdown-menu #selectSubjectName="nzDropdownMenu">
                     <app-custom-select [control]="examForm.get('subjectId')" [data]="listOfDisplaySubject | async" [name]="'id'" [label]="'name'" [placeholder]="'Tìm kiếm theo tên môn học'"></app-custom-select>
                   </nz-dropdown-menu>
                 </div>
               </div>
-              <div class="d-flex mt-2">                
+              <div class="d-flex mt-2">
                 <div class="col-md-12">
                   <label for="">Tiêu Đề <span style="color: red;">*</span></label>
                   <nb-form-field>
                     <textarea [formControl]="examForm.get('name')"  type="text" nbInput fullWidth></textarea>
                   </nb-form-field>
-                </div>                
+                </div>
               </div>
               <div class="d-flex mt-2">
                 <div class="col-md-3" style="display: flex; justify-content: center; align-items: center;">
                   <label for="" style="margin-bottom: 0;">Thời Gian <span style="color: red;">*</span></label>
                 </div>
-                <div class="col-md-3" style="padding-left: 0; padding-right: 0;">                  
+                <div class="col-md-3" style="padding-left: 0; padding-right: 0;">
                   <div style="position: relative;">
                     <span class="bold500" style="position: absolute;height: 100%;display: flex; right: 8%;  align-items: center; font-size: 12px; font-weight: 600;">PHÚT</span>
                     <nb-form-field>
@@ -177,33 +177,33 @@
                 <div class="col-md-2" style="display: flex; justify-content: center; align-items: center; padding-right: 0; padding-left: 20px;">
                   <label for="" style="margin-bottom: 0;">Năm</label>
                 </div>
-                <div class="col-md-4" style="padding-left: 0;">                  
-                  <nb-select [formControl]="examForm.get('year')" fullWidth>                      
-                    <nb-option [value]="2020" style="text-align: right;">2020</nb-option>        
-                    <nb-option [value]="2021" style="text-align: right;">2021</nb-option> 
-                    <nb-option [value]="2022" style="text-align: right;">2022</nb-option> 
-                    <nb-option [value]="2023" style="text-align: right;">2023</nb-option> 
-                    <nb-option [value]="2024" style="text-align: right;">2024</nb-option>                          
+                <div class="col-md-4" style="padding-left: 0;">
+                  <nb-select [formControl]="examForm.get('year')" fullWidth>
+                    <nb-option [value]="2020" style="text-align: right;">2020</nb-option>
+                    <nb-option [value]="2021" style="text-align: right;">2021</nb-option>
+                    <nb-option [value]="2022" style="text-align: right;">2022</nb-option>
+                    <nb-option [value]="2023" style="text-align: right;">2023</nb-option>
+                    <nb-option [value]="2024" style="text-align: right;">2024</nb-option>
                   </nb-select>
                 </div>
 
               </div>
               <nz-divider></nz-divider>
-              <div class="footer">    
+              <div class="footer">
                 <button (click)="openViewExamModal()" [disabled]="examForm.invalid"  nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
-                  TẠO ĐỀ THI
-                </button>                    
+                  Lưu
+                </button>
                 <!-- <button (click)="createExam()"  nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
-                  XÁC NHẬN 
+                  XÁC NHẬN
                 </button>                   -->
-                <button nz-button [nzSize]="'medium'" nzType="basic">
-                  TẠO LẠI 
+                <button nz-button (click)="getDefault()" [nzSize]="'medium'" nzType="dashed">
+                  Tạo lại
                 </button>
               </div>
             </div>
           </nb-card-body>
         </nb-card>
-      </div>                
+      </div>
     </div>
   </div>
 </div>

@@ -10,7 +10,7 @@
                   <label for="" style="margin-right: 15px;">Bộ lọc tìm kiếm: </label>
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Loại đề thi" [ngModel]="selectedTestType" (ngModelChange)="searchByTestType($event)" style="min-width: 245px; margin-right: 10px;">
                     <nz-option nzLabel="Trung Học Phổ Thông Quốc Gia" [nzValue]="1"></nz-option>
-                    <nz-option nzLabel="Đánh Giá Năng Lực" [nzValue]="0"></nz-option>                    
+                    <nz-option nzLabel="Đánh Giá Năng Lực" [nzValue]="0"></nz-option>
                   </nz-select>
                   <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Năm" [ngModel]="selectedYear" (ngModelChange)="searchByYear($event)" style="min-width: 150px;">
                     <nz-option nzLabel="Năm 2017" [nzValue]="2017"></nz-option>
@@ -26,7 +26,7 @@
                   </button>
                 </div>
               </div>
-              <nz-divider></nz-divider> 
+              <nz-divider></nz-divider>
               <nz-table #basicTable nzBordered nzShowSizeChanger nzShowQuickJumper [nzFrontPagination]="false" [nzData]="listOfExamBySubject" [nzTotal]="total" [nzPageSize]="pageSize" [nzPageIndex]="pageIndex"  [nzPageSizeOptions]="[5, 10]" [nzShowPagination]="total > 5"  (nzQueryParams)="onQueryParamsChange($event)">
                 <thead>
                   <tr>
@@ -36,7 +36,7 @@
                         <i nz-icon nzType="search"></i>
                       </nz-filter-trigger>
                     </th>
-                    <th>THAO TÁC</th>
+                    <th>ĐỀ THI GỢI Ý</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -55,7 +55,7 @@
                     <td class="action">
                       <div style="display: flex; justify-content: center; align-items: center;">
                         <nz-switch [formControl]="examSubjectForm.controls[i].get('isSuggestedTest')"  (ngModelChange)="chooseSuggestedTest(i, exam, $event)"></nz-switch>
-                      </div>                      
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -72,7 +72,7 @@
   <div class="ant-table-filter-dropdown">
     <div class="search-box">
       <input type="text" nz-input placeholder="Tìm Kiếm Đề Thi" [(ngModel)]="searchValueName" />
-      <button nz-button nzSize="small" nzType="primary" class="search-button" (click)="searchByName()"> 
+      <button nz-button nzSize="small" nzType="primary" class="search-button" (click)="searchByName()">
         TÌM KIẾM
       </button>
       <button nz-button nzSize="small" (click)="resetSearchName()">TẠO LẠI</button>

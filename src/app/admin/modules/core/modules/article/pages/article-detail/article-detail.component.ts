@@ -72,7 +72,7 @@ export class ArticleDetailComponent implements OnInit {
     this.dateForm = this._fb.group({
       'publicFromDate': [new Date, Validators.required],
       'publicToDate': [new Date, Validators.required]
-    })    
+    })
   }
 
   setDataToDateForm(publicFromDate: Date, publicToDate: Date): void {
@@ -88,7 +88,7 @@ export class ArticleDetailComponent implements OnInit {
           if (rs.succeeded === true) {
             this.listOfSelectedUniversity = rs.data.universityIds;
             this.listOfSelectedMajor = rs.data.majorIds;
-            this.article = rs.data;            
+            this.article = rs.data;
             this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
           } else {
             this.article = null;
@@ -269,12 +269,13 @@ export class ArticleDetailComponent implements OnInit {
       case 'published':
         newValue = {
           'id': this.articleId,
-          'publicFromDate': this.dateForm.get('publicFromDate').value,
-          'publicToDate': this.dateForm.get('publicToDate').value,
+          'publicFromDate': (this.dateForm.get('publicFromDate').value as Date).toLocaleString(),
+          'publicToDate': (this.dateForm.get('publicToDate').value as Date).toLocaleString(),
           'status': 3,
           'university': this.listOfSelectedUniversity,
           'major': this.listOfSelectedMajor
         }
+        console.log(newValue);
         Swal.fire({
           title: 'ĐĂNG BÀI',
           text: "Bài viết sẽ được đăng lên trang tin của hệ thống.",

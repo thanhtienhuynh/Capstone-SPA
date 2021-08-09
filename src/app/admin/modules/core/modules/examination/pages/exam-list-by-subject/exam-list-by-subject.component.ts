@@ -97,21 +97,21 @@ export class ExamListBySubjectComponent implements OnInit {
   getSubjectName(subjectId: string): string {
     switch (subjectId) {
       case '1':
-        return 'TOÁN'        
+        return 'TOÁN'
       case '2':
-        return 'Toán'        
+        return 'Toán'
       case '3':
-        return 'VẬT LÝ'        
+        return 'VẬT LÝ'
       case '4':
-        return 'HÓA HỌC'        
+        return 'HÓA HỌC'
       case '5':
-        return 'TIẾNG ANH'        
+        return 'TIẾNG ANH'
       case '6':
-        return 'SINH HỌC'        
+        return 'SINH HỌC'
       case '7':
-        return 'ĐỊA LÝ'        
+        return 'ĐỊA LÝ'
       case '8':
-        return 'LỊCH SỬ'        
+        return 'LỊCH SỬ'
       default:
         break;
     }
@@ -137,7 +137,7 @@ export class ExamListBySubjectComponent implements OnInit {
           tap(rs => {
             if (rs.succeeded === true) {
               this.getListOfExam(this.pageIndex, this.pageSize, null, null, null, this.subjectId, null);
-              Swal.fire('Thành công', '', 'success');
+              Swal.fire('Thành công', 'Cập nhật thành công', 'success');
               // for (let i = 0; i < this.examSubjectForm.controls.length; i++) {
               //   const isSuggestedTest = this.examSubjectForm.controls[i].get('isSuggestedTest');
               //   if (i !== examIndex) {
@@ -146,13 +146,15 @@ export class ExamListBySubjectComponent implements OnInit {
               // }
             } else {
               Swal.fire('Lỗi', '', 'error');
-              this.examSubjectForm.controls[examIndex].get('isSuggestedTest').patchValue(exam.isSuggestedTest)
+              // this.examSubjectForm.controls[examIndex].get('isSuggestedTest').patchValue(exam.isSuggestedTest)
+              this.getListOfExam(this.pageIndex, this.pageSize, null, null, null, this.subjectId, null);
             }
           })
         ).subscribe();
       }
       if (result.isDismissed) {
-        this.examSubjectForm.controls[examIndex].get('isSuggestedTest').patchValue(exam.isSuggestedTest)
+        this.getListOfExam(this.pageIndex, this.pageSize, null, null, null, this.subjectId, null);
+        // this.examSubjectForm.controls[examIndex].get('isSuggestedTest').setValue(exam.isSuggestedTest)
       }
     })
   }
