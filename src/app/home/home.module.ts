@@ -7,6 +7,7 @@ import { CommonModule } from "@angular/common";
 import { HomeRoutingModule } from "./home-routing.module";
 import { DetailArticleComponent } from "./detail-article/detail-article.component";
 import { CollapseArticleComponent } from "./collapse-article/collapse-article.component";
+import { NgxEchartsModule } from "ngx-echarts";
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import { CollapseArticleComponent } from "./collapse-article/collapse-article.co
     MaterialModule,
     FlexLayoutModule,
     CommonModule,
-    MaterialModule
+    MaterialModule,
   ]
 })
 export class HomeModule {}
