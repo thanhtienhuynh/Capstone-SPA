@@ -1,5 +1,5 @@
 <div *ngIf="detailAricle" class="center-all">
-  <div class="main-frame">
+  <div class="main-frame" ngClass.lt-lg="main-frame-md">
     <h1 class="title center-all" [innerHtml]="detailAricle.title"></h1>
     <div class="postedDate"><strong>Ngày đăng:</strong> {{detailAricle.postedDate}}</div>
     <div class="source"><strong>Nguồn:</strong><a href="{{detailAricle.publishedPage}}"> {{detailAricle.publishedPage}}</a></div>

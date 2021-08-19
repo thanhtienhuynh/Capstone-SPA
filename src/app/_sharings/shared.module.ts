@@ -84,7 +84,7 @@ const materialModules = [
   ScrollingModule,
   MatSnackBarModule,
   NzNotificationModule,
-  MatChipsModule
+  MatChipsModule,
 ];
 
 @NgModule({
@@ -117,7 +117,7 @@ const materialModules = [
     ProgressSpinnerComponent,
     ScrollToTopComponent,
     ShareButtonModule,
-    SafeUrlPipe
+    SafeUrlPipe,
   ],
 })
 export class MaterialModule {

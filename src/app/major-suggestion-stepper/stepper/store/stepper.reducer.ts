@@ -14,7 +14,7 @@ import * as StepperActions from './stepper.actions';
 export interface State {
   subjectGroups: CusSubjectGroup[];
   subjects: Subject[];
-
+  testConfig: number;
   //Điểm user submit, MarkParam
   marks: Mark[];
   transcriptTypeId: number; //Type điểm lúc bấm suggest
@@ -22,6 +22,8 @@ export interface State {
   provinceId: number;
   subjectGroupIds: number[];
 
+  //spectrum
+  spectrum: number[];
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
   trainingProgramBasedUniversity: TrainingProgramBasedUniversity[];
   //List trường ứng với điểm thi thử
@@ -60,8 +62,10 @@ export interface State {
 
 const initialState: State = {
   subjectGroups: [],
+  testConfig: null,
   subjects: [],
   marks: [],
+  spectrum: [],
   subjectGroupIds: [],
   suggestedSubjectsGroup: [],
   trainingProgramBasedUniversity: [],
@@ -123,6 +127,18 @@ export function stepReducer(
         subjects: [...action.payload],
         actionsQueue: [...tempActions],
       };
+    case StepperActions.LOAD_TEST_CONFIG:
+      return {
+        ...state,
+        actionsQueue: [...state.actionsQueue, action],
+      };
+    case StepperActions.SET_TEST_CONFIG:
+      tempActions.splice( tempActions.findIndex(a => a.type == StepperActions.LOAD_TEST_CONFIG), 1);
+      return {
+        ...state,
+        testConfig: action.payload,
+        actionsQueue: [...tempActions],
+      };
     case StepperActions.SET_MARKS:
       return {
         ...state,
@@ -152,7 +168,6 @@ export function stepReducer(
     case StepperActions.SET_SELECTED_SUGGESTED_SUBJECTGROUP:
       return {
         ...state,
-
         selectedSubjectGroup: action.payload,
       };
     case StepperActions.LOAD_MAJORS_SELECTED_SUBJECT_GROUP:
@@ -341,6 +356,18 @@ export function stepReducer(
       return {
         ...state,
         provinces: action.payload,
+        actionsQueue: [...tempActions],
+      };
+    case StepperActions.LOAD_SPECTRUM:
+      return {
+        ...state,
+        actionsQueue: [...state.actionsQueue, action],
+      };  
+    case StepperActions.SET_SPECTRUM:
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.LOAD_SPECTRUM), 1);
+      return {
+        ...state,
+        spectrum: action.payload,
         actionsQueue: [...tempActions],
       };
     case StepperActions.SET_TEST_SUBMISSION_ID:

@@ -39,6 +39,8 @@ import { CusUniversityComponent } from './cus-university/cus-university.componen
 import { CusMajorComponent } from './cus-major/cus-major.component';
 import { CusTestComponent } from './cus-test/cus-test.component';
 import { CanDeactivateGuard } from './_helper/can-deactivate-guard.service';
+import { NgxEchartsModule } from "ngx-echarts";
+import { SpectrumDialogComponent } from './major-suggestion-stepper/spectrum-dialog/spectrum-dialog.component';
 
 
 registerLocaleData(vi);
@@ -48,6 +50,7 @@ registerLocaleData(vi);
     StepperComponent,
     ExamPageComponent,
     FinishTestDialogComponent,
+    SpectrumDialogComponent,
     TestCardComponent,
     HomeComponent,
     SubmitDialogComponent,
@@ -63,13 +66,14 @@ registerLocaleData(vi);
     StoreModule.forRoot(fromApp.appReducer),
     EffectsModule.forRoot([StepperEffects, AuthEffects, UserEffects, HomeEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
-    
     AppRoutingModule,
     CountdownModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     AngularFireMessagingModule,
-
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    }),
     FormsModule,
     ReactiveFormsModule,
     CommonModule,  
