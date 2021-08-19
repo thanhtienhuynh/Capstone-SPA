@@ -34,6 +34,7 @@ import { MockTestRulesDialogComponent } from '../mock-test-rules-dialog/mock-tes
 import { CanComponentDeactivate } from 'src/app/_helper/can-deactivate-guard.service';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { GroupMockTestDialogComponent } from '../group-mock-test-dialog/group-mock-test-dialog.component';
+import { SpectrumDialogComponent } from '../spectrum-dialog/spectrum-dialog.component';
 
 
 @Component({
@@ -51,6 +52,11 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
   transcripts: TranscriptType[];
   provinceOptions: Province[];
   needDoneTestIds: number[] = [];
+
+  //spectrum
+  spectrum: number[] = [];
+  isShowSpectrum: boolean = false;
+
   shouldLoadAtUniListStep = true;
   
   filteredOptions: Observable<Province[]>;
@@ -125,6 +131,7 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
   ngOnInit() {
     this.store.dispatch(new StepperActions.ResetState());
     this.store.dispatch(new StepperActions.LoadSubjects());
+    this.store.dispatch(new StepperActions.LoadTestConfig());
     this.store.dispatch(new StepperActions.LoadSubjectGroups());
     this.store.dispatch(new StepperActions.LoadProvinces());
     this.secondFormGroup.controls['transcriptTypeId'].valueChanges.subscribe(changeValue => {
@@ -191,6 +198,12 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
         (stepperState) => {
           if (this.suggestedSubjectsGroup != stepperState.suggestedSubjectsGroup) {
             this.suggestedSubjectsGroup = stepperState.suggestedSubjectsGroup;
+          }
+          if (this.spectrum != stepperState.spectrum) {
+            this.spectrum = stepperState.spectrum;
+            if (this.isShowSpectrum) {
+              this.openSpectrum();
+            }
           }
           this.needDoneTestIds = stepperState.needDoneTestIds;
           this.trainingProgramBasedUniversity = stepperState.trainingProgramBasedUniversity;    
@@ -380,6 +393,11 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
     if (this.suggestedSubjectsGroup && this.suggestedSubjectsGroup.length > 0) {
       this.getAction(6);
     }
+  }
+
+  onSpectrumClick() {
+    this.isShowSpectrum = true;
+    this.store.dispatch(new StepperActions.LoadSpectrum());
   }
 
   remove(group: CusSubjectGroup): void {
@@ -729,6 +747,24 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
     });
   }
 
+  openSpectrum() {
+    const dialogRef = this.dialog.open(
+      SpectrumDialogComponent, {
+        width: '100%',
+        height: 'auto',
+        disableClose: false,
+        data: {
+          name: this.selectedSubjectGroup.name,
+          score: this.totalMockTestMark
+        }
+      }
+    )
+
+    dialogRef.afterClosed().subscribe(v => {
+      this.isShowSpectrum = false;
+    });
+  }
+
   openGroupMockTestRulesDialog() {
     const dialogRef = this.dialog.open(
       GroupMockTestDialogComponent, {
@@ -747,6 +783,15 @@ export class StepperComponent extends CanComponentDeactivate implements OnInit, 
         this.shouldLoadAtUniListStep = false;
       }
     });
+  }
+
+  totalMockTestMark: number = 0;
+  getMockTestTotalMark() {
+    this.totalMockTestMark = 0;
+    for (let test of this.tests) {
+      this.totalMockTestMark += test.lastTranscript;
+    }
+    return this.totalMockTestMark;
   }
 
 

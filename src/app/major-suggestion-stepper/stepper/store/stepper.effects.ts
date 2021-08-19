@@ -56,6 +56,25 @@ export class StepperEffects {
   );
 
   @Effect()
+  loadTestConfig = this.actions$.pipe(
+    ofType(StepperActions.LOAD_TEST_CONFIG),
+    switchMap(() => {
+      return this.http.get<Response<number>>(environment.apiUrl + 'api/v1/configuration/test')
+      .pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new StepperActions.SetTestConfig(response.data);
+          }
+          return new StepperActions.HasErrors({action: StepperActions.LOAD_TEST_CONFIG, messages: response.errors});
+        }),
+        catchError((error: HttpErrorResponse) => {
+          return of(new StepperActions.HasErrors({action: StepperActions.LOAD_TEST_CONFIG, messages: [error.message]}));
+        })
+      );
+    }),
+  );
+
+  @Effect()
   loadSubjectGroups = this.actions$.pipe(
     ofType(StepperActions.LOAD_SUBJECT_GROUPS),
     switchMap(() => {
@@ -425,6 +444,26 @@ export class StepperEffects {
         }),
         catchError((error: HttpErrorResponse) => {
           return of(new StepperActions.HasErrors({action: StepperActions.LOAD_PROVINCES, messages: [error.message]}));
+        })
+      );
+    }),
+  );
+
+  @Effect()
+  loadSpectrum = this.actions$.pipe(
+    ofType(StepperActions.LOAD_SPECTRUM),
+    withLatestFrom(this.store.select('stepper')),
+    switchMap(([actionData, stepperState]) => {
+      return this.http.get<Response<number[]>>(environment.apiUrl + 'api/v1/subject-group/' + stepperState.selectedSubjectGroup.id.toString() + '/spectrum')
+      .pipe(
+        map((response) => {
+          if (response.succeeded) {
+            return new StepperActions.SetSpectrum(response.data);
+          }
+          return new StepperActions.HasErrors({action: StepperActions.LOAD_SPECTRUM, messages: response.errors});
+        }),
+        catchError((error: HttpErrorResponse) => {
+          return of(new StepperActions.HasErrors({action: StepperActions.SET_SPECTRUM, messages: [error.message]}));
         })
       );
     }),

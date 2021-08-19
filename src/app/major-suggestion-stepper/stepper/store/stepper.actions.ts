@@ -45,6 +45,10 @@ export const LOAD_USER_SUGGESTION = '[Stepper] Load User Suggestion';
 export const SET_USER_SUGGESTION = '[Stepper] Set User Suggestion';
 export const LOAD_PROVINCES = '[Stepper] Load Provinces';
 export const SET_PROVINCES = '[Stepper] Set Provinces';
+export const LOAD_SPECTRUM = '[Stepper] Load Spectrum';
+export const SET_SPECTRUM = '[Stepper] Set Spectrum';
+export const LOAD_TEST_CONFIG = '[Stepper] Load Test Config';
+export const SET_TEST_CONFIG = '[Stepper] Set Test Config';
 export const SET_TEST_SUBMISSION_ID = '[Stepper] Set Test Submission Id';
 export const DONE_LOADING = '[Stepper] Done Loading';
 export const RESET_STATE = '[Stepper] Reset State';
@@ -220,6 +224,28 @@ export class SetTestSubmissionId implements Action {
   constructor(public payload: number) {}
 }
 
+export class LoadSpectrum implements Action {
+  readonly message = "Đang nạp phổ điểm";
+  readonly type = LOAD_SPECTRUM;
+  constructor() {}
+}
+
+export class SetSpectrum implements Action {
+  readonly type = SET_SPECTRUM;
+  constructor(public payload: number[]) {}
+}
+
+export class LoadTestConfig implements Action {
+  readonly message = "Đang nạp cấu hình thi thử";
+  readonly type = LOAD_TEST_CONFIG;
+  constructor() {}
+}
+
+export class SetTestConfig implements Action {
+  readonly type = SET_TEST_CONFIG;
+  constructor(public payload: number) {}
+}
+
 export class DoneLoading implements Action {
   readonly type = DONE_LOADING;
   constructor(public payload: string) {}
@@ -244,4 +270,4 @@ export type StepperActions = ResetState | ScoringTest | SetTestMark | LoadTest |
             CaringActionSuccess | UncaringAction | UncaringActionSuccess | LoadAfterMockTestsUniversities | SetAfterMockTestsUniversities |
             LoadUserSuggestion | SetUserSuggestion | LoadProvinces | SetProvinces | HasErrors | ConfirmErrors |
             DoneLoading | SaveMarks | SetTestSubmissionId | LoadSubjectGroups | SetSubjectGroups | SetSelectedSuggestedSubjectgroup |
-            LoadMajorsSelectedSubjectGroup | SetMajorsSelectedSubjectGroup;
+            LoadMajorsSelectedSubjectGroup | SetMajorsSelectedSubjectGroup | LoadSpectrum | SetSpectrum | LoadTestConfig | SetTestConfig;

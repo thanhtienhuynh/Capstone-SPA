@@ -17,6 +17,8 @@ import { SuggestedSubjectsGroup } from 'src/app/_models/suggested-subjects-group
 export class GroupMockTestDialogComponent implements OnInit {
   
   subscription: Subscription;
+  stepperSubscription: Subscription;
+  testConfig: number;
   user: User;
   selectedSubjecGroup: number = 0;
 
@@ -29,6 +31,12 @@ export class GroupMockTestDialogComponent implements OnInit {
   ngOnInit() {
     this.subscription = this.store.select('auth').subscribe((authState) => {
       this.user = authState.user;
+    });
+
+    this.stepperSubscription = this.store.select('stepper').subscribe((stepperState) => {
+      if (this.testConfig != stepperState.testConfig) {
+        this.testConfig = stepperState.testConfig;
+      }
     });
   }
 
@@ -45,6 +53,10 @@ export class GroupMockTestDialogComponent implements OnInit {
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
+    }
+
+    if (this.stepperSubscription) {
+      this.stepperSubscription.unsubscribe();
     }
   }
 
