@@ -174,7 +174,7 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
       return;
     };
     Swal.fire({
-      title: 'CẢNH BÁO',
+      title: 'LƯU Ý',
       text: 'Lưu mới danh sách TOP bài viết vào hệ thống',
       icon: 'warning',
       showCancelButton: true,
@@ -192,7 +192,7 @@ export class BoardArticleListComponent implements OnInit, OnChanges {
 
   resetTopArticle(): void {
     Swal.fire({
-      title: 'CẢNH BÁO',
+      title: 'LƯU Ý',
       text: 'Danh sách TOP bài viết sẽ được tạo mới',
       icon: 'warning',
       showCancelButton: true,

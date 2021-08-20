@@ -836,4 +836,5 @@ export class MajorConfigDetailComponent implements OnInit {
     }
     return false;
   }
+
 }

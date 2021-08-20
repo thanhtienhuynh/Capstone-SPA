@@ -17,7 +17,7 @@ export class CreateSeasonModalComponent implements OnInit {
     private _fb: FormBuilder,
     private _seasonService: SeasonService,
     private _modalRef: NzModalRef
-  ) { 
+  ) {
     this.initForm();
   }
 
@@ -46,12 +46,12 @@ export class CreateSeasonModalComponent implements OnInit {
       'name': this.createForm.get('name').value,
       'fromDate': this.createForm.get('fromDate').value,
       'seasonSourceId': this.createForm.get('seasonSourceId').value === 1000 ? null : this.createForm.get('seasonSourceId').value
-    }    
+    }
     this._seasonService.createSeason(newValue).pipe(
       tap(rs => {
         if (rs.succeeded === true) {
           this.isLoading = false;
-          Swal.fire('Thành công', `${rs.data}`, 'success');
+          Swal.fire('Thành công', 'Tạo mùa mới thành công', 'success');
           this.callBack();
           this.closeModal();
         } else {

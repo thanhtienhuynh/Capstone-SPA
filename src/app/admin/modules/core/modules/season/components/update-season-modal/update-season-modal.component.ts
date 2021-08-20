@@ -19,12 +19,12 @@ export class UpdateSeasonModalComponent implements OnInit {
   @Input() listOfSeason: Season[];
 
   isLoading: boolean = false;
-  updateForm: FormGroup;  
+  updateForm: FormGroup;
   constructor(
     private _fb: FormBuilder,
     private _seasonService: SeasonService,
     private _modalRef: NzModalRef
-  ) { 
+  ) {
     this.initForm();
   }
 
@@ -53,7 +53,7 @@ export class UpdateSeasonModalComponent implements OnInit {
       this.updateForm.get('name').setValue(this.season.name);
       this.updateForm.get('fromDate').setValue(this.season.fromDate);
       this.updateForm.get('status').setValue(1);
-    }    
+    }
   }
 
   updateSeason(): void {
@@ -63,12 +63,12 @@ export class UpdateSeasonModalComponent implements OnInit {
       'name': this.updateForm.get('name').value,
       'fromDate': this.updateForm.get('fromDate').value,
       'status': this.updateForm.get('status').value
-    }      
-    this._seasonService.updateSeason(newValue).pipe(      
-      tap(rs => {        
+    }
+    this._seasonService.updateSeason(newValue).pipe(
+      tap(rs => {
         if (rs.succeeded === true) {
           this.isLoading = false;
-          Swal.fire('Thành công', `${rs.data}`, 'success');
+          Swal.fire('Thành công', 'Cập nhật thành công', 'success');
           this.callBack();
           this.closeModal();
         } else {
