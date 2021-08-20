@@ -25,33 +25,21 @@ export class ReviewMajorConfigurationModalComponent implements OnInit {
 
   }
 
-  ngOnInit() {    
+  ngOnInit() {
   }
 
-  updateMajorToSystem(): void {    
+  updateMajorToSystem(): void {
     this.isUpdateLoading = true;
     this._majorConfigService.updateMajorToSystem(this.data).pipe(
       tap(rs => {
         if (rs.succeeded === true) {
           this.isUpdateLoading = false;
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'THÀNH CÔNG',
-            showConfirmButton: false,
-            timer: 1500
-          });
+          Swal.fire('Thành công', 'Cập nhật thành công', 'success');
           this.update();
           this.closeModal();
         } else {
           this.isUpdateLoading = false;
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: `${rs.errors[0]}`,
-            showConfirmButton: false,
-            timer: 1500
-          });
+          Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
         }
 
       })
@@ -64,30 +52,18 @@ export class ReviewMajorConfigurationModalComponent implements OnInit {
       tap(rs => {
         if (rs.succeeded === true) {
           this.isCreateLoading = false;
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'THÊM NGÀNH VÀO HỆ THỐNG THÀNH CÔNG',
-            showConfirmButton: false,
-            timer: 1500
-          });  
+          Swal.fire('Thành công', 'Thêm ngành mới vào hệ thống thành công', 'success');
           this.update();
-          this.closeModal();       
+          this.closeModal();
         } else {
           this.isCreateLoading = false;
-          Swal.fire({            
-            position: 'center',
-            icon: 'error',
-            title: rs.errors[0],
-            showConfirmButton: false,
-            timer: 1500
-          })
+          Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
         }
       })
     ).subscribe();
   }
 
-  closeModal(): void {  
+  closeModal(): void {
     this._modalRef.close();
   }
 }

@@ -1,23 +1,23 @@
 <div class="pt-3">
   <div >
-    <span class="text-xl">XÓA THÔNG TIN NGÀNH {{data.majorName.toUpperCase()}} CỦA {{ universityName.toUpperCase() }}</span>           
+    <span class="text-xl">XÓA THÔNG TIN NGÀNH {{data.majorName.toUpperCase()}} CỦA {{ universityName.toUpperCase() }}</span>
   </div>
   <div style="display: flex; margin-top: 2;">
     <span class="text-xl">HỆ ĐÀO TẠO</span>
     <div style="min-width: 195px; margin-left: 2rem; margin-right: 2rem;">
-      <nb-select [selected]="data.majorDetailUnies[0].id" (selectedChange)="filterDataByTrainingProgramId($event)" fullWidth>        
-        <nb-option *ngFor="let pro of data.majorDetailUnies" [value]="pro.id"> {{pro.trainingProgramName.toUpperCase()}} </nb-option>                
+      <nb-select [selected]="data.majorDetailUnies[0].id" (selectedChange)="filterDataByTrainingProgramId($event)" fullWidth>
+        <nb-option *ngFor="let pro of data.majorDetailUnies" [value]="pro.id"> {{pro.trainingProgramName.toUpperCase()}} </nb-option>
       </nb-select>
-    </div> 
+    </div>
     <span class="text-xl">MÙA {{data.majorDetailUnies[0].seasonName.toUpperCase()}} ????</span>
   </div>
 </div>
-<nz-divider nzDashed ></nz-divider>  
-<div class="footer">    
-  <button (click)="deleteMajor()"  nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
-    XÁC NHẬN 
-  </button>    
-  <button (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="basic">
-    THOÁT 
+<nz-divider nzDashed ></nz-divider>
+<div class="footer">
+  <button [nzLoading]="isDeleting" (click)="deleteMajor()"  nz-button [nzSize]="'medium'" nzType="primary" style="margin-right: 15px;">
+    Xác nhận
+  </button>
+  <button [disabled]="isDeleting" (click)="closeModal()"  nz-button [nzSize]="'medium'" nzType="dashed">
+    Thoát
   </button>
 </div>

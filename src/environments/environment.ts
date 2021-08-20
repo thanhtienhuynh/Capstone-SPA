@@ -17,9 +17,9 @@ export const environment = {
     measurementId: "G-4V3YLW14CB"
   },
 
-  apiUrl: 'https://localhost:44344/',
+  // apiUrl: 'https://localhost:44344/',
   // apiUrl: 'https://mohs.azurewebsites.net/',
-  // apiUrl: 'https://mohsdev.azurewebsites.net/',
+  apiUrl: 'https://mohsdev.azurewebsites.net/',
   nation: {id: 1000, name: 'TOÀN QUỐC', regionId: 1} as Province,
   initSeasonId: 5
 };

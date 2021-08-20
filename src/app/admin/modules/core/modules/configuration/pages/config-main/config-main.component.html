@@ -77,15 +77,15 @@
                         <nz-collapse-panel [nzHeader]="'Chu kì crawl bài viết'" [nzActive]="true">
                           <nz-radio-group [(ngModel)]="crawlTimeType" [nzDisabled]="isUpdateApp === true">
                             <label nz-radio [nzValue]="1">
-                              <span class="mr-1">Mỗi </span>
+                              <span style="margin-right: 44px;">Mỗi </span>
                               <nz-select style="width: 60px;" [(ngModel)]="crawlTimeStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfTwelve" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">giờ</span>
+                              <span style="margin-right: 10px; margin-left: 10px;">giờ</span>
                               <nz-select style="width: 60px;" [(ngModel)]="crawlTimeMinStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">phút</span>
+                              <span  style="margin-right: 10px; margin-left: 10px;">phút</span>
 
                             </label>
                             <label nz-radio [nzValue]="2">
@@ -93,11 +93,11 @@
                               <nz-select  style="width: 60px;" [(ngModel)]="crawlTimeStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfTwentyfour" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">giờ</span>
+                              <span style="margin-right: 10px; margin-left: 10px;">giờ</span>
                               <nz-select style="width: 60px;" [(ngModel)]="crawlTimeMinStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">phút</span>
+                              <span  style="margin-right: 10px; margin-left: 10px;">phút</span>
                             </label>
                           </nz-radio-group>
                         </nz-collapse-panel>
@@ -105,15 +105,15 @@
                           <button [disabled]="isUpdateApp === true" [nzLoading]="isLoadingRank" (click)="updateRank()" nz-button nzType="primary" style="display: block; margin: 0 10px 10px 0;">Cập nhật bảng xếp hạng</button>
                           <nz-radio-group [(ngModel)]="updateRankTimeType" [nzDisabled]="isUpdateApp === true">
                             <label nz-radio [nzValue]="1">
-                              <span class="mr-1">Mỗi </span>
+                              <span style="margin-right: 44px;">Mỗi </span>
                               <nz-select style="width: 60px;" [(ngModel)]="updateRankTimeStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfTwelve" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">giờ</span>
+                              <span style="margin-right: 10px; margin-left: 10px;">giờ</span>
                               <nz-select style="width: 60px;" [(ngModel)]="updateRankMinStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">phút</span>
+                              <span  style="margin-right: 10px; margin-left: 10px;">phút</span>
 
                             </label>
                             <label nz-radio [nzValue]="2">
@@ -121,26 +121,26 @@
                               <nz-select style="width: 60px;" [(ngModel)]="updateRankTimeStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfTwentyfour" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">giờ</span>
+                              <span style="margin-right: 10px; margin-left: 10px;">giờ</span>
                               <nz-select style="width: 60px;" [(ngModel)]="updateRankMinStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">phút</span>
+                              <span  style="margin-right: 10px; margin-left: 10px;">phút</span>
                             </label>
                           </nz-radio-group>
                         </nz-collapse-panel>
                         <nz-collapse-panel [nzHeader]="'Chu kì cập nhật bài viết quá hạn'" [nzActive]="true">
                           <nz-radio-group [(ngModel)]="expireArticleTimeType" [nzDisabled]="isUpdateApp === true">
                             <label nz-radio [nzValue]="1">
-                              <span class="mr-1">Mỗi </span>
+                              <span style="margin-right: 44px;">Mỗi </span>
                               <nz-select [(ngModel)]="expireArticleTimeStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfTwelve" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">giờ</span>
+                              <span style="margin-right: 10px; margin-left: 10px;">giờ</span>
                               <nz-select style="width: 60px;" [(ngModel)]="expireArticleMinStart" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">phút</span>
+                              <span  style="margin-right: 10px; margin-left: 10px;">phút</span>
 
                             </label>
                             <label nz-radio [nzValue]="2">
@@ -148,11 +148,11 @@
                               <nz-select [(ngModel)]="expireArticleTimeStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfTwentyfour" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">giờ</span>
+                              <span style="margin-right: 10px; margin-left: 10px;">giờ</span>
                               <nz-select style="width: 60px;" [(ngModel)]="expireArticleMinStartFrom" [nzDisabled]="isUpdateApp || isLoadingUpdateApp">
                                 <nz-option *ngFor="let item of listOfMinute" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
                               </nz-select>
-                              <span class="ml-1 mr-1">phút</span>
+                              <span  style="margin-right: 10px; margin-left: 10px;">phút</span>
                             </label>
                           </nz-radio-group>
                         </nz-collapse-panel>

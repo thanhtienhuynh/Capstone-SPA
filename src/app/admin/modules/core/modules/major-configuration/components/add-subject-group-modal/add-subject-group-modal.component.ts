@@ -30,11 +30,11 @@ export class AddSubjectGroupModalComponent implements OnInit {
     private _subjectGroupService: SubjectGroupService,
     private _majorConfigService: MajorConfigurationService,
     private _fb: FormBuilder
-  ) { 
+  ) {
     this.initAddSubjectGroupForm();
   }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.getListOfSubjectGroup();
     this.setDataToForm(this.data);
   }
@@ -50,7 +50,7 @@ export class AddSubjectGroupModalComponent implements OnInit {
       'salaryDescription': [''],
       'status': [1],
       'subjectGroup': this._fb.array([
-        this._fb.group({          
+        this._fb.group({
           'id': [undefined, Validators.required],
           'status': [1],
           'subjectWeights': this._fb.array([])
@@ -93,7 +93,7 @@ export class AddSubjectGroupModalComponent implements OnInit {
     this.getSubjectGroups.removeAt(index);
   }
 
-  useSelectSubjectGroup(data: { id?: number, groupCode?: string }, index: number): void {    
+  useSelectSubjectGroup(data: { id?: number, groupCode?: string }, index: number): void {
     this.getSubjectsPerSubjectGroup(data.id, index);
   }
 
@@ -108,7 +108,7 @@ export class AddSubjectGroupModalComponent implements OnInit {
     this._subjectGroupService.getSubjectsBySubjectGroupId(id).pipe(
       tap(rs => {
         if (rs.succeeded === true) {
-          if (rs.data !== null) {            
+          if (rs.data !== null) {
             this.addSubjectWeights(index, rs.data.subjects as Subject[])
           }
         } else {
@@ -123,7 +123,7 @@ export class AddSubjectGroupModalComponent implements OnInit {
     this.removeFormArray(subjectWeights);
     for (let i = 0; i < data.length; i++) {
       const tmp = {subjectId: data[i].id, subjectName: data[i].name}
-      subjectWeights.push(        
+      subjectWeights.push(
         this._fb.group({
           'subjectId': [tmp, Validators.required],
           'weight': [1, Validators.required],
@@ -133,7 +133,7 @@ export class AddSubjectGroupModalComponent implements OnInit {
     }
   }
 
-  addNewSubjectGroup(): void {        
+  addNewSubjectGroup(): void {
     this.isLoading = true;
     const subjectGroupsValues = this.getSubjectGroups.controls.map(rs => rs.value);
     const subjectGroups = subjectGroupsValues.map(rs => {
@@ -143,30 +143,18 @@ export class AddSubjectGroupModalComponent implements OnInit {
       })
       const tmp = {...rs, id: rs.id?.id, subjectWeights: subjectWeightTmp};
       return tmp
-    });    
-    const newValue = {...this.addSubjectGroupForm.value, subjectGroup: subjectGroups}      
+    });
+    const newValue = {...this.addSubjectGroupForm.value, subjectGroup: subjectGroups}
     this._majorConfigService.updateMajorToSystem(newValue).pipe(
       tap(rs => {
         if (rs.succeeded === true) {
           this.isLoading = false;
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'THAY ĐỔI THÔNG TIN THÀNH CÔNG',
-            showConfirmButton: false,
-            timer: 1500
-          })
+          Swal.fire('Thành công', 'Cập nhật thành công', 'success');
           this.callBack(1, 10, this.addSubjectGroupForm.get('name').value);
           this.closeModal();
         } else {
           this.isLoading = false;
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: `${rs.errors[0]}`,
-            showConfirmButton: false,
-            timer: 1500
-          })          
+          Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
         }
 
       })
