@@ -4,7 +4,7 @@ import { AuthGuard } from './_helper/auth.guard';
 
 const appRoutes: Routes = [
   { path: '', redirectTo: 'customer', pathMatch: 'full' },
-  { path: 'customer', loadChildren: () => import('./customer/customer.module').then((m) => m.CustomerModule)},
+  { path: 'customer', loadChildren: () => import('./customer/customer.module').then((m) => m.CustomerModule), data: { title: 'Người dùng'}},
   // { path: 'admin',  canActivate: [AuthGuard], data: { isStaff: true }, loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule)}
   { path: 'admin', data: { isStaff: true }, loadChildren: () => import('./admin/admin.module').then((m) => m.AdminModule)}
 ];
