@@ -45,7 +45,7 @@ export class MajorConfigurationModalComponent implements OnInit {
 
   ngOnInit() {
     this.getListSubject();
-    this.getListOfSubjectGroup();    
+    this.getListOfSubjectGroup();
     if (this.data !== undefined) {
       this.setDataToMajorForm(this.data, 0);
       this.setDataToSubjectWeightForm(this.data.subjectGroups[0].subjectWeights);
@@ -152,7 +152,7 @@ export class MajorConfigurationModalComponent implements OnInit {
     });
   }
 
-  updateMajorToSystem(action?: string): void {    
+  updateMajorToSystem(action?: string): void {
     const subjectWeightValue = this.subjectWeightsUpdating.controls.map(rs => rs.value);
     const subjectWeights = subjectWeightValue.map(rs => {
       const tmp = { ...rs, subjectId: rs?.subjectId?.subjectId }
@@ -160,7 +160,7 @@ export class MajorConfigurationModalComponent implements OnInit {
     });
     const subjectGroupStatus = action === 'delete' ? 0 : 1;
     const subjectGroups = [{ ...this.majorForm.value.subjectGroup, subjectWeights: subjectWeights, status: subjectGroupStatus }];
-    const newValue = { ...this.majorForm.value, subjectGroup: subjectGroups };       
+    const newValue = { ...this.majorForm.value, subjectGroup: subjectGroups };
     if (action === 'delete') {
       this.deletetionLoading = true;
       Swal.fire({
@@ -197,7 +197,7 @@ export class MajorConfigurationModalComponent implements OnInit {
                   timer: 1500
                 });
               }
-      
+
             })
           ).subscribe()
         }
@@ -212,26 +212,14 @@ export class MajorConfigurationModalComponent implements OnInit {
         tap(rs => {
           if (rs.succeeded === true) {
             this.updationLoading = false;
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'THAY ĐỔI THÔNG TIN THÀNH CÔNG',
-              showConfirmButton: false,
-              timer: 1500
-            });
+            Swal.fire('Thành công', 'Cập nhật thành công', 'success');
             this.callBack(1, 10, this.majorForm.get('name').value);
             this.closeModal();
           } else {
             this.updationLoading = false;
-            Swal.fire({
-              position: 'center',
-              icon: 'error',
-              title: `${rs.errors[0]}`,
-              showConfirmButton: false,
-              timer: 1500
-            });
+            Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
           }
-  
+
         })
       ).subscribe()
     }
@@ -303,7 +291,7 @@ export class MajorConfigurationModalComponent implements OnInit {
 
   previousSubjetGroupIndex: number = 0;
 
-  filterDataBySubjectGroup(id: number, data: MajorConfiguration): void {        
+  filterDataBySubjectGroup(id: number, data: MajorConfiguration): void {
     if (this.data === undefined) {
       return;
     }
@@ -317,10 +305,10 @@ export class MajorConfigurationModalComponent implements OnInit {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Rời đi'
     }).then((result) => {
-      if (result.isConfirmed) {        
+      if (result.isConfirmed) {
         const subjectGroup = this.data.subjectGroups.find(rs => rs.id === id) as SubjetGroup;
-        this.previousSubjetGroupIndex = data.subjectGroups.findIndex(rs => rs.id === subjectGroup.id);        
-        (this.majorForm.get('subjectGroup') as FormGroup).controls.id.setValue(subjectGroup.id);        
+        this.previousSubjetGroupIndex = data.subjectGroups.findIndex(rs => rs.id === subjectGroup.id);
+        (this.majorForm.get('subjectGroup') as FormGroup).controls.id.setValue(subjectGroup.id);
         this.removeFormArray(this.subjectWeightsUpdating);
         for (let i = 0; i < subjectGroup.subjectWeights.length; i++) {
           const element = subjectGroup.subjectWeights[i];
@@ -333,8 +321,8 @@ export class MajorConfigurationModalComponent implements OnInit {
           )
         }
       }
-      if (result.isDismissed) {        
-        (this.majorForm.get('subjectGroup') as FormGroup).controls.id.setValue(data.subjectGroups[this.previousSubjetGroupIndex].id);                
+      if (result.isDismissed) {
+        (this.majorForm.get('subjectGroup') as FormGroup).controls.id.setValue(data.subjectGroups[this.previousSubjetGroupIndex].id);
       }
     })
   }

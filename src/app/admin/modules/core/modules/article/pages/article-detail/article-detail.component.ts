@@ -318,7 +318,7 @@ export class ArticleDetailComponent implements OnInit {
         };
         Swal.fire({
           title: 'HỦY ĐĂNG BÀI',
-          text: "Bài viết sẽ được chuyển tiếp về danh sách đã được duyệt.",
+          text: "Bài viết sẽ được chuyển tiếp về danh sách các bài viết cần được xem.",
           icon: 'warning',
           showCancelButton: true,
           showLoaderOnConfirm: true,
@@ -332,7 +332,7 @@ export class ArticleDetailComponent implements OnInit {
             this._articleService.confirmArticle(newValue).pipe(
               tap((rs) => {
                 if (rs.succeeded === true) {
-                  this.createNotification('success', 'ĐĂNG BÀI', 'Đăng bài viết thành công', 'bottomRight');
+                  this.createNotification('success', 'HỦY ĐĂNG BÀI', 'Hủy đăng bài viết thành công', 'bottomRight');
                   this.getArticleById();
                 } else {
                   this.createNotification('error', 'ĐĂNG BÀI', 'Đăng bài viết thất bại', 'bottomRight');

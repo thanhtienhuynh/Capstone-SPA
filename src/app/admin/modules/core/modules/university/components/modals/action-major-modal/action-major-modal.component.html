@@ -8,7 +8,7 @@
       <label for="">Tên ngành <span style="color: red;">*</span></label>
       <nb-form-field>
         <nb-icon nbPrefix icon="briefcase-outline"></nb-icon>
-        <input  readonly nz-dropdown type="text" [value]="majorForm.get('majorId').value?.name" [placeholder]="'Chọn ngành'" [nzDropdownMenu]="selectMajorName" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
+        <input  readonly nz-dropdown type="text" [value]="majorForm.get('majorId').value?.name" [nzDropdownMenu]="selectMajorName" nzTrigger="click" nzPlacement="bottomLeft" fullWidth nbInput
       [status]="majorForm.get('majorId').invalid && (majorForm.get('majorId').touched || majorForm.get('majorId').dirty) ? 'danger' : 'basic'">
       </nb-form-field>
       <nz-dropdown-menu #selectMajorName="nzDropdownMenu">
@@ -16,10 +16,10 @@
       </nz-dropdown-menu>
     </div>
     <div class="col-md-3">
-      <label for="">Code <span style="color: red;">*</span></label>
+      <label for="">Mã ngành <span style="color: red;">*</span></label>
       <nb-form-field>
         <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
-        <input style="text-align: right;" [formControl]="majorForm.get('majorCode')"  type="text" placeholder="Mã Ngành" fullWidth nbInput
+        <input style="text-align: right;" [formControl]="majorForm.get('majorCode')"  type="text" fullWidth nbInput
         />
       </nb-form-field>
     </div>
@@ -40,10 +40,9 @@
       <label for="">Tổng chỉ tiêu</label>
       <nb-form-field>
         <nb-icon nbPrefix icon="layers-outline" pack="eva"></nb-icon>
-        <input style="text-align: right;" [formControl]="majorForm.get('totalAdmissionQuantity')"  type="number" placeholder="Nhập chỉ tiêu" fullWidth nbInput
-
-        />
+        <input style="text-align: right;" [formControl]="majorForm.get('totalAdmissionQuantity')"  type="number" fullWidth nbInput/>
       </nb-form-field>
+      <span style="color: red;" *ngIf="majorForm.errors?.greaterThan">Tổng chi tiêu không được bé hơn tổng sổ lượng của chỉ tiêu phụ</span>
     </div>
     <div class="col-md-3">
       <label for="">Mùa <span style="color: red;">*</span></label>
@@ -85,7 +84,7 @@
           </div>
           <div class="col-md-2" style="padding-right: 0;">
             <label for="">Số lượng</label>
-            <input style="text-align: right;" [formControl]="getSubAddmissions.controls[i].get('quantity')"  type="number" placeholder="Số Lượng" fullWidth nbInput/>
+            <input style="text-align: right;" [formControl]="getSubAddmissions.controls[i].get('quantity')"  type="number" fullWidth nbInput/>
           </div>
         </div>
         <nb-card class="mt-2" style="margin-bottom: 0;">
@@ -113,7 +112,7 @@
               </div>
               <div class="col-md-3" style="justify-content: center; align-items: center; display: flex;">
                 <nb-form-field>
-                  <input style="text-align: right;" type="number" [formControl]="getSubAddmissions.controls[i].get('subjectGroups').controls[si].get('entryMarkPerGroup')"  placeholder="Nhập Điểm" fullWidth nbInput/>
+                  <input style="text-align: right;" type="number" [formControl]="getSubAddmissions.controls[i].get('subjectGroups').controls[si].get('entryMarkPerGroup')" fullWidth nbInput/>
                 </nb-form-field>
               </div>
               <div class="col-md-3" style="justify-content: center; align-items: center; display: flex;">
@@ -177,15 +176,18 @@
       <label for="">Code <span style="color: red;">*</span></label>
       <nb-form-field>
         <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
-        <input style="text-align: right;" [formControl]="updateMajorForm.get('majorCode')"  type="text" placeholder="Mã Ngành" fullWidth nbInput />
+        <input style="text-align: right;" [formControl]="updateMajorForm.get('majorCode')"  type="text" fullWidth nbInput />
       </nb-form-field>
     </div>
     <div class="col-md-3">
-      <label for="">Tổng chỉ tiêu <span style="color: red;">*</span></label>
+      <label for="">Tổng chỉ tiêu <span style="color: red;">*</span>
+      </label>
       <nb-form-field>
-        <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i>
-        <input style="text-align: right;" [formControl]="updateMajorForm.get('totalAdmissionQuantity')"  type="number" placeholder="Chỉ Tiêu" fullWidth nbInput />
+        <!-- <i nbPrefix nz-icon nzType="key" nzTheme="outline"></i> -->
+        <nb-icon nbPrefix icon="layers-outline" pack="eva"></nb-icon>
+        <input style="text-align: right;" [formControl]="updateMajorForm.get('totalAdmissionQuantity')" min="1"  type="number" fullWidth nbInput />
       </nb-form-field>
+      <span style="color: red;" *ngIf="updateMajorForm.errors?.greaterThan">Tổng chi tiêu không được bé hơn tổng sổ lượng của chỉ tiêu phụ</span>
     </div>
   </div>
   <nz-divider nzDashed ></nz-divider>
@@ -219,7 +221,7 @@
           </div>
           <div class="col-md-2" style="padding-right: 0;">
             <label for="">Số lượng</label>
-            <input style="text-align: right;" [formControl]="updatingUniSubAdmissionParams.controls[i].get('quantity')"  type="number" placeholder="Số Lượng" fullWidth nbInput/>
+            <input style="text-align: right;" [formControl]="updatingUniSubAdmissionParams.controls[i].get('quantity')"  type="number" fullWidth nbInput/>
           </div>
         </div>
         <nb-card class="mt-2" style="margin-bottom: 0;">
@@ -247,7 +249,7 @@
               </div>
               <div class="col-md-3">
                 <nb-form-field>
-                  <input style="text-align: right;" type="number" [formControl]="updatingUniSubAdmissionParams.controls[i].get('majorDetailEntryMarkParams').controls[si].get('mark')"  placeholder="Nhập Điểm" fullWidth nbInput/>
+                  <input style="text-align: right;" type="number" [formControl]="updatingUniSubAdmissionParams.controls[i].get('majorDetailEntryMarkParams').controls[si].get('mark')" fullWidth nbInput/>
                 </nb-form-field>
               </div>
               <div class="col-md-3" style="justify-content: center; align-items: center; display: flex;">
