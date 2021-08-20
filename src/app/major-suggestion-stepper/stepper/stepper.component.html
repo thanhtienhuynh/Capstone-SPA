@@ -42,6 +42,7 @@
         </div>
 
         <div fxLayout="row wrap"  fxLayoutAlign="center">
+          <div *ngIf="typeScore == 2" fxFlex="0 1 calc(100%)" class="center-all note-score">Nhập điểm trung bình của học kì hoặc năm học gần nhất</div>
           <div *ngFor="let subject of subjects; let i = index" fxFlex="0 1 calc(30%)"
               fxFlex.lt-md="0 1 calc(50%)" fxFlex.lt-sm="100%" class="subject-frame">
             <label class="label-subject">{{ subject.name == "Giáo dục công dân" ? "GDCD" : subject.name}}</label>
