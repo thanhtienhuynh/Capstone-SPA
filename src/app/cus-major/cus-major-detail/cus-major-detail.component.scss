@@ -29,10 +29,9 @@
   border: 1px solid rgb(70, 141, 235);
   padding: 5px;
   margin-bottom: 5px;
-
-  background-color: rgb(70, 141, 235); 
-  color: white;
+  color: #082f4e;
   cursor: pointer;
+  font-weight: 500;
 }
 
 .article:hover {
@@ -42,7 +41,11 @@
 
 .article-frame-title {
   border-bottom: 1px solid black;
-  padding-bottom: 12px;
+  padding: 12px 0px;
   color: #033969;
   font-weight: 600;
+}
+
+.career-title {
+  font-weight: 500;
 }

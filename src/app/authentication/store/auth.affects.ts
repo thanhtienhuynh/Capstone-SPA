@@ -46,7 +46,10 @@ export class AuthEffects {
     map((token: string) => {
       return new AuthActions.LoginServer(token);
     }),
-    catchError((error: HttpErrorResponse) => {
+    catchError((error: any) => {
+      if(error && error.code == "auth/popup-closed-by-user") {
+        return of({type: "DUMMY"});
+      }
       return of(new AuthActions.HasErrors([error.message]));
     })
   );
@@ -82,7 +85,7 @@ export class AuthEffects {
     switchMap(() => {
       const token = localStorage.getItem('token');
       if (!token) {
-        this.router.navigate(['/']);
+        // this.router.navigate(['/']);
         return of({type: "DUMMY"});
       }
       return this.http.get<Response<User>>(
@@ -122,16 +125,17 @@ export class AuthEffects {
           localStorage.removeItem('token');
           this.router.navigate(['/']);
           if (response.succeeded) {
-            console.log("Unsubscribe success");
-            return { type: 'DUMMY' };
+            console.log("unsubscribe success!");
+          } else {
+            console.log("unsubscribe fail!");
           }
-          return new AuthActions.HasErrors(response.errors);
+          return { type: 'DUMMY' };
         }),
         catchError((error: HttpErrorResponse) => {
           this.authService.clearLogoutTimer();
           localStorage.removeItem('token');
           this.router.navigate(['/']);
-          return of(new AuthActions.HasErrors([error.message]));
+          return of({ type: 'DUMMY' });
         })
       );
     }),
@@ -148,10 +152,11 @@ export class AuthEffects {
       ).pipe(
         map((response) => {
           if (response.succeeded) {
-            console.log("Subscribe success");
-            return { type: 'DUMMY' };
+            console.log("subscribe success!");
+          } else {
+            console.log("subscribe fail!");
           }
-          return new AuthActions.HasErrors(response.errors);
+          return { type: 'DUMMY' };
         }),
         catchError((error: HttpErrorResponse) => {
           return of(new AuthActions.HasErrors([error.message]));

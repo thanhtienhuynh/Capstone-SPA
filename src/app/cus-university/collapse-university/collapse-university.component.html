@@ -1,17 +1,19 @@
 <div class="center-all">
-  <h1 class="title">DANH SÁCH CÁC TRƯỜNG ĐẠI HỌC KHU VỰC PHÍA NAM</h1>
+  <h1 class="title">DANH SÁCH CÁC TRƯỜNG ĐẠI HỌC</h1>
 </div>
 <div class="host-frame center-all">
     <form (ngSubmit)="onSubmit()" class="search-frame">
-      <input class="text-field" type="text" id="fullname" [(ngModel)]="searchTerm" name="searchTerm"/>
+      <input class="text-field" ngClass.lt-md="text-field-md" type="text" id="fullname" [(ngModel)]="searchTerm" placeholder="Nhập tên trường..." name="searchTerm"/>
       <button class="search-btn">Tìm kiếm</button>
     </form>
 </div>
 <div *ngIf="universitiesPageResponse && universitiesPageResponse.data.length > 0" class="host-frame">
   <div class="total">Hệ thống ghi nhận có {{universitiesPageResponse.totalRecords}} trường đại học.</div>
-  <div class="uni-frame" *ngFor="let university of universitiesPageResponse.data" gdAreas="avatar name info | detail detail detail" gdRows="auto auto" gdColumns ="20% 50% 30%"
-      gdAreas.lt-md="" gdRows.lt-md="auto auto auto auto">
-    <div class="avatar" gdArea="avatar">
+  <div class="uni-frame" *ngFor="let university of universitiesPageResponse.data"
+    gdAreas="avatar name info | detail detail detail" gdRows="auto auto" gdColumns ="20% 50% 30%"
+      gdAreas.lt-md="avatar name info | detail detail detail" gdRows.lt-md="auto auto" gdColumns.lt-sm ="100%"
+      gdAreas.lt-sm="name | info | detail" gdRows.lt-sm="auto auto auto">
+    <div class="avatar" ngClass.lt-sm="avatar-md" gdArea="avatar">
       <img class="img-frame" src="{{university.logoUrl || '../../../../../assets/img/ic/univeristy.jpg'}}" alt="" />
     </div>
   
@@ -41,7 +43,7 @@
       <div class="tuition-value">{{university.phone}}</div>
   
       <p class="tuition-title website-title">Website:</p>
-      <a class="tuition-value" href="{{university.webUrl}}" target="_blank">{{university.webUrl | shorten:27}}</a>
+      <a class="tuition-value" href="{{university.webUrl}}" target="_blank">{{university.webUrl | shorten:27 | lowercase}}</a>
     </div>
     <div class="detail" gdArea="detail">
         <button class="detail-btn" [routerLinkActiveOptions]="{exact: true}" routerLink="./{{university.id}}">Xem chi tiết</button>

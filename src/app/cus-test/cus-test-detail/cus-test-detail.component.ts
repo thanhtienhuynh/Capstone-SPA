@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 
 import * as fromApp from '../../_store/app.reducer';
 import * as HomeActions from '../../home/store/home.actions';
-import * as UserActions from '../../user/store/user.actions';
 import { Observable, Subscription } from 'rxjs';
 import { Test } from 'src/app/_models/test';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -15,8 +14,8 @@ import { TestSubmission } from 'src/app/_models/test-submission';
 import Swal from 'sweetalert2';
 import { CanComponentDeactivate } from 'src/app/_helper/can-deactivate-guard.service';
 import { User } from 'src/app/_models/user';
-import { ResultDialogComponent } from 'src/app/major-suggestion-stepper/exam-page/result-dialog/result-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LoginDialogComponent } from 'src/app/_sharings/components/login-dialog/login-dialog.component';
 @Component({
   selector: 'app-cus-test-detail',
   templateUrl: './cus-test-detail.component.html',
@@ -35,6 +34,7 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
   isScored: boolean;
   isSaved: boolean = false;
   isSaving: boolean = false;
+  numberOfCompletedQuestion: number = 0;
   user: User;
   errors: string[];
 
@@ -53,6 +53,12 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
 
       if (this.isSaved != homeState.isSubmissionSaved) {
         this.isSaved = homeState.isSubmissionSaved;
+        if (this.isSaved) {
+          Swal.fire({title: 'Thành công', text: "Lưu thông tin bài thi thành công", icon: 'success', allowOutsideClick: true})
+          .then(() => {
+            
+          });
+        }
       }
 
       if (this.test != homeState.selectedTest) {
@@ -67,6 +73,7 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
             this.examSubmissionFormGroup.controls[question.id.toString()].valueChanges.subscribe(
               v => {
                 this.selectedIndex = question.realOrder;
+                this.calculateCompleted();
               }
             )
           }
@@ -97,17 +104,64 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
     .select('auth')
     .subscribe(
       (authState) => {
-        this.user = authState.user;
+        if (this.user != authState.user) {
+          this.user = authState.user;
+          if (this.user && this.isSaving) {
+            this.store.dispatch(new HomeActions.SaveUnsaveTestSubmissions());
+            this.isSaving = false;
+          }
+        }
+        
       },
       (error) => {
       }
     );
   }
 
+  openSubmitDialog(questionRemaining: number, timeRemaining: number): void {
+    let caution = "";
+    if (questionRemaining > 0 && timeRemaining > 0) {
+      caution = "<p style=\"color: red\">Chú ý: Bạn còn " + questionRemaining + " câu hỏi chưa làm và "  + timeRemaining + " phút để làm bài.</p>"
+    } else if (questionRemaining > 0) {
+      caution = "<p style=\"color: red\">Chú ý: Bạn còn " + questionRemaining + " câu hỏi chưa làm.</p>"
+    } else if (timeRemaining > 0) {
+      caution = "<p style=\"color: red\">Chú ý: Bạn còn " + timeRemaining + " phút để làm bài, kiểm tra kĩ trước khi nộp bài.</p>"
+    }
+    Swal.fire({
+      title: 'Bạn có chắc muốn nộp bài thi?',
+      html: caution,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Nộp bài',
+      cancelButtonText: 'Tiếp tục làm bài'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.onSubmit();
+      }
+    });
+  }
+
+  calculateCompleted() {
+    let questions: QuestionParam[] = [];
+    for(let question of this.test.questions) {
+      if (!question.isAnnotate) {
+        questions.push(new QuestionParam(question.id, 
+          this.getResult(question.options.length, +this.examSubmissionFormGroup.controls[question.id.toString()].value)));
+      }
+    }
+    this.numberOfCompletedQuestion = questions.filter(q => q.options.indexOf(DEFAULT_SELECTED_ANSWER) >= 0).length;
+  }
+
   handleCoundown(event: CountdownEvent) {
     if (event.action === "done") {
      this.onSubmit();
     }
+  }
+
+  onSubmitClick() {
+    this.openSubmitDialog(this.test.numberOfQuestion - this.numberOfCompletedQuestion, Math.floor(this.countdown.left / 60000));
   }
 
   onSubmit() {
@@ -119,13 +173,10 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
       }
     }
     // if (questions.filter(q => q.options.indexOf(DEFAULT_SELECTED_ANSWER) >= 0).length >= this.test.numberOfQuestion / 2) {
-    if (questions.filter(q => q.options.indexOf(DEFAULT_SELECTED_ANSWER) >= 0).length >= 0) {
-      this.countdown.stop();
-      this.store.dispatch(new HomeActions.ScoringTest(
-        new TestSubmissionParam(this.test.id, Math.ceil(this.test.timeLimit - (this.countdown.left / 60000)), questions)));
-    } else {
-      // this.openSubmitDialog();
-    }
+    this.countdown.stop();
+    this.store.dispatch(new HomeActions.ScoringTest(
+      new TestSubmissionParam(this.test.id, Math.ceil(this.test.timeLimit - (this.countdown.left / 60000)), questions)));
+    
   }
 
   
@@ -168,7 +219,7 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
   }
 
   onSave() {
-    if (this.userSubscription) {
+    if (this.user) {
       this.store.dispatch(new HomeActions.SaveUnsaveTestSubmissions());
       this.isSaving = true;
     } else {
@@ -178,9 +229,9 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
   }
 
   openResultDialog(): void {
-    const dialogRef = this.dialog.open(ResultDialogComponent, {
-      width: '500px',
-      height: '210px',
+    const dialogRef = this.dialog.open(LoginDialogComponent, {
+      width: '350px',
+      height: '150px',
       disableClose: false
     });
   }
@@ -206,7 +257,6 @@ export class CusTestDetailComponent extends CanComponentDeactivate implements On
 
   answerClick(quesId: number) {
     const itemToScrollTo = document.getElementById(quesId.toString());
-    console.log("ques: ", quesId);
     if (itemToScrollTo) {
       itemToScrollTo.scrollIntoView(true);
     }

@@ -13,7 +13,6 @@ import { environment } from 'src/environments/environment';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AppRoutingModule } from './app-routing.module';
 import { ExamPageComponent } from './major-suggestion-stepper/exam-page/exam-page.component';
-import { ResultDialogComponent } from './major-suggestion-stepper/exam-page/result-dialog/result-dialog.component';
 import { CountdownModule } from 'ngx-countdown';
 import { TestCardComponent } from './major-suggestion-stepper/exam-page/test-card/test-card.component';
 import { HomeComponent } from './home/home.component';
@@ -40,6 +39,8 @@ import { CusUniversityComponent } from './cus-university/cus-university.componen
 import { CusMajorComponent } from './cus-major/cus-major.component';
 import { CusTestComponent } from './cus-test/cus-test.component';
 import { CanDeactivateGuard } from './_helper/can-deactivate-guard.service';
+import { NgxEchartsModule } from "ngx-echarts";
+import { SpectrumDialogComponent } from './major-suggestion-stepper/spectrum-dialog/spectrum-dialog.component';
 
 
 registerLocaleData(vi);
@@ -48,8 +49,8 @@ registerLocaleData(vi);
     AppComponent,
     StepperComponent,
     ExamPageComponent,
-    ResultDialogComponent,
     FinishTestDialogComponent,
+    SpectrumDialogComponent,
     TestCardComponent,
     HomeComponent,
     SubmitDialogComponent,
@@ -65,13 +66,14 @@ registerLocaleData(vi);
     StoreModule.forRoot(fromApp.appReducer),
     EffectsModule.forRoot([StepperEffects, AuthEffects, UserEffects, HomeEffects]),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
-    
     AppRoutingModule,
     CountdownModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     AngularFireMessagingModule,
-
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    }),
     FormsModule,
     ReactiveFormsModule,
     CommonModule,  

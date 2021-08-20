@@ -1,0 +1,18 @@
+<div>
+  <h4 class="caution-title">LƯU Ý</h4>
+  <p *ngIf="!user">- Bạn phải <span class="emphasized-title" (click)="onGoogleLoginClick()">Đăng nhập</span> mới có thể làm bài thi thử.</p>
+  <p>- Trong <span class="emphasized-title">{{testConfig}} tháng</span> , bạn chỉ có thể làm bài thi thử <span class="emphasized-title">1 lần</span>, hãy ôn luyện thật kĩ trước khi làm bài thi.</p>
+  
+  <div *ngIf="data && data.suggestedSubjectGroups && data.suggestedSubjectGroups.length > 0">
+    <div>- Chọn khối mà bạn muốn làm bài thi thử:</div>
+    <div class="group-frame">
+      <div *ngFor="let group of data.suggestedSubjectGroups" class="group-item">
+        <div (click)="selectedSubjecGroup = group.id" [ngClass]="{'selected': selectedSubjecGroup == group.id}" class="group-item-title">{{group.name}}</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="center-all">
+    <button class="detail-btn" [disabled]="!user || selectedSubjecGroup <= 0" [ngClass]="{'disabled-btn': !user || selectedSubjecGroup <= 0}" (click)="doTest()">Vào thi</button>
+  </div>
+</div>

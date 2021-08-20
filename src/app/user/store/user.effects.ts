@@ -136,7 +136,6 @@ export class UserEffects {
       ).pipe(
         map((response) => {
           if (response.succeeded) {
-            console.log(response.data)
             return new UserActions.SetUserFollowingDetail(response.data);
           }
           return new UserActions.HasErrors({action: UserActions.LOAD_USER_FOLLOWING_DETAIL, messages: response.errors});
@@ -227,7 +226,6 @@ export class UserEffects {
     switchMap(([actionData, userState]) => {
       let queryParams = new HttpParams();
       queryParams = queryParams.append('pageSize', '10');
-      console.log("page: ", userState.pagedNotifications.pageNumber + 1);
       queryParams = queryParams.append('pageNumber', (userState.pagedNotifications.pageNumber + 1).toString());
       return this.http.get<PagedResponse<NotificationDataSet[]>>(
         environment.apiUrl + 'api/v1/notification/user',
@@ -320,11 +318,10 @@ export class UserEffects {
     withLatestFrom(this.store.select('user')),
     switchMap(([actionData, userState]) => {
       return this.http.delete<Response<boolean>>(
-        environment.apiUrl + 'api/v1/following-detail/' + userState.uncaringFollowingDetailId.toString()
+        environment.apiUrl + 'api/v1/following-detail/all/' + userState.uncaringFollowingDetailId.toString()
       ).pipe(
         switchMap((response) => {
           if (response.succeeded) {
-            console.log("success: ", userState.uncareType);
             if (userState.uncareType == 0) {
 
               return [new UserActions.LoadMajorBasedFollowingDetails(),

@@ -96,7 +96,6 @@ export class CollapseArticleComponent implements OnInit {
   }
 
   onSearch() {
-    console.log(this.searchTerm);
     this.store.dispatch(new HomeActions.LoadCollapseArticles({pageParam: new PageParam(1, 10), searchTerm: this.searchTerm}));
     this.isViewAll = true;
   }

@@ -10,7 +10,7 @@ const routes: Routes = [
     path: '',
     component: CusUniversityComponent,
     children: [
-      { path: '', component: CollapseUniversityComponent},
+      { path: '', pathMatch: "full", component: CollapseUniversityComponent},
       { path: ':id', component: CusUniversityDetailComponent, resolve: {university: DetailUniversityResolver}},
     ]
   }

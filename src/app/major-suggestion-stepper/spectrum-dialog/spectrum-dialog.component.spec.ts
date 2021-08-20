@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { ResultDialogComponent } from './result-dialog.component';
+import { SpectrumDialogComponent } from './spectrum-dialog.component';
 
-describe('ResultDialogComponent', () => {
-  let component: ResultDialogComponent;
-  let fixture: ComponentFixture<ResultDialogComponent>;
+describe('SpectrumDialogComponent', () => {
+  let component: SpectrumDialogComponent;
+  let fixture: ComponentFixture<SpectrumDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ResultDialogComponent ]
+      declarations: [ SpectrumDialogComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ResultDialogComponent);
+    fixture = TestBed.createComponent(SpectrumDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -16,7 +16,7 @@ gdAreas.lt-md="score | test" gdRows.lt-md="auto" gdColumns.lt-md="100%">
         </div>
         <div class="line-frame">
           <div class="center-vertical timer-title" >Số câu hoàn thành:&nbsp;</div>
-          <div class="center-vertical" >0/{{test.numberOfQuestion}}</div>
+          <div class="center-vertical count-down-frame" >{{numberOfCompletedQuestion}}/{{test.numberOfQuestion}}</div>
         </div>
         <!-- Khung câu hỏi -->
         <div class="no-question-frame">
@@ -32,7 +32,7 @@ gdAreas.lt-md="score | test" gdRows.lt-md="auto" gdColumns.lt-md="100%">
           </div>
         </div>
         <div class="center-all" style="margin: 10px 0 10px 0;">
-          <button class="detail-btn" form="examSubmitForm">Nộp bài</button>
+          <button class="detail-btn" (click)="onSubmitClick()">Nộp bài</button>
         </div>
       </div>
   
@@ -48,9 +48,9 @@ gdAreas.lt-md="score | test" gdRows.lt-md="auto" gdColumns.lt-md="100%">
             <p style="font-size: small; font-style: italic;">
               <span style="color: rgb(240, 30, 30);">Chú ý:</span> 
               Bạn có thể lưu lại kết quả bài thi bằng cách nhấn vào nút "Lưu".</p>     
-            <div mat-dialog-actions>
-              <button mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" routerLink="/" >Đóng</button>
-              <button mat-button color="primary" (click)="onSave()" cdkFocusInitial>Lưu</button>
+            <div class="result-btn-frame">
+              <button mat-button routerLink="/" >Đóng</button>
+              <button class="save-btn" mat-raised-button color="primary" (click)="onSave()" cdkFocusInitial>Lưu</button>
             </div>
           </div>
         </div>   
@@ -61,7 +61,7 @@ gdAreas.lt-md="score | test" gdRows.lt-md="auto" gdColumns.lt-md="100%">
   <div class="test-exam-scroll" gdArea="test"  id="style-7" ngClass.lt-md="test-exam-scroll-lt-md">
     <mat-card  class="card" class="question_widget">
       <mat-card-content class="card-body p-0">
-        <form  [formGroup]="examSubmissionFormGroup" id="examSubmitForm" (ngSubmit)="onSubmit()">
+        <form  [formGroup]="examSubmissionFormGroup" id="examSubmitForm">
         <div *ngFor="let question of test.questions; let i = index">
           <div *ngIf="question.isAnnotate">
             <span class="anotate-question">

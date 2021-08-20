@@ -40,6 +40,15 @@
   color: #262626;
 }
 
+.text-field-md {
+  width: 70%;
+  border-radius: 5px;
+  padding: 9px;
+  font-size: 14px;
+  color: #262626;
+}
+
+
 .search-btn {
   background-color: white;
   border-radius: 5px;
@@ -65,6 +74,7 @@
   margin-bottom: 30px;
   padding: 10px;
   box-shadow: rgb(17 17 17 / 30%) 0px 0px 6px;
+  cursor: pointer;
 }
 
 

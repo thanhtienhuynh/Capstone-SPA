@@ -30,9 +30,17 @@ export interface UniversityGroupByTrainingProgramDataSet {
   rating: number;
   majorCode: string;
   seasonDataSets: Season[];
+  otherSubjectGroups: OtherSubjectGroup[];
   positionOfUser: number;
   totalUserCared: number;
   subjectGroupId: number;
   subjectGroupCode: string;
   rankingMark: number;
+}
+
+export interface OtherSubjectGroup {
+  id: number;
+  name: string;
+  rankTypeId: number;
+  mark: number;
 }

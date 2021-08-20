@@ -32,7 +32,7 @@
         <div>Các công việc, chức danh cụ thể khi tốt nghiệp ngành {{majorDetail.name}}:</div>
         <div *ngIf="!majorDetail.careers || majorDetail.careers.length <= 0">- Đang cập nhật</div>
         <div *ngFor="let career of majorDetail.careers">
-          <div>- {{career.name}}</div>
+          <div class="career-title">- {{career.name}}</div>
         </div>
       </div>
       <div>

@@ -23,6 +23,7 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
   subsription: Subscription;
   majors: CusUniversityMajorDetail[] = [];
   cusMajorDetailPageResponse: PagedResponse<CusUniversityMajorDetail[]>;
+  cusMajorDetailPageResponseForDisplay: PagedResponse<CusUniversityMajorDetail[]>;
   homeActionQueue: HomeActions.HomeActions[] = [];
   seasons: UniSeason[];
   selectedSeasonId: number;
@@ -73,10 +74,11 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
       
       if (this.cusMajorDetailPageResponse != homeState.cusMajorDetailPageResponse) {
         this.cusMajorDetailPageResponse = homeState.cusMajorDetailPageResponse;
+        this.cusMajorDetailPageResponseForDisplay = JSON.parse(JSON.stringify(homeState.cusMajorDetailPageResponse));
         this.rows = [];
         this.majors = [];
-        if (this.cusMajorDetailPageResponse && this.cusMajorDetailPageResponse.data && this.cusMajorDetailPageResponse.data.length > 0) {
-          this.cusMajorDetailPageResponse.data.map(major => {
+        if (this.cusMajorDetailPageResponseForDisplay && this.cusMajorDetailPageResponseForDisplay.data && this.cusMajorDetailPageResponseForDisplay.data.length > 0) {
+          this.cusMajorDetailPageResponseForDisplay.data.map(major => {
             let countChild2 = 0;
             let programs: CusMajorDetail[] = [];
             major.majorDetailUnies.map(program => {
@@ -134,11 +136,11 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
     let row: Row = new Row();
     let cells: Cell[] = [];
     this.majors.forEach((major, a) => {
-      cells.push({data: major.majorName.toUpperCase(), rowspan: major.rows, isNumber: false});
+      cells.push({data: major.majorName.toUpperCase(), rowspan: major.rows, isNumber: false, isTitle: true});
       major.majorDetailUnies.forEach((program, b) => {
-        cells.push({data: program.trainingProgramName, rowspan: program.rows, isNumber: false});
-        cells.push({data: program.majorDetailCode, rowspan: program.rows, isNumber: false});
-        cells.push({data: program.admissionQuantity, rowspan: program.rows, isNumber: true});
+        cells.push({data: program.trainingProgramName, rowspan: program.rows, isNumber: false, isTitle: false});
+        cells.push({data: program.majorDetailCode, rowspan: program.rows, isNumber: false, isTitle: false});
+        cells.push({data: program.admissionQuantity, rowspan: program.rows, isNumber: true, isTitle: false});
         program.majorDetailSubAdmissions.forEach((admission, c) => {
           let gender = null;
           if (admission.genderId == 0) {
@@ -154,11 +156,11 @@ export class CusUniversityDetailComponent implements OnInit, OnDestroy {
           if (provinceName) {
             admissionName += " - " + provinceName;
           }
-          cells.push({data: admissionName, rowspan: admission.rows, isNumber: false});
-          cells.push({data: admission.quantity, rowspan: admission.rows, isNumber: true});
+          cells.push({data: admissionName, rowspan: admission.rows, isNumber: false, isTitle: false});
+          cells.push({data: admission.quantity, rowspan: admission.rows, isNumber: true, isTitle: false});
           admission.majorDetailEntryMarks.forEach ((entryMark, d) => {
-            cells.push({data: entryMark.subjectGroupCode, rowspan: entryMark.rows, isNumber: false});
-            cells.push({data: entryMark.mark, rowspan: entryMark.rows, isNumber: true});
+            cells.push({data: entryMark.subjectGroupCode, rowspan: entryMark.rows, isNumber: false, isTitle: false});
+            cells.push({data: entryMark.mark, rowspan: entryMark.rows, isNumber: true, isTitle: false});
             row.cells = cells;
             row.isOdd = a % 2 != 0;
             this.rows.push(row);

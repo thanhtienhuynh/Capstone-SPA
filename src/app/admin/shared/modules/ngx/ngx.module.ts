@@ -11,7 +11,6 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BarRatingModule } from 'ngx-bar-rating';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import * as echarts from 'echarts';
 import { ClickOutsideModule } from 'ng-click-outside';
 import {QuillModule} from 'ngx-quill';
 
@@ -42,9 +41,6 @@ export class NgxModule {
       ngModule: NgxModule,
       providers: [
         ...NgxMaskModule.forRoot(options).providers,
-        ...NgxEchartsModule.forRoot({
-          echarts
-        }).providers,
         ...NgxEmojiPickerModule.forRoot().providers,
         ...QuillModule.forRoot().providers
       ]

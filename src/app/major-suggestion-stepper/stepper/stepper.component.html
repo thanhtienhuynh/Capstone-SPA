@@ -1,14 +1,14 @@
 <mat-horizontal-stepper #stepper class="host-frame">
   <mat-step #stepOne [stepControl]="secondFormGroup" editable="true">
-    <div class="center step-1-frame">
-      <form *ngIf="secondFormGroup != null; elseNull" [formGroup]="secondFormGroup" (ngSubmit)="onSuggestSubmit()">
+    <div class="center step-1-frame" ngClass.lt-lg="center-md">
+      <form *ngIf="secondFormGroup != null; elseNull" [formGroup]="secondFormGroup" (ngSubmit)="onSuggestSubmit()" (keydown.enter)="$event.preventDefault()">
         <ng-template matStepLabel>Nhập điểm</ng-template>
         <h1 class="step-1-title">Nhập điểm trung bình học bạ hoặc điểm thi THPT Quốc gia</h1>
         <div fxLayout="row wrap" fxLayoutGap="32px" fxLayoutAlign="center" class="criteria-frame">
-          <div fxFlex.lg="0 1 calc(60%)" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="100%">
+          <div fxFlex.lg="0 1 calc(60%)" fxFlex.lt-md="0 1 calc(100%)">
 
             <div class="center-vertical province-frame">
-              <div class="criteria-lable">Tỉnh đang sinh sống: </div>
+              <div class="criteria-lable">Tỉnh đang sinh sống<span style="color: red;">*</span></div>
               <div class="province-field">
                 <input class="province-input" [ngClass]="{'province-error': secondFormGroup?.controls['province']?.status == 'INVALID'}"
                     type="text" placeholder="Chọn tỉnh, thành" required formControlName="province"
@@ -22,7 +22,7 @@
             </div>
 
             <div class="center-vertical" >
-              <label class="criteria-lable">Giới tính: </label>
+              <label class="criteria-lable">Giới tính<span style="color: red;">*</span></label>
               <mat-radio-group [(ngModel)]="gender" formControlName="gender">
                 <mat-radio-button class="radio-choice" [checked]="'true'" [value]="1">Nữ</mat-radio-button>
                 <mat-radio-button [value]="0">Nam</mat-radio-button>
@@ -30,7 +30,7 @@
             </div>
 
              <div class="center-vertical" style="margin-top: 20px;">
-              <label class="criteria-lable">Loại điểm: </label>
+              <label class="criteria-lable">Loại điểm<span style="color: red;">*</span></label>
               <mat-radio-group [(ngModel)]="typeScore" formControlName="transcriptTypeId">
                 <mat-radio-button class="radio-choice" [checked]="'true'" [value]="2">Điểm học bạ</mat-radio-button>
                 <mat-radio-button [value]="1">Điểm THPT QG</mat-radio-button>
@@ -42,6 +42,7 @@
         </div>
 
         <div fxLayout="row wrap"  fxLayoutAlign="center">
+          <div *ngIf="typeScore == 2" fxFlex="0 1 calc(100%)" class="center-all note-score">Nhập điểm trung bình của học kì hoặc năm học gần nhất</div>
           <div *ngFor="let subject of subjects; let i = index" fxFlex="0 1 calc(30%)"
               fxFlex.lt-md="0 1 calc(50%)" fxFlex.lt-sm="100%" class="subject-frame">
             <label class="label-subject">{{ subject.name == "Giáo dục công dân" ? "GDCD" : subject.name}}</label>
@@ -60,6 +61,38 @@
             <mat-error *ngIf="secondFormGroup.errors.mustMatchGroup">{{secondFormGroup.errors.mustMatchGroup}}</mat-error>
           </div>
         </div>
+        <div class="priority-group-frame">
+          <div class="priority-group-note-frame">
+            <div class="center-vertical"><mat-icon class="note-icon">info</mat-icon>Nhập các tổ hợp môn bạn muốn ưu tiên, hệ thống sẽ gợi ý dựa trên những tổ hợp môn này:</div>
+            <div class="leave-empty-note">Để trống ô này nếu bạn chưa có định hướng tổ hợp môn thi.</div>
+          </div>
+          <div class="priority-group-input-frame">
+            <mat-form-field appearance="fill" class="group-form-field">
+              <mat-label>Tổ hợp môn</mat-label>
+              <mat-chip-list #chipList aria-label="Fruit selection">
+                <mat-chip
+                  *ngFor="let subjectGroup of selectedChips"
+                  [selectable]="true"
+                  [removable]="true"
+                  (removed)="remove(subjectGroup)">
+                  {{subjectGroup.groupCode}}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="Tổ hợp môn..."
+                  #subjectGroupsInput
+                  [formControl]="subjectGroupsControl"
+                  [matAutocomplete]="subjectGroupAuto"
+                  [matChipInputFor]="chipList">
+              </mat-chip-list>
+              <mat-autocomplete #subjectGroupAuto="matAutocomplete" (optionSelected)="selected($event)">
+                <mat-option *ngFor="let subjectGroup of filteredSubjectGroups | async" [value]="subjectGroup.id">
+                  {{subjectGroup.groupCode}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+        </div>
         <div style="width: 100%;">
           <div class="center-all suggest-btn">
             <button [disabled]="secondFormGroup.invalid" mat-raised-button color="primary">
@@ -72,37 +105,42 @@
   </mat-step>
   <mat-step #stepTwo >
     <ng-template matStepLabel>Kết quả</ng-template>
-    <div class="center step-2-frame">
+    <div class="center step-2-frame" ngClass.lt-lg="center-md">
       <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup.length > 0" fxLayout="row wrap" fxLayoutAlign="flex-start" class="step-2-in-frame">
         
         <!-- Top 2 -->
-        <div fxFlex.lg="0 1 calc(34% )" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="100%" >
-          <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[1]" class="top-2-group-frame">
+        <div fxFlex.lg="0 1 calc(34% )" fxFlex.lt-lg="0 1 calc(34% )" fxFlex.lt-sm="0 1 calc(100%)" >
+          <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[groupPage * 3 - 2]" class="top-2-group-frame">
             <div class="top-2-group-in-frame">  
               <div class="top-2-group-inner-frame">
                 <div class="top-2-title-frame">
-                  <div class="top-2-title">Top 2</div>
+                  <div class="top-2-title">Top {{suggestedSubjectsGroup[groupPage * 3 - 2].top}}</div>
                 </div>
                 <div class="low-level-subject-group-frame">
                   <div class="low-level-in-subject-group-frame">
                     <div class="top-2-out-circle-frame"
                     #tooltip="matTooltip"
-                    [matTooltip]="getSubjectNames(suggestedSubjectsGroup[1])"
+                    [matTooltip]="getSubjectNames(suggestedSubjectsGroup[groupPage * 3 - 2])"
                     matTooltipPosition="above"
                     matTooltipHideDelay="2000">
                       <div class="center-vertical top-2-circle-frame">
-                        <div class="group-top-2-name">{{suggestedSubjectsGroup[1].name}}</div>
+                        <div class="group-top-2-name">{{suggestedSubjectsGroup[groupPage * 3 - 2].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="top-2-major-frame">
-                  <div style="height: 91%; width: 100%;" class="major-scroll" id="style-7">
-                    <button *ngFor="let major of suggestedSubjectsGroup[1].suggestedMajors" style="width: 100%;" mat-button 
-                    (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[1], major: major})">
+                  <div *ngIf="suggestedSubjectsGroup[groupPage * 3 - 2].suggestedMajors
+                      && suggestedSubjectsGroup[groupPage * 3 - 2].suggestedMajors.length > 0" class="major-scroll top-2-major-list-frame" id="style-7">
+                    <button *ngFor="let major of suggestedSubjectsGroup[groupPage * 3 - 2].suggestedMajors" style="width: 100%;" mat-button 
+                    (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[groupPage * 3 - 2], major: major})">
                       {{major.name | shorten:22}} 
                       <!-- - {{major.highestEntryMark}} - {{major.weightMark}} -->
                     </button>
+                  </div>
+                  <div *ngIf="!(suggestedSubjectsGroup[groupPage * 3 - 2].suggestedMajors
+                                && suggestedSubjectsGroup[groupPage * 3 - 2].suggestedMajors.length > 0)">
+                    <div class="empty-major">Không có ngành học phù hợp</div>
                   </div>
                 </div>
               </div>
@@ -110,75 +148,98 @@
           </div>
         </div>
         <!-- Top 1 -->
-        <div fxFlex="0 1 calc(36%-32px)" fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="0 1 calc(100%)" class="top-1-group-frame">
-            <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[0]" class="top-1-group-in-frame" >  
+        <div fxFlex.lg="0 1 calc(36%-32px)" fxFlex.lt-lg="0 1 calc(36%-32px)" fxFlex.lt-sm="0 1 calc(100%)" class="top-1-group-frame">
+            <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[groupPage * 3 - 3]" class="top-1-group-in-frame" >  
               <div style="height: 100%; background-color: azure; border-radius: 30px;">
                 <div class="top-1-title-frame">
-                  <div class="top-1-title">Top 1</div>
+                  <div class="top-1-title">Top {{suggestedSubjectsGroup[groupPage * 3 - 3].top}}</div>
                 </div>
                 <div style="height: 30%; background-color: rgb(231, 238, 240);">
                   <div style="height: 100%; padding-top: 12px;">
                     <div class="top-1-out-circle-frame"
                       #tooltip="matTooltip"
-                      [matTooltip]="getSubjectNames(suggestedSubjectsGroup[0])"
+                      [matTooltip]="getSubjectNames(suggestedSubjectsGroup[groupPage * 3 - 3])"
                       matTooltipPosition="above"
                       matTooltipHideDelay="10000">
                       <div class="center-vertical top-1-circle-frame">
-                        <div class="group-top-1-name">{{suggestedSubjectsGroup[0].name}}</div>
+                        <div class="group-top-1-name">{{suggestedSubjectsGroup[groupPage * 3 - 3].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="top-1-major-frame">
-                  <div style="height: 91%; width: 100%;" class="major-scroll"  id="style-7">
-                    <button *ngFor="let major of suggestedSubjectsGroup[0].suggestedMajors" style="width: 100%;" mat-button 
-                      (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[0], major: major})">
+                  <div *ngIf="suggestedSubjectsGroup[groupPage * 3 - 3].suggestedMajors
+                              && suggestedSubjectsGroup[groupPage * 3 - 3].suggestedMajors.length > 0"
+                              class="major-scroll top-2-major-list-frame"  id="style-7">
+                    <button *ngFor="let major of suggestedSubjectsGroup[groupPage * 3 - 3].suggestedMajors" style="width: 100%;" mat-button 
+                      (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[groupPage * 3 - 3], major: major})">
                       {{major.name | shorten:30}}
                        <!-- - {{major.highestEntryMark}} - {{major.weightMark}} -->
                     </button>
+                  </div>
+                  <div *ngIf="!(suggestedSubjectsGroup[groupPage * 3 - 3].suggestedMajors
+                                && suggestedSubjectsGroup[groupPage * 3 - 3].suggestedMajors.length > 0)">
+                    <div class="empty-major">Không có ngành học phù hợp</div>
                   </div>
                 </div>
               </div>
             </div>
         </div>
         <!-- Top 3 -->
-        <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[2]" fxFlex="0 1 calc(30%)"
-          fxFlex.lt-md="0 1 calc(100%)" fxFlex.lt-sm="0 1 calc(100%)" class="top-3-group-frame">
-          <div style="padding-top: 50px;">
+        <div fxFlex.lg="0 1 calc(30%)" fxFlex.lt-lg="0 1 calc(30%)" fxFlex.lt-sm="0 1 calc(100%)" class="top-3-group-frame">
+          <div *ngIf="suggestedSubjectsGroup && suggestedSubjectsGroup[groupPage * 3 - 1]"  style="padding-top: 50px;">
             <div class="top-3-group-in-frame" >  
               <div style="height: 100%; background-color: azure; border-radius: 30px;">
                 <div class="top-3-title-frame">
-                  <div class="top-3-title">Top 3</div>
+                  <div class="top-3-title">Top {{suggestedSubjectsGroup[groupPage * 3 - 1].top}}</div>
                 </div>
                 <div class="low-level-subject-group-frame">
                   <div class="low-level-in-subject-group-frame">
                     <div class="top-3-out-circle-frame"
                       #tooltip="matTooltip"
-                      [matTooltip]="getSubjectNames(suggestedSubjectsGroup[2])"
+                      [matTooltip]="getSubjectNames(suggestedSubjectsGroup[groupPage * 3 - 1])"
                       matTooltipPosition="above"
                       matTooltipHideDelay="100000">
                       <div class="center-vertical top-3-circle-frame">
-                        <div class="group-top-3-name">{{suggestedSubjectsGroup[2].name}}</div>
+                        <div class="group-top-3-name">{{suggestedSubjectsGroup[groupPage * 3 - 1].name}}</div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="top-3-major-frame">
-                  <div style="height: 91%; border-radius: 0px 0px 30px 30px; width: 100%;"  class="major-scroll"  id="style-7" >
-                    <button *ngFor="let major of suggestedSubjectsGroup[2].suggestedMajors" style="width: 100%;" mat-button 
-                      (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[2], major: major})">
+                  <div *ngIf="suggestedSubjectsGroup[groupPage * 3 - 1].suggestedMajors
+                              && suggestedSubjectsGroup[groupPage * 3 - 1].suggestedMajors.length > 0"
+                                class="major-scroll top-2-major-list-frame"  id="style-7" >
+                    <button *ngFor="let major of suggestedSubjectsGroup[groupPage * 3 - 1].suggestedMajors" style="width: 100%;" mat-button 
+                      (click)="getAction(2, {suggestedSubjectsGroup: suggestedSubjectsGroup[groupPage * 3 - 1], major: major})">
                       {{major.name  | shorten:22}} 
                       <!-- - {{major.highestEntryMark}}- {{major.weightMark}} -->
                     </button>
+                  </div>
+                  <div *ngIf="!(suggestedSubjectsGroup[groupPage * 3 - 1].suggestedMajors
+                                && suggestedSubjectsGroup[groupPage * 3 - 1].suggestedMajors.length > 0)">
+                    <div class="empty-major">Không có ngành học phù hợp</div>
                   </div>
                 </div>
               </div>
             </div>  
           </div>
         </div>
-
+        <div fxFlex.lg="0 1 calc(50%)" fxFlex.lt-lg="0 1 calc(50%)" class="back-group-frame" (click)="onBackClick()">
+          <div *ngIf="suggestedSubjectsGroup.length > 3 && groupPage > 1" class="center-vertical back-group"><mat-icon>chevron_left</mat-icon> Quay lại</div>
+        </div>
+        <div fxFlex.lg="0 1 calc(50%)" fxFlex.lt-lg="0 1 calc(50%)" (click)="onMoreClick()">
+          <div *ngIf="suggestedSubjectsGroup.length > 3 && groupPage < math.ceil(suggestedSubjectsGroup.length / 3)" class="more-group center-vertical">Xem thêm <mat-icon>chevron_right</mat-icon></div>
+        </div>
         <div fxFlex.lg="0 1 calc(100%)" class="suggest-title center-all">
           <mat-icon class="note-icon">info</mat-icon>Kết quả gợi ý đang được tính toán dựa trên những thông tin sau: Điểm {{getTypeScore()}} + Giới tính {{getGender()}} + Tỉnh/TP {{getProvinceName(provinceId)}}
+        </div>
+        <div *ngIf="typeScore == 2" fxFlex.lg="0 1 calc(100%)" class="sub-suggest-title center-all">
+          <div><span class="result-link" (click)="getAction(8)">Nhập điểm thi THPT Quốc gia</span> hoặc <span class="result-link"
+            (click)="getAction(9)">Làm bài thi thử</span> của hệ thống để có kết quả gợi ý chính xác hơn.</div>
+        </div>
+        <div *ngIf="typeScore == 3" fxFlex.lg="0 1 calc(100%)" class="sub-suggest-title center-all">
+          <div>Bạn có thể <span class="result-link" (click)="getAction(8)">Nhập điểm thi THPT Quốc gia</span> để có kết quả gợi ý chính xác hơn.</div>
         </div>
       </div>
       <div *ngIf="(!suggestedSubjectsGroup || suggestedSubjectsGroup.length == 0) && stepperActionQueue.length <= 0" class="center-all">
@@ -192,7 +253,7 @@
   <!-- Danh sách trường step -->
   <mat-step  #stepThree >
     <ng-template matStepLabel>Danh sách trường</ng-template>
-    <div class="center">
+    <div class="center" ngClass.lt-lg="center-md">
       <div *ngIf="typeScore != 1" class="uni-list-header-frame" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
         
         <div fxFlex="0 1 calc(100%)" fxFlex.lt-sm="100%" class="center-horizontal">
@@ -231,9 +292,9 @@
         <div *ngIf="mockTestBasedUniversityForCheck.trainingProgramBasedUniversityDataSets?.length > 0" fxFlex="0 1 calc(100%)">
           <div class="university-frame" *ngFor="let university of mockTestBasedUniversity" >
             <div gdAreas="name name | logo training-program | detail detail" gdRows="50px 220px auto" gdColumns="22% 78%"
-              gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto auto auto">
+              gdAreas.lt-lg="name name | logo training-program | detail detail" gdRows.lt-lg="50px 220px auto" gdColumns.lt-lg="22% 78%">
               <!-- logo -->
-              <div gdArea="logo" class="logo">
+              <div gdArea="logo" class="logo" gdA>
                 <img class="img-frame" src="{{university.logoUrl || '../../../assets/img/ic/univeristy.jpg'}}" alt="">
               </div>
               <!-- name -->
@@ -248,12 +309,12 @@
                   <div class="training-program-item-frame" [ngClass]="getClass(trainingProgramSet.dividedClass)" *ngFor="let trainingProgramSet of university.trainingProgramSets" fxFlex="0 1 calc(33% - 20px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
                     <div class="center-all training-program-name">Hệ {{trainingProgramSet.name}}</div>
                     <div class="training-title"><span class="uni-des-title">Điểm chuẩn {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[0].entryMark}}</div>
-                    <div class="training-title"><span class="uni-des-title">Chỉ tiêu {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[0].numberOfStudents || "..."}}</div>
-                    <div class="training-title"><span class="uni-des-title">Chỉ tiêu {{trainingProgramSet.seasonDataSets[1].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[1].numberOfStudents || "..."}}</div>
+                    <div class="training-title"><span class="uni-des-title">Chỉ tiêu {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[0].numberOfStudents || "Đang cập..."}}</div>
+                    <div class="training-title"><span class="uni-des-title">Chỉ tiêu {{trainingProgramSet.seasonDataSets[1].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[1].numberOfStudents || "Đang cập..."}}</div>
                     <div class="training-title"><span class="uni-des-title">Bạn đang đứng top:&nbsp;</span>{{trainingProgramSet.rank}}/{{trainingProgramSet.numberOfCaring}}</div>
                     <div class="training-title"><span class="uni-des-title">Tỉ lệ chọi:&nbsp;</span>{{getRatio(trainingProgramSet.numberOfCaring, trainingProgramSet.seasonDataSets[1].numberOfStudents) || 'Đang cập nhật'}}</div>
                     <div class="center-all follow-button-frame">
-                    <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, 3)" mat-flat-button color="accent">Theo dõi</button>
+                    <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, 3, trainingProgramSet.rank)" mat-flat-button color="accent">Theo dõi</button>
                     <button *ngIf="trainingProgramSet.followingDetail" (click)="onUncaringClick(trainingProgramSet.followingDetail.id, university.name)" style="background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ theo dõi</button>
                     </div>
                   </div>
@@ -314,7 +375,7 @@
                           <tr>
                             <td><mat-icon class="uni-icon">link</mat-icon></td>
                             <td class="uni-des-title"><span class="uni-des-title">Web: </span></td>
-                            <td><a [href]="university.webUrl | safeUrl" target="_blank">{{university.webUrl}}</a></td>
+                            <td><a [href]="university.webUrl | safeUrl" target="_blank">{{university.webUrl | lowercase}}</a></td>
                           </tr>
                         </tbody>
                       </table>
@@ -347,9 +408,9 @@
       <div *ngIf="this.trainingProgramBasedUniversityForCheck && this.trainingProgramBasedUniversityForCheck.length > 0" fxLayout="row wrap" fxLayoutGap="grid" fxLayoutAlign="flex-start">
         <div class="university-frame" *ngFor="let university of trainingProgramBasedUniversity" fxFlex="0 1 calc(100%)" >
           <div gdAreas="name name | logo training-program | detail detail" gdRows="50px 220px auto" gdColumns="22% 78%"
-          gdAreas.lt-md="name | logo | description | information" gdRows.lt-md="auto auto auto auto">
+          gdAreas.lt-md="name name | training-program training-program | detail detail" gdRows.lt-md="auto auto auto" gdColumns.lt-md="20% 80%">
             <!-- logo -->
-            <div gdArea="logo" class="logo">
+            <div gdArea="logo" class="logo" ngClass.lt-md="logo-md">
               <img class="img-frame" src="{{university.logoUrl || '../../../assets/img/ic/univeristy.jpg'}}" alt="">
             </div>
             <!-- name -->
@@ -361,15 +422,17 @@
             <!-- training-program -->
             <div  gdArea="training-program" class="training-program">
               <div class="training-program-list-frame" *ngIf="university.trainingProgramSets" fxLayout="20px wrap" fxLayoutAlign="center">
-                <div class="training-program-item-frame" [ngClass]="getClass(trainingProgramSet.dividedClass)" *ngFor="let trainingProgramSet of university.trainingProgramSets" fxFlex="0 1 calc(33% - 20px)" fxFlex.lt-md="0 1 calc(50% - 32px)" fxFlex.lt-sm="100%">
+                <div class="training-program-item-frame" [ngClass]="getClass(trainingProgramSet.dividedClass)"
+                  *ngFor="let trainingProgramSet of university.trainingProgramSets"
+                  fxFlex="0 1 calc(33% - 20px)" fxFlex.lt-md="0 1 calc(33% - 20px)" fxFlex.lt-sm="100%">
                   <div class="center-all  training-program-name">Hệ {{trainingProgramSet.name}}</div>
                   <div class="training-title"><span class="uni-des-title">Điểm chuẩn {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[0].entryMark}}</div>
-                  <div class="training-title"><span class="uni-des-title">Chỉ tiêu {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[0].numberOfStudents || "..."}}</div>
-                  <div class="training-title"><span class="uni-des-title">Chỉ tiêu {{trainingProgramSet.seasonDataSets[1].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[1].numberOfStudents || "..."}}</div>
+                  <div class="training-title"><span class="uni-des-title">Chỉ tiêu {{trainingProgramSet.seasonDataSets[0].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[0].numberOfStudents || "Đang cập..."}}</div>
+                  <div class="training-title"><span class="uni-des-title">Chỉ tiêu {{trainingProgramSet.seasonDataSets[1].name}}:&nbsp;</span>{{trainingProgramSet.seasonDataSets[1].numberOfStudents || "Đang cập..."}}</div>
                   <div class="training-title"><span class="uni-des-title">Bạn đang đứng top:&nbsp;</span>{{trainingProgramSet.rank}}/{{trainingProgramSet.numberOfCaring}}</div>
                   <div class="training-title"><span class="uni-des-title">Tỉ lệ chọi:&nbsp;</span>{{getRatio(trainingProgramSet.numberOfCaring, trainingProgramSet.seasonDataSets[1].numberOfStudents) || 'Đang cập nhật'}}</div>
                   <div class="center-all follow-button-frame">
-                  <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, this.typeScore)" mat-flat-button color="accent">Theo dõi</button>
+                  <button *ngIf="!trainingProgramSet.followingDetail" (click)="onCaringClick(university.id, trainingProgramSet.id, this.typeScore, trainingProgramSet.rank)" mat-flat-button color="accent">Theo dõi</button>
                   <button *ngIf="trainingProgramSet.followingDetail" (click)="onUncaringClick(trainingProgramSet.followingDetail.id, university.name)" style="background-color: rgba(58, 57, 57, 0.05);" mat-flat-button>Bỏ theo dõi</button>
                   </div>
                 </div>
@@ -430,7 +493,7 @@
                         <tr>
                           <td><mat-icon class="uni-icon">link</mat-icon></td>
                           <td class="uni-des-title"><span class="uni-des-title">Web: </span></td>
-                          <td><a [href]="university.webUrl | safeUrl" target="_blank">{{university.webUrl}}</a></td>
+                          <td><a [href]="university.webUrl | safeUrl" target="_blank">{{university.webUrl | lowercase}}</a></td>
                         </tr>
                       </tbody>
                     </table>
@@ -452,18 +515,25 @@
   </mat-step>
   <mat-step *ngIf="typeScore === 3 || typeScore === 2"  #stepFour >
     <ng-template matStepLabel>Danh sách bài thi</ng-template>
-    <div class="center" >
+    <div class="center" ngClass.lt-lg="center-md">
       <div *ngIf="needDoneTestIds.length <= 0 && selectedSubjectGroup" class="result-note-frame center-vertical">
         <mat-icon class="note-icon">info</mat-icon>Bạn đã hoàn thành các đề thi của khối {{selectedSubjectGroup.name}}, bạn có thể
         <span (click)="reloadUni(true)" class="result-link">Xem kết quả gợi ý mới</span> dựa trên điểm thi thử.
       </div>
+
+      <div *ngIf="selectedSubjectGroup" class="mock-test-score-title">Tổng điểm thi thử khối {{selectedSubjectGroup.name}} của bạn là: {{getMockTestTotalMark()}} điểm.</div>
       <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
-        <div *ngFor="let subjectBasedTests of tests" fxFlex="0 1 calc(50%)" fxFlex.lt-md = "100%">
+        <div *ngFor="let subjectBasedTests of tests" fxFlex="0 1 calc(50%)" fxFlex.lt-sm = "100%">
           <h2 class="test-subject-title" *ngIf="getSubjectName(subjectBasedTests.subjectId)">Môn {{subjectName}}</h2>
           <!-- <h2 *ngIf="subjectBasedTests.universityId">{{getUniversityName(subjectBasedTests.universityId)}}</h2> -->
           <div>
               <app-test-card [test]="subjectBasedTests" (testSelected)="onTestSelected($event)"></app-test-card>
           </div>
+        </div>
+      </div>
+      <div *ngIf="needDoneTestIds.length <= 0 && selectedSubjectGroup" class="spectrum-frame">
+        <div class="spectrum center-vertical" (click)="onSpectrumClick()">
+          <mat-icon> bar_chart</mat-icon>Phổ điểm khối {{selectedSubjectGroup.name}}
         </div>
       </div>
       <div style="margin-top: 25px;">

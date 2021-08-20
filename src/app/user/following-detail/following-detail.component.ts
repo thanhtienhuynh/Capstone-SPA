@@ -26,7 +26,6 @@ export class FollowingDetailComponent implements OnInit {
   ngOnInit() {
     this.followingDetailId = this.activatedRoute.snapshot.params['id'];
     this.activatedRoute.params.subscribe((params: Params) => {
-      console.log("Hihi");
       this.store.dispatch(new UserActions.LoadUserFollowingDetail(params['id']));
     });
     // this.store.dispatch(new UserActions.LoadUserFollowingDetail(this.followingDetailId));
@@ -75,6 +74,18 @@ export class FollowingDetailComponent implements OnInit {
     );
   }
 
+  getScoreType(typeId: number) {
+    switch (typeId) {
+      case 1:
+        return "Điểm THPT QG";
+      case 2:
+        return "Điểm học bạ";
+      case 3:
+        return "Điểm thi thử";
+      default:
+        return "Không đủ điều kiện";
+    }
+  }
   
   count(index: number) {
     let count = 0;

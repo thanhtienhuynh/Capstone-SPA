@@ -127,6 +127,7 @@ export function homeReducer(
     case HomeActions.LOAD_DETAIL_TEST:
       return {
         ...state,
+        isSubmissionSaved: false,
         selectedTestId: action.payload,
         selectedTest: null,
         actionsQueue: [...state.actionsQueue, action],
@@ -159,6 +160,7 @@ export function homeReducer(
       return {
         ...state,
         testSubmissionReponse: action.payload,
+        isSubmissionSaved: false,
         unsaveTestSubmissions: [...unsaveTestSubmissions],
         actionsQueue: [...tempActions]
       };

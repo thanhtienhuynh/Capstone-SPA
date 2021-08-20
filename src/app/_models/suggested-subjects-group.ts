@@ -7,6 +7,7 @@ export interface SuggestedSubjectsGroup {
   id: number;
   name: string;
   totalMark: number;
+  top: number;
   subjectDataSets: Subject[];
   specialSubjectGroups: SpecialSubjectGroup[];
   suggestedMajors: Major[];
@@ -16,4 +17,9 @@ export interface UserSuggestionSubjectGroup {
   provinceId: number;
   gender: number;
   transcriptDetails: TranscriptType[];
+}
+
+export interface CusSubjectGroup {
+  id: number;
+  groupCode: string;
 }

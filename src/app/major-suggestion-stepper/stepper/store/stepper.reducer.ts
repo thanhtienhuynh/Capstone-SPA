@@ -2,7 +2,7 @@ import { ClassifiedTests } from 'src/app/_models/classified-tests';
 import { Major } from 'src/app/_models/major';
 import { Mark } from 'src/app/_models/mark';
 import { Province } from 'src/app/_models/province';
-import { SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from 'src/app/_models/suggested-subjects-group';
+import { CusSubjectGroup, SuggestedSubjectsGroup, UserSuggestionSubjectGroup } from 'src/app/_models/suggested-subjects-group';
 import { Test } from 'src/app/_models/test';
 import { TestSubmission } from 'src/app/_models/test-submission';
 import { TranscriptType } from 'src/app/_models/transcript';
@@ -12,27 +12,34 @@ import { Subject } from '../../../_models/subject';
 import * as StepperActions from './stepper.actions';
 
 export interface State {
+  subjectGroups: CusSubjectGroup[];
   subjects: Subject[];
-  //Điểm user submit
+  testConfig: number;
+  //Điểm user submit, MarkParam
   marks: Mark[];
+  transcriptTypeId: number; //Type điểm lúc bấm suggest
+  gender: number;
+  provinceId: number;
+  subjectGroupIds: number[];
+
+  //spectrum
+  spectrum: number[];
   suggestedSubjectsGroup: SuggestedSubjectsGroup[];
   trainingProgramBasedUniversity: TrainingProgramBasedUniversity[];
   //List trường ứng với điểm thi thử
   mockTestBasedUniversity: MockTestBasedUniversity;
   tests: ClassifiedTests[];
   test: Test;
-  //Type điểm lúc bấm suggest
-  transcriptTypeId: number;
   followTranscriptTypeId: number;
   removeFollowingDetailId: number;
-  gender: number;
-  provinceId: number;
   //Khối chọn sau khi suggest
   selectedSubjectGroup: SuggestedSubjectsGroup;
   //Ngành chọn sau khi suggest
   selectedMajor: Major;
   selectedUniversityId: number;
+  //param follow
   selectedTrainingProgramId: number;
+  position: number;
   selectedTestId: number;
   unsaveTestSubmissions: UnsaveTestSubmission[];
   //Param lúc chấm điểm
@@ -54,8 +61,12 @@ export interface State {
 }
 
 const initialState: State = {
+  subjectGroups: [],
+  testConfig: null,
   subjects: [],
   marks: [],
+  spectrum: [],
+  subjectGroupIds: [],
   suggestedSubjectsGroup: [],
   trainingProgramBasedUniversity: [],
   mockTestBasedUniversity: null,
@@ -70,6 +81,7 @@ const initialState: State = {
   selectedMajor: null,
   selectedUniversityId: null,
   selectedTrainingProgramId: null,
+  position: null,
   selectedTestId: null,
   testSubmissionParam: null,
   testSubmissionReponse: null,
@@ -91,6 +103,18 @@ export function stepReducer(
 ) {
   let tempActions = [...state.actionsQueue];
   switch (action.type) {
+    case StepperActions.LOAD_SUBJECT_GROUPS:
+      return {
+        ...state,
+        actionsQueue: [...state.actionsQueue, action],
+      };
+    case StepperActions.SET_SUBJECT_GROUPS:
+      tempActions.splice( tempActions.findIndex(a => a.type == StepperActions.LOAD_SUBJECT_GROUPS), 1);
+      return {
+        ...state,
+        subjectGroups: [...action.payload],
+        actionsQueue: [...tempActions],
+      };
     case StepperActions.LOAD_SUBJECTS:
       return {
         ...state,
@@ -103,6 +127,18 @@ export function stepReducer(
         subjects: [...action.payload],
         actionsQueue: [...tempActions],
       };
+    case StepperActions.LOAD_TEST_CONFIG:
+      return {
+        ...state,
+        actionsQueue: [...state.actionsQueue, action],
+      };
+    case StepperActions.SET_TEST_CONFIG:
+      tempActions.splice( tempActions.findIndex(a => a.type == StepperActions.LOAD_TEST_CONFIG), 1);
+      return {
+        ...state,
+        testConfig: action.payload,
+        actionsQueue: [...tempActions],
+      };
     case StepperActions.SET_MARKS:
       return {
         ...state,
@@ -111,6 +147,7 @@ export function stepReducer(
         tests: [],
         test: null,
         marks: [...action.payload.marks],
+        subjectGroupIds: [...action.payload.subjectGroupIds],
         transcriptTypeId: action.payload.transcriptTypeId,
         gender: action.payload.gender,
         provinceId: action.payload.provinceId,
@@ -121,8 +158,26 @@ export function stepReducer(
         ...state,
         actionsQueue: [...state.actionsQueue, action],
       };
-    case StepperActions.SET_SUGGESTED_SUBJECTS_GROUP:
+    case StepperActions.SET_SUGGESTED_SUBJECT_GROUPS:
       tempActions.splice( tempActions.findIndex(a => a.type == StepperActions.SET_MARKS), 1);
+      return {
+        ...state,
+        suggestedSubjectsGroup: action.payload,
+        actionsQueue: [...tempActions],
+      };
+    case StepperActions.SET_SELECTED_SUGGESTED_SUBJECTGROUP:
+      return {
+        ...state,
+        selectedSubjectGroup: action.payload,
+      };
+    case StepperActions.LOAD_MAJORS_SELECTED_SUBJECT_GROUP:
+      return {
+        ...state,
+        transcriptTypeId: 3,
+        actionsQueue: [...state.actionsQueue, action],
+      };
+    case StepperActions.SET_MAJORS_SELECTED_SUBJECT_GROUP:
+      tempActions.splice( tempActions.findIndex(a => a.type == StepperActions.LOAD_MAJORS_SELECTED_SUBJECT_GROUP), 1);
       return {
         ...state,
         suggestedSubjectsGroup: action.payload,
@@ -244,6 +299,7 @@ export function stepReducer(
         selectedUniversityId: action.payload.universityId,
         selectedTrainingProgramId: action.payload.trainingProgramId,
         followTranscriptTypeId: action.payload.followTranscriptTypeId,
+        position: action.payload.position,
         actionsQueue: [...state.actionsQueue, action],
       };
     case StepperActions.CARING_ACTION_SUCCESS:
@@ -300,6 +356,18 @@ export function stepReducer(
       return {
         ...state,
         provinces: action.payload,
+        actionsQueue: [...tempActions],
+      };
+    case StepperActions.LOAD_SPECTRUM:
+      return {
+        ...state,
+        actionsQueue: [...state.actionsQueue, action],
+      };  
+    case StepperActions.SET_SPECTRUM:
+      tempActions.splice(tempActions.findIndex(a => a.type == StepperActions.LOAD_SPECTRUM), 1);
+      return {
+        ...state,
+        spectrum: action.payload,
         actionsQueue: [...tempActions],
       };
     case StepperActions.SET_TEST_SUBMISSION_ID:

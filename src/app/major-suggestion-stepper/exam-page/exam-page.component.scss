@@ -31,6 +31,11 @@
   align-items: center;
 }
 
+.test-exam-scroll-lt-md {
+  overflow-y: hidden !important;
+  height: auto !important;
+}
+
 
 .count-down-frame {
   color: #3898e7;

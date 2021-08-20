@@ -1,7 +1,12 @@
 <div style="width: 100%; height: auto;">
   <div class="header-frame">
     <div class="center-all page-title">DANH SÁCH CÁC BÀI THI BẠN ĐÃ HOÀN THÀNH</div>
-    <div style="width: 100%; height: 10%;" class="center-all">
+    <div class="center-horizontal">
+      <div class="divider"></div>
+    </div>
+  </div>
+  <div class="body-frame">
+    <div class="search-frame">
       <form [formGroup]="form" class="center-vertical form-filter" (ngSubmit)="onSubmit()">
         <div class="title">Môn học:</div>
         <select class="select filter-field" formControlName="subject-select">
@@ -17,46 +22,44 @@
         </select>
       
         <div class="title">Loại đề thi:</div>
-        <select class="select filter-field" formControlName="test-type">
+        <select class="select filter-field" formControlName="is-suggested-test">
           <option [value]="0">Tất cả</option>
-          <option [value]="1">THPT Quốc gia</option>
-          <option [value]="2">Đánh giá năng lực</option>
+          <option [value]="1">Đề thi thử</option>
+          <option [value]="2">Đề luyện thi</option>
 
         </select>
-        <div class="title">Đề thi thử:</div>
-        <input class="filter-field is-suggest-field" type="checkbox" formControlName="is-suggest-test" value="1">
-        <button mat-raised-button class="search-btn">Xem</button>
+        
       </form>
     </div>
-  </div>
-  <h2 *ngIf="(!testSubmissions || testSubmissions.length <= 0) && userActionQueue.length <= 0" class="empty-title">Bạn chưa làm bài thi môn nào.</h2>
-  <div *ngIf="testSubmissions" class="done-number-title">- Số đề thi đã làm: {{testSubmissions.length}}</div>
-  <div *ngIf="testSubmissions" class="test-submissions-scroll test-list-frame" id="style-7">
-    <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
-      <div *ngFor="let testSubmission of testSubmissions" fxFlex="0 1 calc(50%)"  fxFlex.lt-md="0 1 calc(50%)"
-      fxFlex.lt-sm="100%">
-        <div class="test-frame">
-          <div class="date-bar center-all">{{ testSubmission.submissionDate | date:'MMM d, y, h:mm:ss a' }}</div>
-          <div class="info-test-frame">
-            <div class="center-all" (click)="testReviewClick(testSubmission.id)" routerLink="./detail" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><p class="test-title">{{ testSubmission.testName}}</p></div>
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-              <div>Số câu trả lời đúng:</div>
-              <div class="test-value">{{testSubmission.numberOfRightAnswers}}/{{testSubmission.numberOfQuestion}}</div>
-            </div>
-            <mat-divider style="margin-bottom: 5px"></mat-divider>
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-              <div>Điểm:</div>
-              <div class="test-value">{{testSubmission.mark | number : '1.2-2'}}/10.0</div>
-            </div>
-            <mat-divider style="margin-bottom: 5px"></mat-divider>
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-              <div>Thời gian làm bài: </div>
-              <div class="test-value">{{testSubmission.spentTime}}/{{testSubmission.timeLimit}}</div>
-            </div>
-            <mat-divider style="margin-bottom: 5px"></mat-divider>
-            <div fxLayout="row" fxLayoutAlign="space-between center">
-              <div>Số lần đã làm: </div>
-              <div class="test-value">{{testSubmission.numberOfCompletion}}</div>
+    <h2 *ngIf="(!testSubmissions || testSubmissions.length <= 0) && userActionQueue.length <= 0" class="empty-title">Bạn chưa làm bài thi môn nào.</h2>
+    <div *ngIf="testSubmissions" class="done-number-title">- Số đề thi đã làm: {{testSubmissions.length}}</div>
+    <div *ngIf="testSubmissions" class="test-submissions-scroll test-list-frame" id="style-7">
+      <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
+        <div *ngFor="let testSubmission of testSubmissions" fxFlex="0 1 calc(50%-16px)"  fxFlex.lt-md="0 1 calc(50%)"
+        fxFlex.lt-sm="100%">
+          <div class="test-frame">
+            <div class="date-bar center-all">{{ testSubmission.submissionDate | date:'MMM d, y, h:mm:ss a' }}</div>
+            <div class="info-test-frame">
+              <div class="center-all" (click)="testReviewClick(testSubmission.id)" routerLink="./detail" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"><p class="test-title">{{ testSubmission.testName}}</p></div>
+              <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div>Số câu trả lời đúng:</div>
+                <div class="test-value">{{testSubmission.numberOfRightAnswers}}/{{testSubmission.numberOfQuestion}}</div>
+              </div>
+              <mat-divider style="margin-bottom: 5px"></mat-divider>
+              <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div>Điểm:</div>
+                <div class="test-value">{{testSubmission.mark | number : '1.2-2'}}/10.0</div>
+              </div>
+              <mat-divider style="margin-bottom: 5px"></mat-divider>
+              <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div>Thời gian làm bài: </div>
+                <div class="test-value">{{testSubmission.spentTime}}/{{testSubmission.timeLimit}}</div>
+              </div>
+              <mat-divider style="margin-bottom: 5px"></mat-divider>
+              <div fxLayout="row" fxLayoutAlign="space-between center">
+                <div>Số lần đã làm: </div>
+                <div class="test-value">{{testSubmission.numberOfCompletion}}</div>
+              </div>
             </div>
           </div>
         </div>

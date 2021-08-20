@@ -17,6 +17,14 @@
   color: #262626;
 }
 
+.text-field-md {
+  width: 70%;
+  border-radius: 5px;
+  padding: 9px;
+  font-size: 14px;
+  color: #262626;
+}
+
 .search-btn {
   background-color: white;
   border-radius: 5px;
@@ -51,6 +59,11 @@
 
 .avatar {
   border: 1px solid rgb(204, 204, 204);
+  padding: 10px;
+}
+
+.avatar-md {
+  display: none!important;
 }
 
 .name {

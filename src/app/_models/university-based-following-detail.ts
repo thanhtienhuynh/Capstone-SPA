@@ -1,3 +1,4 @@
+import { OtherSubjectGroup } from "./major-based-following-detail";
 import { Season } from "./university";
 
 export interface UniversityBasedFollowingDetail {
@@ -29,9 +30,11 @@ export interface MajorGroupByTrainingProgramDataSet {
   code: string;
   name: string;
   seasonDataSets: Season[];
+  otherSubjectGroups: OtherSubjectGroup[];
   positionOfUser: number;
   totalUserCared: number;
   subjectGroupId: number;
   subjectGroupCode: string;
   rankingMark: number;
+  rankTypeId: number;
 }

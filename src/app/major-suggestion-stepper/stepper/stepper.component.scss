@@ -42,7 +42,7 @@
 }
 
 .criteria-lable {
-  width: 25%;
+  width: 26%;
   font-weight: 500;
 }
 
@@ -92,10 +92,15 @@
 
 .suggest-title {
   color: #1f85c3;
-  font-style: italic;
-  padding: 5px;
   border-radius: 5px;
-  margin-top: 20px;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+.sub-suggest-title {
+  margin-top: 10px;
+  color: #1f85c3;
+  border-radius: 5px;
   font-weight: 500;
 }
 
@@ -124,11 +129,15 @@
   border-radius: 30px;
 }
 
-
-
 .center {
   margin: auto;
   width: 70%;
+  padding: 10px;
+}
+
+.center-md {
+  margin: auto;
+  width: 100%;
   padding: 10px;
 }
 
@@ -335,15 +344,36 @@
 .result-link {
   padding: 0 5px;
   border-radius: 5px;
-  border: 1px solid rgb(88, 153, 236);
-  background-color: rgb(88, 153, 236);
+  border: 1px solid #1f85c3;
+  background-color: #1f85c3;
   color: white;
   margin: 0 5px;
 }
 
+.note-score {
+  padding-bottom: 20px;
+  font-style: italic;
+  font-size: 15px;
+  color: red;
+}
+
+.spectrum-frame {
+  color: white;
+  margin-top: 15px;
+  float: right;
+}
+
+.spectrum {
+  width: fit-content;
+  background-color: #3f51b5;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
 .result-note-frame {
   border-radius: 5px;
-  background-color: #cee3f0;
+  // background-color: #cee3f0;
   padding: 8px 5px;
   width: 100%;
   margin-bottom: 20px;
@@ -472,7 +502,7 @@ animation: pulse-blue 2s infinite;
   font-family: "Great Vibes", 
   cursive; 
   justify-content: center;
-  font-size: 3.5em; 
+  font-size: 3em; 
   font-weight: normal; 
   text-align: center; 
   text-shadow: 0 1px 1px #fff; 
@@ -533,7 +563,7 @@ animation: pulse-blue 2s infinite;
   font-family: "Great Vibes", 
   cursive; 
   justify-content: center;
-  font-size: 3em; 
+  font-size: 2.7em; 
   font-weight: normal; 
   text-align: center; 
   text-shadow: 0 1px 1px #fff; 
@@ -571,7 +601,10 @@ animation: pulse-blue 2s infinite;
   border-radius: 0px 0px 30px 30px;
 }
 
-
+.top-2-major-list-frame {
+  width: 100%;
+  height: 91%;
+}
 
 
 
@@ -593,7 +626,7 @@ animation: pulse-blue 2s infinite;
   font-family: "Great Vibes", 
   cursive; 
   justify-content: center;
-  font-size: 3em; 
+  font-size: 2.7em; 
   font-weight: normal; 
   text-align: center; 
   text-shadow: 0 1px 1px #fff; 
@@ -662,6 +695,10 @@ animation: pulse-blue 2s infinite;
   // border: 1px solid #cccccc;
 }
 
+.logo-md {
+  max-height: 180px;
+}
+
 .uni-name {
   color: #033969;
   cursor: pointer;
@@ -713,6 +750,10 @@ animation: pulse-blue 2s infinite;
   font-size: 16px !important;
 }
 
+::ng-deep .mat-horizontal-stepper-header-container {
+  height: 50px !important;
+}
+
 td {
   vertical-align: top;
   padding: 10px;
@@ -726,4 +767,69 @@ td {
 
 .host-frame {
   margin-top: 15px;
+}
+
+.more-group {
+  float: right;
+  cursor: pointer;
+  color: #1890ff;
+  text-align: right;
+  font-weight: 500;
+}
+
+.back-group {
+  float: left;
+  cursor: pointer;
+  color: #1890ff;
+  text-align: left;
+  font-weight: 500;
+}
+
+.back-group-frame {
+  width: 100%;
+}
+
+.priority-group-frame {
+  margin-top: 15px;
+  width: 100%;
+  display: flex;
+}
+
+.priority-group-note-frame {
+  font-weight: 500;
+  width: 70%;
+}
+
+.priority-group-input-frame {
+  width: 30%;
+}
+
+.group-form-field {
+  width: 85%;
+}
+
+.leave-empty-note {
+  padding-left: 28px;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: white !important;
+  border-radius: 5px !important;
+  border: 1px solid #c4ecf3;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0px;
+}
+
+::ng-deep .mat-form-field-underline {
+  display: none;
+}
+
+.empty-major {
+  text-align: center;
+  font-weight: 500;
+  font-size: 15px;
+  font-style: italic;
+  padding-top: 10px;
 }

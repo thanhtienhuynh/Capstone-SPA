@@ -34,11 +34,13 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ShareButtonModule } from 'ngx-sharebuttons/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { ShareButtonsConfig, SharerMethod, SHARE_BUTTONS_CONFIG } from 'ngx-sharebuttons';
 import { ShortenPipe } from '../_helper/shorten-pipe';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { SafeUrlPipe } from '../_helper/safe-url-pipe';
+import { ScrollToTopComponent } from './components/scroll-to-top/scroll-to-top.component';
 
 const customConfig: ShareButtonsConfig = {
   include: ['facebook'],
@@ -81,7 +83,8 @@ const materialModules = [
   MatBadgeModule,
   ScrollingModule,
   MatSnackBarModule,
-  NzNotificationModule
+  NzNotificationModule,
+  MatChipsModule,
 ];
 
 @NgModule({
@@ -94,6 +97,7 @@ const materialModules = [
     ConfirmDialogComponent,
     LoginDialogComponent,
     ProgressSpinnerComponent,
+    ScrollToTopComponent,
     SafeUrlPipe
   ],
   imports: [
@@ -111,8 +115,9 @@ const materialModules = [
     ConfirmDialogComponent,
     LoginDialogComponent,
     ProgressSpinnerComponent,
+    ScrollToTopComponent,
     ShareButtonModule,
-    SafeUrlPipe
+    SafeUrlPipe,
   ],
 })
 export class MaterialModule {

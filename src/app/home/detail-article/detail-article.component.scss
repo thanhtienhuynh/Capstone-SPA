@@ -5,14 +5,21 @@
 }
 
 .main-frame {
-  padding: 0px 5%;
+  padding: 20px 5%;
+  width: 70%;
 }
 
 :host ::ng-deep img { 
   max-width: 100% !important;
+  width: 100%;
   height: auto;
 }
 
 .root-page {
   margin-top: 10px;
+}
+
+.main-frame-md {
+  width: 100%;
+  padding: 20px 5%;
 }
