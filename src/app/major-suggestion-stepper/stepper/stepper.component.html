@@ -520,7 +520,7 @@
         <span (click)="reloadUni(true)" class="result-link">Xem kết quả gợi ý mới</span> dựa trên điểm thi thử.
       </div>
 
-      <div *ngIf="selectedSubjectGroup" class="mock-test-score-title">Tổng điểm thi thử khối {{selectedSubjectGroup.name}} của bạn là: {{getMockTestTotalMark()}} điểm.</div>
+      <div *ngIf="needDoneTestIds.length <= 0 && selectedSubjectGroup" class="mock-test-score-title">Tổng điểm thi thử khối {{selectedSubjectGroup.name}} của bạn là: {{getMockTestTotalMark()}} điểm.</div>
       <div fxLayout="row wrap" fxLayoutGap="32px grid" fxLayoutAlign="flex-start">
         <div *ngFor="let subjectBasedTests of tests" fxFlex="0 1 calc(50%)" fxFlex.lt-sm = "100%">
           <h2 class="test-subject-title" *ngIf="getSubjectName(subjectBasedTests.subjectId)">Môn {{subjectName}}</h2>
