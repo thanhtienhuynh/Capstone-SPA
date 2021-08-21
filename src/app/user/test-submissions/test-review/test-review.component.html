@@ -27,7 +27,8 @@
         <div fxLayout="row wrap" fxLayoutGap="6px grid" fxLayoutAlign="flex-start" 
           style="padding: 7px;">
           <div fxFlex="0 1 calc(5%)" *ngFor="let question of detailTestSubmission.numberOfQuestion | toArray; let i = index">
-            <app-answer [numericalOrder]="i" [isRight]="isRight(i)" [isWrong]="isWrong(i)"></app-answer>
+            <app-answer [numericalOrder]="i" [isSuggestedTest]="detailTestSubmission.isSuggestedTest"
+            [isRight]="isRight(i)" [isWrong]="isWrong(i)"></app-answer>
           </div>
         </div>
       </div>  
@@ -50,9 +51,9 @@
               <mat-radio-group aria-label="Select an option">
                 <div *ngFor="let option of question.options; let j = index">
                   <div  class="center-vertical">
-                    <div class="marked-answer">
+                    <div *ngIf="!detailTestSubmission.isSuggestedTest" class="marked-answer">
                       <div *ngIf="question.rightResult.indexOf('1') === j"><mat-icon class="right-answer">done</mat-icon></div>
-                      <div *ngIf="question.result.indexOf('1') === j && question.result.indexOf('1') !== question.rightResult.indexOf('1')"><mat-icon class="wrong-answer"><mat-icon>close</mat-icon></mat-icon></div>
+                      <div *ngIf="question.result.indexOf('1') === j && question.result.indexOf('1') !== question.rightResult.indexOf('1')"><mat-icon class="wrong-answer">close</mat-icon></div>
                     </div>
                     <mat-radio-button [disabled]='true' [value]="j" [checked]="question.result.indexOf('1') === j">
                       <div [innerHtml]="option.content | safeHtml"></div>

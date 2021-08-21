@@ -154,7 +154,7 @@ export function homeReducer(
         testParam.questions,
         action.payload.mark,
         action.payload.numberOfRightAnswers,
-        state.selectedTestId
+        null
       );
       var unsaveTestSubmissions = [...state.unsaveTestSubmissions, unsaveTestSubmission];
       return {

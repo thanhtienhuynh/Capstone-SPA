@@ -11,6 +11,7 @@ export class AnswerComponent implements OnInit, OnChanges {
   @Input() selectedIndex : number;  
   @Input() isRight : boolean;  
   @Input() isWrong : boolean;  
+  @Input() isSuggestedTest : boolean = false;  
   isSelected: boolean = false;
   constructor() { }  
 
