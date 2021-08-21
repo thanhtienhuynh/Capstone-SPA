@@ -33,4 +33,8 @@ export class ConfigurationService {
   updateRank(body: {}): Observable<Response<any>> {
     return this._http.put<Response<any>>(this.baseUrl + 'api/v1/rank/updation', body);
   }
+
+  updateExpiredArticle(body: {}): Observable<Response<any>> {
+    return this._http.put<Response<any>>(this.baseUrl + 'api/v1/article/update-exprire-article', body);
+  }
 }

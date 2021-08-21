@@ -16,11 +16,13 @@ export class ConfigMainComponent implements OnInit {
   firstPage: number;
 
   isLoadingRank: boolean = false;
+  isLoadingExpired: boolean = false;
   highestQuantity: number;
   isUpdatePaging: boolean = true;
   isUpdateApp: boolean = true;
   isLoadingUpdatePaging: boolean = false;
   isLoadingUpdateApp: boolean = false;
+
 
   testMonths: number;
   crawlTimeType: number;
@@ -97,6 +99,22 @@ export class ConfigMainComponent implements OnInit {
           Swal.fire('Thành công', 'Cập nhật bảng xếp hạng thành công', 'success');
         } else {
           this.isLoadingRank = false;
+          Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
+        }
+      })
+    ).subscribe();
+  }
+
+  updateExpiredArticle(): void {
+    this.isLoadingExpired = true;
+    this._configService.updateExpiredArticle({} as any).pipe(
+      tap(rs => {
+        if (rs.succeeded === true) {
+          this.isLoadingExpired = false;
+          this.isUpdateApp = true;
+          Swal.fire('Thành công', 'Cập nhật thành công', 'success');
+        } else {
+          this.isLoadingExpired = false;
           Swal.fire('Lỗi', `${rs.errors[0]}`, 'error');
         }
       })
