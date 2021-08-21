@@ -25,6 +25,7 @@ export interface UserDetailTestSubmission {
   timeLimit: number;
   numberOfCompletion: number;
   questionSubmissions: QuestionSubmission[];
+  isSuggestedTest: boolean;
 }
 
 export interface QuestionSubmission {

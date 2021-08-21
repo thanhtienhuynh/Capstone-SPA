@@ -169,11 +169,11 @@ export class HomeEffects {
   saveTestSubmissions = this.actions$.pipe(
     ofType(HomeActions.SAVE_UNSAVE_TEST_SUBMISSIONS, HomeActions.SET_TEST_MARK),
     withLatestFrom(this.store.select('home'), this.store.select('auth')),
-    switchMap(([actionData, stepperState, authState]) => {
+    switchMap(([actionData, homeState, authState]) => {
       if (authState.user) {
         return this.http.post<Response<any>>(
           environment.apiUrl + 'api/v1/test-submission/saving',
-          stepperState.unsaveTestSubmissions
+          homeState.unsaveTestSubmissions
         ).pipe(
           map((response) => {
             if (response.succeeded) {
