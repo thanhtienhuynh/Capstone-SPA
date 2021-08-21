@@ -8,13 +8,16 @@
   padding: 200px;
 }
 
+.bg-frame-md {
+  padding: 200px 20px
+}
 // .demo-chart {
 //   width: 100%;
 // }
 
 .search-section {
-  width: 50%;
- float: right;
+  width: 60%;
+  float: right;
 }
 
 .text-field {
@@ -28,6 +31,11 @@
 
 .mock-test-button {
   width: 22%;
+}
+
+
+.mock-test-button-md {
+  width: 50%;
 }
 
 .blob {

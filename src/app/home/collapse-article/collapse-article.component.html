@@ -1,9 +1,9 @@
 <div class="home-frame">
-  <div class="bg-frame">
+  <div class="bg-frame" ngClass.lt-md="bg-frame-md">
     <div class="search-section">
       <form (ngSubmit)="onSearch()" class="search-frame center-all">
         <input placeholder="Tiêu đề bài viết..." class="text-field" type="text" id="fullname" [(ngModel)]="searchTerm" name="searchTerm"/>
-        <div class="center-vertical mock-test-button">
+        <div class="center-vertical mock-test-button" ngClass.lt-md="mock-test-button-md">
           <button type="submit" class="blob blue">Tìm kiếm</button>
         </div>
       </form>
