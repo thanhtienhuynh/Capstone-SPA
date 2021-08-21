@@ -130,6 +130,7 @@
                           </nz-radio-group>
                         </nz-collapse-panel>
                         <nz-collapse-panel [nzHeader]="'Chu kì cập nhật bài viết quá hạn'" [nzActive]="true">
+                          <button [disabled]="isUpdateApp === true" [nzLoading]="isLoadingExpired" (click)="updateExpiredArticle()" nz-button nzType="primary" style="display: block; margin: 0 10px 10px 0;">Cập nhật bài viết quá hạn</button>
                           <nz-radio-group [(ngModel)]="expireArticleTimeType" [nzDisabled]="isUpdateApp === true">
                             <label nz-radio [nzValue]="1">
                               <span style="margin-right: 44px;">Mỗi </span>

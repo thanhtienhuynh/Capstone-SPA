@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { differenceInCalendarDays } from 'date-fns';
+import { DateHelperService } from 'ng-zorro-antd/i18n';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationPlacement, NzNotificationService } from 'ng-zorro-antd/notification';
 import { of } from 'rxjs';
@@ -57,6 +58,7 @@ export class ArticleDetailComponent implements OnInit {
   publicFromDate: Date | Date[];
   publicToDate: Date | Date[];
   dateForm: FormGroup;
+  rePublishedDateForm: FormGroup;
 
   ngOnInit() {
     this.getArticleById();
@@ -72,10 +74,26 @@ export class ArticleDetailComponent implements OnInit {
     this.dateForm = this._fb.group({
       'publicFromDate': [new Date, Validators.required],
       'publicToDate': [new Date, Validators.required]
+    }, {
+      validators: (formGroup: FormGroup) =>  {
+        const { publicFromDate, publicToDate } = formGroup.value;
+        if(new Date(publicToDate).getDate() < new Date(publicFromDate).getDate()){
+          return {greaterThan: true}
+        }
+        return null;
+      }
     })
+
+    this.dateForm.valueChanges.pipe().subscribe(rs => console.log(this.dateForm));
   }
 
-  setDataToDateForm(publicFromDate: Date, publicToDate: Date): void {
+
+  setDataToDateForm(publicFromDate: Date, publicToDate: Date, status: number): void {
+    if (status === 4) {
+      this.dateForm.get('publicFromDate').setValue(null);
+      this.dateForm.get('publicToDate').setValue(null);
+      return;
+    }
     this.dateForm.get('publicFromDate').setValue(publicFromDate);
     this.dateForm.get('publicToDate').setValue(publicToDate);
   }
@@ -89,7 +107,7 @@ export class ArticleDetailComponent implements OnInit {
             this.listOfSelectedUniversity = rs.data.universityIds;
             this.listOfSelectedMajor = rs.data.majorIds;
             this.article = rs.data;
-            this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate);
+            this.setDataToDateForm(rs.data.publicFromDate, rs.data.publicToDate, rs.data.status);
           } else {
             this.article = null;
           }
@@ -275,7 +293,6 @@ export class ArticleDetailComponent implements OnInit {
           'university': this.listOfSelectedUniversity,
           'major': this.listOfSelectedMajor
         }
-        console.log(newValue);
         Swal.fire({
           title: 'ĐĂNG BÀI',
           text: "Bài viết sẽ được đăng lên trang tin của hệ thống.",
