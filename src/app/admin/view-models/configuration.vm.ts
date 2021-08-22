@@ -2,19 +2,20 @@ export interface ConfigurationRM {
     crawlTime?: CrawlTime,
     updateRankTime?: UpdateRankTime,
     expireArticleTime?: ExpireArticleTime,
-    testMonths: number
+    testMonths?: number,
+    passRatio?: number
 }
 
 export interface CrawlTime {
     start?: number,
     minStart?: number,
-    type?: number,    
+    type?: number,
 }
 
 export interface UpdateRankTime {
     start?: number,
     minStart?: number,
-    type?: number,    
+    type?: number,
 }
 
 export interface ExpireArticleTime {
@@ -24,7 +25,7 @@ export interface ExpireArticleTime {
 }
 
 export interface PagingConfiguration {
-    firstPage: number, 
+    firstPage: number,
     highestQuantity: number
 }
 
