@@ -25,6 +25,7 @@ export class ConfigMainComponent implements OnInit {
 
 
   testMonths: number;
+  passRatio: number;
   crawlTimeType: number;
   crawlTimeStart: number;
   crawlTimeMinStart: number;
@@ -172,7 +173,8 @@ export class ConfigMainComponent implements OnInit {
         'minStart': this.expireArticleTimeType === 1 ? this.expireArticleMinStart : this.expireArticleTimeStartFrom,
         'type': this.expireArticleTimeType
       },
-      'testMonths': this.testMonths
+      'testMonths': this.testMonths,
+      'passRatio': this.passRatio
     }
     this._configService.updateConfigApp(newValue).pipe(
       tap(rs => {
@@ -222,6 +224,7 @@ export class ConfigMainComponent implements OnInit {
             this.expireArticleMinStart = rs.data.expireArticleTime.minStart;
             this.expireArticleMinStartFrom = rs.data.expireArticleTime.minStart;
             this.testMonths = rs.data.testMonths;
+            this.passRatio = rs.data.passRatio;
           }
         }
       })

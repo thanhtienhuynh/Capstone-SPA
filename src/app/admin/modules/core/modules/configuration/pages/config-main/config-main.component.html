@@ -7,14 +7,13 @@
             <div class="configuration-header">
               <div class="none-action">
                 <div class="configuration-header-title">
-                  <h5>BẢNG CẤU HÌNH THÔNG TIN CÁC NGÀNH CÓ TRONG HỆ THỐNG</h5>
+                  <h5>DANH SÁCH CÁC MỤC CẤU HÌNH CÓ TRONG HỆ THỐNG</h5>
                 </div>
               </div>
               <div class="add-configuration">
-                <button nz-button nzSize="medium" nzType="dashed">
-                  <!-- <span style="font-size: 12px;">THÊM NGÀNH</span> -->
+                <!-- <button nz-button nzSize="medium" nzType="dashed " (click)="cancelEditAppConfig()" *ngIf="isLoadingUpdateApp">
                   Mặc định
-                </button>
+                </button> -->
               </div>
             </div>
             <nz-divider></nz-divider>
@@ -62,10 +61,17 @@
                     <nz-divider></nz-divider>
                     <div class="col-md-12" >
                       <div class="d-flex mb-2 align-items-center">
-                        <div class="col-md-8 pl-0">
-                          <label for="" class="mr-2">Chu kì thi thử</label>
-                          <input style="text-align: end; width: 50px;" [disabled]="isUpdateApp || isLoadingUpdateApp" type="number" nz-input [(ngModel)]="testMonths">
-                          <label for="" class="ml-2">tháng / lần</label>
+                        <div class="col-md-8">
+                          <div class="d-flex align-items-center">
+                            <label for="" class="mr-2">Chu kì thi thử</label>
+                            <input style="text-align: end; width: 65px;" [disabled]="isUpdateApp || isLoadingUpdateApp" type="number" nz-input [(ngModel)]="testMonths">
+                            <label for="" class="ml-2">tháng / lần</label>
+                          </div>
+                          <div class="d-flex mt-2 align-items-center">
+                            <label for="" style="margin-right: 39px;">Tỷ lệ đậu</label>
+                            <input style="text-align: end; width: 65px;" [disabled]="isUpdateApp || isLoadingUpdateApp" type="number" nz-input [(ngModel)]="passRatio">
+                            <label for="" class="ml-2"> <b>%</b></label>
+                          </div>
                         </div>
                         <div class="col-md-4 d-flex justify-content-end align-items-center pr-0">
                           <button *ngIf="isUpdateApp === true" nz-button nzType="primary" (click)="editAppConfig()">Chỉnh sửa</button>
